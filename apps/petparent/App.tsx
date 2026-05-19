@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useFonts } from 'expo-font';
 import {
   Inter_400Regular,
@@ -14,6 +15,8 @@ import { ActivityIndicator, SafeAreaView, StatusBar, View } from 'react-native';
 
 import './global.css';
 import PetPage from './screens/PetPage';
+import OnboardingHousehold from './screens/OnboardingHousehold';
+import OnboardingFirstPet from './screens/OnboardingFirstPet';
 
 // Font stack locked 2026-05-15 evening (mauve-only v1.4):
 //   - Inter (body + display): handles every non-pet-name surface
@@ -21,6 +24,15 @@ import PetPage from './screens/PetPage';
 //     personalisation, magic toast, memorial card per docs/premium-feel/byline.md
 // Replaces v1.3's Spectral italic (rejected as too harsh) + Satoshi display
 // (rejected as "circus" at 22-26px).
+
+// Onboarding state machine (2026-05-19): per the locked decision, the parent
+// app boots into a 2-step onboarding (household → first pet) that pre-fills
+// from Fernandes seed data and lands on the existing PetPage. No INSERTs yet;
+// "Continue" / "Create pet page" are pure navigation. To skip onboarding in
+// future builds, change `INITIAL_SCREEN` to `'petpage'`.
+type Screen = 'onboarding-household' | 'onboarding-pet' | 'petpage';
+const INITIAL_SCREEN: Screen = 'onboarding-household';
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -31,6 +43,8 @@ export default function App() {
     Lora_600SemiBold,
     Lora_600SemiBold_Italic,
   });
+
+  const [screen, setScreen] = useState<Screen>(INITIAL_SCREEN);
 
   if (!fontsLoaded) {
     return (
@@ -43,7 +57,16 @@ export default function App() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F7F5' }}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8F7F5" />
-      <PetPage />
+      {screen === 'onboarding-household' && (
+        <OnboardingHousehold onNext={() => setScreen('onboarding-pet')} />
+      )}
+      {screen === 'onboarding-pet' && (
+        <OnboardingFirstPet
+          onBack={() => setScreen('onboarding-household')}
+          onNext={() => setScreen('petpage')}
+        />
+      )}
+      {screen === 'petpage' && <PetPage />}
     </SafeAreaView>
   );
 }
