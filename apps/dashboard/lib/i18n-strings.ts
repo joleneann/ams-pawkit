@@ -284,8 +284,6 @@ export const i18n: Record<string, Pair> = {
   "composer.cover.replace": { en: "Replace", mr: "बदला" },
   "composer.cover.remove": { en: "Remove", mr: "काढून टाका" },
   "composer.footer.ready": { en: "Ready to send", mr: "पाठवण्यासाठी तयार" },
-  "composer.footer.send": { en: "Send broadcast", mr: "प्रसारण पाठवा" },
-  "composer.footer.preview": { en: "Preview", mr: "पूर्वावलोकन" },
 
   // Audience modal
   "audModal.title": { en: "Who's this for?", mr: "हे कोणासाठी आहे?" },
