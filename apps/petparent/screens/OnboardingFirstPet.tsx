@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-import { ArrowRight, CaretDown } from 'phosphor-react-native';
+import { CaretRight, CaretDown } from 'phosphor-react-native';
 
 import { getCurrentHousehold, getHouseholdPets } from '../lib/current-household';
 
@@ -182,10 +182,60 @@ export default function OnboardingFirstPet({
         </Field>
       </ScrollView>
 
-      {/* Footer buttons */}
-      <View style={{ padding: 20, flexDirection: 'row', gap: 10 }}>
-        <OutlineBtn label="Back" onPress={onBack} />
-        <PrimaryBtn label="Create pet page" onPress={onNext} trailingIcon />
+      {/* Footer buttons. Inline static-style Pressables for cross-version
+          Android reliability (no function-style Pressable, no `gap` reliance). */}
+      <View
+        style={{
+          paddingHorizontal: 20,
+          paddingTop: 16,
+          paddingBottom: 28,
+          flexDirection: 'row',
+          alignItems: 'stretch',
+        }}
+      >
+        <Pressable
+          onPress={onBack}
+          style={{
+            flex: 1,
+            paddingVertical: 14,
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: RULE,
+            backgroundColor: CANVAS,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: 10,
+          }}
+        >
+          <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: INK }}>
+            Back
+          </Text>
+        </Pressable>
+
+        <Pressable
+          onPress={onNext}
+          style={{
+            flex: 2,
+            paddingVertical: 14,
+            borderRadius: 12,
+            backgroundColor: INK,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: 'Inter_600SemiBold',
+              fontSize: 14,
+              color: CANVAS,
+              marginRight: 8,
+            }}
+          >
+            Create pet page
+          </Text>
+          <CaretRight size={16} color={CANVAS} weight="bold" />
+        </Pressable>
       </View>
     </View>
   );
@@ -255,11 +305,10 @@ function Seg({
         backgroundColor: CANVAS_2,
         borderRadius: 10,
         padding: 3,
-        gap: 2,
         alignSelf: 'flex-start',
       }}
     >
-      {options.map((opt) => {
+      {options.map((opt, idx) => {
         const on = opt === value;
         return (
           <Pressable
@@ -270,6 +319,7 @@ function Seg({
               paddingHorizontal: 14,
               borderRadius: 8,
               backgroundColor: on ? CANVAS : 'transparent',
+              marginRight: idx < options.length - 1 ? 2 : 0,
             }}
           >
             <Text
@@ -479,11 +529,11 @@ function Wheel({ label, value, max }: { label: string; value: number; max: numbe
 }
 
 // ─────────────────────────────────────────────────────────────
-// Shared mini primitives (duplicated from OnboardingHousehold for now).
+// Progress dots. marginRight (not `gap`) for Android render reliability.
 // ─────────────────────────────────────────────────────────────
 function Progress({ total, at }: { total: number; at: number }) {
   return (
-    <View style={{ flexDirection: 'row', gap: 6 }}>
+    <View style={{ flexDirection: 'row' }}>
       {Array.from({ length: total }).map((_, i) => (
         <View
           key={i}
@@ -491,60 +541,12 @@ function Progress({ total, at }: { total: number; at: number }) {
             width: 24,
             height: 4,
             borderRadius: 2,
+            marginRight: i < total - 1 ? 6 : 0,
             backgroundColor: i <= at ? INK : RAIL_TINT,
           }}
         />
       ))}
     </View>
-  );
-}
-
-function OutlineBtn({ label, onPress }: { label: string; onPress: () => void }) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => ({
-        flex: 1,
-        paddingVertical: 14,
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: RULE,
-        backgroundColor: pressed ? RAIL_TINT : CANVAS,
-        alignItems: 'center',
-        justifyContent: 'center',
-      })}
-    >
-      <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: INK }}>{label}</Text>
-    </Pressable>
-  );
-}
-
-function PrimaryBtn({
-  label,
-  onPress,
-  trailingIcon,
-}: {
-  label: string;
-  onPress: () => void;
-  trailingIcon?: boolean;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => ({
-        flex: 2,
-        paddingVertical: 14,
-        borderRadius: 12,
-        backgroundColor: pressed ? '#000' : INK,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 8,
-      })}
-    >
-      <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: CANVAS }}>{label}</Text>
-      {trailingIcon && <ArrowRight size={16} color={CANVAS} weight="bold" />}
-    </Pressable>
   );
 }
 

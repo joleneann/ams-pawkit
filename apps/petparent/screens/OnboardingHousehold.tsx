@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
-import { ArrowRight } from 'phosphor-react-native';
+import { CaretRight } from 'phosphor-react-native';
 
 import { getCurrentHousehold } from '../lib/current-household';
 
@@ -114,23 +114,72 @@ export default function OnboardingHousehold({ onNext }: { onNext: () => void }) 
         </Text>
       </View>
 
-      {/* Footer buttons */}
-      <View style={{ padding: 20, flexDirection: 'row', gap: 10 }}>
-        <OutlineBtn label="Skip" onPress={onNext} />
-        <PrimaryBtn label="Continue" onPress={onNext} trailingIcon />
+      {/* Footer buttons. Static styles + marginRight (not `gap`) so Android
+          renders both children reliably across RN/Expo versions. */}
+      <View
+        style={{
+          paddingHorizontal: 20,
+          paddingTop: 16,
+          paddingBottom: 28,
+          flexDirection: 'row',
+          alignItems: 'stretch',
+        }}
+      >
+        <Pressable
+          onPress={onNext}
+          style={{
+            flex: 1,
+            paddingVertical: 14,
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: RULE,
+            backgroundColor: CANVAS,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: 10,
+          }}
+        >
+          <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: INK }}>
+            Skip
+          </Text>
+        </Pressable>
+
+        <Pressable
+          onPress={onNext}
+          style={{
+            flex: 2,
+            paddingVertical: 14,
+            borderRadius: 12,
+            backgroundColor: INK,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: 'Inter_600SemiBold',
+              fontSize: 14,
+              color: CANVAS,
+              marginRight: 8,
+            }}
+          >
+            Continue
+          </Text>
+          <CaretRight size={16} color={CANVAS} weight="bold" />
+        </Pressable>
       </View>
     </View>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
-// Inline primitives. Extracted to a shared file if/when reused
-// across other onboarding steps or screens.
+// Inline primitives.
 // ─────────────────────────────────────────────────────────────
 
 function Progress({ total, at }: { total: number; at: number }) {
   return (
-    <View style={{ flexDirection: 'row', gap: 6 }}>
+    <View style={{ flexDirection: 'row' }}>
       {Array.from({ length: total }).map((_, i) => (
         <View
           key={i}
@@ -138,75 +187,11 @@ function Progress({ total, at }: { total: number; at: number }) {
             width: 24,
             height: 4,
             borderRadius: 2,
+            marginRight: i < total - 1 ? 6 : 0,
             backgroundColor: i <= at ? INK : RAIL_TINT,
           }}
         />
       ))}
     </View>
-  );
-}
-
-function OutlineBtn({ label, onPress }: { label: string; onPress: () => void }) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => ({
-        flex: 1,
-        paddingVertical: 14,
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: RULE,
-        backgroundColor: pressed ? RAIL_TINT : CANVAS,
-        alignItems: 'center',
-        justifyContent: 'center',
-      })}
-    >
-      <Text
-        style={{
-          fontFamily: 'Inter_600SemiBold',
-          fontSize: 14,
-          color: INK,
-        }}
-      >
-        {label}
-      </Text>
-    </Pressable>
-  );
-}
-
-function PrimaryBtn({
-  label,
-  onPress,
-  trailingIcon,
-}: {
-  label: string;
-  onPress: () => void;
-  trailingIcon?: boolean;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => ({
-        flex: 2,
-        paddingVertical: 14,
-        borderRadius: 12,
-        backgroundColor: pressed ? '#000' : INK,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 8,
-      })}
-    >
-      <Text
-        style={{
-          fontFamily: 'Inter_600SemiBold',
-          fontSize: 14,
-          color: CANVAS,
-        }}
-      >
-        {label}
-      </Text>
-      {trailingIcon && <ArrowRight size={16} color={CANVAS} weight="bold" />}
-    </Pressable>
   );
 }
