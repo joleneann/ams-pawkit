@@ -839,7 +839,8 @@ function SectionEditor({
   onLabelFocus: () => void;
 }) {
   const updateItem = (idx: number, val: string) => {
-    onChange({ items: section.items.map((it, i) => (i === idx ? val : it)) });
+    const final = section.type === "warning" && val ? val.charAt(0).toUpperCase() + val.slice(1) : val;
+    onChange({ items: section.items.map((it, i) => (i === idx ? final : it)) });
   };
   const removeAt = (idx: number) => {
     onChange({ items: section.items.filter((_, i) => i !== idx) });
@@ -1008,7 +1009,7 @@ function SectionEditor({
                 <span className="mt-[10px] w-1.5 h-1.5 rounded-full shrink-0 bg-ink-soft" />
                 <input
                   type="text"
-                  value={item}
+                  value={section.type === "warning" && item ? item.charAt(0).toUpperCase() + item.slice(1) : item}
                   onChange={(e) => updateItem(i, e.target.value)}
                   onFocus={() => onBulletFocus(i)}
                   onKeyDown={(e) => {
