@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Toggle selected color · grey options</title>
+<link rel="stylesheet" href="../parent-app-source/tokens.css" />
+<link rel="stylesheet" href="../parent-app-source/primitives.css" />
+<style>
+  body {
+    background: var(--rail-tint);
+    padding: 48px 24px;
+    color: var(--ink);
+    font-family: var(--font-inter);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .sub { font-size: 14px; color: var(--ink-70); margin: -16px 0 0; }
+  .row {
+    background: var(--canvas);
+    border-radius: 14px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
+  }
+  .row-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .row-label .hex {
+    font-family: var(--font-mono);
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink-30);
+    font-weight: 500;
+  }
+  .field-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .field .label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin-bottom: 6px;
+  }
+
+  /* Option A: --ink (current spec) — pure near-black */
+  .opt-a .pk-seg .opt.on { background: var(--ink); color: var(--canvas); }
+  /* Option B: --ink-soft (#5C5550) — warm dark brown-grey */
+  .opt-b .pk-seg .opt.on { background: var(--ink-soft); color: var(--canvas); }
+  /* Option C: --ink at 72% opacity — soft black, slight transparency feel */
+  .opt-c .pk-seg .opt.on { background: var(--ink-70); color: var(--canvas); }
+  /* Option D: tonal dark mauve — derived to harmonize with --rail-tint */
+  .opt-d .pk-seg .opt.on { background: #5A3D4B; color: var(--canvas); }
+</style>
+</head>
+<body>
+  <h1>Toggle selected pill · 4 grey options</h1>
+  <p class="sub">Pick whichever feels right. Each row uses the same Species + Gender pair so you can compare like-for-like.</p>
+
+  <div class="row opt-a">
+    <div class="row-label"><span>A · INK (current spec)</span><span class="hex">#0F0C0A</span></div>
+    <div class="field-stack">
+      <div class="field"><div class="label">Species</div><span class="pk-seg"><span class="opt on">Dog</span><span class="opt">Cat</span></span></div>
+      <div class="field"><div class="label">Gender</div><span class="pk-seg"><span class="opt">Female</span><span class="opt on">Male</span></span></div>
+    </div>
+  </div>
+
+  <div class="row opt-b">
+    <div class="row-label"><span>B · INK-SOFT (warm dark brown-grey)</span><span class="hex">#5C5550</span></div>
+    <div class="field-stack">
+      <div class="field"><div class="label">Species</div><span class="pk-seg"><span class="opt on">Dog</span><span class="opt">Cat</span></span></div>
+      <div class="field"><div class="label">Gender</div><span class="pk-seg"><span class="opt">Female</span><span class="opt on">Male</span></span></div>
+    </div>
+  </div>
+
+  <div class="row opt-c">
+    <div class="row-label"><span>C · INK at 72% opacity (softer black)</span><span class="hex">rgba(15,12,10,0.72)</span></div>
+    <div class="field-stack">
+      <div class="field"><div class="label">Species</div><span class="pk-seg"><span class="opt on">Dog</span><span class="opt">Cat</span></span></div>
+      <div class="field"><div class="label">Gender</div><span class="pk-seg"><span class="opt">Female</span><span class="opt on">Male</span></span></div>
+    </div>
+  </div>
+
+  <div class="row opt-d">
+    <div class="row-label"><span>D · TONAL DARK MAUVE (harmonizes with rail-tint)</span><span class="hex">#5A3D4B</span></div>
+    <div class="field-stack">
+      <div class="field"><div class="label">Species</div><span class="pk-seg"><span class="opt on">Dog</span><span class="opt">Cat</span></span></div>
+      <div class="field"><div class="label">Gender</div><span class="pk-seg"><span class="opt">Female</span><span class="opt on">Male</span></span></div>
+    </div>
+  </div>
+</body>
+</html>

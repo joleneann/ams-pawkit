@@ -17,6 +17,13 @@
       radial-gradient(120% 60% at 50% 0%, rgba(156, 43, 92, 0.05), transparent 50%),
       var(--canvas);
   }
+  /* Toggle selected state: --ink-soft (#5C5550) instead of pure --ink, picked
+     2026-05-19 because pure ink reads as "heavy" against the soft mauve
+     wash. INK-SOFT shares the warm earthy undertone with the palette. */
+  .d2 .pk-seg .opt.on {
+    background: var(--ink-soft);
+    color: var(--canvas);
+  }
   .d2 .accent {
     font-family: var(--font-lora);
     font-style: italic;
