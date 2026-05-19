@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit Phase 2 · Screen 06c · Broadcast send (final review)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --honey: #C8A467;
+    --red: #B33A3A;
+    --red-bg: rgba(179, 58, 58, 0.06);
+  }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #1f1f1f; color: var(--bg-canvas); padding: 48px 32px 96px; line-height: 1.4; }
+  .doc { max-width: 1360px; margin: 0 auto; }
+  .doc-header { border-bottom: 1px solid #444; padding-bottom: 24px; margin-bottom: 40px; }
+  .doc-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+  .doc-title { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: var(--bg-canvas); margin-bottom: 12px; }
+  .doc-sub { font-size: 13px; color: #aaa; line-height: 1.6; max-width: 820px; }
+  .doc-sub .key { color: var(--bg-canvas); font-weight: 500; }
+
+  .reading-note { background: rgba(255,255,255,0.04); border-left: 3px solid var(--teal); padding: 14px 18px; margin: 8px 0 40px; font-size: 13px; line-height: 1.6; color: #ccc; }
+  .reading-note .key { color: var(--bg-canvas); font-weight: 600; }
+
+  .direction { margin-bottom: 40px; }
+  .direction-header-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  .direction-label { font-family: 'Satoshi', sans-serif; font-size: 13px; font-weight: 700; color: var(--teal); letter-spacing: 0.06em; text-transform: uppercase; }
+  .direction-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--bg-canvas); letter-spacing: -0.015em; }
+  .direction-sub { font-size: 12px; color: #999; max-width: 880px; line-height: 1.55; margin-bottom: 16px; }
+  .frame { width: 1280px; min-height: 760px; background: var(--bg-canvas); color: var(--ink); border: 1px solid #444; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Locked chrome (Screen 01) */
+  .chrome-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 28px; height: 64px; border-bottom: 1px solid var(--ink-faint); gap: 28px; flex-shrink: 0; }
+  .chrome-wordmark { display: flex; flex-direction: column; line-height: 1; justify-self: start; }
+  .chrome-wordmark .line1 { font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); letter-spacing: -0.015em; }
+  .chrome-wordmark .line2 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.14em; margin-top: 3px; }
+  .chrome-search { width: 460px; height: 36px; background: rgba(168, 163, 158, 0.15); border-radius: 4px; display: flex; align-items: center; padding: 0 12px; gap: 10px; justify-self: center; }
+  .chrome-search svg { width: 14px; height: 14px; color: var(--ink-soft); stroke: currentColor; fill: none; }
+  .chrome-search .placeholder { font-size: 14px; color: var(--ink-soft); }
+  .chrome-right { justify-self: end; }
+  .chrome-shell { display: grid; grid-template-columns: 240px 1fr; min-height: 696px; }
+  .chrome-rail { border-right: 1px solid var(--ink-faint); padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .chrome-rail-label { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); padding: 0 16px; margin: 4px 0 8px; }
+  .chrome-rail-item { height: 40px; display: flex; align-items: center; gap: 14px; padding: 0 16px; border-left: 4px solid transparent; margin-left: -12px; padding-left: 24px; font-size: 15px; font-weight: 400; color: var(--ink-soft); border-radius: 0 6px 6px 0; }
+  .chrome-rail-item svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+  .chrome-rail-item.active { border-left-color: var(--teal); color: var(--ink); font-weight: 600; }
+  .chrome-main { overflow-y: auto; }
+
+  /* 3-step nav */
+  .step-nav { display: flex; gap: 0; padding: 0 32px; height: 48px; align-items: stretch; border-bottom: 1px solid var(--ink-faint); flex-shrink: 0; }
+  .step { display: flex; align-items: center; gap: 8px; padding: 0 22px; font-size: 12px; color: var(--ink-soft); border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
+  .step.active { color: var(--ink); font-weight: 700; border-bottom-color: var(--ink); }
+  .step.done { color: var(--ink); }
+  .step-num { width: 18px; height: 18px; border-radius: 50%; background: rgba(15,12,10,0.08); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--ink-soft); }
+  .step.active .step-num { background: var(--ink); color: var(--bg-canvas); }
+  .step.done .step-num { background: var(--teal); color: var(--bg-canvas); }
+
+  /* Send-stage shell */
+  .send-stage { padding: 28px 40px 40px; max-width: 1080px; margin: 0 auto; }
+  .send-eyebrow { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: rgba(15,12,10,0.04); border-radius: 6px; margin-bottom: 22px; font-size: 12px; color: var(--ink-soft); }
+  .send-eyebrow .label { font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); font-size: 10px; }
+  .send-eyebrow .title { color: var(--ink); font-weight: 600; }
+  .send-eyebrow .edit { margin-left: auto; color: var(--ink-soft); font-size: 11px; padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; cursor: pointer; }
+  .send-title { font-family: 'Satoshi', sans-serif; font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 6px; }
+  .send-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 28px; }
+
+  .send-split { display: grid; grid-template-columns: 320px 1fr; gap: 36px; align-items: start; }
+
+  /* Mobile preview (left column) */
+  .preview-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; text-align: center; }
+  .phone { width: 290px; margin: 0 auto; background: var(--ink); border-radius: 32px; padding: 4px; }
+  .phone-inner { background: var(--bg-canvas); border-radius: 28px; max-height: 580px; overflow: hidden auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .phone-inner::-webkit-scrollbar { display: none; width: 0; height: 0; }
+  .phone-statusbar { height: 22px; display: flex; justify-content: space-between; align-items: center; padding: 0 18px; font-size: 10px; font-weight: 600; color: var(--ink); background: var(--bg-canvas); }
+  .phone-content { padding: 0 0 20px; }
+  .phone-header { padding: 12px 16px 10px; border-bottom: 1px solid var(--ink-faint); display: flex; align-items: center; gap: 8px; }
+  .phone-back { width: 16px; height: 16px; color: var(--ink-soft); stroke: currentColor; fill: none; }
+  .phone-header-title { font-size: 11px; font-weight: 600; color: var(--ink); letter-spacing: 0.04em; }
+  .phone-cover { aspect-ratio: 16/9; background: rgba(168, 163, 158, 0.18); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--ink-faint); font-style: italic; }
+  .phone-body { padding: 14px 16px; }
+  .phone-byline { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .phone-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--honey); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--ink); }
+  .phone-byline-meta { display: flex; flex-direction: column; }
+  .phone-byline-name { font-size: 11px; font-weight: 600; color: var(--ink); }
+  .phone-byline-clinic { font-size: 9px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em; }
+  .phone-title { font-family: 'Satoshi', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 8px; line-height: 1.25; letter-spacing: -0.01em; }
+  .phone-audience-tag { display: inline-block; font-size: 9px; padding: 2px 8px; background: rgba(15,12,10,0.06); border-radius: 3px; color: var(--ink-soft); margin-bottom: 14px; letter-spacing: 0.04em; }
+  .phone-section { margin-bottom: 14px; }
+  .phone-section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .phone-summary { font-size: 11px; color: var(--ink); line-height: 1.55; padding-left: 14px; }
+  .phone-summary li { margin-bottom: 4px; list-style-type: "·  "; padding-left: 4px; }
+  .phone-body-text { font-size: 11px; color: var(--ink); line-height: 1.6; }
+  .phone-card { border: 1.5px solid var(--red); border-radius: 6px; padding: 10px 12px; background: var(--red-bg); margin-bottom: 12px; }
+  .phone-card-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .phone-card-icon { width: 13px; height: 13px; color: var(--red); stroke: currentColor; fill: none; }
+  .phone-card-title { font-size: 10px; font-weight: 700; color: var(--red); letter-spacing: 0.06em; text-transform: uppercase; }
+  .phone-card-body { font-size: 11px; color: var(--ink); line-height: 1.55; }
+  .phone-card-body ul { padding-left: 14px; }
+  .phone-card-body li { list-style-type: "·  "; padding-left: 4px; margin-bottom: 3px; }
+  .phone-card-body p { margin-bottom: 4px; }
+  .phone-card-body p:last-child { margin-bottom: 0; }
+  .phone-share-btn { background: var(--teal); color: var(--bg-canvas); width: 100%; padding: 10px; border-radius: 6px; font-size: 11px; font-weight: 600; border: none; margin-top: 8px; }
+
+  /* Audience confirmation (right column) */
+  .confirm-col { display: flex; flex-direction: column; gap: 22px; }
+  .confirm-hero { background: var(--ink); color: var(--bg-canvas); padding: 28px 32px; border-radius: 8px; }
+  .confirm-hero-eyebrow { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.7; margin-bottom: 10px; }
+  .confirm-hero-num { font-family: 'Satoshi', sans-serif; font-size: 48px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 6px; }
+  .confirm-hero-meta { font-size: 13px; opacity: 0.85; }
+  .confirm-block { background: var(--bg-canvas); border: 1px solid var(--ink-faint); border-radius: 6px; padding: 18px 22px; }
+  .confirm-block-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+  .confirm-filter-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--ink-faint); font-size: 13px; }
+  .confirm-filter-row:last-child { border-bottom: none; }
+  .confirm-filter-prop { color: var(--ink-soft); font-weight: 500; }
+  .confirm-filter-value { color: var(--ink); font-weight: 600; }
+  .confirm-channels { background: rgba(15,12,10,0.025); border: 1px solid var(--ink-faint); border-radius: 6px; padding: 18px 22px; }
+  .confirm-channels .confirm-block-label { margin-bottom: 12px; }
+  .confirm-channel-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 12px; color: var(--ink); }
+  .confirm-channel-row svg { width: 14px; height: 14px; color: var(--teal); stroke: currentColor; fill: none; flex-shrink: 0; }
+  .confirm-channel-row .meta { color: var(--ink-soft); margin-left: auto; font-size: 11px; }
+
+  .send-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 22px; border-top: 1px solid var(--ink-faint); margin-top: 32px; }
+  .send-undo-hint { font-size: 11px; color: var(--ink-faint); font-style: italic; display: flex; align-items: center; gap: 6px; }
+  .send-undo-hint svg { width: 12px; height: 12px; stroke: currentColor; fill: none; }
+  .send-buttons { display: flex; gap: 12px; }
+  .send-back-btn { background: transparent; border: 1px solid var(--ink-faint); color: var(--ink-soft); padding: 11px 22px; font-size: 13px; border-radius: 4px; cursor: pointer; }
+  .send-confirm-btn { background: var(--teal); color: var(--bg-canvas); padding: 11px 26px; font-size: 14px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .send-confirm-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; }
+
+  .direction-notes { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; color: #bbb; font-size: 12px; line-height: 1.6; }
+  .direction-notes .note-block { background: rgba(255,255,255,0.04); padding: 14px 16px; border-radius: 4px; }
+  .direction-notes .note-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Phase 2 · Screen 06c · Broadcast send (final review)</div>
+    <div class="doc-title">Send · review what you wrote, who it's going to, then publish</div>
+    <div class="doc-sub">
+      Third and final step of the broadcast flow (06 Compose → 06b Audience → 06c Send). After Sagar has composed the broadcast on 06 and locked the audience filter on 06b, this surface lets him do a final review side-by-side: what the parent will read on the LEFT (mobile preview), who it's going to on the RIGHT (count + filter confirmation + delivery channels). One "Confirm and Send" CTA fires the publish flow with a 15-second undo window.
+    </div>
+  </div>
+
+  <div class="reading-note">
+    <span class="key">Reading the screen.</span> One direction (per the specific layout you described). 3-step nav at top with Compose + Audience done (teal-filled nums) and Send active. Mobile preview LEFT, audience confirmation RIGHT. Confirm and Send is the only primary Teal action; Back to Audience is a ghost button.
+  </div>
+
+  <div class="direction">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction · single</div>
+      <div class="direction-title">Send review · mobile preview LEFT + audience confirmation RIGHT</div>
+    </div>
+    <div class="direction-sub">Locked layout per your spec: mobile preview on the left so Sagar sees exactly what each parent will read; audience confirmation on the right with the count hero + filter conditions readable as a verifiable list + delivery channels (in-app + push). Confirm and Send button bottom-right; Back to Audience ghost button bottom-left. 15-second undo runs after Send fires.</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="step-nav">
+            <div class="step done"><div class="step-num">1</div>Compose</div>
+            <div class="step done"><div class="step-num">2</div>Audience</div>
+            <div class="step active"><div class="step-num">3</div>Send</div>
+          </div>
+          <div class="send-stage">
+            <div class="send-eyebrow">
+              <span class="label">Broadcast ready to send</span>
+              <span class="title">How to care for your dog in the summer</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="send-title">Final check before sending</div>
+            <div class="send-sub">Confirm what parents will read on the left, and confirm who's getting it on the right. Send fires with a 15-second undo window.</div>
+
+            <div class="send-split">
+              <div>
+                <div class="preview-label">What parents will read</div>
+                <div class="phone">
+                  <div class="phone-inner">
+                    <div class="phone-statusbar"><span>9:41</span><span>● ● ●</span></div>
+                    <div class="phone-content">
+                      <div class="phone-header">
+                        <svg class="phone-back" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        <div class="phone-header-title">Broadcasts</div>
+                      </div>
+                      <div class="phone-cover">No cover · Vanilla placeholder</div>
+                      <div class="phone-body">
+                        <div class="phone-byline">
+                          <div class="phone-avatar">SB</div>
+                          <div class="phone-byline-meta">
+                            <div class="phone-byline-name">Dr Sagar Bhongale</div>
+                            <div class="phone-byline-clinic">AMS Pune · 6 May 2026</div>
+                          </div>
+                        </div>
+                        <div class="phone-title">How to care for your dog in the summer</div>
+                        <span class="phone-audience-tag">For: All dog parents</span>
+                        <div class="phone-section">
+                          <div class="phone-section-label">Summary</div>
+                          <ul class="phone-summary">
+                            <li>Unlimited fresh water, change twice daily</li>
+                            <li>Protect paws, asphalt over 50°C burns</li>
+                            <li>NEVER leave in a parked car</li>
+                            <li>Walk before 7am or after 7pm</li>
+                            <li>Heat stroke: panting, drool, vomiting, collapse</li>
+                          </ul>
+                        </div>
+                        <div class="phone-section">
+                          <div class="phone-body-text">Maharashtra summers are tough on dogs. They don't sweat like us and can overheat quickly, especially short-nosed breeds and seniors.</div>
+                        </div>
+                        <div class="phone-card">
+                          <div class="phone-card-head">
+                            <svg class="phone-card-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                            <div class="phone-card-title">Warning signs</div>
+                          </div>
+                          <div class="phone-card-body"><ul><li>Excessive panting that doesn't slow</li><li>Thick drool</li><li>Vomiting · bright red gums</li><li>Stumbling or collapse</li><li>Temp above 39.5°C</li></ul></div>
+                        </div>
+                        <div class="phone-card">
+                          <div class="phone-card-head">
+                            <svg class="phone-card-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <div class="phone-card-title">When to call us</div>
+                          </div>
+                          <div class="phone-card-body">
+                            <p>If temp over 39.5°C OR dog can't stand, emergency.</p>
+                            <p>Call AMS: +91 20 2612 3456</p>
+                            <p>En route: cool water + AC full blast.</p>
+                            <p style="color: var(--ink-soft); font-size: 10px;">AMS hours: 9am to 9pm, Mon-Sat</p>
+                          </div>
+                        </div>
+                        <button class="phone-share-btn">Share · WhatsApp / Social / Email</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="confirm-col">
+                <div class="confirm-hero">
+                  <div class="confirm-hero-eyebrow">Sending to</div>
+                  <div class="confirm-hero-num">187 pets</div>
+                  <div class="confirm-hero-meta">across 143 households · 94% of AMS dog parents</div>
+                </div>
+                <div class="confirm-block">
+                  <div class="confirm-block-label">Audience filter</div>
+                  <div class="confirm-filter-row"><span class="confirm-filter-prop">Species</span><span class="confirm-filter-value">Dogs only</span></div>
+                  <div class="confirm-filter-row"><span class="confirm-filter-prop">Age range</span><span class="confirm-filter-value">0 to 15 years</span></div>
+                  <div class="confirm-filter-row"><span class="confirm-filter-prop">Deceased pets</span><span class="confirm-filter-value">Excluded</span></div>
+                </div>
+                <div class="confirm-channels">
+                  <div class="confirm-block-label">Delivery</div>
+                  <div class="confirm-channel-row">
+                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6l-4 4V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></svg>
+                    Appears in each parent's Broadcasts tab
+                    <span class="meta">in-app · instant</span>
+                  </div>
+                  <div class="confirm-channel-row">
+                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                    Push notification fires
+                    <span class="meta">in-app · instant</span>
+                  </div>
+                  <div class="confirm-channel-row">
+                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    Public web URL goes live
+                    <span class="meta">pawkit.app/broadcasts/summer-dog-care</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="send-actions">
+              <div class="send-undo-hint">
+                <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></svg>
+                Send has a 15-second undo window
+              </div>
+              <div class="send-buttons">
+                <button class="send-back-btn">← Back to Audience</button>
+                <button class="send-confirm-btn">
+                  Confirm and Send
+                  <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>One Teal: Confirm and Send CTA. Rail Broadcasts-active stays Teal.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Customer.io's hero count + Substack's review-before-publish step. Pitfall: review screens that just re-show what you already know waste a step. Mitigation: this screen surfaces things that DIDN'T fit on Compose or Audience alone (delivery channels, public URL preview, the parent-side rendering at scale).</div>
+      <div class="note-block"><div class="note-label">Risk</div>Adding a third step adds friction. Counter: broadcasts go to hundreds of parents and become a public web URL; one final review before pressing the irreversible button is worth the extra click. The 15s undo softens any accidental sends.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

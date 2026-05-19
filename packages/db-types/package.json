@@ -1,0 +1,18 @@
+{
+  "name": "@pawkit/db-types",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/database.types.ts",
+  "types": "./src/database.types.ts",
+  "exports": {
+    ".": "./src/database.types.ts"
+  },
+  "scripts": {
+    "gen": "supabase gen types typescript --project-id pevofxnfjcvmamdcfkus > src/database.types.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

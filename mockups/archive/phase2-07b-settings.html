@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit Phase 2 · Screen 07b · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --honey: #C8A467;
+  }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #1f1f1f; color: var(--bg-canvas); padding: 48px 32px 96px; line-height: 1.4; }
+  .doc { max-width: 1360px; margin: 0 auto; }
+  .doc-header { border-bottom: 1px solid #444; padding-bottom: 24px; margin-bottom: 40px; }
+  .doc-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+  .doc-title { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: var(--bg-canvas); margin-bottom: 12px; }
+  .doc-sub { font-size: 13px; color: #aaa; line-height: 1.6; max-width: 880px; }
+  .doc-sub .key { color: var(--bg-canvas); font-weight: 500; }
+  .doc-sub code { background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; font-size: 11px; }
+
+  .reading-note { background: rgba(255,255,255,0.04); border-left: 3px solid var(--teal); padding: 14px 18px; margin: 8px 0 40px; font-size: 13px; line-height: 1.6; color: #ccc; }
+  .reading-note .key { color: var(--bg-canvas); font-weight: 600; }
+
+  .direction { margin-bottom: 56px; }
+  .direction-header-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  .direction-label { font-family: 'Satoshi', sans-serif; font-size: 13px; font-weight: 700; color: var(--teal); letter-spacing: 0.06em; text-transform: uppercase; }
+  .direction-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--bg-canvas); letter-spacing: -0.015em; }
+  .direction-sub { font-size: 12px; color: #999; max-width: 880px; line-height: 1.55; margin-bottom: 16px; }
+  .frame { width: 1280px; min-height: 780px; background: var(--bg-canvas); color: var(--ink); border: 1px solid #444; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Locked chrome (Screen 01) — Settings rail active, search bar hidden per Section 1 spec */
+  .chrome-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 28px; height: 64px; border-bottom: 1px solid var(--ink-faint); gap: 28px; flex-shrink: 0; }
+  .chrome-wordmark { display: flex; flex-direction: column; line-height: 1; justify-self: start; }
+  .chrome-wordmark .line1 { font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); letter-spacing: -0.015em; }
+  .chrome-wordmark .line2 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.14em; margin-top: 3px; }
+  .chrome-search-empty { /* Search hidden on Settings; empty middle keeps grid integrity */ }
+  .chrome-right { justify-self: end; }
+  .chrome-shell { display: grid; grid-template-columns: 240px 1fr; min-height: 716px; }
+  .chrome-rail { border-right: 1px solid var(--ink-faint); padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .chrome-rail-label { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); padding: 0 16px; margin: 4px 0 8px; }
+  .chrome-rail-item { height: 40px; display: flex; align-items: center; gap: 14px; padding: 0 16px; border-left: 4px solid transparent; margin-left: -12px; padding-left: 24px; font-size: 15px; font-weight: 400; color: var(--ink-soft); border-radius: 0 6px 6px 0; }
+  .chrome-rail-item svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+  .chrome-rail-item.active { border-left-color: var(--teal); color: var(--ink); font-weight: 600; }
+  .chrome-main { overflow-y: auto; }
+
+  .direction-notes { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; color: #bbb; font-size: 12px; line-height: 1.6; }
+  .direction-notes .note-block { background: rgba(255,255,255,0.04); padding: 14px 16px; border-radius: 4px; }
+  .direction-notes .note-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+
+  /* ===== Direction A — Linear-channeled (dense inline-edit, hairlines only) ===== */
+  .dir-a .stage { max-width: 720px; margin: 0 auto; padding: 36px 32px 64px; }
+  .dir-a .page-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 4px; }
+  .dir-a .page-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 36px; }
+  .dir-a .section { margin-bottom: 36px; }
+  .dir-a .section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
+  .dir-a .photo-row { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-top: 1px solid var(--ink-faint); border-bottom: 1px solid var(--ink-faint); }
+  .dir-a .photo-slot { width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--ink-faint); background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .dir-a .photo-slot svg { width: 20px; height: 20px; color: var(--ink-faint); stroke: currentColor; fill: none; }
+  .dir-a .photo-text { flex: 1; min-width: 0; }
+  .dir-a .photo-name { font-size: 13px; color: var(--ink); font-weight: 600; }
+  .dir-a .photo-help { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+  .dir-a .photo-edit { font-size: 11px; color: var(--ink-soft); padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; cursor: pointer; flex-shrink: 0; }
+  .dir-a .field-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--ink-faint); }
+  .dir-a .field-row:last-child { border-bottom: none; }
+  .dir-a .field-label { font-size: 12px; color: var(--ink-soft); flex-shrink: 0; width: 160px; }
+  .dir-a .field-value { flex: 1; font-size: 13px; color: var(--ink); font-weight: 500; min-width: 0; }
+  .dir-a .field-value.readonly { color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 400; }
+  .dir-a .field-value.placeholder { color: var(--ink-faint); font-weight: 400; font-style: italic; }
+  .dir-a .field-value.tabular { font-variant-numeric: tabular-nums; }
+  .dir-a .field-edit { font-size: 11px; color: var(--ink-soft); padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; cursor: pointer; flex-shrink: 0; }
+  .dir-a .lang-toggle { display: inline-flex; padding: 3px; background: rgba(15,12,10,0.04); border-radius: 4px; }
+  .dir-a .lang-pill { padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--ink-soft); border-radius: 3px; cursor: pointer; }
+  .dir-a .lang-pill.active { background: var(--ink); color: var(--bg-canvas); }
+  .dir-a .stacked-help { font-size: 11px; color: var(--ink-faint); padding: 6px 0 0 176px; line-height: 1.55; max-width: 520px; }
+  .dir-a .clinic-lines { padding: 4px 0; }
+  .dir-a .clinic-name { font-family: 'Satoshi', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.005em; }
+  .dir-a .clinic-line { font-size: 12px; color: var(--ink-soft); line-height: 1.65; }
+  .dir-a .clinic-line.tabular { font-variant-numeric: tabular-nums; }
+  .dir-a .signout-btn { width: 100%; padding: 11px; font-size: 13px; font-weight: 600; color: var(--ink); background: transparent; border: 1px solid var(--ink); border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .dir-a .signout-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+  .dir-a .vendor { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--ink-faint); display: flex; justify-content: center; gap: 8px; align-items: baseline; }
+  .dir-a .vendor-brand { font-family: 'Satoshi', sans-serif; font-size: 11px; font-weight: 700; color: var(--ink-faint); }
+  .dir-a .vendor-sep { font-size: 10px; color: var(--ink-faint); }
+  .dir-a .vendor-version { font-size: 10px; color: var(--ink-faint); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+
+  /* ===== Direction B — Stripe-channeled (cards, profile-photo prominence) ===== */
+  .dir-b .stage { max-width: 760px; margin: 0 auto; padding: 40px 32px 64px; }
+  .dir-b .page-title { font-family: 'Satoshi', sans-serif; font-size: 26px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 6px; }
+  .dir-b .page-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 36px; }
+  .dir-b .card { background: var(--bg-canvas); border: 1px solid var(--ink-faint); border-radius: 8px; padding: 22px 26px; margin-bottom: 20px; }
+  .dir-b .card-header { padding-bottom: 16px; border-bottom: 1px solid var(--ink-faint); margin-bottom: 4px; }
+  .dir-b .card-title { font-family: 'Satoshi', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.005em; }
+  .dir-b .card-sub { font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+  .dir-b .profile-hero { display: flex; align-items: center; gap: 18px; padding: 14px 0 18px; border-bottom: 1px solid var(--ink-faint); margin-bottom: 4px; }
+  .dir-b .profile-photo { width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid var(--ink-faint); background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .dir-b .profile-photo svg { width: 28px; height: 28px; color: var(--ink-faint); stroke: currentColor; fill: none; }
+  .dir-b .profile-hero-text { flex: 1; min-width: 0; }
+  .dir-b .profile-hero-name { font-family: 'Satoshi', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .dir-b .profile-hero-meta { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+  .dir-b .profile-hero-action { font-size: 12px; color: var(--ink); padding: 7px 14px; border: 1px solid var(--ink); border-radius: 4px; font-weight: 500; cursor: pointer; flex-shrink: 0; background: transparent; font-family: 'Inter', sans-serif; }
+  .dir-b .field-row { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--ink-faint); }
+  .dir-b .field-row:last-child { border-bottom: none; }
+  .dir-b .field-label { font-size: 12px; color: var(--ink-soft); flex-shrink: 0; width: 160px; }
+  .dir-b .field-value { flex: 1; font-size: 14px; color: var(--ink); font-weight: 500; min-width: 0; }
+  .dir-b .field-value.readonly { color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 400; }
+  .dir-b .field-value.placeholder { color: var(--ink-faint); font-weight: 400; font-style: italic; }
+  .dir-b .field-value.tabular { font-variant-numeric: tabular-nums; }
+  .dir-b .field-edit { font-size: 12px; color: var(--ink); font-weight: 500; cursor: pointer; flex-shrink: 0; padding: 4px 0; text-decoration: underline; text-decoration-color: var(--ink-faint); text-underline-offset: 3px; }
+  .dir-b .stacked-row { padding: 14px 0; border-bottom: 1px solid var(--ink-faint); }
+  .dir-b .stacked-row:last-child { border-bottom: none; }
+  .dir-b .stacked-top { display: flex; align-items: center; gap: 16px; }
+  .dir-b .stacked-label { font-size: 12px; color: var(--ink-soft); width: 160px; flex-shrink: 0; }
+  .dir-b .stacked-control { flex: 1; }
+  .dir-b .stacked-help { font-size: 12px; color: var(--ink-faint); padding: 6px 0 0 176px; line-height: 1.55; max-width: 500px; }
+  .dir-b .lang-toggle { display: inline-flex; padding: 3px; background: rgba(15,12,10,0.04); border-radius: 4px; }
+  .dir-b .lang-pill { padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--ink-soft); border-radius: 3px; cursor: pointer; }
+  .dir-b .lang-pill.active { background: var(--ink); color: var(--bg-canvas); }
+  .dir-b .clinic-block { padding: 8px 0 0; }
+  .dir-b .clinic-name { font-family: 'Satoshi', sans-serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; }
+  .dir-b .clinic-line { font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+  .dir-b .clinic-line.tabular { font-variant-numeric: tabular-nums; }
+  .dir-b .signout-card { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+  .dir-b .signout-text { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+  .dir-b .signout-text strong { color: var(--ink); font-weight: 600; }
+  .dir-b .signout-btn { padding: 10px 22px; font-size: 13px; font-weight: 600; color: var(--ink); background: transparent; border: 1px solid var(--ink); border-radius: 4px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-family: 'Inter', sans-serif; flex-shrink: 0; }
+  .dir-b .signout-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+  .dir-b .vendor { text-align: center; margin-top: 28px; padding: 16px 0; display: flex; justify-content: center; gap: 8px; align-items: baseline; }
+  .dir-b .vendor-brand { font-family: 'Satoshi', sans-serif; font-size: 11px; font-weight: 700; color: var(--ink-faint); }
+  .dir-b .vendor-sep { font-size: 10px; color: var(--ink-faint); }
+  .dir-b .vendor-version { font-size: 10px; color: var(--ink-faint); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+
+  /* ===== Direction C — Notion-channeled (narrow stage, small-caps lead, quiet pencils) ===== */
+  .dir-c .stage { max-width: 640px; margin: 0 auto; padding: 48px 32px 80px; }
+  .dir-c .page-title { font-family: 'Satoshi', sans-serif; font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
+  .dir-c .page-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 44px; }
+  .dir-c .section { margin-bottom: 40px; }
+  .dir-c .section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; padding-bottom: 8px; border-bottom: 1px solid var(--ink-faint); }
+  .dir-c .field-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+  .dir-c .field-row + .field-row { border-top: 1px dashed var(--ink-faint); }
+  .dir-c .field-label { font-size: 12px; color: var(--ink-soft); flex-shrink: 0; width: 140px; }
+  .dir-c .field-value { flex: 1; font-size: 13px; color: var(--ink); font-weight: 500; min-width: 0; }
+  .dir-c .field-value.readonly { color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 400; }
+  .dir-c .field-value.placeholder { color: var(--ink-faint); font-weight: 400; font-style: italic; }
+  .dir-c .field-value.tabular { font-variant-numeric: tabular-nums; }
+  .dir-c .field-edit { color: var(--ink-faint); cursor: pointer; flex-shrink: 0; padding: 6px; border-radius: 3px; display: flex; align-items: center; }
+  .dir-c .field-edit:hover { color: var(--ink); background: rgba(15,12,10,0.04); }
+  .dir-c .field-edit svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+  .dir-c .profile-photo-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; }
+  .dir-c .profile-photo-row + .field-row { border-top: 1px dashed var(--ink-faint); }
+  .dir-c .profile-photo { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--ink-faint); background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .dir-c .profile-photo svg { width: 18px; height: 18px; color: var(--ink-faint); stroke: currentColor; fill: none; }
+  .dir-c .profile-photo-text { flex: 1; min-width: 0; font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  .dir-c .profile-photo-action { font-size: 11px; color: var(--ink-soft); padding: 4px 8px; cursor: pointer; flex-shrink: 0; border-radius: 3px; }
+  .dir-c .profile-photo-action:hover { color: var(--ink); background: rgba(15,12,10,0.04); }
+  .dir-c .lang-toggle { display: inline-flex; padding: 2px; background: rgba(15,12,10,0.04); border-radius: 4px; }
+  .dir-c .lang-pill { padding: 4px 12px; font-size: 12px; font-weight: 600; color: var(--ink-soft); border-radius: 3px; cursor: pointer; }
+  .dir-c .lang-pill.active { background: var(--ink); color: var(--bg-canvas); }
+  .dir-c .stacked-help { font-size: 11px; color: var(--ink-faint); padding: 6px 0 4px 152px; line-height: 1.55; max-width: 460px; }
+  .dir-c .clinic-block { padding: 8px 0 4px; }
+  .dir-c .clinic-name { font-family: 'Satoshi', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.005em; }
+  .dir-c .clinic-line { font-size: 12px; color: var(--ink-soft); line-height: 1.65; }
+  .dir-c .clinic-line.tabular { font-variant-numeric: tabular-nums; }
+  .dir-c .signout-row { padding-top: 8px; }
+  .dir-c .signout-btn { padding: 9px 18px; font-size: 12px; font-weight: 600; color: var(--ink); background: transparent; border: 1px solid var(--ink); border-radius: 4px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .dir-c .signout-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+  .dir-c .vendor { text-align: center; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--ink-faint); display: flex; justify-content: center; gap: 8px; align-items: baseline; }
+  .dir-c .vendor-brand { font-family: 'Satoshi', sans-serif; font-size: 11px; font-weight: 700; color: var(--ink-faint); }
+  .dir-c .vendor-sep { font-size: 10px; color: var(--ink-faint); }
+  .dir-c .vendor-version { font-size: 10px; color: var(--ink-faint); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Phase 2 · Screen 07b · Settings</div>
+    <div class="doc-title">Three settings directions on the locked chrome</div>
+    <div class="doc-sub">
+      Reached from the Settings rail item. <span class="key">Header search bar hidden</span> per Section 1 spec (Settings has no searchable content). Single-column scrollable page. Four content blocks: <span class="key">Profile</span> (photo, full name, vet license, email, all inline-editable), <span class="key">Account</span> (read-only phone tied to auth, EN/MR chrome-language toggle), <span class="key">Clinic info</span> (hard-coded AMS Pune in v0, no edit affordance), <span class="key">Sign out</span> (Ink ghost, no Teal). Quiet Pawkit v0.1 vendor mark at the bottom is the only place Pawkit-as-vendor appears in the dashboard chrome (white-label discipline per <code>docs/decisions-log.md</code>).
+    </div>
+  </div>
+
+  <div class="reading-note">
+    <span class="key">Reading the three directions.</span> Same chrome (Settings rail active, search bar hidden). Same content (Profile, Account, Clinic, Sign out, EN+MR toggle). Each direction renders the same fields with a different visual treatment per <code style="background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:3px;font-size:11px;">docs/layout-spec.md</code> Section 7b's locked Steal anchors: Linear settings density, Stripe profile screen rhythm, Notion small-caps section labels. The variance is stage width, card chrome vs none, profile-photo prominence, Edit-affordance style, and sign-out placement.
+  </div>
+
+  <!-- ============ Direction A · Linear-channeled ============ -->
+  <div class="direction dir-a">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction A</div>
+      <div class="direction-title">Linear-channeled · dense inline-edit, hairlines only</div>
+    </div>
+    <div class="direction-sub">720px stage. No card chrome around sections; small-caps section labels sit above hairline 1px Ink-faint dividers between rows. 160px label column + value flex + small "Edit" pill on the right (Ink-faint border, 3px radius). Profile photo at 48px in a top photo-row with thin top + bottom borders, "Upload" pill on the right. EN/MR pill toggle sits inline as a normal field value, with helper text below pulled to the 176px indent. Clinic info renders as plain prose lines (no tinted block, no border). Sign out as full-width ghost button at the bottom. Quiet Pawkit v0.1 mark centred below a hairline divider. Reads as a working surface, not a display.</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search-empty"></div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="stage">
+            <div class="page-title">Settings</div>
+            <div class="page-sub">Your profile, account, and clinic details.</div>
+
+            <div class="section">
+              <div class="section-label">Profile</div>
+              <div class="photo-row">
+                <div class="photo-slot">
+                  <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="photo-text">
+                  <div class="photo-name">Profile photo</div>
+                  <div class="photo-help">Appears in your byline on every Broadcast and inbox reply.</div>
+                </div>
+                <div class="photo-edit">Upload</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Full name</div>
+                <div class="field-value">Dr Sagar Bhongale</div>
+                <div class="field-edit">Edit</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Vet license</div>
+                <div class="field-value tabular">MVC/2008/04821</div>
+                <div class="field-edit">Edit</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Email</div>
+                <div class="field-value placeholder">Not added</div>
+                <div class="field-edit">Add</div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-label">Account</div>
+              <div class="field-row">
+                <div class="field-label">Phone</div>
+                <div class="field-value readonly">+91 98220 47561</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Dashboard language</div>
+                <div class="field-value">
+                  <div class="lang-toggle">
+                    <span class="lang-pill active">English</span>
+                    <span class="lang-pill">मराठी</span>
+                  </div>
+                </div>
+              </div>
+              <div class="stacked-help">Changes labels and buttons in your dashboard. Broadcasts always ship to parents in both languages.</div>
+            </div>
+
+            <div class="section">
+              <div class="section-label">Clinic</div>
+              <div class="clinic-lines">
+                <div class="clinic-name">Animal Medical Services</div>
+                <div class="clinic-line">Karve Road, Kothrud, Pune 411038</div>
+                <div class="clinic-line">Maharashtra, India</div>
+                <div class="clinic-line tabular">GSTIN 27ABCDE1234F1Z2</div>
+                <div class="clinic-line">Open 9am to 9pm, Mon to Sat</div>
+              </div>
+            </div>
+
+            <button class="signout-btn">
+              <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sign out
+            </button>
+
+            <div class="vendor">
+              <span class="vendor-brand">Pawkit</span>
+              <span class="vendor-sep">·</span>
+              <span class="vendor-version">v0.1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>One Teal: rail Settings-active 4px left border. No CTA on this surface (Settings is configuration, not action; one-Teal-per-screen rule honoured by the rail border alone).</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Linear's settings density: hairline-only dividers, inline-edit pills, no card chrome. Pitfall: density can read as flat or unloved if hierarchy isn't carried by the small-caps section labels. Mitigation: 36px gap between sections + tiered type rhythm (Satoshi page title, small-caps labels, Inter rows) carry the structure without cards.</div>
+      <div class="note-block"><div class="note-label">Risk</div>Inline-edit pills next to every row may feel busy at first glance. Counter: pills are tiny (4/10 padding, Ink-faint border, Ink-soft text), they read as scannable action targets rather than chrome noise once Sagar uses the page twice.</div>
+    </div>
+  </div>
+
+  <!-- ============ Direction B · Stripe-channeled ============ -->
+  <div class="direction dir-b">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction B</div>
+      <div class="direction-title">Stripe-channeled · cards, profile photo prominent</div>
+    </div>
+    <div class="direction-sub">760px stage. Each section sits in its own card (1px Ink-faint border, 8px radius, 22/26px padding). The Profile card opens with a hero photo row: 72px circular avatar slot + name in Satoshi 17pt + "Animal Medical Services" affiliation in Ink-soft below + "Upload photo" Ink-outline button on the right. Field rows below get more vertical breathing (14px padding) and a slightly larger value type (14pt). Edit affordances are plain text links with a thin Ink-faint underline, no border (Stripe pattern). Clinic info is its own card matching the rest. Sign out lives in a final card with helper text on the left and a compact right-aligned ghost button. Vendor mark sits centred below all cards with no divider.</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search-empty"></div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="stage">
+            <div class="page-title">Settings</div>
+            <div class="page-sub">Manage your profile, account, and clinic details.</div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Profile</div>
+                <div class="card-sub">How you appear in bylines, replies, and Broadcasts.</div>
+              </div>
+              <div class="profile-hero">
+                <div class="profile-photo">
+                  <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="profile-hero-text">
+                  <div class="profile-hero-name">Dr Sagar Bhongale</div>
+                  <div class="profile-hero-meta">Animal Medical Services, Pune</div>
+                </div>
+                <button class="profile-hero-action">Upload photo</button>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Full name</div>
+                <div class="field-value">Dr Sagar Bhongale</div>
+                <div class="field-edit">Edit</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Vet license</div>
+                <div class="field-value tabular">MVC/2008/04821</div>
+                <div class="field-edit">Edit</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Email</div>
+                <div class="field-value placeholder">Not added</div>
+                <div class="field-edit">Add</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Account</div>
+                <div class="card-sub">Sign-in details and dashboard language.</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Phone</div>
+                <div class="field-value readonly">+91 98220 47561</div>
+              </div>
+              <div class="stacked-row">
+                <div class="stacked-top">
+                  <div class="stacked-label">Dashboard language</div>
+                  <div class="stacked-control">
+                    <div class="lang-toggle">
+                      <span class="lang-pill active">English</span>
+                      <span class="lang-pill">मराठी</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="stacked-help">Changes labels and buttons in your dashboard. Broadcasts always ship to parents in both languages.</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Clinic</div>
+                <div class="card-sub">Visible to parents in invoices and Broadcast bylines.</div>
+              </div>
+              <div class="clinic-block">
+                <div class="clinic-name">Animal Medical Services</div>
+                <div class="clinic-line">Karve Road, Kothrud, Pune 411038</div>
+                <div class="clinic-line">Maharashtra, India</div>
+                <div class="clinic-line tabular">GSTIN 27ABCDE1234F1Z2</div>
+                <div class="clinic-line">Open 9am to 9pm, Mon to Sat</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="signout-card">
+                <div class="signout-text">
+                  <strong>Sign out of this dashboard.</strong><br>
+                  You'll need your phone to sign back in.
+                </div>
+                <button class="signout-btn">
+                  <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  Sign out
+                </button>
+              </div>
+            </div>
+
+            <div class="vendor">
+              <span class="vendor-brand">Pawkit</span>
+              <span class="vendor-sep">·</span>
+              <span class="vendor-version">v0.1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>One Teal: rail Settings-active border, same as Direction A. Cards add no Teal accents.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Stripe's profile-card rhythm: hero photo row at the top of Profile, descriptive sub under each card title, plain underline Edit links. Pitfall: 8px-radius cards on cream Paper can drift toward generic-SaaS if borders read too crisp. Mitigation: 1px Ink-faint border (not Ink) keeps cards quiet, the photo hero carries warmth.</div>
+      <div class="note-block"><div class="note-label">Risk</div>Four stacked cards may feel heavier than Settings deserves (only 6 editable fields total). Counter: cards give the photo-hero room to breathe and let the Clinic block feel like a verifiable identity card (which matches its function as the AMS letterhead source).</div>
+    </div>
+  </div>
+
+  <!-- ============ Direction C · Notion-channeled ============ -->
+  <div class="direction dir-c">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction C</div>
+      <div class="direction-title">Notion-channeled · narrow stage, small-caps lead</div>
+    </div>
+    <div class="direction-sub">640px stage, narrower than Linear or Stripe. Small-caps section labels lead the structural rhythm with a thin 1px Ink-faint underline beneath each label. Field rows are dashed-divider light. Profile photo at 40px reads as auxiliary metadata at the top of the Profile section, not a hero. Edit affordances as quiet pencil ghosts on the right (no text "Edit" label, no border). Clinic info as plain prose without card chrome. Sign out as small inline ghost button (no full-width, no card). Reads as a quiet document, not a control panel. Best fit if Sagar visits Settings rarely.</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search-empty"></div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="stage">
+            <div class="page-title">Settings</div>
+            <div class="page-sub">Your profile, account, and clinic.</div>
+
+            <div class="section">
+              <div class="section-label">Profile</div>
+              <div class="profile-photo-row">
+                <div class="profile-photo">
+                  <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="profile-photo-text">Profile photo. Appears in your byline on every Broadcast and inbox reply.</div>
+                <div class="profile-photo-action">Upload</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Full name</div>
+                <div class="field-value">Dr Sagar Bhongale</div>
+                <div class="field-edit">
+                  <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Vet license</div>
+                <div class="field-value tabular">MVC/2008/04821</div>
+                <div class="field-edit">
+                  <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Email</div>
+                <div class="field-value placeholder">Not added</div>
+                <div class="field-edit">
+                  <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-label">Account</div>
+              <div class="field-row">
+                <div class="field-label">Phone</div>
+                <div class="field-value readonly">+91 98220 47561</div>
+              </div>
+              <div class="field-row">
+                <div class="field-label">Dashboard language</div>
+                <div class="field-value">
+                  <div class="lang-toggle">
+                    <span class="lang-pill active">English</span>
+                    <span class="lang-pill">मराठी</span>
+                  </div>
+                </div>
+              </div>
+              <div class="stacked-help">Changes labels and buttons in your dashboard. Broadcasts always ship to parents in both languages.</div>
+            </div>
+
+            <div class="section">
+              <div class="section-label">Clinic</div>
+              <div class="clinic-block">
+                <div class="clinic-name">Animal Medical Services</div>
+                <div class="clinic-line">Karve Road, Kothrud, Pune 411038</div>
+                <div class="clinic-line">Maharashtra, India</div>
+                <div class="clinic-line tabular">GSTIN 27ABCDE1234F1Z2</div>
+                <div class="clinic-line">Open 9am to 9pm, Mon to Sat</div>
+              </div>
+            </div>
+
+            <div class="signout-row">
+              <button class="signout-btn">
+                <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign out
+              </button>
+            </div>
+
+            <div class="vendor">
+              <span class="vendor-brand">Pawkit</span>
+              <span class="vendor-sep">·</span>
+              <span class="vendor-version">v0.1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>One Teal: rail Settings-active border, same as A and B. Pencil-ghost edits stay Ink-faint until hover.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Notion's small-caps section labels with a thin bottom rule + dashed-divider quiet rows + pencil-ghost edits. Pitfall: too quiet can make edit affordances un-discoverable for low-literacy or first-time users. Mitigation: hover state on each row reveals the pencil at Ink, and the row tints subtly to telegraph "this is editable".</div>
+      <div class="note-block"><div class="note-label">Risk</div>Pencil-only edits with no text label fail accessibility / discoverability for users who don't recognise the icon. Counter: Settings is admin-only (Sagar, not parents). The wider parent app uses Pencil sparingly. Sagar uses Settings <1x/week so a quieter density is appropriate; the cost of low affordance is low here.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

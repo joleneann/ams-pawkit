@@ -1,0 +1,33 @@
+{
+  "name": "pawkit",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.2",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "type-check": "turbo type-check",
+    "db:push": "supabase db push",
+    "db:types": "supabase gen types typescript --project-id pevofxnfjcvmamdcfkus > packages/db-types/src/database.types.ts",
+    "db:seed": "tsx supabase/seed/seed.ts",
+    "db:reset": "tsx supabase/seed/reset.ts"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5",
+    "supabase": "^2.98.0",
+    "tsx": "^4.16.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["supabase"]
+  }
+}

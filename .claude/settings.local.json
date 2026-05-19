@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node gen-parent-mockups.js)",
+      "Bash(rm -f broadcast-inbox-parent-mockup.excalidraw)",
+      "Read(//d/c/Users/Jolene Fernandes/.claude/**)",
+      "Bash(sed -n 27,114p '/c/Users/Jolene Fernandes/.claude/plans/i-m-pitching-to-work-wiggly-dahl.md')",
+      "Bash(sed -n 115,174p '/c/Users/Jolene Fernandes/.claude/plans/i-m-pitching-to-work-wiggly-dahl.md')",
+      "Bash(sed -n 175,247p '/c/Users/Jolene Fernandes/.claude/plans/i-m-pitching-to-work-wiggly-dahl.md')",
+      "Bash(sed -n 248,336p '/c/Users/Jolene Fernandes/.claude/plans/i-m-pitching-to-work-wiggly-dahl.md')",
+      "Bash(sed -n 337,382p '/c/Users/Jolene Fernandes/.claude/plans/i-m-pitching-to-work-wiggly-dahl.md')",
+      "Bash(mkdir -p '/d/Claude Code Projects/Animal Medical Services/mockups/reference/abandoned')",
+      "Bash(mv '/c/Users/Jolene Fernandes/.claude/plans/admin-screens.html' '/d/Claude Code Projects/Animal Medical Services/mockups/reference/abandoned/')",
+      "Bash(mv '/c/Users/Jolene Fernandes/.claude/plans/inbox.html' '/d/Claude Code Projects/Animal Medical Services/mockups/reference/abandoned/')",
+      "Bash(mv '/c/Users/Jolene Fernandes/.claude/plans/inbox.pptx' '/d/Claude Code Projects/Animal Medical Services/mockups/reference/abandoned/')",
+      "Bash(mv '/c/Users/Jolene Fernandes/.claude/plans/inbox-canva.pptx' '/d/Claude Code Projects/Animal Medical Services/mockups/reference/abandoned/')",
+      "Bash(mkdir -p \"D:/Claude Code Projects/Animal Medical Services/brand-experiments\")",
+      "Bash(mv \"/c/Users/Jolene Fernandes/.claude/plans/aesthetics-comparison.html\" \"D:/Claude Code Projects/Animal Medical Services/brand-experiments/\")",
+      "Bash(mv \"/c/Users/Jolene Fernandes/.claude/plans/pet-name-fonts.html\" \"D:/Claude Code Projects/Animal Medical Services/brand-experiments/\")",
+      "Bash(mv \"/c/Users/Jolene Fernandes/.claude/plans/i-m-pitching-to-work-wiggly-dahl.md\" \"D:/Claude Code Projects/Animal Medical Services/session-logs/2026-05-04-premium-direction-v1.3.md\")",
+      "Bash(rm \"D:/Claude Code Projects/Animal Medical Services/session-logs/2026-05-01-ux-agent-output-STALE.md\")"
+    ]
+  }
+}

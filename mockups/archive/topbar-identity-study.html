@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pawkit · Topbar identity study (2026-05-15)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,wght@1,500;1,600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --canvas: #F8F7F5;
+    --ground: #EFE6E8;
+    --ink: #0F0C0A;
+    --ink-70: rgba(15, 12, 10, 0.72);
+    --ink-50: rgba(15, 12, 10, 0.55);
+    --ink-30: rgba(15, 12, 10, 0.35);
+    --rule: rgba(15, 12, 10, 0.12);
+    --rule-soft: rgba(15, 12, 10, 0.06);
+    --canvas-2: rgba(15, 12, 10, 0.04);
+    --berry: #9C2B5C;
+    --berry-deep: #7C1F47;
+    --berry-soft: rgba(156, 43, 92, 0.12);
+  }
+  html, body {
+    background: #1f1f1f;
+    color: #eaeaea;
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding: 56px 32px 96px; }
+  .doc { max-width: 1280px; margin: 0 auto; }
+
+  .doc-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; color: #c9a3b8; margin-bottom: 10px;
+  }
+  .doc-title {
+    font-size: 32px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+    color: #f0f0f0; margin-bottom: 14px;
+  }
+  .doc-lede { font-size: 14.5px; color: #bbbbbb; max-width: 880px; }
+  .doc-lede strong { color: #f0f0f0; }
+  .doc-lede code {
+    font-family: 'Inter', monospace; font-size: 13px;
+    background: #242424; border: 1px solid #3a3a3a; border-radius: 4px;
+    padding: 1px 6px; color: #d9d9d9;
+  }
+
+  /* TOC */
+  .toc {
+    display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 18px;
+    background: #242424; border: 1px solid #3a3a3a; border-radius: 10px;
+    margin: 32px 0 40px;
+  }
+  .toc-label {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #888; align-self: center; margin-right: 6px;
+  }
+  .toc a {
+    font-size: 12.5px; color: #ddd; text-decoration: none;
+    border: 1px solid #3a3a3a; border-radius: 999px; padding: 6px 12px;
+    background: #1f1f1f;
+  }
+  .toc a:hover { background: #2a2a2a; border-color: #555; }
+
+  /* Per-option section */
+  .option { margin-bottom: 56px; scroll-margin-top: 24px; }
+  .option-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
+  .option-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #c9a3b8;
+  }
+  .option-name {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: #f0f0f0;
+  }
+  .option-prims {
+    font-family: 'Inter', monospace; font-size: 12px; color: #98c69e; font-weight: 600;
+    background: #1e2a1f; border: 1px solid #2a3e2c; border-radius: 4px;
+    padding: 2px 8px;
+  }
+  .option-char { font-size: 13px; color: #aaa; margin-bottom: 18px; max-width: 880px; }
+
+  /* Topbar frame */
+  .frame {
+    width: 100%; max-width: 1180px;
+    border: 1px solid #333; border-radius: 14px; overflow: hidden;
+    background: var(--ground);
+  }
+  .topbar {
+    height: 60px; display: grid; align-items: center; padding: 0 22px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--ground);
+  }
+
+  /* Reusable bits */
+  .clinic-mark-40 {
+    width: 40px; height: 40px; background: var(--berry); color: #fff;
+    border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .clinic-mark-32 {
+    width: 32px; height: 32px; background: var(--berry); color: #fff;
+    border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .vet-av-34 {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--canvas-2); border: 1px solid var(--rule);
+    color: var(--ink); display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    overflow: hidden;
+  }
+  .vet-av-28 {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--canvas-2); border: 1px solid var(--rule);
+    color: var(--ink); display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    overflow: hidden;
+  }
+
+  /* Search bar (shared) */
+  .search {
+    height: 36px;
+    background: var(--canvas); border: 1px solid var(--rule); border-radius: 12px;
+    display: flex; align-items: center; padding: 0 14px; gap: 10px;
+    font-size: 13px; color: var(--ink-50);
+    max-width: 460px; margin: 0 auto; width: 100%;
+  }
+  .search svg { width: 16px; height: 16px; color: var(--ink-50); flex-shrink: 0; }
+
+  /* Caret */
+  .caret {
+    width: 12px; height: 12px; color: var(--ink-50);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .caret::before {
+    content: ""; width: 6px; height: 6px;
+    border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  /* notes block */
+  .note {
+    margin-top: 12px; padding: 10px 14px;
+    background: rgba(200, 230, 200, 0.06); border: 1px solid rgba(200, 230, 200, 0.15);
+    border-radius: 8px;
+    font-size: 12px; color: #b6cfb8; max-width: 880px;
+  }
+  .note strong { color: #d0e4d0; font-weight: 600; }
+
+  /* footnote */
+  .foot { margin-top: 56px; padding-top: 24px; border-top: 1px solid #444; }
+  .foot p { font-size: 13px; color: #aaa; max-width: 880px; margin-bottom: 8px; }
+  .foot strong { color: #f0f0f0; }
+  .foot code {
+    font-family: 'Inter', monospace; font-size: 12.5px;
+    background: #242424; border: 1px solid #3a3a3a; border-radius: 5px;
+    padding: 2px 6px; color: #d9d9d9;
+  }
+</style>
+</head>
+<body>
+
+<div class="doc">
+
+  <header>
+    <div class="doc-eyebrow">Topbar identity study · 2026-05-15</div>
+    <h1 class="doc-title">Quiet down the clinic + vet identity</h1>
+    <p class="doc-lede">
+      The current topbar leads loud — 40px berry clinic disc + "Animal Medical Services" at <strong>14px semibold ink</strong>, then "Dr Sagar Bhongale" at the same weight + 34px avatar circle. The identity ends up competing with the search bar and the actual content. Five options below: the current baseline plus four progressively quieter or restructured layouts. Each panel notes which shadcn primitives it uses.
+    </p>
+    <p class="doc-lede" style="margin-top:12px">
+      <strong>About Avatar circles.</strong> The clinic disc + vet avatar are currently hand-rolled <code>&lt;div&gt;</code> elements. To make them properly shadcn we'd install <code>@radix-ui/react-avatar</code> and add a wrapper at <code>components/ui/avatar.tsx</code>. Each option below could be implemented with either the hand-rolled circles or a future shadcn <code>&lt;Avatar&gt;</code> — flag at the bottom which way you want to go.
+    </p>
+  </header>
+
+  <nav class="toc">
+    <span class="toc-label">Jump to</span>
+    <a href="#current">Current (baseline)</a>
+    <a href="#a">A · Quieter type</a>
+    <a href="#b">B · Avatars only</a>
+    <a href="#c">C · Wordmark + vet menu</a>
+    <a href="#d">D · Brand chip + vet menu</a>
+  </nav>
+
+  <!-- ===================== CURRENT ===================== -->
+  <section class="option" id="current">
+    <div class="option-head">
+      <span class="option-tag">Baseline · current</span>
+      <h2 class="option-name">Where we are now</h2>
+      <span class="option-prims">Button · Input</span>
+    </div>
+    <p class="option-char">40px clinic disc + "Animal Medical Services" 14px semibold + search + "Dr Sagar Bhongale" 14px semibold + 34px avatar. Two equal-weight identity labels both competing for the chrome lane.</p>
+    <div class="frame">
+      <div class="topbar" style="grid-template-columns: 230px 1fr 230px;">
+        <a style="display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)">
+          <div class="clinic-mark-40">AMS</div>
+          <span style="font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap">Animal Medical Services</span>
+        </a>
+        <div class="search">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span>Search pets, parents, phone numbers</span>
+        </div>
+        <a style="display:flex;align-items:center;gap:12px;justify-self:end;text-decoration:none;color:var(--ink)">
+          <span style="font-size:14px;font-weight:600;color:var(--ink)">Dr Sagar Bhongale</span>
+          <div class="vet-av-34">SB</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== A · QUIETER TYPE ===================== -->
+  <section class="option" id="a">
+    <div class="option-head">
+      <span class="option-tag">Option A</span>
+      <h2 class="option-name">Quieter type</h2>
+      <span class="option-prims">Button · Input</span>
+    </div>
+    <p class="option-char">Smallest possible intervention. Same layout, but the clinic name + vet name drop from 14px/600 to <strong>13px/500</strong> with ink-70 color (instead of ink). Logos stay 40/34. Identity recedes; the search bar visually takes center stage.</p>
+    <div class="frame">
+      <div class="topbar" style="grid-template-columns: 230px 1fr 230px;">
+        <a style="display:flex;align-items:center;gap:12px;text-decoration:none">
+          <div class="clinic-mark-40">AMS</div>
+          <span style="font-size:13px;font-weight:500;color:var(--ink-70);white-space:nowrap">Animal Medical Services</span>
+        </a>
+        <div class="search">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span>Search pets, parents, phone numbers</span>
+        </div>
+        <a style="display:flex;align-items:center;gap:12px;justify-self:end;text-decoration:none">
+          <span style="font-size:13px;font-weight:500;color:var(--ink-70)">Dr Sagar Bhongale</span>
+          <div class="vet-av-34">SB</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== B · AVATARS ONLY ===================== -->
+  <section class="option" id="b">
+    <div class="option-head">
+      <span class="option-tag">Option B</span>
+      <h2 class="option-name">Avatars only</h2>
+      <span class="option-prims">Button · Tooltip · Input · (Avatar)</span>
+    </div>
+    <p class="option-char">Drop both names entirely. Just the clinic disc (left) and the vet avatar (right). Hover gives a <strong>shadcn Tooltip</strong> with the full name. Click on the vet avatar opens a <strong>DropdownMenu</strong> with Settings / Sign out. Cleanest, most "Linear-style" of the four.</p>
+    <div class="frame">
+      <div class="topbar" style="grid-template-columns: auto 1fr auto;">
+        <a style="text-decoration:none">
+          <div class="clinic-mark-40">AMS</div>
+        </a>
+        <div class="search" style="max-width:560px">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span>Search pets, parents, phone numbers</span>
+        </div>
+        <button style="border:0;background:transparent;padding:0;cursor:pointer;display:flex;align-items:center;gap:6px">
+          <div class="vet-av-34">SB</div>
+          <span class="caret"></span>
+        </button>
+      </div>
+    </div>
+    <div class="note">
+      <strong>Trade-off:</strong> Loses the clinic / vet name as always-visible chrome. On first-load a new user might not know whose dashboard this is — but Sagar is the only vet so this stops mattering after day one. Tooltip on hover recovers the name when needed.
+    </div>
+  </section>
+
+  <!-- ===================== C · WORDMARK + VET MENU ===================== -->
+  <section class="option" id="c">
+    <div class="option-head">
+      <span class="option-tag">Option C</span>
+      <h2 class="option-name">Wordmark + vet menu</h2>
+      <span class="option-prims">Button · DropdownMenu · Input · (Avatar)</span>
+    </div>
+    <p class="option-char">Lead with <strong>"Pawkit"</strong> as the brand wordmark instead of the clinic identity. The clinic disc moves into a <strong>compact secondary chip</strong> to the right of the wordmark. Vet avatar on the right is the trigger for a <strong>DropdownMenu</strong> (Settings, Sign out, language switch). Most product-first — feels like a SaaS not a single-clinic tool.</p>
+    <div class="frame">
+      <div class="topbar" style="grid-template-columns: auto 1fr auto; gap: 22px;">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="font-family:'Newsreader',serif;font-style:italic;font-weight:600;font-size:20px;color:var(--ink);letter-spacing:-0.01em">Pawkit</span>
+          <span style="width:1px;height:18px;background:var(--rule)"></span>
+          <span style="display:inline-flex;align-items:center;gap:8px;background:var(--canvas-2);padding:4px 10px 4px 4px;border-radius:999px;font-size:12.5px;font-weight:500;color:var(--ink-70)">
+            <span class="clinic-mark-32" style="width:24px;height:24px;font-size:9px">AMS</span>
+            AMS · Pune
+          </span>
+        </div>
+        <div class="search" style="max-width:520px">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span>Search pets, parents, phone numbers</span>
+        </div>
+        <button style="border:0;background:transparent;padding:0;cursor:pointer;display:flex;align-items:center;gap:8px">
+          <div class="vet-av-34">SB</div>
+          <span style="font-size:13px;font-weight:600;color:var(--ink)">Dr Sagar</span>
+          <span class="caret"></span>
+        </button>
+      </div>
+    </div>
+    <div class="note">
+      <strong>Trade-off:</strong> Adds a brand wordmark ("Pawkit") at the top of every screen — Sagar sees the platform name not just his clinic. Could read as "this is the product, not your clinic" which might cut against the white-label feel.
+    </div>
+  </section>
+
+  <!-- ===================== D · BRAND CHIP + VET MENU ===================== -->
+  <section class="option" id="d">
+    <div class="option-head">
+      <span class="option-tag">Option D</span>
+      <h2 class="option-name">Clinic chip + vet menu</h2>
+      <span class="option-prims">Button · DropdownMenu · Tooltip · Input · (Avatar)</span>
+    </div>
+    <p class="option-char">Identity-led but quieter. Clinic logo + "AMS" short name combined as a single <strong>compact chip</strong> on the left (full name on hover via Tooltip). Vet avatar + first name + DropdownMenu trigger on the right. Both identity blocks are clearly <em>clickable</em> objects, not just labels — matches the modern app expectation. Keeps the clinic-first framing.</p>
+    <div class="frame">
+      <div class="topbar" style="grid-template-columns: auto 1fr auto; gap: 22px;">
+        <button style="border:1px solid var(--rule);background:var(--canvas);padding:5px 14px 5px 6px;border-radius:999px;display:flex;align-items:center;gap:10px;cursor:pointer">
+          <div class="clinic-mark-32" style="width:30px;height:30px;font-size:11px">AMS</div>
+          <span style="font-size:13.5px;font-weight:600;color:var(--ink)">AMS</span>
+          <span class="caret"></span>
+        </button>
+        <div class="search" style="max-width:520px">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span>Search pets, parents, phone numbers</span>
+        </div>
+        <button style="border:1px solid var(--rule);background:var(--canvas);padding:5px 14px 5px 6px;border-radius:999px;display:flex;align-items:center;gap:10px;cursor:pointer">
+          <div class="vet-av-28">SB</div>
+          <span style="font-size:13.5px;font-weight:600;color:var(--ink)">Dr Sagar</span>
+          <span class="caret"></span>
+        </button>
+      </div>
+    </div>
+    <div class="note">
+      <strong>Trade-off:</strong> Both identity blocks become DropdownMenu triggers — the clinic dropdown might be empty for v0 (just "AMS, Pune" as a static label). That's a minor over-promise. We could leave it as a static chip (no dropdown) and only the vet chip opens a menu.
+    </div>
+  </section>
+
+  <div class="foot">
+    <p><strong>How to choose.</strong> Look at each topbar in context — does it sit quietly so the inbox / billing / broadcasts content can lead? Or does the identity still grab the eye?</p>
+    <p><strong>My read.</strong> <strong>B (Avatars only)</strong> is the cleanest minimal — but loses always-visible identity. <strong>D (Clinic chip + vet menu)</strong> hits the sweet spot for me: identity is present but quieter, both blocks read as interactive objects, and it sets up properly for v1+ when there's more than one vet or clinic. <strong>A (Quieter type)</strong> is the safe small fix if you don't want to restructure.</p>
+    <p>Pick A / B / C / D. Two related side-questions:</p>
+    <p>1. <strong>Should I install <code>@radix-ui/react-avatar</code></strong> + add a shadcn <code>Avatar</code> wrapper so the clinic disc + vet circle become proper primitives? Recommended yes (it's a small dep, covers ~6 places in the codebase, and the topbar refactor is a natural moment to do it).</p>
+    <p>2. <strong>Vet dropdown menu items</strong> (if you pick B / C / D) — what should be inside? Suggested: <em>Settings</em>, <em>Switch language (English / मराठी)</em>, <em>Sign out</em>. Anything else?</p>
+  </div>
+
+</div>
+
+</body>
+</html>

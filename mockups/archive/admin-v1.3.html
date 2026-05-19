@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+<title>Pawkit v1.3 - Admin Reference Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Spectral:ital,wght@0,400;0,600;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --milk: #FFFCF2; --vanilla: #EAE0C8; --honey: #E5C896; --peach: #E8A87C;
+    --rust: #B05E2E; --mushroom: #A8927A; --smoke: #8B928A; --steel: #5F6961;
+    --bark: #5C4A3A; --sable: #2B221A;
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #2a2a2a;
+    color: var(--ink);
+    line-height: 1.4;
+    padding: 32px;
+  }
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--bg-canvas);
+    padding: 48px;
+  }
+
+  /* Sheet header */
+  .sheet-header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+  .sheet-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .sheet-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    line-height: 1.05;
+  }
+  .sheet-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 12px;
+    max-width: 720px;
+  }
+
+  /* Brand reference bar */
+  .brand-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--ink-faint);
+    margin-bottom: 48px;
+  }
+  .brand-section h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+  .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .swatch {
+    width: 64px; height: 64px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 6px;
+  }
+  .swatch-label {
+    font-size: 9px;
+    color: var(--ink);
+    background: rgba(248,246,238,0.85);
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+  .swatch-light .swatch-label { color: var(--ink); background: rgba(255,255,255,0.7); }
+  .swatch-dark .swatch-label { color: var(--bg-canvas); background: rgba(15,12,10,0.7); }
+
+  /* Type samples */
+  .type-row { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--ink-faint); }
+  .type-row:last-child { border: none; }
+  .type-label { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .type-inter-body { font-family: 'Inter'; font-size: 14px; color: var(--ink); }
+  .type-inter-display { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+  .type-spectral { font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 32px; color: var(--ink); letter-spacing: -0.01em; }
+  .type-spectral small { font-size: 11px; color: var(--ink-soft); font-style: normal; font-family: Inter; font-weight: 400; letter-spacing: 0; margin-left: 12px; }
+
+  /* Component samples */
+  .components-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .teal-cta {
+    background: var(--teal);
+    color: var(--bg-canvas);
+    border: none;
+    border-radius: 6px;
+    padding: 9.5px 17.5px;
+    font-family: Inter;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    /* border: none explicitly overrides the browser default <button> border (May 5 - Teal grounds itself) */
+  }
+  .ghost-btn {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-family: Inter;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .status-pill {
+    background: var(--ink);
+    color: var(--bg-canvas);
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-family: Inter;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-feature-settings: 'tnum';
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .status-dot { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; }
+  .fur-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+    border: 2.5px solid var(--honey);
+    display: inline-block;
+  }
+  .fur-avatar.vanilla { border-color: var(--vanilla); }
+  .fur-avatar.peach { border-color: var(--peach); }
+  .fur-avatar.smoke { border-color: var(--smoke); }
+  .fur-avatar.bark { border-color: var(--bark); }
+  .fur-avatar.sable { border-color: var(--sable); }
+  .fur-avatar.milk { border-color: var(--milk); background: #d8d4cc; }
+  .fur-avatar.rust { border-color: var(--rust); }
+  .fur-avatar.mushroom { border-color: var(--mushroom); }
+  .fur-avatar.steel { border-color: var(--steel); }
+
+  /* Screen frame */
+  .screen-section { margin-bottom: 64px; }
+  .screen-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .screen-num {
+    font-family: 'Inter';
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .screen-title {
+    font-family: 'Inter';
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .screen-sub {
+    font-family: 'Inter';
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+    max-width: 720px;
+  }
+  .screen-frame {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 1300 / 800;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Dashboard chrome (shared across all admin screens) */
+  .dash-header {
+    height: 56px;
+    border-bottom: 1px solid var(--ink-faint);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  .ams-logo {
+    width: 32px; height: 32px;
+    background: var(--ink);
+    color: var(--bg-canvas);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .wordmark {
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .wordmark .clinic-name-sm { font-size: 9px; color: var(--ink-soft); display: block; text-transform: uppercase; letter-spacing: 0.16em; font-weight: 500; margin-top: 1px; }
+  .dash-search {
+    flex: 1;
+    max-width: 320px;
+    height: 32px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--ink-faint);
+    border-radius: 6px;
+    padding: 0 12px;
+    font-family: Inter;
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  .lang-toggle {
+    display: flex;
+    border: 1px solid var(--ink);
+    border-radius: 100px;
+    overflow: hidden;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .lang-toggle .lang-en { background: var(--ink); color: var(--bg-canvas); padding: 4px 12px; }
+  .lang-toggle .lang-mr { background: transparent; color: var(--ink); padding: 4px 12px; }
+  .user-chip {
+    width: 28px; height: 28px;
+    background: var(--ink-faint);
+    color: var(--bg-canvas);
+    border-radius: 50%;
+    font-family: Inter;
+    font-size: 10px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .dash-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+  .left-rail {
+    width: 200px;
+    border-right: 1px solid var(--ink-faint);
+    padding: 24px 12px;
+    flex-shrink: 0;
+  }
+  .rail-section-label {
+    font-family: Inter;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 12px;
+    margin-bottom: 8px;
+  }
+  .rail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: Inter;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 2px;
+  }
+  .rail-item.active {
+    background: var(--teal);
+    color: var(--bg-canvas);
+    padding: 8px 12px;
+    font-weight: 600;
+    /* No Ink border per May 5 discipline; padding restored to 8px 12px to preserve visual size */
+  }
+  .rail-icon {
+    width: 16px; height: 16px;
+    flex-shrink: 0;
+    stroke-width: 1.75;
+  }
+  .canvas {
+    flex: 1;
+    padding: 28px 32px;
+    overflow: hidden;
+  }
+
+  /* Inbox screen */
+  .inbox-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .inbox-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 20px; }
+  .inbox-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0 12px 12px;
+    border-bottom: 1px solid var(--ink-faint);
+    position: relative;
+  }
+  .inbox-row.active-window {
+    border-left: 4px solid var(--teal);
+    padding-left: 16px;
+    margin-left: -4px;
+  }
+  .inbox-row.unread .row-name { color: var(--ink); font-weight: 600; }
+  .inbox-row.unread::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--ink);
+    border-radius: 50%;
+    position: absolute;
+    left: -10px;
+    top: 22px;
+  }
+  .row-meta { flex: 1; min-width: 0; }
+  .row-name { font-family: Inter; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+  .row-name .pet-name { font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 14px; }
+  .row-snippet { font-family: Inter; font-size: 12px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row-snippet.mr { font-family: Inter, 'Noto Sans Devanagari', sans-serif; }
+  .row-time { font-family: Inter; font-size: 11px; color: var(--ink-faint); font-feature-settings: 'tnum'; text-align: right; flex-shrink: 0; }
+  .row-time .followup-meta { font-size: 9px; color: var(--ink-soft); display: block; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row-time .overdue { color: var(--peach); }
+  .row-tag { font-size: 9px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* Pet-context detail (screen 2) */
+  .context-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; height: 100%; }
+  .context-thread { padding-right: 24px; border-right: 1px solid var(--ink-faint); display: flex; flex-direction: column; }
+  .context-pet-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+  .context-pet-name {
+    font-family: 'Spectral', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.05;
+    margin-bottom: 2px;
+  }
+  .context-pet-meta { font-family: Inter; font-size: 11px; color: var(--ink-soft); }
+  .response-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--ink-faint);
+    border-radius: 100px;
+    padding: 3px 10px;
+    font-family: Inter;
+    font-size: 10px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+  .followup-banner {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-left: 4px solid var(--teal);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-family: 'Spectral', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .bubble {
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: Inter;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    max-width: 78%;
+  }
+  .bubble.parent {
+    background: var(--ink);
+    color: var(--bg-canvas);
+    margin-left: auto;
+  }
+  .bubble.vet {
+    background: var(--bg-canvas);
+    border: 1px solid var(--ink-faint);
+    color: var(--ink);
+  }
+  .reply-input {
+    margin-top: auto;
+    background: var(--bg-canvas);
+    border: 1px solid var(--ink);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: Inter;
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .reply-input .voice-pill { background: var(--teal); color: var(--bg-canvas); border: none; padding: 4.5px 9.5px; border-radius: 4px; font-size: 9px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; } /* border: none explicit (May 5 - Teal grounds itself) */
+  .context-medical { padding-left: 0; }
+  .medical-section { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px dashed var(--ink-faint); }
+  .medical-label { font-family: Inter; font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .medical-content { font-family: Inter; font-size: 12px; color: var(--ink); line-height: 1.5; }
+  .medical-content .meta { color: var(--ink-soft); font-size: 11px; }
+  .vet-byline {
+    font-family: Inter;
+    font-size: 11px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .vet-byline .credential {
+    display: block;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    font-weight: 500;
+    margin-top: 1px;
+  }
+
+  /* Per-pet medical profile (screen 3) - full-page Pet Page on dashboard */
+  .pet-page-cover {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid var(--ink-faint);
+    margin-bottom: 20px;
+  }
+  .pet-photo {
+    width: 96px; height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--honey), var(--peach));
+    border: 3px solid var(--honey);
+    flex-shrink: 0;
+  }
+  .pet-page-name {
+    font-family: 'Spectral', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 36px;
+    color: var(--ink);
+    line-height: 1.0;
+    margin-bottom: 6px;
+    letter-spacing: -0.015em;
+  }
+  .pet-page-context { font-family: Inter; font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
+  .pet-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--ink-faint); margin-bottom: 16px; }
+  .pet-tab { padding: 8px 14px; font-family: Inter; font-size: 12px; color: var(--ink-soft); border-bottom: 2px solid transparent; }
+  .pet-tab.active { color: var(--ink); font-weight: 600; border-bottom-color: var(--ink); }
+  .timeline-card {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .timeline-icon { width: 22px; height: 22px; color: var(--ink); stroke-width: 1.75; flex-shrink: 0; padding: 3px; }
+  .timeline-content { flex: 1; }
+  .timeline-title { font-family: Inter; font-size: 13px; font-weight: 600; color: var(--ink); }
+  .timeline-meta { font-family: Inter; font-size: 11px; color: var(--ink-soft); }
+  .timeline-date { font-family: Inter; font-size: 11px; color: var(--ink-faint); font-feature-settings: 'tnum'; text-align: right; }
+
+  /* Itemised invoice (screen 4) */
+  .invoice-header { display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 20px; }
+  .invoice-title { font-family: Inter; font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+  .invoice-meta { font-family: Inter; font-size: 11px; color: var(--ink-soft); margin-top: 4px; font-feature-settings: 'tnum'; }
+  .invoice-total {
+    font-family: Inter;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--ink);
+    font-feature-settings: 'tnum';
+    letter-spacing: -0.02em;
+    text-align: right;
+  }
+  .invoice-status { font-family: Inter; font-size: 11px; color: var(--ink-soft); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; text-align: right; margin-top: 2px; }
+  .line-group-label { font-family: Inter; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin: 14px 0 8px; }
+  .line-item { display: grid; grid-template-columns: 24px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--ink-faint); font-family: Inter; font-size: 12px; }
+  .info-icon { width: 14px; height: 14px; color: var(--ink-soft); stroke-width: 2; flex-shrink: 0; }
+  .line-name { color: var(--ink); }
+  .line-amount { color: var(--ink); font-weight: 600; font-feature-settings: 'tnum'; }
+  .invoice-totals-row { display: flex; justify-content: space-between; padding-top: 14px; margin-top: 6px; border-top: 2px solid var(--ink); font-family: Inter; font-size: 14px; font-weight: 700; font-feature-settings: 'tnum'; }
+
+  /* Broadcast composer (screen 5) */
+  .broadcast-grid { display: grid; grid-template-columns: 1fr 380px; gap: 24px; height: 100%; }
+  .compose-area { display: flex; flex-direction: column; gap: 16px; }
+  .compose-label { font-family: Inter; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px; }
+  .compose-input {
+    background: var(--bg-canvas);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: Inter;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .compose-textarea {
+    background: var(--bg-canvas);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    padding: 12px;
+    font-family: Inter;
+    font-size: 13px;
+    color: var(--ink);
+    min-height: 120px;
+    line-height: 1.5;
+  }
+  .compose-textarea .draft-hint { font-size: 11px; color: var(--ink-faint); display: block; margin-bottom: 6px; }
+  .lang-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+  .lang-tab { padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 4px; font-family: Inter; font-size: 10px; color: var(--ink-soft); font-weight: 600; }
+  .lang-tab.active { background: var(--ink); color: var(--bg-canvas); border-color: var(--ink); }
+  .audience-card {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-radius: 8px;
+    padding: 16px;
+    height: fit-content;
+  }
+  .audience-card h4 { font-family: Inter; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+  .audience-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--ink-faint); font-family: Inter; font-size: 12px; }
+  .audience-row:last-of-type { border: none; }
+  .audience-count {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 2px solid var(--ink);
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 800;
+    font-feature-settings: 'tnum';
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .audience-count small { font-size: 11px; color: var(--ink-soft); font-weight: 500; display: block; letter-spacing: 0; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* Health Kit editor (screen 6) */
+  .kit-grid { display: grid; grid-template-columns: 1fr 320px; gap: 24px; height: 100%; }
+  .kit-fields { display: flex; flex-direction: column; gap: 14px; }
+  .kit-cover {
+    background: var(--vanilla);
+    border: 1.5px dashed var(--ink-soft);
+    border-radius: 8px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .what-includes-row { display: flex; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px dashed var(--ink-faint); font-family: Inter; font-size: 12px; }
+  .check { width: 16px; height: 16px; border: 1.5px solid var(--ink); border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .preview-frame {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-radius: 16px;
+    padding: 14px;
+    height: fit-content;
+  }
+  .preview-eyebrow { font-family: Inter; font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  .preview-mini-cover { background: var(--honey); height: 80px; border-radius: 8px; margin-bottom: 10px; }
+  .preview-title { font-family: Inter; font-size: 14px; font-weight: 700; }
+  .preview-price { font-family: Inter; font-size: 16px; font-weight: 700; font-feature-settings: 'tnum'; color: var(--ink); margin: 6px 0; }
+  .preview-cta { background: var(--teal); color: var(--bg-canvas); border: none; border-radius: 6px; padding: 9.5px; text-align: center; font-family: Inter; font-size: 11px; font-weight: 600; margin-top: 10px; cursor: pointer; } /* border: none explicit (May 5 - Teal grounds itself) */
+
+  /* Settings (screen 7) */
+  .settings-section { padding: 14px 0; border-bottom: 1px solid var(--ink-faint); }
+  .settings-label { font-family: Inter; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 12px; }
+  .settings-row { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+  .settings-avatar { width: 64px; height: 64px; background: var(--ink-faint); border-radius: 50%; flex-shrink: 0; }
+  .settings-name { font-family: Inter; font-size: 16px; font-weight: 700; }
+  .settings-credential { font-family: Inter; font-size: 11px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+  .settings-field { background: var(--bg-canvas); border: 1px solid var(--ink-faint); border-radius: 6px; padding: 8px 12px; font-family: Inter; font-size: 12px; color: var(--ink); margin-bottom: 8px; }
+
+  /* Footer */
+  .footer-note {
+    margin-top: 64px;
+    padding: 24px;
+    background: rgba(0, 109, 111, 0.08);
+    border: 1px solid var(--teal);
+    border-radius: 8px;
+    font-family: Inter;
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .footer-note strong { color: var(--ink); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- SHEET HEADER -->
+  <div class="sheet-header">
+    <div class="sheet-eyebrow">Pawkit v1.3 &middot; Admin Reference Sheet &middot; May 2026</div>
+    <h1 class="sheet-title">Animal Medical Services<br/>Clinic Dashboard</h1>
+    <p class="sheet-sub">Schematic reference for Figma. Demonstrates v1.3 brand discipline (Paper #F5F1E8 + Ink + Deep Teal #006D6F hero rendering border-less, May 5 update + Spectral serif italic for pet names) across all 7 admin screens. Not a final design - pixel-perfect work happens in Figma.</p>
+  </div>
+
+  <!-- BRAND BAR -->
+  <div class="brand-bar">
+    <div class="brand-section">
+      <h3>Palette v1.3</h3>
+      <div class="swatch-row">
+        <div class="swatch swatch-light" style="background: #F5F1E8;"><span class="swatch-label">Paper</span></div>
+        <div class="swatch swatch-dark" style="background: #0F0C0A;"><span class="swatch-label">Ink</span></div>
+        <div class="swatch swatch-dark" style="background: #5C5550;"><span class="swatch-label">Soft</span></div>
+        <div class="swatch swatch-light" style="background: #A8A39E;"><span class="swatch-label">Faint</span></div>
+        <div class="swatch swatch-dark" style="background: #006D6F;"><span class="swatch-label">Teal</span></div>
+      </div>
+      <div class="swatch-row">
+        <div class="swatch swatch-light" style="background: #FFFCF2;"><span class="swatch-label">Milk</span></div>
+        <div class="swatch swatch-light" style="background: #EAE0C8;"><span class="swatch-label">Vanilla</span></div>
+        <div class="swatch swatch-light" style="background: #E5C896;"><span class="swatch-label">Honey</span></div>
+        <div class="swatch swatch-light" style="background: #E8A87C;"><span class="swatch-label">Peach</span></div>
+        <div class="swatch swatch-dark" style="background: #B05E2E;"><span class="swatch-label">Rust</span></div>
+        <div class="swatch swatch-light" style="background: #A8927A;"><span class="swatch-label">Mush.</span></div>
+        <div class="swatch swatch-light" style="background: #8B928A;"><span class="swatch-label">Smoke</span></div>
+        <div class="swatch swatch-dark" style="background: #5F6961;"><span class="swatch-label">Steel</span></div>
+        <div class="swatch swatch-dark" style="background: #5C4A3A;"><span class="swatch-label">Bark</span></div>
+        <div class="swatch swatch-dark" style="background: #2B221A;"><span class="swatch-label">Sable</span></div>
+      </div>
+    </div>
+
+    <div class="brand-section">
+      <h3>Typography &amp; Components</h3>
+      <div class="type-row">
+        <div class="type-label">Display &middot; Satoshi Bold</div>
+        <div class="type-inter-display">Pet inbox</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Body &middot; Inter 400</div>
+        <div class="type-inter-body">12 messages need your attention today.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Pet name &middot; Spectral semibold italic (hero contexts only)</div>
+        <div class="type-spectral">Gabby <small>&larr; pet names use Spectral</small></div>
+      </div>
+      <div class="components-row">
+        <button class="teal-cta">Send reply</button>
+        <button class="ghost-btn">Save draft</button>
+        <span class="status-pill"><span class="status-dot"></span>Open &middot; 2d</span>
+        <span class="status-pill"><span class="status-dot"></span>Overdue</span>
+      </div>
+      <div class="components-row" style="margin-top: 12px;">
+        <span class="fur-avatar honey"></span>
+        <span class="fur-avatar vanilla"></span>
+        <span class="fur-avatar peach"></span>
+        <span class="fur-avatar smoke"></span>
+        <span class="fur-avatar bark"></span>
+        <span class="fur-avatar sable"></span>
+        <span style="font-family: Inter; font-size: 10px; color: var(--ink-faint); margin-left: 8px;">Fur avatars (10 ring colours)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: INBOX -->
+  <div class="screen-section">
+    <div class="screen-title-row">
+      <span class="screen-num">Screen 01</span>
+      <h2 class="screen-title">Inbox - Sagar's daily landing</h2>
+    </div>
+    <p class="screen-sub">One queue of open-follow-up-window threads. No buckets, no classifier pills, no tabs (locked 2026-05-06; incoming messages only exist inside open windows so there is nothing to classify). Active-window rows have a 4px Teal left bar. Unreplied rows have a 7px Ink dot at the row gutter. Pet names render in Spectral semibold italic.</p>
+    <div class="screen-frame">
+      <div class="dash-header">
+        <div class="ams-logo">AMS</div>
+        <div class="wordmark">Animal Medical Services<span class="clinic-name-sm">Pune</span></div>
+        <div class="dash-search">Search messages, parents, pets&hellip;</div>
+        <div class="lang-toggle"><span class="lang-en">EN</span><span class="lang-mr">MR</span></div>
+        <div class="user-chip">JF</div>
+      </div>
+      <div class="dash-body">
+        <div class="left-rail">
+          <div class="rail-section-label">Today</div>
+          <div class="rail-item active"><i data-lucide="inbox" class="rail-icon"></i> Inbox</div>
+          <div class="rail-item"><i data-lucide="megaphone" class="rail-icon"></i> Broadcasts</div>
+          <div class="rail-item"><i data-lucide="book-open" class="rail-icon"></i> Health Kits</div>
+          <div class="rail-item" style="margin-top: 24px;"><i data-lucide="settings" class="rail-icon"></i> Settings</div>
+        </div>
+        <div class="canvas">
+          <h1 class="inbox-title">Inbox</h1>
+          <div class="inbox-sub">5 open windows &middot; 2 unreplied &middot; 1 overdue</div>
+          <div class="inbox-row active-window unread">
+            <span class="fur-avatar honey"></span>
+            <div class="row-meta">
+              <div class="row-name">Jolene Fernandes &middot; <span class="pet-name">Gabby</span></div>
+              <div class="row-snippet">Gabby's still limping a bit. Not putting weight on his back left leg.</div>
+            </div>
+            <div class="row-time">2h<span class="followup-meta">follow-up &middot; 2d left</span></div>
+          </div>
+          <div class="inbox-row active-window unread">
+            <span class="fur-avatar rust"></span>
+            <div class="row-meta">
+              <div class="row-name">Priya Mehta &middot; <span class="pet-name">Coco</span></div>
+              <div class="row-snippet">Coco vomited again last night, third time this week.</div>
+            </div>
+            <div class="row-time">1d<span class="followup-meta overdue">&bull; overdue</span></div>
+          </div>
+          <div class="inbox-row active-window">
+            <span class="fur-avatar peach"></span>
+            <div class="row-meta">
+              <div class="row-name">Sneha Karve &middot; <span class="pet-name">Mishti</span></div>
+              <div class="row-snippet mr">Mishti गेल्या आठवड्यापासून थोडी थकलेली दिसते</div>
+            </div>
+            <div class="row-time">2d<span class="followup-meta">follow-up &middot; 1d left &middot; MR</span></div>
+          </div>
+          <div class="inbox-row active-window">
+            <span class="fur-avatar smoke"></span>
+            <div class="row-meta">
+              <div class="row-name">Sanjay Naik &middot; <span class="pet-name">Loki</span></div>
+              <div class="row-snippet">Stitches looking pink around the edge. Sending photo.</div>
+            </div>
+            <div class="row-time">1d<span class="followup-meta">surgery follow-up &middot; 2d left</span></div>
+          </div>
+          <div class="inbox-row active-window">
+            <span class="fur-avatar mushroom"></span>
+            <div class="row-meta">
+              <div class="row-name">Aamir Khan &middot; <span class="pet-name">Tiger</span></div>
+              <div class="row-snippet">Thank you for the careful work on Tiger's surgery. He's eating again today.</div>
+            </div>
+            <div class="row-time">3d<span class="followup-meta">surgery follow-up &middot; closing today</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: PET-CONTEXT VIEW -->
+  <div class="screen-section">
+    <div class="screen-title-row">
+      <span class="screen-num">Screen 02</span>
+      <h2 class="screen-title">Pet-context view - reply with full medical context</h2>
+    </div>
+    <p class="screen-sub">Tapping an inbox row opens a split view: thread bubbles on the left, read-only medical context on the right. Open follow-up window banner uses Spectral serif italic. Sagar hand-writes every reply with Sarvam voice-input transcription as the only AI assist; no AI-drafted replies in v0.</p>
+    <div class="screen-frame">
+      <div class="dash-header">
+        <div class="ams-logo">AMS</div>
+        <div class="wordmark">Animal Medical Services<span class="clinic-name-sm">Pune</span></div>
+        <div class="dash-search">Search messages, parents, pets&hellip;</div>
+        <div class="lang-toggle"><span class="lang-en">EN</span><span class="lang-mr">MR</span></div>
+        <div class="user-chip">JF</div>
+      </div>
+      <div class="dash-body">
+        <div class="left-rail">
+          <div class="rail-section-label">Today</div>
+          <div class="rail-item active"><i data-lucide="inbox" class="rail-icon"></i> Inbox</div>
+          <div class="rail-item"><i data-lucide="megaphone" class="rail-icon"></i> Broadcasts</div>
+          <div class="rail-item"><i data-lucide="book-open" class="rail-icon"></i> Health Kits</div>
+          <div class="rail-item" style="margin-top: 24px;"><i data-lucide="settings" class="rail-icon"></i> Settings</div>
+        </div>
+        <div class="canvas">
+          <div class="context-grid">
+            <div class="context-thread">
+              <div class="context-pet-header">
+                <span class="fur-avatar honey" style="width: 56px; height: 56px;"></span>
+                <div>
+                  <div class="context-pet-name">Gabby</div>
+                  <div class="context-pet-meta">Golden Retriever &middot; 4 years &middot; Fernandes household</div>
+                  <span class="response-chip">Dr Sagar typically replies within 4h during clinic hours</span>
+                </div>
+              </div>
+              <div class="followup-banner">Open follow-up &middot; 2 days left</div>
+              <div class="bubble parent">Gabby's still limping a bit. He's not putting weight on his back left leg, especially after walks.</div>
+              <div class="bubble vet">Could you send a short video of him walking around? And note when you noticed it starting. I'll have a closer look in the morning.</div>
+              <div class="bubble parent">Sending now. Started yesterday after his evening walk.</div>
+              <div class="reply-input"><span>Type a reply&hellip;</span><span class="voice-pill">Voice input</span></div>
+            </div>
+            <div class="context-medical">
+              <div class="medical-section">
+                <div class="medical-label">Last visit</div>
+                <div class="medical-content">Routine consult <span class="meta">&middot; 14 March 2026</span></div>
+              </div>
+              <div class="medical-section">
+                <div class="medical-label">Chronic conditions</div>
+                <div class="medical-content">Mild seasonal dermatitis (managed)</div>
+              </div>
+              <div class="medical-section">
+                <div class="medical-label">Current medications</div>
+                <div class="medical-content">Apoquel 5.4mg &middot; once daily</div>
+              </div>
+              <div class="medical-section">
+                <div class="medical-label">Last vaccination</div>
+                <div class="medical-content">DHPPi+L4 booster <span class="meta">&middot; 22 January 2026</span></div>
+              </div>
+              <div class="medical-section">
+                <div class="vet-byline">Dr Sagar Bhongale<span class="credential">Animal Medical Services</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: PER-PET MEDICAL PROFILE -->
+  <div class="screen-section">
+    <div class="screen-title-row">
+      <span class="screen-num">Screen 03</span>
+      <h2 class="screen-title">Per-pet medical profile (Gabby) - full Pet Page</h2>
+    </div>
+    <p class="screen-sub">The Pet Page treatment ported to the dashboard. Pet name in Spectral 36pt semibold italic, gradient avatar uses fur-match-derived primary tone (Honey for Gabby), editorial timeline of clinical moments below. Vet byline as magazine attribution.</p>
+    <div class="screen-frame">
+      <div class="dash-header">
+        <div class="ams-logo">AMS</div>
+        <div class="wordmark">Animal Medical Services<span class="clinic-name-sm">Pune</span></div>
+        <div class="dash-search">Search messages, parents, pets&hellip;</div>
+        <div class="lang-toggle"><span class="lang-en">EN</span><span class="lang-mr">MR</span></div>
+        <div class="user-chip">JF</div>
+      </div>
+      <div class="dash-body">
+        <div class="left-rail">
+          <div class="rail-section-label">Today</div>
+          <div class="rail-item"><i data-lucide="inbox" class="rail-icon"></i> Inbox</div>
+          <div class="rail-item"><i data-lucide="megaphone" class="rail-icon"></i> Broadcasts</div>
+          <div class="rail-item"><i data-lucide="book-open" class="rail-icon"></i> Health Kits</div>
+          <div class="rail-item" style="margin-top: 24px;"><i data-lucide="settings" class="rail-icon"></i> Settings</div>
+        </div>
+        <div class="canvas">
+          <div class="pet-page-cover">
+            <div class="pet-photo"></div>
+            <div style="flex: 1;">
+              <div class="pet-page-name">Gabby</div>
+              <div class="pet-page-context">Golden Retriever &middot; 4 years &middot; Patient at Animal Medical Services since 2024</div>
+              <div class="vet-byline">Dr Sagar Bhongale<span class="credential">Animal Medical Services</span></div>
+            </div>
+            <div style="text-align: right;">
+              <span class="status-pill"><span class="status-dot"></span>Open &middot; 2d</span>
+            </div>
+          </div>
+          <div class="pet-tabs">
+            <span class="pet-tab active">Timeline</span>
+            <span class="pet-tab">Visits</span>
+            <span class="pet-tab">Vaccinations</span>
+            <span class="pet-tab">Notes</span>
+          </div>
+          <div class="followup-banner">Dr Sagar is here for Gabby until 2 May</div>
+          <div class="timeline-card">
+            <i data-lucide="stethoscope" class="timeline-icon"></i>
+            <div class="timeline-content">
+              <div class="timeline-title">Routine wellness check and mild lameness assessment</div>
+              <div class="timeline-meta">Right hind, transient. Soft-tissue suspected. Rest + observe 7 days.</div>
+            </div>
+            <div class="timeline-date">14 Mar 2026</div>
+          </div>
+          <div class="timeline-card">
+            <i data-lucide="syringe" class="timeline-icon"></i>
+            <div class="timeline-content">
+              <div class="timeline-title">DHPPi+L4 annual booster</div>
+              <div class="timeline-meta">No reaction. Next due January 2027.</div>
+            </div>
+            <div class="timeline-date">22 Jan 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: ITEMISED INVOICE -->
+  <div class="screen-section">
+    <div class="screen-title-row">
+      <span class="screen-num">Screen 04</span>
+      <h2 class="screen-title">Itemised invoice - view-only receipt</h2>
+    </div>
+    <p class="screen-sub">View-only receipt (payments cleared at the desk). Line items grouped by type with always-visible info icons. NO Mark-paid CTA - this is a record, not a bill.</p>
+    <div class="screen-frame">
+      <div class="dash-header">
+        <div class="ams-logo">AMS</div>
+        <div class="wordmark">Animal Medical Services<span class="clinic-name-sm">Pune</span></div>
+        <div class="dash-search">Search messages, parents, pets&hellip;</div>
+        <div class="lang-toggle"><span class="lang-en">EN</span><span class="lang-mr">MR</span></div>
+        <div class="user-chip">JF</div>
+      </div>
+      <div class="dash-body">
+        <div class="left-rail">
+          <div class="rail-section-label">Today</div>
+          <div class="rail-item"><i data-lucide="inbox" class="rail-icon"></i> Inbox</div>
+          <div class="rail-item"><i data-lucide="megaphone" class="rail-icon"></i> Broadcasts</div>
+          <div class="rail-item"><i data-lucide="book-open" class="rail-icon"></i> Health Kits</div>
+          <div class="rail-item" style="margin-top: 24px;"><i data-lucide="settings" class="rail-icon"></i> Settings</div>
+        </div>
+        <div class="canvas">
+          <div class="invoice-header">
+            <div>
+              <h1 class="invoice-title">Invoice #AMS-2026-1138</h1>
+              <div class="invoice-meta">For <span class="pet-name" style="font-family: 'Spectral', serif; font-style: italic; font-weight: 600;">Gabby</span> &middot; Fernandes household &middot; 14 March 2026</div>
+            </div>
+            <div>
+              <div class="invoice-total">&#8377;3,450</div>
+              <div class="invoice-status">Paid &middot; Cleared at desk</div>
+            </div>
+          </div>
+          <div class="line-group-label">Consultation</div>
+          <div class="line-item">
+            <i data-lucide="info" class="info-icon"></i>
+            <span class="line-name">Routine consult - lameness assessment</span>
+            <span class="line-amount">&#8377;800</span>
+          </div>
+          <div class="line-group-label">Diagnostics</div>
+          <div class="line-item">
+            <i data-lucide="info" class="info-icon"></i>
+            <span class="line-name">Right hind palpation &amp; gait observation</span>
+            <span class="line-amount">&#8377;400</span>
+          </div>
+          <div class="line-group-label">Medications dispensed</div>
+          <div class="line-item">
+            <i data-lucide="info" class="info-icon"></i>
+            <span class="line-name">Cefadroxil 500mg &times; 7 days</span>
+            <span class="line-amount">&#8377;620</span>
+          </div>
+          <div class="line-item">
+            <i data-lucide="info" class="info-icon"></i>
+            <span class="line-name">Meloxicam 1.5mg/ml suspension &times; 30ml</span>
+            <span class="line-amount">&#8377;780</span>
+          </div>
+          <div class="line-group-label">Vaccination</div>
+          <div class="line-item">
+            <i data-lucide="info" class="info-icon"></i>
+            <span class="line-name">Rabies booster (annual)</span>
+            <span class="line-amount">&#8377;850</span>
+          </div>
+          <div class="invoice-totals-row"><span>Total paid</span><span>&#8377;3,450</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: BROADCAST COMPOSER -->
+  <div class="screen-section">
+    <div class="screen-title-row">
+      <span class="screen-num">Screen 05</span>
+      <h2 class="screen-title">Broadcast composer - bilingual + audience filtering</h2>
+    </div>
+    <p class="screen-sub">EN/MR tabs on the body field (both languages first-class, not source/translation). Live audience count chip ticks down when "Exclude deceased" is toggled (143 &rarr; 142). Microphone button next to body for Sarvam AI voice input. Send is the single Teal CTA.</p>
+    <div class="screen-frame">
+      <div class="dash-header">
+        <div class="ams-logo">AMS</div>
+        <div class="wordmark">Animal Medical Services<span class="clinic-name-sm">Pune</span></div>
+        <div class="dash-search">Search messages, parents, pets&hellip;</div>
+        <div class="lang-toggle"><span class="lang-en">EN</span><span class="lang-mr">MR</span></div>
+        <div class="user-chip">JF</div>
+      </div>
+      <div class="dash-body">
+        <div class="left-rail">
+          <div class="rail-section-label">Today</div>
+          <div class="rail-item"><i data-lucide="inbox" class="rail-icon"></i> Inbox</div>
+          <div class="rail-item active"><i data-lucide="megaphone" class="rail-icon"></i> Broadcasts</div>
+          <div class="rail-item"><i data-lucide="book-open" class="rail-icon"></i> Health Kits</div>
+          <div class="rail-item" style="margin-top: 24px;"><i data-lucide="settings" class="rail-icon"></i> Settings</div>
+        </div>
+        <div class="canvas">
+          <div class="broadcast-grid">
+            <div class="compose-area">
+              <div>
+                <div class="compose-label">Topic</div>
+                <div class="compose-input">Monsoon tick prevention - June reminder</div>
+              </div>
+              <div>
+                <div class="compose-label">Body</div>
+                <div class="lang-tabs"><span class="lang-tab active">EN</span><span class="lang-tab">MR</span></div>
+                <div class="compose-textarea">
+                  <span class="draft-hint">Voice input via Sarvam AI &middot; type or dictate</span>
+                  Monsoon is here. Ticks and fleas are most active right now. Bring your dog in for a quick parasite check - we have spot-on treatments and tick collars in stock. Walk in any time before 7pm.
+                </div>
+              </div>
+              <button class="teal-cta" style="margin-top: 12px; align-self: flex-start; padding: 10px 24px;">Send now</button>
+            </div>
+            <div class="audience-card">
+              <h4>Audience filter</h4>
+              <div class="audience-row"><span>Species</span><span>All</span></div>
+              <div class="audience-row"><span>Age range</span><span>Any</span></div>
+              <div class="audience-row"><span>Last visit</span><span>&lt; 12 months</span></div>
+              <div class="audience-row"><span>Exclude deceased</span><span>&#10003;</span></div>
+              <div class="audience-count">142 households<small>187 pets</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: HEALTH KIT EDITOR -->
+  <div class="screen-section">
+    <div class="screen-title-row">
+      <span class="screen-num">Screen 06</span>
+      <h2 class="screen-title">Health Kit editor - educational content (locked May 4)</h2>
+    </div>
+    <p class="screen-sub">Health Kit = <strong>educational content</strong> the vet authors for pet parents (e.g. "How to care for your dog in the summer"), NOT a service bundle. Sections: title + key_points + body + warning_signs + escalation, all bilingual EN+MR. Cover image optional. <strong>Each published kit gets a public URL</strong> (<code>pawkit.app/kits/[slug]</code>) so parents can share to non-Pawkit users via WhatsApp / Social / Email - the virality layer. Publish is the single Teal CTA.</p>
+    <div class="screen-frame">
+      <div class="dash-header">
+        <div class="ams-logo">AMS</div>
+        <div class="wordmark">Animal Medical Services<span class="clinic-name-sm">Pune</span></div>
+        <div class="dash-search">Search messages, parents, pets&hellip;</div>
+        <div class="lang-toggle"><span class="lang-en">EN</span><span class="lang-mr">MR</span></div>
+        <div class="user-chip">JF</div>
+      </div>
+      <div class="dash-body">
+        <div class="left-rail">
+          <div class="rail-section-label">Today</div>
+          <div class="rail-item"><i data-lucide="inbox" class="rail-icon"></i> Inbox</div>
+          <div class="rail-item"><i data-lucide="megaphone" class="rail-icon"></i> Broadcasts</div>
+          <div class="rail-item active"><i data-lucide="book-open" class="rail-icon"></i> Health Kits</div>
+          <div class="rail-item" style="margin-top: 24px;"><i data-lucide="settings" class="rail-icon"></i> Settings</div>
+        </div>
+        <div class="canvas">
+          <div class="kit-grid">
+            <div class="kit-fields">
+              <div class="kit-cover">+ Cover image (optional)</div>
+              <div style="display: flex; gap: 8px; align-items: center; padding: 8px 12px; background: var(--bg-canvas); border: 1px dashed var(--ink-faint); border-radius: 6px; font-family: Inter; font-size: 11px; color: var(--ink-soft);">
+                <span style="font-weight: 600;">pawkit.app/kits/summer-dog-care</span>
+                <button class="ghost-btn" style="padding: 4px 10px; font-size: 11px; margin-left: auto;">Copy public URL</button>
+                <span style="color: var(--ink-faint); padding-left: 8px; border-left: 1px solid var(--ink-faint); font-feature-settings: 'tnum';">&middot; 17 shares</span>
+              </div>
+              <div>
+                <div class="compose-label">Title</div>
+                <div class="lang-tabs"><span class="lang-tab active">EN</span><span class="lang-tab">MR</span></div>
+                <div class="compose-input">How to care for your dog in the summer</div>
+              </div>
+              <div>
+                <div class="compose-label">Key points (bullet summary)</div>
+                <div class="lang-tabs"><span class="lang-tab active">EN</span><span class="lang-tab">MR</span></div>
+                <div class="what-includes-row" style="font-size: 11px;"><span style="color: var(--ink); font-weight: 700; flex-shrink: 0;">&middot;</span> Provide unlimited fresh water - change it twice daily</div>
+                <div class="what-includes-row" style="font-size: 11px;"><span style="color: var(--ink); font-weight: 700; flex-shrink: 0;">&middot;</span> Protect their paws - asphalt above 50&deg;C burns paw pads in seconds</div>
+                <div class="what-includes-row" style="font-size: 11px;"><span style="color: var(--ink); font-weight: 700; flex-shrink: 0;">&middot;</span> NEVER leave them in a parked car, even with windows cracked</div>
+                <div class="what-includes-row" style="font-size: 11px;"><span style="color: var(--ink); font-weight: 700; flex-shrink: 0;">&middot;</span> Walk before 7&nbsp;am or after 7&nbsp;pm only</div>
+                <div class="what-includes-row" style="font-size: 11px;"><span style="color: var(--ink); font-weight: 700; flex-shrink: 0;">&middot;</span> Recognise heat stroke: panting, drooling, vomiting, collapse</div>
+              </div>
+              <div>
+                <div class="compose-label">Warning signs <span style="color: var(--peach); margin-left: 4px;">&#9679;</span></div>
+                <div class="compose-textarea" style="min-height: 50px; font-size: 12px;">Excessive panting that doesn't slow with rest. Thick drool. Vomiting. Bright red gums. Stumbling or collapse. Body temperature above 39.5&deg;C measured rectally.</div>
+              </div>
+              <div>
+                <div class="compose-label">Escalation - when to call us <span style="color: var(--peach); margin-left: 4px;">&#9679;</span></div>
+                <div class="compose-textarea" style="min-height: 50px; font-size: 12px;">If rectal temperature exceeds 39.5&deg;C OR your dog cannot stand, this is an emergency. Call AMS immediately at +91-2026123456. While en route, wet your dog with cool (NOT cold) water and run AC at full blast.</div>
+              </div>
+              <button class="teal-cta" style="align-self: flex-start; padding: 10px 24px;">Publish</button>
+            </div>
+            <div class="preview-frame">
+              <div class="preview-eyebrow">Parent-side preview</div>
+              <div style="background: var(--vanilla); height: 60px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-family: Inter; font-size: 9px; color: var(--ink-soft); font-style: italic;">No cover &middot; Vanilla placeholder</div>
+              <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 8px;">
+                <div style="width: 18px; height: 18px; background: var(--ink-faint); border-radius: 50%;"></div>
+                <div style="font-family: Inter; font-size: 9px; font-weight: 600;">Dr Sagar Bhongale<span style="display: block; font-weight: 400; color: var(--ink-soft); font-size: 8px; text-transform: uppercase; letter-spacing: 0.08em;">AMS Pune</span></div>
+              </div>
+              <div class="preview-title" style="font-size: 13px; line-height: 1.2;">How to care for your dog in the summer</div>
+              <div style="font-family: Inter; font-size: 9px; color: var(--ink-soft); margin-top: 8px; line-height: 1.5;">&bull; Unlimited fresh water&hellip;<br/>&bull; Protect their paws&hellip;<br/>&bull; Never leave in car&hellip;</div>
+              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--ink-faint); font-family: Inter; font-size: 9px; color: var(--ink-soft);"><span style="color: var(--peach);">&#9679;</span> Warning signs &middot; Escalation</div>
+              <div class="preview-cta" style="margin-top: 10px;">Share &middot; WhatsApp / Social / Email</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: SETTINGS -->
+  <div class="screen-section">
+    <div class="screen-title-row">
+      <span class="screen-num">Screen 07</span>
+      <h2 class="screen-title">Settings - account + language only (v0)</h2>
+    </div>
+    <p class="screen-sub">Minimum-viable settings: account profile, language preference (Sagar's dashboard interface), logout. NOT in v0: clinic info (hard-coded), notification prefs (PWA install grant), theme. No Teal CTA on this screen - passive surface.</p>
+    <div class="screen-frame">
+      <div class="dash-header">
+        <div class="ams-logo">AMS</div>
+        <div class="wordmark">Animal Medical Services<span class="clinic-name-sm">Pune</span></div>
+        <div class="dash-search">Search messages, parents, pets&hellip;</div>
+        <div class="lang-toggle"><span class="lang-en">EN</span><span class="lang-mr">MR</span></div>
+        <div class="user-chip">JF</div>
+      </div>
+      <div class="dash-body">
+        <div class="left-rail">
+          <div class="rail-section-label">Today</div>
+          <div class="rail-item"><i data-lucide="inbox" class="rail-icon"></i> Inbox</div>
+          <div class="rail-item"><i data-lucide="megaphone" class="rail-icon"></i> Broadcasts</div>
+          <div class="rail-item"><i data-lucide="book-open" class="rail-icon"></i> Health Kits</div>
+          <div class="rail-item active" style="margin-top: 24px;"><i data-lucide="settings" class="rail-icon"></i> Settings</div>
+        </div>
+        <div class="canvas">
+          <h1 class="inbox-title">Settings</h1>
+          <div class="settings-section">
+            <div class="settings-label">Account</div>
+            <div class="settings-row">
+              <div class="settings-avatar"></div>
+              <div>
+                <div class="settings-name">Dr Sagar Bhongale</div>
+                <div class="settings-credential">Animal Medical Services</div>
+              </div>
+            </div>
+            <div class="settings-field">+91 98XX XX XX21</div>
+            <div class="settings-field">sagar@animalmedicalservices.in</div>
+            <button class="ghost-btn" style="align-self: flex-start;">Save changes</button>
+          </div>
+          <div class="settings-section">
+            <div class="settings-label">Language preference (your dashboard interface)</div>
+            <div class="lang-toggle" style="display: inline-flex;"><span class="lang-en">EN</span><span class="lang-mr">MR</span></div>
+            <div style="font-family: Inter; font-size: 11px; color: var(--ink-soft); margin-top: 8px;">Broadcasts and Health Kits stay independently bilingual via the EN/MR tabs in their composers.</div>
+          </div>
+          <div class="settings-section" style="border: none;">
+            <button class="ghost-btn" style="border-color: var(--ink-faint); color: var(--ink-soft);">Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-note">
+    <strong>How to use this sheet:</strong> Open in Figma alongside your design file. The palette swatches, type samples, and component samples in the Brand Bar are the source of truth for styles you'll set up in Figma. The seven screens below are layout-intent references - pixel-perfect work happens in Figma using the locked v1.3 system above. <strong>Microcopy is placeholder - the proper copy round happens after screens are designed.</strong>
+  </div>
+
+</div>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+/* Pawkit palette v1.4 (mauve-only, locked 2026-05-14; v1.3 Teal/Paper deleted same day). */
+/* 14 colour tokens, three roles. Pure white (#FFFFFF) and pure black (#000000) are forbidden. */
+/* Fur tokens NEVER in chrome (hardened 2026-05-08). */
+/* The hero brand color renamed from --teal to --berry 2026-05-15 cleanup so the variable name */
+/* matches the actual color identity (Boysenberry). Hex updated 2026-05-15 evening from */
+/* #823159 (HSL 327 45 35) to #9C2B5C (HSL 334 57 39) — "tasteful pop" saturation lift */
+/* to pull the brand out of the dusty / gray zone. data-theme="mauve" switch deleted */
+/* 2026-05-14: mauve is the only theme, no more conditional overrides. */
+
+:root {
+  /* Structural neutrals: NEVER use as fur-match targets */
+  --bg-canvas: #F8F7F5;       /* Cool off-white. Hex alias for direct CSS use (body bg, focus outline). */
+  --bg-canvas-rgb: 248 247 245; /* RGB triplet form for Tailwind alpha-value composition (bg-canvas/40 etc.). */
+  --text-primary: #0F0C0A;    /* Ink, L=4. All body text, headlines, structural shadow. */
+  --text-secondary: #5C5550;  /* Ink-soft, L=36. Secondary text, captions, handles. */
+  --text-muted: #8F8B86;      /* Ink-faint, L=58. Bumped from #A8A39E for 3.5:1 contrast on cool canvas. */
+
+  /* Fur kit (10 tones): ONLY for pet fur matching, NEVER chrome (hardened 2026-05-08). */
+  /* Allowed exception: Sable as Sampling-state cover in fur-match (the moment is about fur). */
+  /* Vanilla as Empty-state cover DROPPED May 5; Empty cover now uses Ink-faint (--text-muted). */
+  --fur-milk: #FFFCF2;        /* L=99: Samoyed, Maltese, white Persian, Dalmatian (white base coat is near-pure white) */
+  --fur-vanilla: #EAE0C8;     /* L=89: Yellow Lab, cream Golden, light Indie */
+  --fur-honey: #E5C896;       /* L=81: Darker Golden Retriever, wheaten coats */
+  --fur-peach: #E8A87C;       /* L=70: Orange tabby, Vizsla, ginger kitten */
+  --fur-rust: #B05E2E;        /* L=47: Irish Setter, Dachshund, ruby Cavalier */
+  --fur-mushroom: #A8927A;    /* L=57: Adult brown Lab, fawn Pug, Indie */
+  --fur-smoke: #8B928A;       /* L=59: Russian Blue, Korat, Chartreux, grey tabby. Shifted 2026-05-08 from #A8B4BA (cool blue → cool-neutral grey with slight green undertone, distinct from warm-taupe Mushroom and warm-neutral Ink-faint chrome). */
+  --fur-steel: #5F6961;       /* L=42: Schnauzer banding, Cane Corso, dark grey cat. Shifted 2026-05-08 from #6B7B82 (cool blue-grey → cool-neutral dark grey with slight green undertone, distinct from warm-brown Bark and warm-neutral Ink-soft chrome). */
+  --fur-bark: #5C4A3A;        /* L=30: Chocolate Lab, brown tabby, dark Indie */
+  --fur-sable: #2B221A;       /* L=13: Black Lab, panther cat, black Pom */
+
+  /* Hero brand color — Boysenberry (was Teal #006D6F in v1.3, lime #DFFD06 in v1.2). */
+  /* Used across CTAs, hero count cards, vet message bubbles, active tabs, segmented */
+  /* toggles, active rail item, focus rings, search-bar wash — the "one Teal per screen" */
+  /* budget from v1.3 is intentionally relaxed for the mauve build (locked 2026-05-14). */
+  --berry: #9C2B5C;           /* Boysenberry — Tasteful pop, locked 2026-05-15 evening. Hex alias for direct CSS use (focus ring outline). */
+  --berry-rgb: 156 43 92;     /* RGB triplet form for Tailwind alpha-value composition (bg-berry/10 etc.). */
+}

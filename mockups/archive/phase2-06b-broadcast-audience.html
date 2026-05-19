@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit Phase 2 · Screen 06b · Broadcast audience + send</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --honey: #C8A467;
+  }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #1f1f1f; color: var(--bg-canvas); padding: 48px 32px 96px; line-height: 1.4; }
+  .doc { max-width: 1360px; margin: 0 auto; }
+  .doc-header { border-bottom: 1px solid #444; padding-bottom: 24px; margin-bottom: 40px; }
+  .doc-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+  .doc-title { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: var(--bg-canvas); margin-bottom: 12px; }
+  .doc-sub { font-size: 13px; color: #aaa; line-height: 1.6; max-width: 820px; }
+  .doc-sub .key { color: var(--bg-canvas); font-weight: 500; }
+
+  .reading-note { background: rgba(255,255,255,0.04); border-left: 3px solid var(--teal); padding: 14px 18px; margin: 8px 0 40px; font-size: 13px; line-height: 1.6; color: #ccc; }
+  .reading-note .key { color: var(--bg-canvas); font-weight: 600; }
+
+  .direction { margin-bottom: 64px; }
+  .direction-header-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  .direction-label { font-family: 'Satoshi', sans-serif; font-size: 13px; font-weight: 700; color: var(--teal); letter-spacing: 0.06em; text-transform: uppercase; }
+  .direction-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--bg-canvas); letter-spacing: -0.015em; }
+  .direction-sub { font-size: 12px; color: #999; max-width: 880px; line-height: 1.55; margin-bottom: 16px; }
+  .frame { width: 1280px; min-height: 740px; background: var(--bg-canvas); color: var(--ink); border: 1px solid #444; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* 3-step flow nav (shared across all 06b directions for consistency with locked Screen 06) */
+  .step-nav { display: flex; gap: 0; padding: 0 32px; height: 48px; align-items: stretch; border-bottom: 1px solid var(--ink-faint); flex-shrink: 0; }
+  .step { display: flex; align-items: center; gap: 8px; padding: 0 22px; font-size: 12px; color: var(--ink-soft); border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
+  .step.active { color: var(--ink); font-weight: 700; border-bottom-color: var(--ink); }
+  .step.done { color: var(--ink); }
+  .step-num { width: 18px; height: 18px; border-radius: 50%; background: rgba(15,12,10,0.08); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--ink-soft); }
+  .step.active .step-num { background: var(--ink); color: var(--bg-canvas); }
+  .step.done .step-num { background: var(--teal); color: var(--bg-canvas); }
+
+  /* Locked chrome (Screen 01) */
+  .chrome-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 28px; height: 64px; border-bottom: 1px solid var(--ink-faint); gap: 28px; }
+  .chrome-wordmark { display: flex; flex-direction: column; line-height: 1; justify-self: start; }
+  .chrome-wordmark .line1 { font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); letter-spacing: -0.015em; }
+  .chrome-wordmark .line2 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.14em; margin-top: 3px; }
+  .chrome-search { width: 460px; height: 36px; background: rgba(168, 163, 158, 0.15); border-radius: 4px; display: flex; align-items: center; padding: 0 12px; gap: 10px; justify-self: center; }
+  .chrome-search svg { width: 14px; height: 14px; color: var(--ink-soft); stroke: currentColor; fill: none; }
+  .chrome-search .placeholder { font-size: 14px; color: var(--ink-soft); }
+  .chrome-right { justify-self: end; }
+  .chrome-shell { display: grid; grid-template-columns: 240px 1fr; min-height: 676px; }
+  .chrome-rail { border-right: 1px solid var(--ink-faint); padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .chrome-rail-label { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); padding: 0 16px; margin: 4px 0 8px; }
+  .chrome-rail-item { height: 40px; display: flex; align-items: center; gap: 14px; padding: 0 16px; border-left: 4px solid transparent; margin-left: -12px; padding-left: 24px; font-size: 15px; font-weight: 400; color: var(--ink-soft); border-radius: 0 6px 6px 0; }
+  .chrome-rail-item svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+  .chrome-rail-item.active { border-left-color: var(--teal); color: var(--ink); font-weight: 600; }
+  .chrome-main { overflow-y: auto; }
+
+  /* Shared above-the-filter header (broadcast reminder) */
+  .audience-shell { padding: 28px 40px 40px; max-width: 980px; margin: 0 auto; }
+  .audience-eyebrow { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: rgba(15,12,10,0.04); border-radius: 6px; margin-bottom: 28px; font-size: 12px; color: var(--ink-soft); }
+  .audience-eyebrow .label { font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); font-size: 10px; }
+  .audience-eyebrow .title { color: var(--ink); font-weight: 600; }
+  .audience-eyebrow .edit { margin-left: auto; color: var(--ink-soft); font-size: 11px; padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; cursor: pointer; }
+  .audience-title { font-family: 'Satoshi', sans-serif; font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 6px; }
+  .audience-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 28px; }
+
+  /* Bottom bar (shared) */
+  .actions-bar { display: flex; justify-content: space-between; align-items: center; padding-top: 22px; border-top: 1px solid var(--ink-faint); margin-top: 28px; }
+  .undo-hint { font-size: 11px; color: var(--ink-faint); font-style: italic; }
+  .actions-right { display: flex; gap: 10px; }
+  .back-btn { background: transparent; border: 1px solid var(--ink-faint); color: var(--ink-soft); padding: 10px 18px; font-size: 13px; border-radius: 4px; cursor: pointer; }
+  .publish-btn { background: var(--teal); color: var(--bg-canvas); padding: 10px 22px; font-size: 13px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+  .direction-notes { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; color: #bbb; font-size: 12px; line-height: 1.6; }
+  .direction-notes .note-block { background: rgba(255,255,255,0.04); padding: 14px 16px; border-radius: 4px; }
+  .direction-notes .note-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+
+  /* ============ Direction A — Mailchimp segments (chip filter) ============ */
+  .dir-a .a-filter-section { margin-bottom: 22px; }
+  .dir-a .a-filter-label { font-size: 11px; font-weight: 600; color: var(--ink-soft); margin-bottom: 8px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .dir-a .a-filter-row { display: grid; grid-template-columns: 160px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--ink-faint); }
+  .dir-a .a-filter-row:first-of-type { border-top: 1px solid var(--ink-faint); }
+  .dir-a .a-filter-prop { font-size: 13px; color: var(--ink); font-weight: 500; }
+  .dir-a .a-filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dir-a .a-pill { padding: 5px 12px; font-size: 12px; border-radius: 4px; background: rgba(15,12,10,0.04); color: var(--ink-soft); border: 1px solid transparent; cursor: pointer; }
+  .dir-a .a-pill.selected { background: var(--ink); color: var(--bg-canvas); font-weight: 500; }
+  .dir-a .a-filter-remove { color: var(--ink-faint); font-size: 14px; cursor: pointer; padding: 4px 8px; }
+  .dir-a .a-add-filter { padding: 10px 14px; border: 1px dashed var(--ink-faint); border-radius: 4px; color: var(--ink-soft); font-size: 12px; cursor: pointer; margin-top: 14px; text-align: center; }
+  .dir-a .a-count-strip { display: flex; align-items: baseline; gap: 18px; padding: 20px 24px; background: var(--ink); color: var(--bg-canvas); border-radius: 6px; margin-top: 24px; }
+  .dir-a .a-count-num { font-family: 'Satoshi', sans-serif; font-size: 32px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .dir-a .a-count-meta { font-size: 13px; opacity: 0.85; }
+  .dir-a .a-count-meta strong { display: block; font-weight: 600; opacity: 1; margin-bottom: 3px; }
+  .dir-a .a-age-slider { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--ink-soft); }
+  .dir-a .a-age-input { width: 60px; padding: 5px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; font-size: 12px; color: var(--ink); background: var(--bg-canvas); font-variant-numeric: tabular-nums; }
+  .dir-a .a-toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink); }
+  .dir-a .a-toggle-switch { width: 30px; height: 16px; background: var(--ink); border-radius: 999px; position: relative; }
+  .dir-a .a-toggle-switch::after { content: ""; position: absolute; right: 2px; top: 2px; width: 12px; height: 12px; background: var(--bg-canvas); border-radius: 50%; }
+
+  /* ============ Direction B — Customer.io big count + sample preview ============ */
+  .dir-b .b-split { display: grid; grid-template-columns: 280px 1fr; gap: 32px; }
+  .dir-b .b-filter-col { display: flex; flex-direction: column; gap: 20px; }
+  .dir-b .b-filter-block { padding: 14px 16px; background: rgba(15,12,10,0.025); border: 1px solid var(--ink-faint); border-radius: 6px; }
+  .dir-b .b-filter-block-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
+  .dir-b .b-block-pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dir-b .b-block-pill { padding: 5px 11px; font-size: 12px; border-radius: 4px; background: var(--bg-canvas); color: var(--ink-soft); border: 1px solid var(--ink-faint); cursor: pointer; }
+  .dir-b .b-block-pill.selected { background: var(--ink); color: var(--bg-canvas); border-color: var(--ink); font-weight: 500; }
+  .dir-b .b-age-range { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink-soft); }
+  .dir-b .b-age-input { width: 56px; padding: 5px 8px; border: 1px solid var(--ink-faint); border-radius: 3px; font-size: 12px; color: var(--ink); background: var(--bg-canvas); font-variant-numeric: tabular-nums; }
+  .dir-b .b-toggle-row { display: flex; align-items: center; justify-content: space-between; }
+  .dir-b .b-toggle { width: 36px; height: 20px; background: var(--ink); border-radius: 999px; position: relative; cursor: pointer; }
+  .dir-b .b-toggle::after { content: ""; position: absolute; right: 3px; top: 3px; width: 14px; height: 14px; background: var(--bg-canvas); border-radius: 50%; }
+  .dir-b .b-toggle-label { font-size: 13px; color: var(--ink); font-weight: 500; }
+  .dir-b .b-result-col { display: flex; flex-direction: column; }
+  .dir-b .b-count-hero { background: var(--ink); color: var(--bg-canvas); border-radius: 8px; padding: 28px 32px; }
+  .dir-b .b-count-eyebrow { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.7; margin-bottom: 8px; }
+  .dir-b .b-count-num { font-family: 'Satoshi', sans-serif; font-size: 48px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 6px; }
+  .dir-b .b-count-meta { font-size: 13px; opacity: 0.85; margin-bottom: 6px; }
+  .dir-b .b-count-pct { font-size: 11px; opacity: 0.6; }
+  .dir-b .b-sample-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin: 24px 0 10px; }
+  .dir-b .b-sample-row { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--ink-faint); }
+  .dir-b .b-sample-row:last-of-type { border-bottom: none; }
+  .dir-b .b-sample-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--honey); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--ink); }
+  .dir-b .b-sample-name { font-size: 13px; color: var(--ink); font-weight: 500; }
+  .dir-b .b-sample-meta { font-size: 11px; color: var(--ink-soft); }
+  .dir-b .b-sample-extra { font-size: 11px; color: var(--ink-faint); font-style: italic; margin-top: 8px; }
+
+  /* ============ Direction C — Klaviyo AND/OR conditional groups ============ */
+  .dir-c .c-group { padding: 16px; border: 1px solid var(--ink-faint); border-radius: 6px; background: rgba(15,12,10,0.02); margin-bottom: 12px; position: relative; }
+  .dir-c .c-group-header { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--ink-soft); margin-bottom: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .dir-c .c-condition-row { display: grid; grid-template-columns: auto 130px 110px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; }
+  .dir-c .c-condition-row + .c-condition-row { border-top: 1px dashed var(--ink-faint); }
+  .dir-c .c-cond-conn { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--ink-soft); padding: 3px 8px; background: rgba(15,12,10,0.06); border-radius: 3px; min-width: 36px; text-align: center; }
+  .dir-c .c-cond-prop { font-size: 13px; color: var(--ink); font-weight: 600; }
+  .dir-c .c-cond-value { font-size: 12px; color: var(--ink); }
+  .dir-c .c-cond-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+  .dir-c .c-cond-pill { padding: 4px 10px; font-size: 11px; border-radius: 3px; background: rgba(15,12,10,0.04); color: var(--ink-soft); cursor: pointer; }
+  .dir-c .c-cond-pill.selected { background: var(--ink); color: var(--bg-canvas); }
+  .dir-c .c-cond-remove { color: var(--ink-faint); font-size: 14px; cursor: pointer; padding: 4px; }
+  .dir-c .c-add-cond { padding: 8px 12px; border: 1px dashed var(--ink-faint); border-radius: 4px; color: var(--ink-soft); font-size: 11px; cursor: pointer; margin-top: 8px; display: inline-block; }
+  .dir-c .c-group-conn { display: flex; gap: 0; padding: 3px; background: rgba(15,12,10,0.04); border-radius: 4px; width: fit-content; margin: 4px auto; position: relative; z-index: 1; }
+  .dir-c .c-group-conn-pill { padding: 4px 12px; font-size: 11px; font-weight: 600; color: var(--ink-soft); border-radius: 3px; cursor: pointer; }
+  .dir-c .c-group-conn-pill.active { background: var(--ink); color: var(--bg-canvas); }
+  .dir-c .c-age-range { display: flex; align-items: center; gap: 8px; }
+  .dir-c .c-age-input { width: 56px; padding: 7px 10px; border: 1px solid var(--ink-faint); border-radius: 4px; font-size: 12px; color: var(--ink); background: var(--bg-canvas); font-variant-numeric: tabular-nums; font-family: 'Inter', sans-serif; }
+  .dir-c .c-age-label { font-size: 12px; color: var(--ink-soft); }
+  .dir-c .c-count-strip { display: flex; align-items: center; gap: 16px; padding: 16px 22px; background: var(--ink); color: var(--bg-canvas); border-radius: 6px; margin-top: 22px; }
+  .dir-c .c-count-num { font-family: 'Satoshi', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .dir-c .c-count-meta { font-size: 12px; opacity: 0.85; }
+
+  /* ============ Direction D — Weave / Beehiiv toggle-driven ============ */
+  .dir-d .d-card { padding: 18px 20px; border: 1px solid var(--ink-faint); border-radius: 6px; background: var(--bg-canvas); margin-bottom: 12px; }
+  .dir-d .d-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0; }
+  .dir-d .d-card-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .dir-d .d-card-hint { font-size: 12px; color: var(--ink-soft); margin-top: 4px; font-style: italic; }
+  .dir-d .d-toggle { width: 38px; height: 22px; background: var(--ink); border-radius: 999px; position: relative; cursor: pointer; flex-shrink: 0; }
+  .dir-d .d-toggle::after { content: ""; position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; background: var(--bg-canvas); border-radius: 50%; transition: right 0.15s; }
+  .dir-d .d-toggle.off { background: rgba(15,12,10,0.15); }
+  .dir-d .d-toggle.off::after { right: auto; left: 3px; }
+  .dir-d .d-card.disabled { background: rgba(15,12,10,0.02); }
+  .dir-d .d-card.disabled .d-card-name { color: var(--ink-soft); }
+  .dir-d .d-card-body { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--ink-faint); }
+  .dir-d .d-pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dir-d .d-pill { padding: 6px 14px; font-size: 12px; border-radius: 4px; background: rgba(15,12,10,0.04); color: var(--ink-soft); border: 1px solid transparent; cursor: pointer; }
+  .dir-d .d-pill.selected { background: var(--ink); color: var(--bg-canvas); font-weight: 500; }
+  .dir-d .d-age-range { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink-soft); }
+  .dir-d .d-age-input { width: 60px; padding: 6px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; font-size: 12px; color: var(--ink); background: var(--bg-canvas); font-variant-numeric: tabular-nums; }
+  .dir-d .d-count-row { display: flex; align-items: baseline; justify-content: space-between; padding: 16px 0 0; margin-top: 8px; border-top: 2px solid var(--ink); }
+  .dir-d .d-count-label { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+  .dir-d .d-count-num { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.015em; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Phase 2 · Screen 06b · Broadcast audience + send (publish half of the locked 06 / 06b split)</div>
+    <div class="doc-title">Four audience + send directions on the locked chrome</div>
+    <div class="doc-sub">
+      After Sagar hits "Continue → Audience" on Screen 06 Compose, this surface lets him pick who receives the broadcast. Same chrome (Broadcasts active in rail). Same filter scope across all four directions: species (dogs / cats / both), age range, exclude deceased toggle. Live audience count ticking as filters change. Back to Compose preserves the draft. Publish CTA fires a 15-second undo window before the broadcast actually goes out. What varies across the four: how the filter is built (chips / hero count + sample / AND-OR groups / toggle-cards) and where the audience count lives visually.
+    </div>
+  </div>
+
+  <div class="reading-note">
+    <span class="key">Reading the directions below.</span> Same broadcast in-flight at the top of each: "How to care for your dog in the summer" (the broadcast Sagar just composed in Screen 06). Same realistic AMS scale (~200 pet parents). Same default filter starting state: Species = Dogs only, exclude deceased = on, age range = all. Audience count starts at "143 households · 187 pets" and ticks live as filters change.
+  </div>
+
+  <!-- ============ Direction A · Mailchimp segments (chip filter) ============ -->
+  <div class="direction dir-a">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction A</div>
+      <div class="direction-title">Mailchimp-channeled · chip filter rows</div>
+    </div>
+    <div class="direction-sub">Filter rendered as a list of rows: property name on the left, value chips on the right. "+ Add filter" CTA at the bottom adds another row. Live audience count in a prominent dark strip below the filter. Reads like a clean tabular filter builder. Best when there are 3-5 named filter properties (which is our locked scope).</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="step-nav">
+            <div class="step done"><div class="step-num">1</div>Compose</div>
+            <div class="step active"><div class="step-num">2</div>Audience</div>
+            <div class="step"><div class="step-num">3</div>Send</div>
+          </div>
+          <div class="audience-shell">
+            <div class="audience-eyebrow">
+              <span class="label">Broadcast in-flight</span>
+              <span class="title">How to care for your dog in the summer</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="audience-title">Pick who receives this broadcast</div>
+            <div class="audience-sub">Filter your pet parents by what matters. Live count ticks as you change filters.</div>
+
+            <div class="a-filter-section">
+              <div class="a-filter-row">
+                <div class="a-filter-prop">Species</div>
+                <div class="a-filter-pills">
+                  <span class="a-pill selected">Dogs</span>
+                  <span class="a-pill">Cats</span>
+                  <span class="a-pill">Both</span>
+                </div>
+                <span class="a-filter-remove">×</span>
+              </div>
+              <div class="a-filter-row">
+                <div class="a-filter-prop">Age range</div>
+                <div class="a-age-slider">
+                  <input class="a-age-input" value="0">
+                  <span>to</span>
+                  <input class="a-age-input" value="15">
+                  <span>years</span>
+                </div>
+                <span class="a-filter-remove">×</span>
+              </div>
+              <div class="a-filter-row">
+                <div class="a-filter-prop">Exclude deceased</div>
+                <div class="a-toggle"><span class="a-toggle-switch"></span> On</div>
+                <span class="a-filter-remove">×</span>
+              </div>
+              <div class="a-add-filter">+ Add filter (chronic condition · last visit · vaccination status)</div>
+            </div>
+
+            <div class="a-count-strip">
+              <div class="a-count-num">187</div>
+              <div class="a-count-meta">
+                <strong>pets will receive this</strong>
+                across 143 households · 94% of AMS dog parents
+              </div>
+            </div>
+
+            <div class="actions-bar">
+              <button class="back-btn">← Back to Compose</button>
+              <button class="publish-btn">
+                Next: Send
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>One Teal: Publish CTA. Rail Broadcasts-active Teal stays.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Mailchimp's "Filter for [chip]" row pattern + HubSpot's add-filter dashed CTA. Pitfall: every filter row sits at the same visual weight, harder to spot which filter is doing the most narrowing. Mitigation: the count strip and "94% of AMS dog parents" line do the narrowing math out loud.</div>
+      <div class="note-block"><div class="note-label">Risk</div>Chip-per-value gets crowded if a filter has many options (e.g., chronic conditions list). v0 filters are small (species 3 options · deceased toggle · age input), so this scales for now.</div>
+    </div>
+  </div>
+
+  <!-- ============ Direction B · Customer.io big count + sample preview ============ -->
+  <div class="direction dir-b">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction B</div>
+      <div class="direction-title">Customer.io-channeled · hero count + sample preview</div>
+    </div>
+    <div class="direction-sub">Filter controls compact in a sidebar (280px) on the left. Right side is dominated by a big-number hero ("187 pets · 1.8% of clinic") and a sample preview panel showing 4 actual pets who match the filter (named, with avatars). This is the "trust" direction: Sagar sees exactly who he's sending to before pressing Publish, not just an abstract count.</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="step-nav">
+            <div class="step done"><div class="step-num">1</div>Compose</div>
+            <div class="step active"><div class="step-num">2</div>Audience</div>
+            <div class="step"><div class="step-num">3</div>Send</div>
+          </div>
+          <div class="audience-shell" style="max-width: 1080px;">
+            <div class="audience-eyebrow">
+              <span class="label">Broadcast in-flight</span>
+              <span class="title">How to care for your dog in the summer</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="audience-title">Pick who receives this broadcast</div>
+            <div class="audience-sub">Compact filter on the left, live preview on the right of who actually matches.</div>
+
+            <div class="b-split">
+              <div class="b-filter-col">
+                <div class="b-filter-block">
+                  <div class="b-filter-block-label">Species</div>
+                  <div class="b-block-pill-row">
+                    <span class="b-block-pill selected">Dogs</span>
+                    <span class="b-block-pill">Cats</span>
+                    <span class="b-block-pill">Both</span>
+                  </div>
+                </div>
+                <div class="b-filter-block">
+                  <div class="b-filter-block-label">Age range</div>
+                  <div class="b-age-range">
+                    <input class="b-age-input" value="0">
+                    <span>to</span>
+                    <input class="b-age-input" value="15">
+                    <span>years</span>
+                  </div>
+                </div>
+                <div class="b-filter-block">
+                  <div class="b-toggle-row">
+                    <div>
+                      <div class="b-toggle-label">Exclude deceased</div>
+                      <div style="font-size: 11px; color: var(--ink-soft); margin-top: 2px;">Respect memorial state</div>
+                    </div>
+                    <div class="b-toggle"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="b-result-col">
+                <div class="b-count-hero">
+                  <div class="b-count-eyebrow">Audience</div>
+                  <div class="b-count-num">187</div>
+                  <div class="b-count-meta">pets · 143 households</div>
+                  <div class="b-count-pct">1.8% of AMS clinic · 94% of dog parents</div>
+                </div>
+                <div class="b-sample-label">Sample of who'll receive this</div>
+                <div class="b-sample-row">
+                  <div class="b-sample-avatar">G</div>
+                  <div>
+                    <div class="b-sample-name">Gabby</div>
+                    <div class="b-sample-meta">Golden Retriever · 4y · Fernandes household</div>
+                  </div>
+                  <div class="b-sample-meta">+91 98XXX XXX12</div>
+                </div>
+                <div class="b-sample-row">
+                  <div class="b-sample-avatar">B</div>
+                  <div>
+                    <div class="b-sample-name">Bruno</div>
+                    <div class="b-sample-meta">Labrador · 7y · Patil household</div>
+                  </div>
+                  <div class="b-sample-meta">+91 98XXX XXX44</div>
+                </div>
+                <div class="b-sample-row">
+                  <div class="b-sample-avatar">C</div>
+                  <div>
+                    <div class="b-sample-name">Cookie</div>
+                    <div class="b-sample-meta">Beagle · 2y · Joshi household</div>
+                  </div>
+                  <div class="b-sample-meta">+91 98XXX XXX87</div>
+                </div>
+                <div class="b-sample-row">
+                  <div class="b-sample-avatar">M</div>
+                  <div>
+                    <div class="b-sample-name">Max</div>
+                    <div class="b-sample-meta">Indie · 9y · Deshmukh household</div>
+                  </div>
+                  <div class="b-sample-meta">+91 98XXX XXX23</div>
+                </div>
+                <div class="b-sample-extra">+ 183 more pets matching this filter</div>
+              </div>
+            </div>
+
+            <div class="actions-bar">
+              <button class="back-btn">← Back to Compose</button>
+              <button class="publish-btn">
+                Next: Send
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>One Teal: Publish CTA. Rail Broadcasts stays.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Customer.io's hero count + sample-members panel exactly. Pitfall: sample preview can feel surveillance-y if it overshows. Mitigation: just 4 sample pets + "+ 183 more" line, no scrolling list.</div>
+      <div class="note-block"><div class="note-label">Risk</div>Sample names are AMS-real (Gabby, Bruno, etc.). Demo gain: Sagar instantly recognises real patients. Production gain: catches accidental over-narrow filters ("oh wait, why is only Gabby in the sample?").</div>
+    </div>
+  </div>
+
+  <!-- ============ Direction C · Klaviyo AND/OR conditional groups ============ -->
+  <div class="direction dir-c">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction C</div>
+      <div class="direction-title">Klaviyo-channeled · AND / OR conditional groups</div>
+    </div>
+    <div class="direction-sub">Conditions grouped, with AND/OR toggles between groups. Most powerful of the four; supports filters like "(Dogs over 5 years) OR (Cats with chronic conditions)". Overkill for v0 scope (species + age + deceased), but future-proof when filter properties grow. Higher visual density; expects Sagar to think in logical groupings.</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="step-nav">
+            <div class="step done"><div class="step-num">1</div>Compose</div>
+            <div class="step active"><div class="step-num">2</div>Audience</div>
+            <div class="step"><div class="step-num">3</div>Send</div>
+          </div>
+          <div class="audience-shell">
+            <div class="audience-eyebrow">
+              <span class="label">Broadcast in-flight</span>
+              <span class="title">How to care for your dog in the summer</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="audience-title">Pick who receives this broadcast</div>
+            <div class="audience-sub">Group conditions with AND / OR. More powerful for layered filters; overkill for simple species+age cases.</div>
+
+            <div class="c-group">
+              <div class="c-group-header">Condition group A · all of the following</div>
+              <div class="c-condition-row">
+                <span class="c-cond-conn">WHERE</span>
+                <span class="c-cond-prop">Species</span>
+                <span class="c-cond-value">is</span>
+                <div class="c-cond-pills"><span class="c-cond-pill selected">Dogs</span><span class="c-cond-pill">Cats</span><span class="c-cond-pill">Both</span></div>
+                <span class="c-cond-remove">×</span>
+              </div>
+              <div class="c-condition-row">
+                <span class="c-cond-conn">AND</span>
+                <span class="c-cond-prop">Age</span>
+                <span class="c-cond-value">between</span>
+                <div class="c-age-range">
+                  <input class="c-age-input" value="0">
+                  <span class="c-age-label">to</span>
+                  <input class="c-age-input" value="15">
+                  <span class="c-age-label">years</span>
+                </div>
+                <span class="c-cond-remove">×</span>
+              </div>
+              <div class="c-condition-row">
+                <span class="c-cond-conn">AND</span>
+                <span class="c-cond-prop">Deceased</span>
+                <span class="c-cond-value">is</span>
+                <div class="c-cond-pills"><span class="c-cond-pill">True</span><span class="c-cond-pill selected">False</span></div>
+                <span class="c-cond-remove">×</span>
+              </div>
+              <span class="c-add-cond">+ Add condition</span>
+            </div>
+
+            <div class="c-group-conn">
+              <span class="c-group-conn-pill active">AND</span>
+              <span class="c-group-conn-pill">OR</span>
+            </div>
+
+            <div class="c-group" style="opacity: 0.5;">
+              <div class="c-group-header">Condition group B · not yet defined</div>
+              <span class="c-add-cond">+ Add first condition (optional second group)</span>
+            </div>
+
+            <div class="c-count-strip">
+              <div class="c-count-num">187</div>
+              <div class="c-count-meta">pets · 143 households · 94% of AMS dog parents</div>
+            </div>
+
+            <div class="actions-bar">
+              <button class="back-btn">← Back to Compose</button>
+              <button class="publish-btn">
+                Next: Send
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>One Teal: Publish CTA. Rail Broadcasts stays.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Klaviyo's AND/OR group + condition-row anatomy. Pitfall: nested groups intimidate non-technical users. Mitigation: second group renders empty + 50% opacity, signalling it's optional ("you don't need this unless you want to").</div>
+      <div class="note-block"><div class="note-label">Risk</div>Higher learning curve than the other three. v0 doesn't need this power. Counter: future-proof when filter scope expands (chronic condition, last visit date, vaccination status, etc.).</div>
+    </div>
+  </div>
+
+  <!-- ============ Direction D · Weave / Beehiiv toggle-driven ============ -->
+  <div class="direction dir-d">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction D</div>
+      <div class="direction-title">Weave / Beehiiv-channeled · toggle-driven filter cards</div>
+    </div>
+    <div class="direction-sub">Each filter is a card with a toggle. Toggle on = filter applies; toggle off = filter ignored. Cards expand to reveal the value picker when toggled on. Most beginner-friendly of the four; lowest cognitive load. The audience count sits at the bottom as a 2px Ink-bordered totals row (same visual pattern as the Screen 04 invoice total).</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="step-nav">
+            <div class="step done"><div class="step-num">1</div>Compose</div>
+            <div class="step active"><div class="step-num">2</div>Audience</div>
+            <div class="step"><div class="step-num">3</div>Send</div>
+          </div>
+          <div class="audience-shell">
+            <div class="audience-eyebrow">
+              <span class="label">Broadcast in-flight</span>
+              <span class="title">How to care for your dog in the summer</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="audience-title">Pick who receives this broadcast</div>
+            <div class="audience-sub">Flip on each filter you want to use. Filters off = everyone matching the species filter.</div>
+
+            <div class="d-card">
+              <div class="d-card-head">
+                <div>
+                  <div class="d-card-name">Filter by species</div>
+                  <div class="d-card-hint">On · narrowing to dogs only</div>
+                </div>
+                <div class="d-toggle"></div>
+              </div>
+              <div class="d-card-body">
+                <div class="d-pill-row">
+                  <span class="d-pill selected">Dogs</span>
+                  <span class="d-pill">Cats</span>
+                  <span class="d-pill">Both</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-card disabled">
+              <div class="d-card-head">
+                <div>
+                  <div class="d-card-name">Filter by age</div>
+                  <div class="d-card-hint">Off · all ages included</div>
+                </div>
+                <div class="d-toggle off"></div>
+              </div>
+            </div>
+
+            <div class="d-card">
+              <div class="d-card-head">
+                <div>
+                  <div class="d-card-name">Exclude deceased pets</div>
+                  <div class="d-card-hint">On · respect memorial state</div>
+                </div>
+                <div class="d-toggle"></div>
+              </div>
+            </div>
+
+            <div class="d-card disabled">
+              <div class="d-card-head">
+                <div>
+                  <div class="d-card-name">Filter by chronic condition</div>
+                  <div class="d-card-hint">Off · all conditions included (v1+ filter, surfaced when relevant)</div>
+                </div>
+                <div class="d-toggle off"></div>
+              </div>
+            </div>
+
+            <div class="d-count-row">
+              <div class="d-count-label">Will receive this broadcast</div>
+              <div class="d-count-num">187 pets · 143 households</div>
+            </div>
+
+            <div class="actions-bar">
+              <button class="back-btn">← Back to Compose</button>
+              <button class="publish-btn">
+                Next: Send
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>One Teal: Publish CTA. Rail Broadcasts stays.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Weave's toggle-per-filter pattern + the totals-row anatomy from Screen 04 invoice grand total. Pitfall: toggles read as binary (on/off) but filter values themselves are still chip choices inside. Mitigation: the hint line under each toggle says what the filter is doing in plain words ("On · narrowing to dogs only").</div>
+      <div class="note-block"><div class="note-label">Risk</div>Toggle-off filters take more visual space than the off state warrants (4 cards even though only 2 are active). Counter: the "all conditions included" hint makes the off state legible without removing the card.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

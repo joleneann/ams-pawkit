@@ -1,0 +1,178 @@
+/* ============================================================
+   PAWKIT · TOKENS · colors_and_type.css
+   Source of truth for the v0 build. Mirrors what ships in
+   packages/design-tokens/src/tokens.css + tailwind-preset.ts.
+
+   Locked 2026-05-15. Mauve-only build. Pure #FFFFFF / #000000
+   are forbidden in chrome.
+   ============================================================ */
+
+/* Webfonts ---------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@1,500;1,600;1,700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap');
+
+:root {
+  /* ───── Structural neutrals ───────────────────────────────── */
+  --canvas:        #F8F7F5;  /* card surface — lifts off the ground */
+  --rail-tint:     #EFE6E8;  /* workspace ground (top bar, rail, gutter, body bg) */
+  --ink:           #0F0C0A;  /* body text, headlines, structural strokes */
+  --ink-soft:      #5C5550;  /* secondary text, eyebrow active, inactive tab */
+  --ink-faint:     #8F8B86;  /* placeholder paws inside avatar inners */
+
+  /* Ink opacity ladder (all "gray" comes through here) */
+  --ink-70:        rgba(15, 12, 10, 0.72);
+  --ink-50:        rgba(15, 12, 10, 0.55);
+  --ink-30:        rgba(15, 12, 10, 0.35);
+
+  /* Hairlines & soft washes */
+  --rule:          rgba(15, 12, 10, 0.12);
+  --rule-soft:     rgba(15, 12, 10, 0.06);
+  --canvas-2:      rgba(15, 12, 10, 0.04);
+
+  /* ───── Brand ladder (Boysenberry) ────────────────────────── */
+  --berry:         #9C2B5C;  /* primary CTA, active tab, focus ring, vet bubbles */
+  --berry-deep:    #7C1F47;  /* hover, awaiting count, accent text on tinted bg */
+  --berry-soft:    rgba(156, 43, 92, 0.12); /* active nav bg, awaiting fill */
+  --berry-ring:    rgba(156, 43, 92, 0.30); /* focus ring (2px outline + 4px offset) */
+
+  /* ───── Fur tones · pet-fur matching ONLY · NEVER chrome ──── */
+  --fur-milk:      #FFFCF2;  /* L=99 */
+  --fur-vanilla:   #EAE0C8;  /* L=89 */
+  --fur-honey:     #E5C896;  /* L=81 */
+  --fur-peach:     #E8A87C;  /* L=70 */
+  --fur-rust:      #B05E2E;  /* L=47 */
+  --fur-mushroom:  #A8927A;  /* L=57 */
+  --fur-smoke:     #8B928A;  /* L=59 */
+  --fur-steel:     #5F6961;  /* L=42 */
+  --fur-bark:      #5C4A3A;  /* L=30 */
+  --fur-sable:     #2B221A;  /* L=13 — only chrome use: Sampling-state cover */
+
+  /* ───── Destructive · inherited from shadcn but unused in v0 ─ */
+  --destructive:   #B53939;
+
+  /* ───── Type families ─────────────────────────────────────── */
+  --font-inter:     'Inter', system-ui, sans-serif;
+  --font-lora:      'Lora', Georgia, serif;            /* italic 600 ONLY, pet name hero */
+  --font-devanagari:'Noto Sans Devanagari', sans-serif;
+  --font-mono:      'Inter', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ───── Type scale (the ONLY allowed sizes) ────────────────
+     No arbitrary text-[Npx]. No inline fontSize.            */
+  --text-xxs:     10px;  --lh-xxs:     14px;
+  --text-xs:      11px;  --lh-xs:      16px;
+  --text-sm:      12px;  --lh-sm:      18px;
+  --text-base:    13px;  --lh-base:    19.5px;
+  --text-md:      14px;  --lh-md:      20px;
+  --text-lg:      17px;  --lh-lg:      22px;
+  --text-xl:      20px;  --lh-xl:      25px;
+  --text-2xl:     22px;  --lh-2xl:     26px;
+  --text-3xl:     26px;  --lh-3xl:     29px;
+  --text-display: 48px;  --lh-display: 48px;
+
+  /* Eyebrow tracking is invariant. Never 0.12em or 0.16em. */
+  --tracking-eyebrow: 0.14em;
+
+  /* ───── Spacing ───────────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 14px;
+  --space-7: 16px;
+  --space-8: 18px;
+  --space-9: 20px;
+  --space-10: 24px;
+  --space-12: 32px;
+  --space-14: 40px;
+  --space-16: 56px;
+
+  /* ───── Radii ─────────────────────────────────────────────── */
+  --radius-sm:   8px;   /* buttons, inputs, badges-square */
+  --radius-md:  10px;   /* fur swatches, icon cells */
+  --radius-lg:  12px;   /* surface cards, awaiting bar */
+  --radius-xl:  14px;   /* page cards, KPI cards, inbox row */
+  --radius-pill: 999px; /* badges, tabs, eyebrow chips */
+
+  /* ───── Elevation (tonal — NO drop shadows) ───────────────
+     The ONLY box-shadow allowed in chrome is the focus ring. */
+  --shadow-focus: 0 0 0 3px var(--berry-ring);
+  --shadow-btn:   0 1px 2px rgba(15, 12, 10, 0.04); /* primary button only */
+
+  /* ───── Motion ────────────────────────────────────────────── */
+  --ease:         cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-quick: 120ms;
+  --duration-base:  150ms;
+  --duration-slow:  240ms;
+}
+
+/* ============================================================
+   Base + semantic typography
+   ============================================================ */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--rail-tint);
+  color: var(--ink);
+  font-family: var(--font-inter);
+  font-size: var(--text-base);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Marathi body — sizes bump +1px in :lang(mr) */
+:lang(mr), .lang-mr {
+  font-family: var(--font-devanagari);
+  font-size: calc(var(--text-base) + 1px);
+}
+
+/* Semantic type --------------------------------------------- */
+.h-display { font-size: var(--text-display); line-height: var(--lh-display); font-weight: 700; letter-spacing: -0.02em; }
+.h1, h1.pawkit { font-size: var(--text-3xl); line-height: var(--lh-3xl); font-weight: 600; letter-spacing: -0.01em; }
+.h2, h2.pawkit { font-size: var(--text-2xl); line-height: var(--lh-2xl); font-weight: 600; letter-spacing: -0.005em; }
+.h3, h3.pawkit { font-size: var(--text-lg);  line-height: var(--lh-lg);  font-weight: 600; }
+
+.p   { font-size: var(--text-base); line-height: var(--lh-base); color: var(--ink); }
+.p-soft { font-size: var(--text-base); line-height: var(--lh-base); color: var(--ink-70); }
+.caption { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-50); }
+.label   { font-size: var(--text-sm); line-height: var(--lh-sm); color: var(--ink); font-weight: 600; }
+.meta    { font-size: var(--text-xs); line-height: var(--lh-xs); color: var(--ink-50); }
+
+/* Eyebrow — invariant tracking ------------------------------ */
+.eyebrow {
+  font-size: var(--text-xxs);
+  line-height: var(--lh-xxs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-50);
+}
+
+/* Pet name hero — Lora italic 600 ONLY ---------------------- */
+.pet-name-hero {
+  font-family: var(--font-lora);
+  font-style: italic;
+  font-weight: 600;
+  font-size: var(--text-lg);
+  line-height: 1.1;
+}
+.pet-name-display {
+  font-family: var(--font-lora);
+  font-style: italic;
+  font-weight: 600;
+  font-size: var(--text-3xl);
+  line-height: 1.05;
+}
+
+/* Numeric niceties ------------------------------------------ */
+.tnum, .num { font-variant-numeric: tabular-nums; }
+
+/* Code (inline) --------------------------------------------- */
+code, .code {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  background: var(--canvas-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+}

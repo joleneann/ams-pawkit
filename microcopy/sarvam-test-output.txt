@@ -1,0 +1,42 @@
+EN: Settings
+MR: सेटिंग्ज
+
+EN: Send
+MR: पाठवा
+
+EN: Sign out
+MR: साइन आउट करा
+
+EN: No open windows right now. Take a breath.
+MR: सध्या कोणतीही खिडकी उघडी नाही. श्वास घे.
+
+EN: Dr Sagar is here for Gabby until 2 May
+MR: डॉ. सागर 2 मे पर्यंत गॅबीसाठी इथे आहेत.
+
+EN: Inbox
+MR: इनबॉक्स
+
+EN: Broadcasts
+MR: प्रसारण
+
+EN: Active
+MR: सक्रिय
+
+EN: Inactive
+MR: निष्क्रिय
+
+EN: Reply
+MR: उत्तर द्या
+
+EN: Confirm and Send
+MR: पुष्टी करा आणि पाठवा
+
+EN: Couldn't transcribe, try typing instead.
+MR: लिप्यंतरण करू शकले नाही, त्याऐवजी टायपिंग करून पहा.
+
+EN: Your broadcast is on its way.
+MR: तुमचे प्रसारण मार्गावर आहे.
+
+EN: Mic blocked in browser settings.
+MR: ब्राउझर सेटिंग्जमध्ये माईक ब्लॉक केले.
+

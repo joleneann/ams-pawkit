@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Pawkit",
+    "slug": "pawkit-petparent",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#F8F7F5",
+      "resizeMode": "contain"
+    },
+    "android": {
+      "package": "ai.pawkit.petparent",
+      "adaptiveIcon": {
+        "backgroundColor": "#F8F7F5"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

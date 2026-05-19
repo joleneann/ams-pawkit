@@ -1,0 +1,192 @@
+@import "@pawkit/design-tokens/tokens.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Pawkit font stack — Inter for body + display, Lora italic for the
+       pet-name hero, Noto Devanagari for Marathi. */
+    --font-display: var(--font-inter), system-ui, sans-serif;
+    --font-body: var(--font-inter), var(--font-noto-devanagari),
+      "Noto Sans Devanagari", system-ui, sans-serif;
+    --font-serif: var(--font-lora), Georgia, serif;
+
+    /* ============================================================
+       Inbox v2 surface architecture (locked 2026-05-15 inbox rebuild).
+       Two surface tones only:
+         - rail-tint = workspace "ground" (top bar + rail + content area)
+         - canvas    = cards/objects that "lift" off the ground
+       No drop shadows — elevation = tonal contrast + 1px rule hairlines.
+       Ground re-tuned through three rounds on 2026-05-15 evening:
+         (1) `rgba(15,12,10,0.045)` ink wash → read as cool/dull
+         (2) `#ECE7E8` desaturated mauve-gray → still read as gray
+         (3) `#F2DEE6` visibly pink (Tasteful pop) → read as too pink
+         (4) `#EFE6E8` barely-there mauve (this lock, "Option D" of the
+             pink-dial-down study) → premium warm neutral with a whisper
+             of the Boysenberry hue; berry accents (chip, KPI, pills) pop
+             cleanly because the ground steps back.
+       Boysenberry primary stays #9C2B5C from the same evening's saturation
+       lift. Canvas card stays #F8F7F5. Two-tone architecture preserved.
+       ============================================================ */
+    --rail-tint:    #EFE6E8;                  /* workspace ground — barely-there mauve, HSL 330° 12% 91% */
+    --canvas-2:     rgba(15, 12, 10, 0.04);   /* embedded surfaces (parent bubbles, hover, default avatar) */
+
+    /* Ink opacity ladder — all grays are ink-over-canvas blends, no hard greys. */
+    --ink-70:       rgba(15, 12, 10, 0.72);
+    --ink-50:       rgba(15, 12, 10, 0.55);
+    --ink-30:       rgba(15, 12, 10, 0.35);
+    --rule:         rgba(15, 12, 10, 0.12);
+    --rule-soft:    rgba(15, 12, 10, 0.06);
+
+    /* Brand ladder — Boysenberry "Tasteful pop" + soft/ring/deep states. */
+    --berry-deep:   #7C1F47;
+    --berry-soft:   rgba(156, 43, 92, 0.12);  /* active nav bg */
+    --berry-ring:   rgba(156, 43, 92, 0.30);  /* focus ring */
+    --berry-gradient: linear-gradient(180deg, #A53565 0%, #9C2B5C 50%, #7C1F47 100%); /* hero mic (voice landing) — 3-stop berry */
+
+    /* ============================================================
+       shadcn semantic tokens. Every shadcn primitive consumes these
+       names; the inbox-v2 lock keeps them pointing at the same
+       Boysenberry/canvas palette.
+       ============================================================ */
+    --background: 36 18% 97%;          /* Cool off-white #F8F7F5 */
+    --foreground: 24 11% 5%;           /* Ink */
+    --card: 36 18% 97%;
+    --card-foreground: 24 11% 5%;
+    --popover: 36 18% 97%;
+    --popover-foreground: 24 11% 5%;
+    --primary: 334 57% 39%;            /* Boysenberry "Tasteful pop" #9C2B5C */
+    --primary-foreground: 36 18% 97%;
+    --secondary: 24 6% 27%;            /* Ink-soft */
+    --secondary-foreground: 36 18% 97%;
+    --muted: 30 9% 79%;
+    --muted-foreground: 24 6% 27%;
+    --accent: 334 57% 39%;
+    --accent-foreground: 36 18% 97%;
+    --destructive: 0 51% 47%;
+    --destructive-foreground: 36 18% 97%;
+    --border: 24 11% 5% / 0.08;
+    --input: 24 11% 5% / 0.15;
+    --ring: 334 57% 39%;
+    --radius: 0.875rem;                 /* 14px — softer corners on cards (was 8px) */
+  }
+
+  html {
+    font-family: var(--font-body);
+    /* Fallback canvas base behind body. Body's rail-tint is now opaque
+       (#ECE7E8) so this no longer composites — but the html background still
+       prevents a brief flash of browser-default white during paint. */
+    background-color: var(--bg-canvas);
+  }
+
+  body {
+    /* Inbox-v2: body is the shared rail-tint ground; cards lift off in canvas.
+       Ground is the desaturated mauve-gray (#ECE7E8) locked 2026-05-15 evening
+       after a side-by-side study against the prior #EEEDEA neutral ink wash
+       (which read as cool/dull). See mockups/ground-tone-mauve-variants.html. */
+    background-color: var(--rail-tint);
+    color: var(--text-primary);
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  /* Focus-visible: 2px Boysenberry ring at 4px offset on any keyboard-focused interactive. */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--berry);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  [role="tab"]:focus-visible {
+    outline-offset: 4px;
+  }
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-tnum {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+  /* Lora italic for pet-name hero contexts. The CSS rule pins italic style
+     for any surface that adds the class. */
+  .font-serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+  /* Inbox-v2 surface utilities. */
+  .bg-rail-tint { background-color: var(--rail-tint); }
+  .bg-canvas-2 { background-color: var(--canvas-2); }
+  .text-ink-70 { color: var(--ink-70); }
+  .text-ink-50 { color: var(--ink-50); }
+  .text-ink-30 { color: var(--ink-30); }
+  .border-rule { border-color: var(--rule); }
+  .border-rule-soft { border-color: var(--rule-soft); }
+  .bg-berry-soft { background-color: var(--berry-soft); }
+  .bg-berry-deep { background-color: var(--berry-deep); }
+  .text-berry-deep { color: var(--berry-deep); }
+  .ring-berry-ring { --tw-ring-color: var(--berry-ring); }
+  .bg-berry-gradient { background: var(--berry-gradient); }
+  /* Berry-tinted "live work" pulse — used inside the inbox CTA as an
+     absolutely-positioned dot at the top-right of the button. Locked
+     2026-05-18 v5: absolute positioning so the dot doesn't widen the
+     button vs its peers (the v4 removal was wrong; the user wants both
+     the pulse AND identical button sizes). Ripple effect via expanding
+     box-shadow rather than opacity — subtler, clinical, less marketing-y. */
+  @keyframes pawkit-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.55); opacity: 0.95; }
+    70%  { box-shadow: 0 0 0 7px rgba(255,255,255,0);  opacity: 1; }
+    100% { box-shadow: 0 0 0 0 rgba(255,255,255,0);    opacity: 0.6; }
+  }
+  .animate-pawkit-pulse { animation: pawkit-pulse 1.4s ease-out infinite; }
+}
+
+/* ============================================================
+   Inbox-v2 chrome overrides (formerly under various selectors,
+   now flat :root since mauve+inbox-v2 is the only build).
+   These rules live OUTSIDE @layer so they win over Tailwind
+   utilities. The shared rail-tint ground is set on body; this
+   block handles the inbox-specific adaptations.
+   ============================================================ */
+
+/* Card surface softening. Legacy 1.5px Ink-frame cards downgrade to a 1px
+   `rule` hairline + 14px radius. `:not(.rounded-full)` preserves the
+   identity-circle treatment (avatars, check icons, logo slots). */
+:root .border-\[1\.5px\].border-ink:not(.rounded-full),
+:root .border-\[1\.5px\].border-ink\/40:not(.rounded-full),
+:root .border-\[1\.5px\].border-ink\/30:not(.rounded-full),
+:root .border-\[1\.5px\].border-ink\/20:not(.rounded-full) {
+  border-width: 1px;
+  border-color: var(--rule);
+  border-radius: 14px;
+}
+
+
+/* ============================================================
+   Type scale + Ink-faint legibility pass.
+   ============================================================ */
+
+/* Ink-faint bumped to #8F8B86 (3.5:1) — also applies to border-ink-faint. */
+:root .text-ink-faint {
+  color: #8F8B86;
+}
+:root .border-ink-faint {
+  border-color: #C9C5C0;
+}
+
+/* Marathi mode: Devanagari needs a slightly larger floor for legibility.
+   Bumps body sizes by 1px only when [lang="mr"] is on the <html> tag. */
+:root[lang="mr"] .text-xs { font-size: 12px; }
+:root[lang="mr"] .text-sm { font-size: 13px; }
+:root[lang="mr"] .text-base { font-size: 14px; }
+:root[lang="mr"] .text-md { font-size: 15px; }

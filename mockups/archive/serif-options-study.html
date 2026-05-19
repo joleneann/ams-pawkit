@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pawkit · Serif options study (2026-05-15)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- All five serifs loaded; each panel scopes itself to one of them. -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Spectral:ital,wght@1,500;1,600&family=Fraunces:ital,opsz,wght,SOFT@1,9..144,500..600,100&family=Newsreader:ital,opsz,wght@1,6..72,500..600&family=Crimson+Pro:ital,wght@1,500..600&family=Lora:ital,wght@1,500..600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --canvas: #F8F7F5;
+    --ground: #EFE6E8;
+    --ink: #0F0C0A;
+    --ink-70: rgba(15, 12, 10, 0.72);
+    --ink-50: rgba(15, 12, 10, 0.55);
+    --ink-30: rgba(15, 12, 10, 0.35);
+    --rule: rgba(15, 12, 10, 0.12);
+    --rule-soft: rgba(15, 12, 10, 0.06);
+    --canvas-2: rgba(15, 12, 10, 0.04);
+    --berry: #9C2B5C;
+    --berry-deep: #7C1F47;
+    --berry-soft: rgba(156, 43, 92, 0.12);
+  }
+  html, body {
+    background: #1f1f1f;
+    color: #eaeaea;
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding: 56px 32px 96px; }
+  .doc { max-width: 1280px; margin: 0 auto; }
+
+  .doc-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; color: #c9a3b8; margin-bottom: 10px;
+  }
+  .doc-title {
+    font-size: 32px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+    color: #f0f0f0; margin-bottom: 14px;
+  }
+  .doc-lede {
+    font-size: 14.5px; color: #bbbbbb; max-width: 880px;
+  }
+  .doc-lede strong { color: #f0f0f0; }
+  .doc-lede code {
+    font-family: 'Inter', monospace; font-size: 13px;
+    background: #242424; border: 1px solid #3a3a3a; border-radius: 4px;
+    padding: 1px 6px; color: #d9d9d9;
+  }
+
+  /* TOC */
+  .toc {
+    display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 18px;
+    background: #242424; border: 1px solid #3a3a3a; border-radius: 10px;
+    margin: 32px 0 40px;
+  }
+  .toc-label {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #888; align-self: center; margin-right: 6px;
+  }
+  .toc a {
+    font-size: 12.5px; color: #ddd; text-decoration: none;
+    border: 1px solid #3a3a3a; border-radius: 999px; padding: 6px 12px;
+    background: #1f1f1f;
+  }
+  .toc a:hover { background: #2a2a2a; border-color: #555; }
+  .toc a.cat {
+    font-family: 'Inter', monospace; font-size: 10.5px;
+    color: #888; padding: 4px 8px; border: 0; background: transparent;
+  }
+
+  /* Per-option section */
+  .option { margin-bottom: 56px; scroll-margin-top: 24px; }
+  .option-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+  .option-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #c9a3b8;
+  }
+  .option-tag.soft { color: #f2c0d2; }
+  .option-tag.classic { color: #d4b896; }
+  .option-name {
+    font-size: 24px; font-weight: 700; letter-spacing: -0.01em; color: #f0f0f0;
+  }
+  .option-font {
+    font-family: 'Inter', monospace; font-size: 13.5px; color: #bbb; font-weight: 500;
+  }
+  .option-char { font-size: 13px; color: #aaa; margin-bottom: 18px; max-width: 880px; }
+
+  /* The three test panels per font, in a grid */
+  .panels {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    max-width: 1180px;
+  }
+  .panel {
+    background: var(--ground);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 22px 24px 24px;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .panel-label {
+    font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-50); margin-bottom: 16px;
+  }
+  .panel-card {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+  /* Hero (focus-card style) */
+  .hero-card { padding: 26px 28px 24px; }
+  .hero-row {
+    display: grid; grid-template-columns: 64px 1fr;
+    gap: 16px; align-items: center;
+  }
+  .hero-av {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, #E5C896 0%, #DDAB69 100%);
+    border: 2.5px solid #FAF1DF;
+  }
+  .pet-hero {
+    /* font-family overridden per panel */
+    font-style: italic; font-weight: 600;
+    font-size: 32px; line-height: 1; letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .hero-meta {
+    font-size: 13.5px; color: var(--ink-70); font-weight: 500;
+    margin-top: 6px;
+  }
+  .hero-meta strong { color: var(--ink); font-weight: 600; }
+  .hero-meta .dot { color: var(--rule); margin: 0 8px; }
+
+  /* Inbox row */
+  .inbox-row {
+    display: grid; grid-template-columns: 48px 1fr auto;
+    gap: 14px; align-items: center;
+  }
+  .inbox-av {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, #FFFCF2 0%, #EAE0C8 100%);
+    border: 2.5px solid #FAF1DF;
+  }
+  .inbox-meta {
+    display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;
+  }
+  .pet-row {
+    /* font-family overridden per panel */
+    font-style: italic; font-weight: 600;
+    font-size: 17px; color: var(--ink); letter-spacing: -0.005em;
+  }
+  .inbox-breed { font-size: 12.5px; color: var(--ink-50); font-weight: 500; }
+  .inbox-household { font-size: 12.5px; color: var(--ink-50); font-weight: 500; }
+  .inbox-preview {
+    font-size: 13.5px; color: var(--ink-70); line-height: 1.45;
+    margin-top: 2px;
+  }
+  .inbox-wait { font-size: 12px; font-weight: 600; color: var(--ink-50); }
+
+  /* Billing row */
+  .billing-row {
+    display: grid; grid-template-columns: 100px 1fr 80px 80px;
+    gap: 14px; align-items: center;
+    font-size: 12.5px;
+  }
+  .billing-inv {
+    font-size: 13.5px; font-weight: 600; color: var(--ink);
+  }
+  .billing-pet-cell .pet-row.small {
+    /* font-family overridden per panel */
+    font-style: italic; font-weight: 600;
+    font-size: 15px; color: var(--ink); letter-spacing: -0.005em;
+  }
+  .billing-pet-cell .breed-line { color: var(--ink-50); font-weight: 500; font-size: 12.5px; }
+  .billing-pet-cell .hh-line { color: var(--ink-50); font-weight: 500; font-size: 12.5px; margin-top: 2px; }
+  .billing-issued { font-size: 13px; color: var(--ink-70); }
+  .billing-amt { font-size: 14.5px; font-weight: 600; color: var(--ink); text-align: right; }
+
+  /* per-option font scoping */
+  .opt-spectral .pet-hero, .opt-spectral .pet-row { font-family: 'Spectral', serif; }
+  .opt-fraunces .pet-hero, .opt-fraunces .pet-row { font-family: 'Fraunces', serif; font-variation-settings: 'SOFT' 100; }
+  .opt-newsreader .pet-hero, .opt-newsreader .pet-row { font-family: 'Newsreader', serif; }
+  .opt-crimson .pet-hero, .opt-crimson .pet-row { font-family: 'Crimson Pro', serif; }
+  .opt-lora .pet-hero, .opt-lora .pet-row { font-family: 'Lora', serif; }
+
+  /* footnote */
+  .foot { margin-top: 56px; padding-top: 24px; border-top: 1px solid #444; }
+  .foot p { font-size: 13px; color: #aaa; max-width: 880px; margin-bottom: 8px; }
+  .foot strong { color: #f0f0f0; }
+  .foot code {
+    font-family: 'Inter', monospace; font-size: 12.5px;
+    background: #242424; border: 1px solid #3a3a3a; border-radius: 5px;
+    padding: 2px 6px; color: #d9d9d9;
+  }
+</style>
+</head>
+<body>
+
+<div class="doc">
+
+  <header>
+    <div class="doc-eyebrow">Serif options study · 2026-05-15</div>
+    <h1 class="doc-title">Replace Spectral with a softer serif</h1>
+    <p class="doc-lede">
+      The pet-name italic ("Gabby") currently renders in <strong>Spectral italic 600</strong> across 13+ surfaces. You've flagged it as harsh — high contrast, sharp serifs, aggressive ink traps. Below: the current baseline plus <strong>two soft modern serifs</strong> (Fraunces in soft mode, Newsreader) and <strong>two classic book serifs</strong> (Crimson Pro, Lora). Each panel shows the italic at all three sizes we use it at: <code>32px</code> hero (focus card), <code>17px</code> inbox row, <code>15px</code> billing ledger. Body text is locked to <strong>Inter</strong> (the reverting body font) so you're judging the serif in its actual Pawkit context.
+    </p>
+  </header>
+
+  <nav class="toc">
+    <span class="toc-label">Jump to</span>
+    <a href="#spectral">Baseline · Spectral</a>
+    <a href="#fraunces">Soft A · Fraunces</a>
+    <a href="#newsreader">Soft B · Newsreader</a>
+    <a href="#crimson">Classic A · Crimson Pro</a>
+    <a href="#lora">Classic B · Lora</a>
+  </nav>
+
+  <!-- ===================== SPECTRAL BASELINE ===================== -->
+  <section class="option opt-spectral" id="spectral">
+    <div class="option-head">
+      <span class="option-tag">Baseline · current</span>
+      <h2 class="option-name">Spectral</h2>
+      <span class="option-font">italic 600 · the &ldquo;harsh&rdquo; one</span>
+    </div>
+    <p class="option-char">High contrast, sharp serifs, narrow proportions. Reads as "editorial / NYT magazine". Modern but rigid in italic.</p>
+    <div class="panels">
+      <!-- Hero -->
+      <div class="panel" style="grid-column: span 2">
+        <div class="panel-label">Hero · focus card header · 32px</div>
+        <div class="panel-card hero-card">
+          <div class="hero-row">
+            <div class="hero-av"></div>
+            <div>
+              <div class="pet-hero">Gabby</div>
+              <div class="hero-meta">Golden Retriever<span class="dot">·</span>M<span class="dot">·</span>4 years<span class="dot">·</span>28.0 kg<span class="dot">·</span><strong>Fernandes household</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Inbox row -->
+      <div class="panel">
+        <div class="panel-label">Inbox row · 17px</div>
+        <div class="panel-card">
+          <div class="inbox-row">
+            <div class="inbox-av"></div>
+            <div>
+              <div class="inbox-meta"><span class="pet-row">Misha</span><span class="inbox-breed">Persian · F · 7y</span><span class="inbox-household">· Khan household</span></div>
+              <div class="inbox-preview">Doctor, the renal kibble is going slowly. She's drinking a lot more than usual the last two days.</div>
+            </div>
+            <div class="inbox-wait">1d 4h</div>
+          </div>
+        </div>
+      </div>
+      <!-- Billing row -->
+      <div class="panel">
+        <div class="panel-label">Billing ledger · 15px</div>
+        <div class="panel-card">
+          <div class="billing-row">
+            <div class="billing-inv">INV-2026-5033</div>
+            <div class="billing-pet-cell">
+              <div><span class="pet-row small">Champ</span> <span class="breed-line">· Indie, M, 2y</span></div>
+              <div class="hh-line">Patel household</div>
+            </div>
+            <div class="billing-issued">8 May 2026</div>
+            <div class="billing-amt">₹5,050</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FRAUNCES (SOFT A) ===================== -->
+  <section class="option opt-fraunces" id="fraunces">
+    <div class="option-head">
+      <span class="option-tag soft">Option A · Soft</span>
+      <h2 class="option-name">Fraunces</h2>
+      <span class="option-font">italic 600, SOFT axis = 100 · most distinctive</span>
+    </div>
+    <p class="option-char">Modern variable serif with a literal <strong>SOFT</strong> axis. At full softness, terminals round and the letterforms gain personality. Most "Pawkit-ish" of the four — pairs naturally with warm pet content. Slight risk of feeling quirky / boutique at hero size.</p>
+    <div class="panels">
+      <div class="panel" style="grid-column: span 2">
+        <div class="panel-label">Hero · focus card header · 32px</div>
+        <div class="panel-card hero-card">
+          <div class="hero-row">
+            <div class="hero-av"></div>
+            <div>
+              <div class="pet-hero">Gabby</div>
+              <div class="hero-meta">Golden Retriever<span class="dot">·</span>M<span class="dot">·</span>4 years<span class="dot">·</span>28.0 kg<span class="dot">·</span><strong>Fernandes household</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Inbox row · 17px</div>
+        <div class="panel-card">
+          <div class="inbox-row">
+            <div class="inbox-av"></div>
+            <div>
+              <div class="inbox-meta"><span class="pet-row">Misha</span><span class="inbox-breed">Persian · F · 7y</span><span class="inbox-household">· Khan household</span></div>
+              <div class="inbox-preview">Doctor, the renal kibble is going slowly. She's drinking a lot more than usual the last two days.</div>
+            </div>
+            <div class="inbox-wait">1d 4h</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Billing ledger · 15px</div>
+        <div class="panel-card">
+          <div class="billing-row">
+            <div class="billing-inv">INV-2026-5033</div>
+            <div class="billing-pet-cell">
+              <div><span class="pet-row small">Champ</span> <span class="breed-line">· Indie, M, 2y</span></div>
+              <div class="hh-line">Patel household</div>
+            </div>
+            <div class="billing-issued">8 May 2026</div>
+            <div class="billing-amt">₹5,050</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NEWSREADER (SOFT B) ===================== -->
+  <section class="option opt-newsreader" id="newsreader">
+    <div class="option-head">
+      <span class="option-tag soft">Option B · Soft</span>
+      <h2 class="option-name">Newsreader</h2>
+      <span class="option-font">italic 600 · text-friendly modern</span>
+    </div>
+    <p class="option-char">Google's modern text serif. Lower contrast than Spectral, friendlier curves, still feels editorial. The safest soft choice — reads "approachable but professional" at every size.</p>
+    <div class="panels">
+      <div class="panel" style="grid-column: span 2">
+        <div class="panel-label">Hero · focus card header · 32px</div>
+        <div class="panel-card hero-card">
+          <div class="hero-row">
+            <div class="hero-av"></div>
+            <div>
+              <div class="pet-hero">Gabby</div>
+              <div class="hero-meta">Golden Retriever<span class="dot">·</span>M<span class="dot">·</span>4 years<span class="dot">·</span>28.0 kg<span class="dot">·</span><strong>Fernandes household</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Inbox row · 17px</div>
+        <div class="panel-card">
+          <div class="inbox-row">
+            <div class="inbox-av"></div>
+            <div>
+              <div class="inbox-meta"><span class="pet-row">Misha</span><span class="inbox-breed">Persian · F · 7y</span><span class="inbox-household">· Khan household</span></div>
+              <div class="inbox-preview">Doctor, the renal kibble is going slowly. She's drinking a lot more than usual the last two days.</div>
+            </div>
+            <div class="inbox-wait">1d 4h</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Billing ledger · 15px</div>
+        <div class="panel-card">
+          <div class="billing-row">
+            <div class="billing-inv">INV-2026-5033</div>
+            <div class="billing-pet-cell">
+              <div><span class="pet-row small">Champ</span> <span class="breed-line">· Indie, M, 2y</span></div>
+              <div class="hh-line">Patel household</div>
+            </div>
+            <div class="billing-issued">8 May 2026</div>
+            <div class="billing-amt">₹5,050</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CRIMSON PRO (CLASSIC A) ===================== -->
+  <section class="option opt-crimson" id="crimson">
+    <div class="option-head">
+      <span class="option-tag classic">Option C · Classic</span>
+      <h2 class="option-name">Crimson Pro</h2>
+      <span class="option-font">italic 600 · modernised Garalde</span>
+    </div>
+    <p class="option-char">A modernisation of classic Garalde proportions (think Garamond family). Warmer than Spectral, more old-book than the soft options. Reads like the inside of a thoughtful book.</p>
+    <div class="panels">
+      <div class="panel" style="grid-column: span 2">
+        <div class="panel-label">Hero · focus card header · 32px</div>
+        <div class="panel-card hero-card">
+          <div class="hero-row">
+            <div class="hero-av"></div>
+            <div>
+              <div class="pet-hero">Gabby</div>
+              <div class="hero-meta">Golden Retriever<span class="dot">·</span>M<span class="dot">·</span>4 years<span class="dot">·</span>28.0 kg<span class="dot">·</span><strong>Fernandes household</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Inbox row · 17px</div>
+        <div class="panel-card">
+          <div class="inbox-row">
+            <div class="inbox-av"></div>
+            <div>
+              <div class="inbox-meta"><span class="pet-row">Misha</span><span class="inbox-breed">Persian · F · 7y</span><span class="inbox-household">· Khan household</span></div>
+              <div class="inbox-preview">Doctor, the renal kibble is going slowly. She's drinking a lot more than usual the last two days.</div>
+            </div>
+            <div class="inbox-wait">1d 4h</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Billing ledger · 15px</div>
+        <div class="panel-card">
+          <div class="billing-row">
+            <div class="billing-inv">INV-2026-5033</div>
+            <div class="billing-pet-cell">
+              <div><span class="pet-row small">Champ</span> <span class="breed-line">· Indie, M, 2y</span></div>
+              <div class="hh-line">Patel household</div>
+            </div>
+            <div class="billing-issued">8 May 2026</div>
+            <div class="billing-amt">₹5,050</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LORA (CLASSIC B) ===================== -->
+  <section class="option opt-lora" id="lora">
+    <div class="option-head">
+      <span class="option-tag classic">Option D · Classic</span>
+      <h2 class="option-name">Lora</h2>
+      <span class="option-font">italic 600 · workhorse book serif</span>
+    </div>
+    <p class="option-char">Well-balanced book serif. Less character than Fraunces, less drama than Crimson Pro — reads as quietly professional. The "always-safe" pick. Pairs naturally with Inter for body text.</p>
+    <div class="panels">
+      <div class="panel" style="grid-column: span 2">
+        <div class="panel-label">Hero · focus card header · 32px</div>
+        <div class="panel-card hero-card">
+          <div class="hero-row">
+            <div class="hero-av"></div>
+            <div>
+              <div class="pet-hero">Gabby</div>
+              <div class="hero-meta">Golden Retriever<span class="dot">·</span>M<span class="dot">·</span>4 years<span class="dot">·</span>28.0 kg<span class="dot">·</span><strong>Fernandes household</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Inbox row · 17px</div>
+        <div class="panel-card">
+          <div class="inbox-row">
+            <div class="inbox-av"></div>
+            <div>
+              <div class="inbox-meta"><span class="pet-row">Misha</span><span class="inbox-breed">Persian · F · 7y</span><span class="inbox-household">· Khan household</span></div>
+              <div class="inbox-preview">Doctor, the renal kibble is going slowly. She's drinking a lot more than usual the last two days.</div>
+            </div>
+            <div class="inbox-wait">1d 4h</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Billing ledger · 15px</div>
+        <div class="panel-card">
+          <div class="billing-row">
+            <div class="billing-inv">INV-2026-5033</div>
+            <div class="billing-pet-cell">
+              <div><span class="pet-row small">Champ</span> <span class="breed-line">· Indie, M, 2y</span></div>
+              <div class="hh-line">Patel household</div>
+            </div>
+            <div class="billing-issued">8 May 2026</div>
+            <div class="billing-amt">₹5,050</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <p><strong>How to choose.</strong> Look at the inbox row and billing row sizes first — those are the surfaces you'll see hundreds of times. The hero size matters less because it appears once per page. Ask: at 15–17px, does the italic feel <em>quiet and warm</em>, or does it still grab the eye?</p>
+    <p><strong>My read.</strong> Fraunces (A) has the most personality — could feel right for a pet-clinic brand if the soft axis lands. Newsreader (B) is the safest text-friendly pick. Crimson Pro (C) is the most "thoughtful book" of the four. Lora (D) is the least distinctive but reads cleanest in dense rows.</p>
+    <p>Pick A / B / C / D. I'll then wire it via <code>next/font/google</code>, drop DM Sans for Inter, drop Spectral for the chosen serif, and add Satoshi via Fontshare for display.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Inbox header redesign — v2 (no count copy, CTA-dominant)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas:       #F8F7F5;
+    --canvas-2:     #EFECE8;
+    --rail-tint:    #EFE6E8;
+    --ink:          #0F0C0A;
+    --ink-soft:     #5C5550;
+    --ink-faint:    #8F8B86;
+    --ink-70:       rgba(15,12,10,0.70);
+    --rule:         rgba(15,12,10,0.10);
+    --rule-soft:    rgba(15,12,10,0.06);
+    --berry:        #9C2B5C;
+    --berry-deep:   #7C1F47;
+    --berry-soft:   rgba(156,43,92,0.12);
+    --berry-tint:   rgba(156,43,92,0.06);
+    --berry-ring:   rgba(156,43,92,0.30);
+    --moss-soft:    rgba(94,112,82,0.12);
+    --moss:         #5E7052;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--canvas);
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 60px 32px 120px;
+  }
+  .eyebrow {
+    font-size: 10px; font-weight: 600; color: var(--berry);
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--berry);
+  }
+  h1 { font-size: 28px; line-height: 1.18; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 14px; }
+  h2 { font-size: 20px; line-height: 1.25; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.005em; }
+  p { color: var(--ink-soft); font-size: 13px; line-height: 1.55; margin: 0 0 12px; max-width: 740px; }
+  .lede { font-size: 14px; color: var(--ink-soft); max-width: 760px; margin: 0 0 32px; }
+  .section-divider { height: 1px; background: var(--rule-soft); margin: 48px 0 32px; }
+
+  /* research card */
+  .research { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+  .ref {
+    background: #FFFFFF; border: 1px solid var(--rule-soft); border-radius: 12px; padding: 14px 16px;
+  }
+  .ref-name {
+    font-size: 11px; font-weight: 700; color: var(--ink); letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ref-pat { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .ref-pat strong { color: var(--ink); font-weight: 600; }
+
+  /* option block */
+  .option-block { margin-bottom: 56px; }
+  .option-eyebrow {
+    font-size: 10px; font-weight: 700; color: var(--ink-soft);
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .option-label { color: var(--berry); font-weight: 700; }
+  .frame {
+    background: var(--rail-tint); border-radius: 16px; padding: 28px 28px;
+  }
+  .annotation {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 18px;
+    padding: 16px 0 0; border-top: 1px solid var(--rule-soft);
+  }
+  .annotation .col { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .annotation .col strong {
+    color: var(--ink); font-weight: 600; display: block; margin-bottom: 4px;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
+  /* shared components */
+  .tabs {
+    display: inline-flex; background: var(--canvas-2); border-radius: 999px; padding: 3px; gap: 0;
+  }
+  .tab {
+    padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 500;
+    color: var(--ink-soft); transition: background 0.18s; line-height: 1.3;
+  }
+  .tab.active { background: var(--berry); color: #FFFFFF; font-weight: 600; }
+  .tab-count {
+    display: inline-block; margin-left: 5px; padding: 1px 6px;
+    border-radius: 999px; background: rgba(255,255,255,0.22);
+    font-size: 9px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.02em;
+  }
+  .tab:not(.active) .tab-count {
+    background: rgba(15,12,10,0.06); color: var(--ink-soft);
+  }
+
+  /* CTA scaled to dominate the tabs */
+  .btn-cta {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 12px 24px; background: var(--berry); color: #FFFFFF;
+    border-radius: 12px; font-size: 14px; font-weight: 600;
+    text-decoration: none; line-height: 1; border: none; cursor: pointer;
+    box-shadow: 0 1px 2px rgba(15,12,10,0.06), 0 4px 14px -6px rgba(156,43,92,0.45);
+    transition: background 0.16s ease, box-shadow 0.16s ease;
+  }
+  .btn-cta:hover { background: var(--berry-deep); }
+  .btn-cta .arrow { font-weight: 400; }
+  .btn-cta.with-pulse {
+    padding-left: 16px;
+  }
+  .btn-pulse {
+    width: 8px; height: 8px; border-radius: 50%; background: #FFFFFF;
+    opacity: 0.85; box-shadow: 0 0 0 0 rgba(255,255,255,0.7);
+    animation: pulse 1.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.55); opacity: 0.9; }
+    70%  { box-shadow: 0 0 0 7px rgba(255,255,255,0); opacity: 1; }
+    100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); opacity: 0.6; }
+  }
+
+  /* option layouts */
+  .opt .row {
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  }
+  .opt-current .top-row { display: flex; justify-content: flex-end; margin-bottom: 18px; }
+  .opt-current .bar {
+    background: var(--berry-soft); border: 1px solid var(--berry-ring); border-radius: 12px;
+    display: flex; align-items: center; justify-content: space-between; padding: 14px 20px;
+  }
+  .opt-current .bar-count { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .opt-current .bar-count .n {
+    font-size: 17px; font-weight: 700; color: var(--berry-deep); margin-right: 4px; font-variant-numeric: tabular-nums;
+  }
+  .opt-current .btn-small {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 14px; background: var(--berry); color: #FFFFFF;
+    border-radius: 8px; font-size: 12px; font-weight: 600; line-height: 1;
+  }
+
+  .opt-c-subline {
+    margin-top: 8px; font-size: 12px; color: var(--ink-faint); font-weight: 500;
+  }
+
+  .section-header {
+    font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em;
+    margin-bottom: 16px;
+  }
+
+  /* recommendation block */
+  .recco {
+    margin-top: 48px; padding: 24px;
+    background: rgba(94,112,82,0.06); border: 1px solid rgba(94,112,82,0.22); border-radius: 16px;
+  }
+  .recco h2 { color: var(--moss); margin-bottom: 10px; }
+  .recco p { color: var(--ink-soft); }
+  .recco .pick {
+    display: inline-block; margin-top: 10px; background: var(--moss); color: #FFFFFF;
+    padding: 6px 12px; border-radius: 999px; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="eyebrow">Mockup · Inbox header redesign · v2 · 2026-05-18</div>
+  <h1>CTA-dominant header, redundant count removed</h1>
+  <p class="lede">
+    Two locks for v2: <strong>(1) the "51 parents are waiting on you" copy is gone</strong> — the rail's
+    Inbox tab already carries that count, so repeating it in the header was triple-redundancy (rail badge + bar copy +
+    in-tab badge). <strong>(2) "Start reply queue" outweighs the Awaiting/Replied tabs visually</strong> — the CTA is
+    the action; the tabs are chrome.
+    Below: 4 reference patterns from products that solve "primary action + filter chrome" well, then 4 reformulated
+    mockup directions. Recommendation at the bottom.
+  </p>
+
+  <!-- =========================================== -->
+  <!-- RESEARCH STRAND                              -->
+  <!-- =========================================== -->
+  <h2>Reference research</h2>
+  <p>
+    Four category-leading apps that visibly weight a primary CTA over secondary filter/nav chrome.
+    Pattern through all four: the action is taller, more saturated, more shadowed; the filters read as ambient toggles.
+  </p>
+
+  <div class="research">
+    <div class="ref">
+      <div class="ref-name">Gmail · Compose</div>
+      <div class="ref-pat">
+        <strong>Compose</strong> is a saturated rectangle, ~48px tall, drop shadow, leftmost slot.
+        Filter chips ("Primary / Promotions / Social") sit below as ~28px-tall ambient toggles. ~2x the
+        button's optical weight vs. the filters.
+      </div>
+    </div>
+    <div class="ref">
+      <div class="ref-name">Linear · Inbox</div>
+      <div class="ref-pat">
+        Filter pills <strong>inline, small, ghost-style</strong>. The "action" is implicit — clicking the
+        first item IS the queue. No big button. But where Linear DOES surface a button (Create issue),
+        it's the loudest element on screen by far.
+      </div>
+    </div>
+    <div class="ref">
+      <div class="ref-name">Notion · Database header</div>
+      <div class="ref-pat">
+        <strong>New</strong> button is 36px tall, filled accent. Filter / sort / view dropdowns are 28px,
+        muted, no fill — they're chrome. The size delta is small but the color delta is large.
+      </div>
+    </div>
+    <div class="ref">
+      <div class="ref-name">Slack · DM list</div>
+      <div class="ref-pat">
+        <strong>New message</strong> sits top-left as a pen icon button on a circular fill. Filter pills
+        (Unread / Mentions) below it are ghost outlines, ~24px tall, mute text colour. Strong visual
+        contrast even though both sit in chrome.
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top: 16px; font-size: 12px; color: var(--ink-faint);">
+    Pattern lock: <strong>CTA</strong> = filled accent, 40-44px tall, shadow, larger text.
+    <strong>Filter tabs</strong> = ambient, 24-28px tall, no fill in the resting state, smaller text.
+    The eye reads CTA → list → filters (in that order), which matches the demo-day mental model:
+    "I have replies to send; now let me decide which slice I'm looking at."
+  </p>
+
+  <div class="section-divider"></div>
+
+  <!-- =========================================== -->
+  <!-- OPTION A: current layout (for reference)     -->
+  <!-- =========================================== -->
+  <div class="option-block opt opt-current">
+    <div class="option-eyebrow"><span class="option-label">CURRENT</span> · today's layout (for comparison)</div>
+
+    <div class="frame">
+      <div class="top-row">
+        <div class="tabs">
+          <div class="tab active">Awaiting reply</div>
+          <div class="tab">Replied</div>
+        </div>
+      </div>
+      <div class="bar">
+        <button class="btn-small">Start reply queue <span style="font-weight:400;">→</span></button>
+        <div class="bar-count"><span class="n">51</span> parents are waiting on you</div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <div class="col">
+        <strong>What's off</strong>
+        Repeats the rail's count (triple-redundancy). Tabs equal-weight with the CTA. Two stacked berry-soft
+        surfaces with no hierarchy. Eye doesn't know where to land.
+      </div>
+      <div class="col">
+        <strong>Visual symptoms</strong>
+        CTA is medium-emphasis (8px padding, 12px text). Tabs are also medium-emphasis (6px padding, 12px text).
+        Both visually equal, then both confused by the floating count.
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================== -->
+  <!-- OPTION B: minimal — just CTA + tabs          -->
+  <!-- =========================================== -->
+  <div class="option-block opt">
+    <div class="option-eyebrow"><span class="option-label">OPTION B</span> · Minimal · CTA + tabs in one row</div>
+
+    <div class="frame">
+      <div class="row">
+        <button class="btn-cta">Start reply queue <span class="arrow">→</span></button>
+        <div class="tabs">
+          <div class="tab active">Awaiting reply</div>
+          <div class="tab">Replied</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <div class="col">
+        <strong>The trade</strong>
+        Cleanest possible. One row, CTA dominates (44px tall with shadow + 14px text, vs tabs at 24px + 11px text).
+        Filter tabs feel like ambient chrome. The rail's count badge handles urgency; the header is action + filter.
+      </div>
+      <div class="col">
+        <strong>Risk</strong>
+        Loses any "this is urgent" signal in the header itself. If Sagar's eye doesn't catch the rail badge,
+        the urgency framing depends entirely on the list below screaming it.
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================== -->
+  <!-- OPTION C: CTA with live pulse                -->
+  <!-- =========================================== -->
+  <div class="option-block opt">
+    <div class="option-eyebrow"><span class="option-label">OPTION C</span> · CTA with live-pulse signal</div>
+
+    <div class="frame">
+      <div class="row">
+        <button class="btn-cta with-pulse">
+          <span class="btn-pulse"></span>
+          Start reply queue
+          <span class="arrow">→</span>
+        </button>
+        <div class="tabs">
+          <div class="tab active">Awaiting reply</div>
+          <div class="tab">Replied</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <div class="col">
+        <strong>The trade</strong>
+        Same minimal layout as B, but the CTA carries a pulsing white dot to signal "there's live work here."
+        Pulses ~once a second; goes static when count drops to zero. Adds urgency without re-stating the count.
+      </div>
+      <div class="col">
+        <strong>Risk</strong>
+        The pulse could read as too "notification" for a clinical product. Subtle to tune (opacity + scale).
+        Empty state must turn it off.
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================== -->
+  <!-- OPTION D: section header + row               -->
+  <!-- =========================================== -->
+  <div class="option-block opt">
+    <div class="option-eyebrow"><span class="option-label">OPTION D</span> · Section header above the action row</div>
+
+    <div class="frame">
+      <div class="section-header">Inbox</div>
+      <div class="row">
+        <button class="btn-cta">Start reply queue <span class="arrow">→</span></button>
+        <div class="tabs">
+          <div class="tab active">Awaiting reply</div>
+          <div class="tab">Replied</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <div class="col">
+        <strong>The trade</strong>
+        Adds a 22px H1 "Inbox" above the action row. Gives the page a sense of place; matches the
+        "Broadcasts" page pattern if you add page titles there too. CTA + tabs sit as the action strip
+        right under the title.
+      </div>
+      <div class="col">
+        <strong>Risk</strong>
+        Vertical bloat — adds ~40px of header chrome to every visit. The dashboard rail already says
+        "Inbox" via the active nav item, so the H1 is mildly redundant (though redundancy at this scale
+        is fine; the page title is a wayfinding affordance).
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================== -->
+  <!-- OPTION E: CTA + ambient ghost tabs           -->
+  <!-- =========================================== -->
+  <div class="option-block opt">
+    <div class="option-eyebrow"><span class="option-label">OPTION E</span> · CTA + ghost-tabs (Linear minimalism)</div>
+
+    <div class="frame">
+      <div class="row">
+        <button class="btn-cta">Start reply queue <span class="arrow">→</span></button>
+        <div style="display:inline-flex; gap: 4px; align-items: center;">
+          <div style="padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; color: var(--berry-deep); background: var(--berry-soft); line-height: 1.3;">Awaiting</div>
+          <div style="padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500; color: var(--ink-faint); line-height: 1.3;">Replied</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <div class="col">
+        <strong>The trade</strong>
+        Tabs lose their pill-pair container entirely — they become small text-buttons with the active one
+        wearing a berry-soft pill. Most extreme tab-as-chrome treatment. CTA dominance ratio is highest of all options.
+      </div>
+      <div class="col">
+        <strong>Risk</strong>
+        Tabs may read as text links rather than as a state filter. Lower discoverability for non-power
+        users. Breaks visual continuity with the broadcasts list (Sent/Drafts) which uses the pill-pair.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- =========================================== -->
+  <!-- RECOMMENDATION                               -->
+  <!-- =========================================== -->
+  <div class="recco">
+    <div class="pick">Recommended</div>
+    <h2>Option C — Minimal + live-pulse on the CTA</h2>
+    <p>
+      <strong>Cleanest action-dominant layout, with one small piece of header-level urgency preserved.</strong>
+      The pulsing dot inside the CTA tells the vet "there's live work here" without restating the count
+      that's already in the rail badge. CTA dominates the tabs by 20px in height + saturated fill + shadow.
+      Filter tabs are demoted to ambient chrome. No empty whitespace, no stacked surfaces, no redundancy.
+    </p>
+    <p style="margin-top: 12px;">
+      <strong>Fallback: Option B</strong> if the pulse feels too "marketing" / too animated for a clinical product.
+      Same layout minus the pulse. Slightly quieter; perfectly legible.
+    </p>
+    <p style="margin-top: 12px;">
+      <strong>Skip D</strong> for now — page titles can wait until you do the dashboard chrome audit.
+      <strong>Skip E</strong> — breaks parity with the broadcasts list (which uses the same pill-pair tabs)
+      and lowers tab discoverability.
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>

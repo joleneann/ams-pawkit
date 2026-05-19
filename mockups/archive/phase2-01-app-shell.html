@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit Phase 2 · Screen 01 · App shell + nav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #1f1f1f;
+    color: var(--bg-canvas);
+    padding: 48px 32px 96px;
+    line-height: 1.4;
+  }
+  .doc { max-width: 1360px; margin: 0 auto; }
+
+  /* Doc header */
+  .doc-header { border-bottom: 1px solid #444; padding-bottom: 24px; margin-bottom: 40px; }
+  .doc-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: #999; margin-bottom: 8px;
+  }
+  .doc-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 30px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .doc-sub { font-size: 13px; color: #bbb; margin-top: 12px; max-width: 760px; }
+  .doc-sub .change { color: #e8d18a; }
+
+  /* Section header */
+  .section-header { margin: 56px 0 18px; }
+  .section-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #888; margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--bg-canvas);
+  }
+
+  /* Reference cards */
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .ref-grid.cat { grid-template-columns: repeat(3, 1fr); }
+  .ref-card {
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .ref-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #1a1a1a;
+    border-bottom: 1px solid #3a3a3a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 11px;
+    font-style: italic;
+    overflow: hidden;
+  }
+  .ref-image img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .ref-image.fallback {
+    flex-direction: column;
+    gap: 8px;
+    background: #161616;
+    color: var(--bg-canvas);
+    font-style: normal;
+    padding: 16px;
+  }
+  .ref-image.fallback .name {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--bg-canvas);
+  }
+  .ref-image.fallback .link {
+    font-size: 11px;
+    color: #888;
+    font-style: italic;
+  }
+  .ref-image.fallback .link a { color: #888; text-decoration: underline; text-underline-offset: 2px; }
+  .ref-meta { padding: 12px 14px; }
+  .ref-name {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--bg-canvas); margin-bottom: 6px;
+  }
+  .ref-caption {
+    font-size: 12px; color: #aaa;
+    line-height: 1.45;
+  }
+  .ref-caption .verb { color: #ddd; font-weight: 600; }
+
+  /* Direction frames */
+  .direction { margin-top: 56px; }
+  .direction-caption { margin-bottom: 14px; }
+  .direction-letter {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: #888; margin-right: 10px;
+  }
+  .direction-name {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--bg-canvas);
+  }
+  .direction-channels { color: #888; font-weight: 400; font-size: 13px; margin-left: 8px; }
+  .direction-spec { font-size: 11px; color: #999; margin-top: 4px; font-style: italic; }
+
+  /* Paper frame */
+  .frame {
+    background: var(--bg-canvas);
+    width: 1280px;
+    max-width: 100%;
+    border: 1px solid #333;
+    overflow: hidden;
+  }
+
+  /* ============ Shared AMS clinic wordmark anatomy ============ */
+  .clinic-wordmark { display: flex; flex-direction: column; line-height: 1; }
+  .clinic-wordmark .line1 {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+  .clinic-wordmark .line2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* ============ Direction A — LINEAR ============ */
+  .frame-linear { font-family: 'Inter', sans-serif; }
+  .frame-linear .header {
+    height: 52px;
+    display: flex; align-items: center;
+    padding: 0 20px; gap: 24px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .frame-linear .clinic-wordmark .line1 { font-size: 12px; }
+  .frame-linear .clinic-wordmark .line2 { font-size: 8px; letter-spacing: 0.14em; }
+  .frame-linear .search {
+    flex: 1; max-width: 360px;
+    height: 28px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 4px;
+    display: flex; align-items: center;
+    padding: 0 10px; gap: 8px;
+    background: var(--bg-canvas);
+  }
+  .frame-linear .search-icon { width: 12px; height: 12px; color: var(--ink-faint); }
+  .frame-linear .search-placeholder { font-size: 12px; color: var(--ink-faint); flex: 1; }
+  .frame-linear .shell {
+    display: grid; grid-template-columns: 200px 1fr;
+    min-height: 540px;
+  }
+  .frame-linear .rail {
+    border-right: 1px solid var(--ink-faint);
+    padding: 12px 8px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .frame-linear .rail-item {
+    height: 32px;
+    display: flex; align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    border-left: 3px solid transparent;
+    margin-left: -8px; padding-left: 17px;
+    font-size: 13px; font-weight: 500;
+    color: var(--ink-soft);
+    border-radius: 0 4px 4px 0;
+    cursor: default;
+  }
+  .frame-linear .rail-item .icon { width: 14px; height: 14px; color: currentColor; }
+  .frame-linear .rail-item.active {
+    border-left-color: var(--teal);
+    color: var(--ink); font-weight: 600;
+  }
+  .frame-linear .main { padding: 20px 24px; }
+
+  /* ============ Direction B — STRIPE ============ */
+  .frame-stripe { font-family: 'Inter', sans-serif; }
+  .frame-stripe .header {
+    height: 60px;
+    display: flex; align-items: center;
+    padding: 0 24px; gap: 28px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .frame-stripe .clinic-wordmark .line1 { font-size: 13px; }
+  .frame-stripe .clinic-wordmark .line2 { font-size: 9px; letter-spacing: 0.14em; }
+  .frame-stripe .search {
+    flex: 1; max-width: 420px;
+    height: 36px;
+    background: rgba(168, 163, 158, 0.15);
+    border-radius: 4px;
+    display: flex; align-items: center;
+    padding: 0 12px; gap: 10px;
+  }
+  .frame-stripe .search-icon { width: 14px; height: 14px; color: var(--ink-soft); }
+  .frame-stripe .search-placeholder { font-size: 14px; color: var(--ink-soft); flex: 1; }
+  .frame-stripe .shell {
+    display: grid; grid-template-columns: 220px 1fr;
+    min-height: 540px;
+  }
+  .frame-stripe .rail {
+    border-right: 1px solid var(--ink-faint);
+    padding: 20px 0;
+  }
+  .frame-stripe .rail-section-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 24px; margin-bottom: 10px;
+  }
+  .frame-stripe .rail-item {
+    height: 36px;
+    display: flex; align-items: center;
+    gap: 12px;
+    padding: 0 24px;
+    border-left: 3px solid transparent;
+    font-size: 14px; font-weight: 500;
+    color: var(--ink-soft);
+    cursor: default;
+  }
+  .frame-stripe .rail-item .icon { width: 16px; height: 16px; color: currentColor; }
+  .frame-stripe .rail-item.active {
+    border-left-color: var(--teal);
+    color: var(--ink); font-weight: 600;
+  }
+  .frame-stripe .main { padding: 24px 32px; }
+
+  /* ============ Direction C — NOTION ============ */
+  .frame-notion { font-family: 'Inter', sans-serif; }
+  .frame-notion .header {
+    height: 64px;
+    display: flex; align-items: center;
+    padding: 0 28px; gap: 32px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .frame-notion .clinic-wordmark .line1 { font-size: 14px; }
+  .frame-notion .clinic-wordmark .line2 { font-size: 10px; letter-spacing: 0.14em; }
+  .frame-notion .search {
+    flex: 1; max-width: 460px;
+    height: 40px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 6px;
+    display: flex; align-items: center;
+    padding: 0 14px; gap: 12px;
+    background: var(--bg-canvas);
+  }
+  .frame-notion .search-icon { width: 15px; height: 15px; color: var(--ink-faint); }
+  .frame-notion .search-placeholder { font-size: 14px; color: var(--ink-faint); flex: 1; }
+  .frame-notion .shell {
+    display: grid; grid-template-columns: 240px 1fr;
+    min-height: 540px;
+  }
+  .frame-notion .rail {
+    border-right: 1px solid var(--ink-faint);
+    padding: 20px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .frame-notion .rail-section-label-faint {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 16px; margin: 4px 0 8px;
+  }
+  .frame-notion .rail-item {
+    height: 40px;
+    display: flex; align-items: center;
+    gap: 14px;
+    padding: 0 16px;
+    border-left: 4px solid transparent;
+    margin-left: -12px; padding-left: 24px;
+    font-size: 15px; font-weight: 400;
+    color: var(--ink-soft);
+    border-radius: 0 6px 6px 0;
+    cursor: default;
+  }
+  .frame-notion .rail-item .icon { width: 16px; height: 16px; color: currentColor; }
+  .frame-notion .rail-item.active {
+    border-left-color: var(--teal);
+    color: var(--ink); font-weight: 600;
+  }
+  .frame-notion .main { padding: 28px 36px; }
+
+  /* ============ Direction D — SUPERHUMAN ============ */
+  .frame-super { font-family: 'Inter', sans-serif; }
+  .frame-super .header {
+    height: 48px;
+    display: flex; align-items: center;
+    padding: 0 16px; gap: 20px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .frame-super .clinic-wordmark .line1 { font-size: 11px; }
+  .frame-super .clinic-wordmark .line2 { font-size: 7px; letter-spacing: 0.16em; }
+  .frame-super .search {
+    flex: 1; max-width: 280px;
+    height: 26px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 3px;
+    display: flex; align-items: center;
+    padding: 0 8px; gap: 6px;
+    background: var(--bg-canvas);
+  }
+  .frame-super .search-icon { width: 11px; height: 11px; color: var(--ink-faint); }
+  .frame-super .search-placeholder { font-size: 11px; color: var(--ink-faint); flex: 1; }
+  .frame-super .shell {
+    display: grid; grid-template-columns: 180px 1fr;
+    min-height: 540px;
+  }
+  .frame-super .rail {
+    border-right: 1px solid var(--ink-faint);
+    padding: 10px 6px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .frame-super .rail-item {
+    height: 28px;
+    display: flex; align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    border-left: 2px solid transparent;
+    margin-left: -6px; padding-left: 14px;
+    font-size: 12px; font-weight: 500;
+    color: var(--ink-soft);
+    cursor: default;
+  }
+  .frame-super .rail-item .icon { width: 12px; height: 12px; color: currentColor; }
+  .frame-super .rail-item.active {
+    border-left-color: var(--teal);
+    color: var(--ink); font-weight: 600;
+  }
+  .frame-super .main { padding: 16px 20px; }
+
+  /* ============ Shared main-area Inbox demo content ============ */
+  .inbox-subtabs {
+    display: flex; gap: 24px;
+    border-bottom: 1px solid var(--ink-faint);
+    padding-bottom: 10px; margin-bottom: 16px;
+  }
+  .inbox-subtab {
+    font-size: 13px; font-weight: 500;
+    color: var(--ink-soft);
+    cursor: default;
+  }
+  .inbox-subtab.active { color: var(--ink); font-weight: 600; }
+  .inbox-subtab .count {
+    font-size: 11px; font-weight: 600;
+    color: var(--ink-faint); margin-left: 4px;
+  }
+  .inbox-subtab.active .count { color: var(--teal); }
+
+  .inbox-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .inbox-row .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background-color: rgba(168, 163, 158, 0.16);
+    border: 1.5px solid var(--ink-faint);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A8A39E' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='4' r='2'/%3E%3Ccircle cx='18' cy='8' r='2'/%3E%3Ccircle cx='20' cy='16' r='2'/%3E%3Cpath d='M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 55%;
+  }
+  .inbox-row .row-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .inbox-row .row-meta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink);
+  }
+  .inbox-row .row-meta .household {
+    font-size: 12px; font-weight: 400;
+    color: var(--ink-soft);
+  }
+  .inbox-row .row-meta .household::before { content: '· '; color: var(--ink-faint); }
+  .inbox-row .row-preview {
+    font-size: 12px; color: var(--ink-soft);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .inbox-row .timestamp {
+    font-size: 11px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Smaller variant for Superhuman density */
+  .frame-super .inbox-subtabs { padding-bottom: 8px; margin-bottom: 12px; gap: 18px; }
+  .frame-super .inbox-subtab { font-size: 12px; }
+  .frame-super .inbox-row { padding: 8px 0; grid-template-columns: 28px 1fr auto; gap: 10px; }
+  .frame-super .inbox-row .avatar { width: 28px; height: 28px; }
+  .frame-super .inbox-row .row-meta { font-size: 12px; }
+  .frame-super .inbox-row .row-preview { font-size: 11px; }
+  .frame-super .inbox-row .timestamp { font-size: 10px; }
+
+  /* Larger variant for Notion airiness */
+  .frame-notion .inbox-subtabs { padding-bottom: 14px; margin-bottom: 20px; gap: 32px; }
+  .frame-notion .inbox-subtab { font-size: 14px; }
+  .frame-notion .inbox-row { padding: 16px 0; grid-template-columns: 40px 1fr auto; gap: 18px; }
+  .frame-notion .inbox-row .avatar { width: 40px; height: 40px; }
+  .frame-notion .inbox-row .row-meta { font-size: 14px; }
+  .frame-notion .inbox-row .row-preview { font-size: 13px; }
+
+  /* Reading note */
+  .reading-note {
+    background: #2a2a2a;
+    border: 1px dashed #444;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 12px 0 20px;
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.5;
+  }
+  .reading-note .key { color: #ddd; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Phase 2 · Screen 01 · App shell + nav</div>
+    <div class="doc-title">Four chrome directions for the dashboard shell</div>
+    <div class="doc-sub">
+      Reference compilation (two strands) plus four HTML/CSS Pawkit directions applying each design reference.
+      Pick one direction, or call out a mix.
+      <br><br>
+      <span class="change">Spec changes proposed in this round (need your nod before locking):</span>
+      header wordmark = AMS clinic name (Satoshi "Animal Medical Services" + Inter small caps "PUNE") instead of "Pawkit" wordmark;
+      Teal brand dot dropped (had no defined job, the wordmark grounds itself);
+      Direction D rebuilt with a compact visible search bar instead of a Mac-only ⌘K command-palette pattern (Sagar is on Windows and is not a keyboard-shortcut power user).
+      <br><br>
+      Constant across all four: three rail destinations (Inbox, Broadcasts, Settings) with Lucide icons (mail / megaphone / settings), Teal-left-border active state (never fill), context-aware search bar, no Pets tab, no In-Surgery toggle, desktop-only.
+    </div>
+  </div>
+
+  <!-- ============ Reference compilation: design refs ============ -->
+  <div class="section-header">
+    <div class="section-eyebrow">Strand A · Design references · UI taste</div>
+    <div class="section-title">Four cross-industry chrome benchmarks</div>
+  </div>
+  <div class="ref-grid">
+    <div class="ref-card" id="ref-linear">
+      <div class="ref-image"><img src="assets/screen-01-refs/linear.png" alt="Linear sidebar reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Linear</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> ultra-tight 13px sidebar type with monochrome icons and razor-thin padding; chrome disappears so list content reads as the page.</div>
+      </div>
+    </div>
+    <div class="ref-card" id="ref-stripe">
+      <div class="ref-image"><img src="assets/screen-01-refs/stripe.png" alt="Stripe Dashboard rail reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Stripe Dashboard</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> small-caps section labels above rail groups; vertical hierarchy through type discipline, not borders.</div>
+      </div>
+    </div>
+    <div class="ref-card" id="ref-notion">
+      <div class="ref-image"><img src="assets/screen-01-refs/notion.png" alt="Notion sidebar reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Notion</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> faint, almost-invisible section labels in muted grey caps; user content (pet names) becomes the visual hierarchy, not the chrome.</div>
+      </div>
+    </div>
+    <div class="ref-card" id="ref-superhuman">
+      <div class="ref-image"><img src="assets/screen-01-refs/superhuman.png" alt="Superhuman chrome reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Superhuman</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> borderless near-flush rail, zero header density; lesson applied as ultra-compact chrome (visible search bar kept; Sagar is not the cmd-K power user Superhuman targets).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Reference compilation: category competitors ============ -->
+  <div class="section-header">
+    <div class="section-eyebrow">Strand B · Category competitors · feature grounding</div>
+    <div class="section-title">Three vet / healthcare practice mgmt dashboards</div>
+  </div>
+  <div class="ref-grid cat">
+    <div class="ref-card" id="ref-petdesk">
+      <div class="ref-image fallback">
+        <div class="name">Petdesk</div>
+        <div class="link">See screenshots: <a href="https://www.capterra.com/p/166086/PetDesk/" target="_blank" rel="noopener">capterra.com/p/166086/PetDesk</a></div>
+      </div>
+      <div class="ref-meta">
+        <div class="ref-name">Petdesk</div>
+        <div class="ref-caption"><span class="verb">Note:</span> icon-led rail with labeled grouping sized for non-technical clinic staff; header carries only practice identity, no clever density.</div>
+      </div>
+    </div>
+    <div class="ref-card" id="ref-klara">
+      <div class="ref-image fallback">
+        <div class="name">Klara</div>
+        <div class="link">See screenshots: <a href="https://www.klara.com/" target="_blank" rel="noopener">klara.com</a></div>
+      </div>
+      <div class="ref-meta">
+        <div class="ref-name">Klara</div>
+        <div class="ref-caption"><span class="verb">Note:</span> conversational rail dominated by thread/inbox items instead of a feature-tree; chrome itself reinforces "messages are the work".</div>
+      </div>
+    </div>
+    <div class="ref-card" id="ref-weave">
+      <div class="ref-image fallback">
+        <div class="name">Weave</div>
+        <div class="link">See screenshots: <a href="https://www.capterra.com/p/141842/Weave/" target="_blank" rel="noopener">capterra.com/p/141842/Weave</a></div>
+      </div>
+      <div class="ref-meta">
+        <div class="ref-name">Weave</div>
+        <div class="ref-caption"><span class="verb">Note:</span> familiar Gmail/Slack-style rail metaphor with widget-driven main content; lowers training cost for non-technical clinic staff.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reading-note">
+    <span class="key">Reading the directions below.</span> Each frame shows the FULL Pawkit dashboard chrome with
+    Inbox active in the rail, so the chrome is in context. Main-area content (Inbox rows) is identical across all
+    four directions; only the chrome anatomy varies. Compare header height, clinic wordmark scale, search anatomy,
+    rail width, rail item density, active-state border weight, and the presence/absence of small-caps section labels.
+  </div>
+
+  <!-- ============ Direction A — LINEAR ============ -->
+  <div class="direction">
+    <div class="direction-caption">
+      <span class="direction-letter">Direction A</span><span class="direction-name">Linear-channeled</span>
+      <span class="direction-channels">tight, geometric, monochrome icons</span>
+      <div class="direction-spec">52px header · 200px rail · 28px outlined search · 3px Teal active border · 32px rail items · Inter 13px medium · Lucide icons 14px stroke 1.75</div>
+    </div>
+    <div class="frame frame-linear">
+      <div class="header">
+        <div class="clinic-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="search">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="search-placeholder">Search pets, parents, phone numbers</div>
+        </div>
+      </div>
+      <div class="shell">
+        <div class="rail">
+          <div class="rail-item active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="rail-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="rail-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="main">
+          <div class="inbox-subtabs">
+            <div class="inbox-subtab active">Active <span class="count">3</span></div>
+            <div class="inbox-subtab">Inactive</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Gabby <span class="household">Fernandes household</span></div>
+              <div class="row-preview">He's been scratching at his ear since this morning, should I be worried?</div>
+            </div>
+            <div class="timestamp">2h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Bruno <span class="household">Patil household</span></div>
+              <div class="row-preview">Photo</div>
+            </div>
+            <div class="timestamp">5h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Misha <span class="household">Khan household</span></div>
+              <div class="row-preview">She finished the antibiotics yesterday. Anything else we should watch for?</div>
+            </div>
+            <div class="timestamp">1d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Coco <span class="household">Sharma household</span></div>
+              <div class="row-preview">Video</div>
+            </div>
+            <div class="timestamp">2d ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Direction B — STRIPE ============ -->
+  <div class="direction">
+    <div class="direction-caption">
+      <span class="direction-letter">Direction B</span><span class="direction-name">Stripe-channeled</span>
+      <span class="direction-channels">warm density, small-caps section labels</span>
+      <div class="direction-spec">60px header · 220px rail · filled-tint 36px search · WORKSPACE small-caps section label · 36px rail items · Inter 14px · Lucide icons 16px stroke 1.75</div>
+    </div>
+    <div class="frame frame-stripe">
+      <div class="header">
+        <div class="clinic-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="search">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="search-placeholder">Search pets, parents, phone numbers</div>
+        </div>
+      </div>
+      <div class="shell">
+        <div class="rail">
+          <div class="rail-section-label">Workspace</div>
+          <div class="rail-item active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="rail-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="rail-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="main">
+          <div class="inbox-subtabs">
+            <div class="inbox-subtab active">Active <span class="count">3</span></div>
+            <div class="inbox-subtab">Inactive</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Gabby <span class="household">Fernandes household</span></div>
+              <div class="row-preview">He's been scratching at his ear since this morning, should I be worried?</div>
+            </div>
+            <div class="timestamp">2h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Bruno <span class="household">Patil household</span></div>
+              <div class="row-preview">Photo</div>
+            </div>
+            <div class="timestamp">5h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Misha <span class="household">Khan household</span></div>
+              <div class="row-preview">She finished the antibiotics yesterday. Anything else we should watch for?</div>
+            </div>
+            <div class="timestamp">1d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Coco <span class="household">Sharma household</span></div>
+              <div class="row-preview">Video</div>
+            </div>
+            <div class="timestamp">2d ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Direction C — NOTION ============ -->
+  <div class="direction">
+    <div class="direction-caption">
+      <span class="direction-letter">Direction C</span><span class="direction-name">Notion-channeled</span>
+      <span class="direction-channels">editorial, generous, breathable</span>
+      <div class="direction-spec">64px header · 240px rail · 40px outlined search · faint WORKSPACE label · 4px Teal active border · 40px rail items · Inter 15px regular · Lucide icons 16px stroke 1.75</div>
+    </div>
+    <div class="frame frame-notion">
+      <div class="header">
+        <div class="clinic-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="search">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="search-placeholder">Search pets, parents, phone numbers</div>
+        </div>
+      </div>
+      <div class="shell">
+        <div class="rail">
+          <div class="rail-section-label-faint">Workspace</div>
+          <div class="rail-item active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="rail-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="rail-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="main">
+          <div class="inbox-subtabs">
+            <div class="inbox-subtab active">Active <span class="count">3</span></div>
+            <div class="inbox-subtab">Inactive</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Gabby <span class="household">Fernandes household</span></div>
+              <div class="row-preview">He's been scratching at his ear since this morning, should I be worried?</div>
+            </div>
+            <div class="timestamp">2h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Bruno <span class="household">Patil household</span></div>
+              <div class="row-preview">Photo</div>
+            </div>
+            <div class="timestamp">5h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Misha <span class="household">Khan household</span></div>
+              <div class="row-preview">She finished the antibiotics yesterday. Anything else we should watch for?</div>
+            </div>
+            <div class="timestamp">1d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Coco <span class="household">Sharma household</span></div>
+              <div class="row-preview">Video</div>
+            </div>
+            <div class="timestamp">2d ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Direction D — SUPERHUMAN ============ -->
+  <div class="direction">
+    <div class="direction-caption">
+      <span class="direction-letter">Direction D</span><span class="direction-name">Superhuman-channeled</span>
+      <span class="direction-channels">ultra-compact, dense, minimal chrome</span>
+      <div class="direction-spec">48px header · 180px rail · compact 26px search · 2px Teal active border · 28px rail items · Inter 12px · Lucide icons 12px stroke 1.75 (no cmd-K; Sagar uses Windows + dashboard daily, shortcut-hidden patterns hurt him)</div>
+    </div>
+    <div class="frame frame-super">
+      <div class="header">
+        <div class="clinic-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="search">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="search-placeholder">Search pets, parents</div>
+        </div>
+      </div>
+      <div class="shell">
+        <div class="rail">
+          <div class="rail-item active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="rail-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="rail-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="main">
+          <div class="inbox-subtabs">
+            <div class="inbox-subtab active">Active <span class="count">3</span></div>
+            <div class="inbox-subtab">Inactive</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Gabby <span class="household">Fernandes household</span></div>
+              <div class="row-preview">He's been scratching at his ear since this morning, should I be worried?</div>
+            </div>
+            <div class="timestamp">2h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Bruno <span class="household">Patil household</span></div>
+              <div class="row-preview">Photo</div>
+            </div>
+            <div class="timestamp">5h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Misha <span class="household">Khan household</span></div>
+              <div class="row-preview">She finished the antibiotics yesterday. Anything else we should watch for?</div>
+            </div>
+            <div class="timestamp">1d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="row-body">
+              <div class="row-meta">Coco <span class="household">Sharma household</span></div>
+              <div class="row-preview">Video</div>
+            </div>
+            <div class="timestamp">2d ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

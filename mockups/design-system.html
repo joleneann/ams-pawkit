@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pawkit Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@1,500;1,600;1,700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Structural neutrals */
+    --canvas:        #F8F7F5;
+    --rail-tint:     #EFE6E8;
+    --ink:           #0F0C0A;
+    --ink-soft:      #5C5550;
+    --ink-faint:     #8F8B86;
+    --ink-70:        rgba(15, 12, 10, 0.72);
+    --ink-50:        rgba(15, 12, 10, 0.55);
+    --ink-30:        rgba(15, 12, 10, 0.35);
+    --rule:          rgba(15, 12, 10, 0.12);
+    --rule-soft:     rgba(15, 12, 10, 0.06);
+    --canvas-2:      rgba(15, 12, 10, 0.04);
+
+    /* Brand ladder */
+    --berry:         #9C2B5C;
+    --berry-deep:    #7C1F47;
+    --berry-soft:    rgba(156, 43, 92, 0.12);
+    --berry-ring:    rgba(156, 43, 92, 0.30);
+
+    /* Fur tones (NEVER chrome) */
+    --fur-milk:      #FFFCF2;
+    --fur-vanilla:   #EAE0C8;
+    --fur-honey:     #E5C896;
+    --fur-peach:     #E8A87C;
+    --fur-rust:      #B05E2E;
+    --fur-mushroom:  #A8927A;
+    --fur-smoke:     #8B928A;
+    --fur-steel:     #5F6961;
+    --fur-bark:      #5C4A3A;
+    --fur-sable:     #2B221A;
+
+    /* Destructive (sparing use) */
+    --destructive:   #B53939;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--rail-tint);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+  .num, .tnum { font-variant-numeric: tabular-nums; }
+  .lora { font-family: 'Lora', Georgia, serif; font-style: italic; font-weight: 600; }
+
+  /* Page chrome */
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 32px 96px;
+  }
+  header.intro {
+    margin-bottom: 64px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin-bottom: 12px;
+  }
+  h1 {
+    margin: 0 0 12px;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  h1 .lora { color: var(--berry-deep); }
+  header.intro p {
+    margin: 0;
+    max-width: 720px;
+    font-size: 14px;
+    color: var(--ink-70);
+    line-height: 1.55;
+  }
+
+  /* Shadcn-only banner (prominent rule) */
+  .shadcn-banner {
+    margin-top: 22px;
+    padding: 16px 20px;
+    background: var(--berry-soft);
+    border: 1px solid rgba(156, 43, 92, 0.20);
+    border-radius: 12px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .shadcn-banner .banner-mark {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--berry);
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .shadcn-banner .banner-body {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .shadcn-banner .banner-body strong {
+    font-weight: 700;
+    color: var(--berry-deep);
+  }
+  .shadcn-banner .banner-body code {
+    background: rgba(15, 12, 10, 0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Inter', monospace;
+    font-size: 11px;
+  }
+
+  /* Primitive tag (under each section header) */
+  .primitive-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 18px;
+    padding: 4px 10px;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: 11px;
+    color: var(--ink-70);
+    font-family: 'Inter', monospace;
+  }
+  .primitive-tag .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--berry);
+  }
+  .primitive-tag strong {
+    color: var(--berry-deep);
+    font-weight: 600;
+  }
+
+  /* TOC */
+  nav.toc {
+    margin-top: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+  }
+  nav.toc a {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--canvas);
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  nav.toc a:hover {
+    background: var(--berry-soft);
+    border-color: rgba(156, 43, 92, 0.20);
+    color: var(--berry-deep);
+  }
+
+  /* Sections */
+  section {
+    margin-bottom: 56px;
+  }
+  section > h2 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  section > .section-note {
+    margin: 0 0 24px;
+    color: var(--ink-70);
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 760px;
+  }
+  h3.sub {
+    margin: 24px 0 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+  }
+
+  /* Card surface (canvas card lifting off rail-tint ground) */
+  .card {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .card + .card { margin-top: 14px; }
+
+  /* Swatch grids */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .swatch {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .swatch .chip {
+    height: 88px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .swatch .meta {
+    padding: 12px 14px 14px;
+  }
+  .swatch .meta .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .swatch .meta .hex {
+    font-size: 11px;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+  }
+  .swatch .meta .role {
+    font-size: 11px;
+    color: var(--ink-70);
+    margin-top: 6px;
+    line-height: 1.45;
+  }
+
+  .fur-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .fur {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .fur .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid var(--rule);
+  }
+  .fur .meta .label {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .fur .meta .hex {
+    font-size: 10px;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Type spec table */
+  .type-row {
+    display: grid;
+    grid-template-columns: 76px 110px 1fr 90px;
+    gap: 18px;
+    align-items: baseline;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .type-row:last-child { border-bottom: 0; }
+  .type-row .token {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--berry-deep);
+    font-family: 'Inter', monospace;
+  }
+  .type-row .size {
+    font-size: 11px;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+  }
+  .type-row .role {
+    font-size: 11px;
+    color: var(--ink-50);
+    text-align: right;
+  }
+  .type-row .preview { color: var(--ink); font-weight: 500; }
+  .type-row .preview.semibold { font-weight: 600; }
+
+  .type-xxs   { font-size: 10px; }
+  .type-xs    { font-size: 11px; }
+  .type-sm    { font-size: 12px; }
+  .type-base  { font-size: 13px; }
+  .type-md    { font-size: 14px; }
+  .type-lg    { font-size: 17px; }
+  .type-xl    { font-size: 20px; }
+  .type-2xl   { font-size: 22px; }
+  .type-3xl   { font-size: 26px; }
+  .type-display { font-size: 48px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+  /* Sizes (mirror Pawkit Button cva) */
+  .btn-default { height: 36px; padding: 0 16px; border-radius: 8px; font-size: 12px; }
+  .btn-sm      { height: 32px; padding: 0 12px; border-radius: 8px; font-size: 11px; }
+  .btn-lg      { height: 44px; padding: 0 24px; border-radius: 8px; font-size: 14px; }
+  .btn-cta     { height: 40px; padding: 0 24px; border-radius: 8px; font-size: 12px; }
+  .btn-icon    { width: 36px; height: 36px; padding: 0; border-radius: 8px; }
+
+  /* Variants */
+  .btn-primary {
+    background: var(--berry);
+    color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(15, 12, 10, 0.04);
+  }
+  .btn-primary:hover { background: var(--berry-deep); }
+  .btn-secondary {
+    background: var(--ink-soft);
+    color: var(--canvas);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid rgba(15, 12, 10, 0.15);
+  }
+  .btn-outline:hover { background: rgba(15, 12, 10, 0.04); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+  }
+  .btn-ghost:hover { background: rgba(15, 12, 10, 0.04); }
+  .btn-destructive {
+    background: var(--destructive);
+    color: #FFFFFF;
+  }
+  .btn-destructive:hover { background: #9A2F2F; }
+  .btn-link {
+    background: transparent;
+    color: var(--berry);
+    padding: 0;
+    height: auto;
+    text-decoration: none;
+  }
+  .btn-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  .btn-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule-soft);
+    margin-bottom: 18px;
+  }
+  .btn-row:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+  .btn-row .row-label {
+    width: 116px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+  }
+
+  /* Form controls */
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .input, .textarea {
+    width: 100%;
+    background: var(--canvas);
+    border: 1px solid rgba(15, 12, 10, 0.15);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--ink);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .input::placeholder, .textarea::placeholder { color: var(--ink-30); }
+  .input:focus, .textarea:focus {
+    outline: none;
+    border-color: var(--berry);
+    box-shadow: 0 0 0 3px var(--berry-ring);
+  }
+  .textarea { min-height: 96px; resize: vertical; line-height: 1.55; }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid transparent;
+  }
+  .badge-primary   { background: var(--berry); color: #FFFFFF; }
+  .badge-secondary { background: rgba(15, 12, 10, 0.06); color: var(--ink-soft); }
+  .badge-outline   { color: var(--ink); border-color: rgba(15, 12, 10, 0.15); background: transparent; }
+  .badge-berry-soft { background: var(--berry-soft); color: var(--berry-deep); border-color: transparent; }
+
+  .badge-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Tabs (inbox pill anatomy, locked 2026-05-16) */
+  .tabs {
+    display: inline-flex;
+    align-items: center;
+    background: var(--canvas-2);
+    border-radius: 999px;
+    padding: 4px;
+    gap: 2px;
+  }
+  .tab {
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .tab.active {
+    background: var(--berry);
+    color: var(--canvas);
+    font-weight: 600;
+  }
+
+  /* Avatars */
+  .avatar {
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .avatar .inner {
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid var(--canvas);
+    background: rgba(168, 163, 158, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .avatar-sm { width: 36px; height: 36px; padding: 2px; }
+  .avatar-sm .inner { width: 28px; height: 28px; }
+  .avatar-md { width: 46px; height: 46px; padding: 3px; }
+  .avatar-md .inner { width: 40px; height: 40px; }
+  .avatar-lg { width: 56px; height: 56px; padding: 3px; }
+  .avatar-lg .inner { width: 50px; height: 50px; }
+
+  .avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .avatar-row .label {
+    margin-left: 10px;
+    font-size: 11px;
+    color: var(--ink-50);
+  }
+
+  /* Composite patterns */
+  .awaiting-bar {
+    background: var(--berry-soft);
+    border: 1px solid rgba(156, 43, 92, 0.20);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .awaiting-bar h2 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .awaiting-bar .count {
+    color: var(--berry-deep);
+    font-weight: 700;
+    font-size: 17px;
+  }
+
+  /* KPI card */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .kpi {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .kpi .kpi-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-50);
+    margin-bottom: 8px;
+  }
+  .kpi .kpi-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi.warn .kpi-value { color: var(--berry-deep); }
+  .kpi .kpi-meta {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--ink-50);
+  }
+
+  /* Inbox row */
+  .inbox-row {
+    display: grid;
+    grid-template-columns: 56px auto minmax(0, 1fr) auto;
+    gap: 24px;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+  }
+  .inbox-row .pet-stack { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .inbox-row .pet-name { font-size: 17px; }
+  .inbox-row .pet-meta { font-size: 11px; color: var(--ink-50); }
+  .inbox-row .household { font-size: 11px; color: var(--ink-70); font-weight: 500; }
+  .inbox-row .preview {
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 600;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    min-width: 0;
+  }
+  .inbox-row .timeago {
+    font-size: 11px;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* Surface architecture demo */
+  .surface-demo {
+    background: var(--rail-tint);
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px dashed var(--rule);
+  }
+  .surface-demo .surface-card {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .surface-demo .ground-label,
+  .surface-demo .card-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin-bottom: 8px;
+  }
+
+  /* Icon row */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 14px;
+  }
+  .icon-cell {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+  .icon-cell svg {
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .icon-cell .name {
+    font-size: 10px;
+    color: var(--ink-50);
+  }
+
+  /* Discipline rules */
+  .rules {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .rule-card {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .rule-card .rule-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--berry-deep);
+    margin-bottom: 10px;
+  }
+  .rule-card .rule-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .rule-card .rule-body {
+    font-size: 12px;
+    color: var(--ink-70);
+    line-height: 1.55;
+  }
+  .rule-card .rule-body code {
+    background: var(--canvas-2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Inter', monospace;
+    font-size: 11px;
+  }
+
+  /* Live dot helper */
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--berry);
+    box-shadow: 0 0 0 4px var(--berry-soft);
+    display: inline-block;
+  }
+
+  footer.tail {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 11px;
+    color: var(--ink-50);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- Icon defs (Phosphor-style filled, simplified inline) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-tray" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M21 13h-5l-1 2H9l-1-2H3v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM19 4H5a2 2 0 0 0-2 2v5h6l1 2h4l1-2h6V6a2 2 0 0 0-2-2z"/>
+    </symbol>
+    <symbol id="i-megaphone" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M21 5v14a1 1 0 0 1-1.5.87L11 16H7a3 3 0 0 1 0-6h4l8.5-3.87A1 1 0 0 1 21 5zM6 17h2l1 4H7z"/>
+    </symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19 2H5a1 1 0 0 0-1 1v19l3-2 3 2 3-2 3 2 3-2 3 2V3a1 1 0 0 0-1-1zM8 11h8v2H8zm0-4h8v2H8z"/>
+    </symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.5-2-3.4-2.4 1a7.5 7.5 0 0 0-1.7-1L15 3.5h-4l-.3 2.6a7.5 7.5 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.5a7.5 7.5 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a7.5 7.5 0 0 0 1.7 1L11 20.5h4l.3-2.6a7.5 7.5 0 0 0 1.7-1l2.4 1 2-3.4zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>
+    </symbol>
+    <symbol id="i-microphone" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z"/>
+    </symbol>
+    <symbol id="i-paper-plane" viewBox="0 0 24 24">
+      <path fill="currentColor" d="m22 2-20 9 7 3v6l4-4 7 3z"/>
+    </symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 13c-2.7 0-6 2.4-6 5 0 1.7 1.3 3 3 3a8 8 0 0 0 3-.8 8 8 0 0 0 3 .8c1.7 0 3-1.3 3-3 0-2.6-3.3-5-6-5zM5 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm14 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM9 4a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm6 0a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/>
+    </symbol>
+    <symbol id="i-magnifier" viewBox="0 0 24 24">
+      <path fill="currentColor" d="m21 21-5.2-5.2A7.5 7.5 0 1 0 14.5 17L20 22zM5 11a5 5 0 1 1 10 0A5 5 0 0 1 5 11z"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M14 4l-1.4 1.4L18.2 11H4v2h14.2l-5.6 5.6L14 20l8-8z"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/>
+    </symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 11h-4V7h2v4h2z"/>
+    </symbol>
+    <symbol id="i-warning" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2 1 21h22zm0 6a1 1 0 0 1 1 1v5a1 1 0 0 1-2 0V9a1 1 0 0 1 1-1zm0 11a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/>
+    </symbol>
+    <symbol id="i-x" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/>
+    </symbol>
+    <symbol id="i-floppy" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7zM12 19a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="page">
+
+  <header class="intro">
+    <p class="eyebrow">Pawkit v0 design system</p>
+    <h1>Design tokens, primitives, and patterns for the <span class="lora">AMS</span> pitch demo</h1>
+    <p>A single visual reference for the colors, type, and components used across the Pawkit dashboard and parent app. Everything below mirrors what actually ships in <code style="font-family: 'Inter', monospace; font-size: 12px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">apps/dashboard</code>. Locked tokens live in <code style="font-family: 'Inter', monospace; font-size: 12px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">packages/design-tokens</code>; consumed via Tailwind preset.</p>
+    <div class="shadcn-banner">
+      <div class="banner-mark">UI</div>
+      <div class="banner-body">
+        <strong>Every primitive on this page is a shadcn primitive.</strong> Buttons, inputs, textareas, tabs, badges, avatars, dialogs, popovers, dropdown menus, sheets, tooltips, skeletons, checkboxes, toggle groups, all of them. There are no hand-rolled UI primitives anywhere in <code>apps/dashboard</code>. If a primitive is missing, the rule is: install the matching <code>@radix-ui/react-*</code> package and add a shadcn wrapper at <code>components/ui/&lt;name&gt;.tsx</code> BEFORE writing any <code>&lt;button&gt;</code> / <code>&lt;input&gt;</code> / <code>&lt;textarea&gt;</code> / <code>&lt;div&gt;</code> with classnames. Locked 2026-05-15 final after four audit rounds.
+      </div>
+    </div>
+
+    <nav class="toc">
+      <a href="#palette">Palette</a>
+      <a href="#fur">Fur tones</a>
+      <a href="#typography">Type scale</a>
+      <a href="#surface">Surface architecture</a>
+      <a href="#buttons">Buttons</a>
+      <a href="#forms">Form controls</a>
+      <a href="#badges">Badges</a>
+      <a href="#tabs">Tabs</a>
+      <a href="#avatars">Avatars</a>
+      <a href="#icons">Icons</a>
+      <a href="#patterns">Composite patterns</a>
+      <a href="#discipline">Discipline rules</a>
+    </nav>
+  </header>
+
+  <!-- PALETTE -->
+  <section id="palette">
+    <h2>Palette</h2>
+    <p class="section-note">Mauve-only build, locked 2026-05-14. Boysenberry primary saturation-lifted to <span class="tnum">#9C2B5C</span> on 2026-05-15 evening; ground re-tuned to <span class="tnum">#EFE6E8</span> the same evening. Pure white <span class="tnum">#FFFFFF</span> and pure black <span class="tnum">#000000</span> are forbidden in chrome.</p>
+
+    <h3 class="sub">Structural neutrals</h3>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="chip" style="background: var(--canvas);"></div>
+        <div class="meta">
+          <div class="label">Canvas</div>
+          <div class="hex">#F8F7F5</div>
+          <div class="role">Cards, surfaces that lift off the ground. Body fallback only.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--rail-tint);"></div>
+        <div class="meta">
+          <div class="label">Rail tint</div>
+          <div class="hex">#EFE6E8</div>
+          <div class="role">Workspace ground. Top bar, rail, content gutter. Body bg.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--ink);"></div>
+        <div class="meta">
+          <div class="label" style="color: var(--ink);">Ink</div>
+          <div class="hex">#0F0C0A</div>
+          <div class="role">Body text, headlines, structural strokes.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--ink-soft);"></div>
+        <div class="meta">
+          <div class="label">Ink soft</div>
+          <div class="hex">#5C5550</div>
+          <div class="role">Secondary text, eyebrows, inactive tab.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub">Ink opacity ladder (all gray via ink-on-canvas blends, no hard greys)</h3>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="chip" style="background: var(--ink-70);"></div>
+        <div class="meta">
+          <div class="label">Ink 70</div>
+          <div class="hex">rgba(15,12,10,0.72)</div>
+          <div class="role">Body prose at reduced emphasis, household label, replied previews.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--ink-50);"></div>
+        <div class="meta">
+          <div class="label">Ink 50</div>
+          <div class="hex">rgba(15,12,10,0.55)</div>
+          <div class="role">Eyebrow labels, KPI captions, secondary metadata.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--ink-30);"></div>
+        <div class="meta">
+          <div class="label">Ink 30</div>
+          <div class="hex">rgba(15,12,10,0.35)</div>
+          <div class="role">Placeholder text, disabled state.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--canvas); border-bottom: 1px solid var(--rule);"></div>
+        <div class="meta">
+          <div class="label">Rule</div>
+          <div class="hex">rgba(15,12,10,0.12)</div>
+          <div class="role">Hairline dividers, card borders, input borders.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub">Brand ladder (Boysenberry)</h3>
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="chip" style="background: var(--berry);"></div>
+        <div class="meta">
+          <div class="label">Berry</div>
+          <div class="hex">#9C2B5C</div>
+          <div class="role">Primary CTA, active tab, focus ring, vet bubbles.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--berry-deep);"></div>
+        <div class="meta">
+          <div class="label">Berry deep</div>
+          <div class="hex">#7C1F47</div>
+          <div class="role">Hover state, awaiting-bar count, semantic accent text on tinted bg.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--berry-soft);"></div>
+        <div class="meta">
+          <div class="label">Berry soft</div>
+          <div class="hex">rgba(156,43,92,0.12)</div>
+          <div class="role">Active nav bg, awaiting bar fill, hover wash on chips.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background: var(--berry-ring);"></div>
+        <div class="meta">
+          <div class="label">Berry ring</div>
+          <div class="hex">rgba(156,43,92,0.30)</div>
+          <div class="role">Focus ring (2px outline + 4px offset on keyboard nav).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUR -->
+  <section id="fur">
+    <h2>Fur tones</h2>
+    <p class="section-note">Ten tones spanning L=99 (Milk) to L=13 (Sable). <strong>Never used in chrome</strong> (hardened 2026-05-08). The only allowed exception is Sable as the Sampling-state cover in fur-match, because the moment itself is about fur.</p>
+    <div class="fur-grid">
+      <div class="fur"><div class="dot" style="background: var(--fur-milk);"></div><div class="meta"><div class="label">Milk</div><div class="hex">#FFFCF2 · L=99</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-vanilla);"></div><div class="meta"><div class="label">Vanilla</div><div class="hex">#EAE0C8 · L=89</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-honey);"></div><div class="meta"><div class="label">Honey</div><div class="hex">#E5C896 · L=81</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-peach);"></div><div class="meta"><div class="label">Peach</div><div class="hex">#E8A87C · L=70</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-rust);"></div><div class="meta"><div class="label">Rust</div><div class="hex">#B05E2E · L=47</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-mushroom);"></div><div class="meta"><div class="label">Mushroom</div><div class="hex">#A8927A · L=57</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-smoke);"></div><div class="meta"><div class="label">Smoke</div><div class="hex">#8B928A · L=59</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-steel);"></div><div class="meta"><div class="label">Steel</div><div class="hex">#5F6961 · L=42</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-bark);"></div><div class="meta"><div class="label">Bark</div><div class="hex">#5C4A3A · L=30</div></div></div>
+      <div class="fur"><div class="dot" style="background: var(--fur-sable);"></div><div class="meta"><div class="label">Sable</div><div class="hex">#2B221A · L=13</div></div></div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section id="typography">
+    <h2>Type scale</h2>
+    <p class="section-note">Inter for everything except the pet-name italic hero (Lora italic 600) and Marathi body (Noto Sans Devanagari). Satoshi was removed 2026-05-15 evening because it read as "circus" on KPIs at 22-26px. The scale below is the only allowed type-size set: arbitrary <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">text-[Npx]</code> values are banned (CLAUDE.md lock 2026-05-15).</p>
+
+    <div class="card" style="padding: 8px 0;">
+      <div class="type-row">
+        <div class="token">text-xxs</div>
+        <div class="size num">10 / 14</div>
+        <div class="preview type-xxs" style="letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600;">SECTION EYEBROW</div>
+        <div class="role">Small-caps section labels</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-xs</div>
+        <div class="size num">11 / 16</div>
+        <div class="preview type-xs">Captions, timestamps, helper text</div>
+        <div class="role">Captions, helper, timestamp</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-sm</div>
+        <div class="size num">12 / 18</div>
+        <div class="preview type-sm">Ink-soft body, field labels, inbox preview</div>
+        <div class="role">Field labels, ink-soft body</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-base</div>
+        <div class="size num">13 / 19.5</div>
+        <div class="preview type-base">Default body. The size most chrome lives at.</div>
+        <div class="role">Default body</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-md</div>
+        <div class="size num">14 / 20</div>
+        <div class="preview type-md">Pet names, button labels, rail items, subtab labels</div>
+        <div class="role">Pet name, button, rail</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-lg</div>
+        <div class="size num">17 / 22</div>
+        <div class="preview type-lg semibold">Pet-name hero · <span class="lora">Galaxy</span></div>
+        <div class="role">Compact display, inbox count</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-xl</div>
+        <div class="size num">20 / 25</div>
+        <div class="preview type-xl semibold">Reserved scale stop</div>
+        <div class="role">Reserved</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-2xl</div>
+        <div class="size num">22 / 26</div>
+        <div class="preview type-2xl semibold">Page titles, modal headlines</div>
+        <div class="role">Page titles</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-3xl</div>
+        <div class="size num">26 / 29</div>
+        <div class="preview type-3xl semibold">Oversized callouts, KPI value</div>
+        <div class="role">Oversized callouts</div>
+      </div>
+      <div class="type-row">
+        <div class="token">text-display</div>
+        <div class="size num">48 / 48</div>
+        <div class="preview type-display tnum">55</div>
+        <div class="role">Hero count</div>
+      </div>
+    </div>
+
+    <h3 class="sub">Font families</h3>
+    <div class="swatch-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="card">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50); margin-bottom: 8px;">Inter</div>
+        <div style="font-size: 28px; font-weight: 600; line-height: 1.1;">The quick brown fox</div>
+        <div style="font-size: 11px; color: var(--ink-50); margin-top: 8px;">Body + display. var(--font-inter).</div>
+      </div>
+      <div class="card">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50); margin-bottom: 8px;">Lora italic 600</div>
+        <div class="lora" style="font-size: 28px; line-height: 1.1;">Galaxy &middot; Gabby</div>
+        <div style="font-size: 11px; color: var(--ink-50); margin-top: 8px;">Pet-name hero only. Never for body.</div>
+      </div>
+      <div class="card">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50); margin-bottom: 8px;">Noto Sans Devanagari</div>
+        <div style="font-family: 'Noto Sans Devanagari', sans-serif; font-size: 24px; font-weight: 500; line-height: 1.2;">गॅलक्सी ठीक आहे का?</div>
+        <div style="font-size: 11px; color: var(--ink-50); margin-top: 8px;">Marathi body. Sizes bump +1px in :lang(mr).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SURFACE -->
+  <section id="surface">
+    <h2>Surface architecture</h2>
+    <p class="section-note">Two surface tones only. <strong>Rail tint</strong> is the workspace ground (top bar, rail, content gutter). <strong>Canvas</strong> is what lifts off the ground (cards, modals, panels). No drop shadows: elevation comes from tonal contrast + a 1px <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">rule</code> hairline.</p>
+    <div class="surface-demo">
+      <div class="ground-label">Ground &middot; rail-tint #EFE6E8</div>
+      <div class="surface-card">
+        <div class="card-label">Canvas card &middot; #F8F7F5 + 1px rule hairline + 12-14px radius</div>
+        <div style="font-size: 13px; color: var(--ink-70); margin-top: 6px;">Cards lift off the ground by hue and tone, not by shadow. This is the entire elevation system.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUTTONS -->
+  <section id="buttons">
+    <h2>Buttons</h2>
+    <span class="primitive-tag"><span class="dot"></span>Primitive: <strong>shadcn Button</strong> &middot; <code>components/ui/button.tsx</code></span>
+    <p class="section-note">Pawkit <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">&lt;Button /&gt;</code> is the shadcn cva primitive driven by the <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">--primary</code> token. Five used variants &times; five sizes. <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">cta</code> is the Pawkit-specific size for the primary action on a screen (40px tall, 24px horizontal padding). The shadcn <strong>destructive</strong> variant is inherited but <strong>unused in Pawkit v0</strong> (zero source references): its default red <span class="tnum">#B43B3B</span> clashes with the mauve-only palette, and v0 has no destructive flows. Excluded from the showcase below.</p>
+
+    <div class="card">
+      <div class="btn-row">
+        <div class="row-label">Default</div>
+        <button class="btn btn-default btn-primary">Primary action</button>
+        <button class="btn btn-default btn-secondary">Secondary</button>
+        <button class="btn btn-default btn-outline">Outline</button>
+        <button class="btn btn-default btn-ghost">Ghost</button>
+        <button class="btn btn-link">Link</button>
+      </div>
+      <div class="btn-row">
+        <div class="row-label">CTA</div>
+        <button class="btn btn-cta btn-primary">Start reply queue <svg width="14" height="14"><use href="#i-arrow-right"/></svg></button>
+        <button class="btn btn-cta btn-outline">Cancel</button>
+      </div>
+      <div class="btn-row">
+        <div class="row-label">Small</div>
+        <button class="btn btn-sm btn-primary">Save</button>
+        <button class="btn btn-sm btn-outline">Edit</button>
+        <button class="btn btn-sm btn-ghost">Dismiss</button>
+      </div>
+      <div class="btn-row">
+        <div class="row-label">Large &middot; h44</div>
+        <button class="btn btn-lg btn-primary">Send broadcast</button>
+        <button class="btn btn-lg btn-outline">Save draft</button>
+      </div>
+      <div class="btn-row">
+        <div class="row-label">Icon</div>
+        <button class="btn btn-icon btn-primary" aria-label="Search"><svg width="16" height="16"><use href="#i-magnifier"/></svg></button>
+        <button class="btn btn-icon btn-outline" aria-label="Settings"><svg width="16" height="16"><use href="#i-gear"/></svg></button>
+        <button class="btn btn-icon btn-ghost" aria-label="Close"><svg width="16" height="16"><use href="#i-x"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMS -->
+  <section id="forms">
+    <h2>Form controls</h2>
+    <span class="primitive-tag"><span class="dot"></span>Primitives: <strong>shadcn Input, Textarea</strong> &middot; <code>components/ui/{input,textarea}.tsx</code></span>
+    <p class="section-note">Shadcn primitives themed via Pawkit tokens. Focus state: berry border + 3px berry-ring halo.</p>
+
+    <div class="card">
+      <div class="field-grid">
+        <div class="field">
+          <label>Pet name</label>
+          <input class="input" type="text" value="Galaxy" />
+        </div>
+        <div class="field">
+          <label>Household</label>
+          <input class="input" type="text" placeholder="Fernandes" />
+        </div>
+        <div class="field">
+          <label>Search</label>
+          <input class="input" type="text" placeholder="Search by pet or parent name" />
+        </div>
+        <div class="field">
+          <label>Phone (focus example)</label>
+          <input class="input" type="text" value="+91 98220 12345" style="border-color: var(--berry); box-shadow: 0 0 0 3px var(--berry-ring);" />
+        </div>
+        <div class="field" style="grid-column: span 2;">
+          <label>Reply</label>
+          <textarea class="textarea" placeholder="Type or dictate. Sarvam audio drops the transcript into this field.">Galaxy seems to have settled. Continue the chicken+rice diet for two more days, then reintroduce her regular food gradually.</textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BADGES -->
+  <section id="badges">
+    <h2>Badges</h2>
+    <span class="primitive-tag"><span class="dot"></span>Primitive: <strong>shadcn Badge</strong> &middot; <code>components/ui/badge.tsx</code></span>
+    <p class="section-note">Small inline labels: SOAP visit tags, audience-filter "OR" connectors, status chips. Berry-soft is the Pawkit-specific variant used for warning chips on the billing detail page. (Destructive variant exists in shadcn defaults but unused, same reason as the Button.)</p>
+
+    <div class="card">
+      <div class="badge-row">
+        <span class="badge badge-primary">Primary</span>
+        <span class="badge badge-secondary">Secondary</span>
+        <span class="badge badge-outline">Outline</span>
+        <span class="badge badge-berry-soft"><svg width="10" height="10"><use href="#i-warning"/></svg> Outstanding</span>
+        <span class="badge badge-berry-soft">Paid</span>
+        <span class="badge badge-secondary">Vaccination</span>
+        <span class="badge badge-secondary">Senior care</span>
+        <span class="badge badge-secondary">Dental</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <section id="tabs">
+    <h2>Tabs</h2>
+    <span class="primitive-tag"><span class="dot"></span>Primitive: <strong>shadcn Tabs</strong> &middot; <code>components/ui/tabs.tsx</code></span>
+    <p class="section-note">Two tab anatomies in the build. The <strong>pill pair</strong> (segmented control look) is used for status filters on inbox and broadcasts; the <strong>underline</strong> is reserved for pet-panel section nav (Clinical / Invoices). Inbox tabs lost their count badge on 2026-05-16; they're pure segment labels now.</p>
+
+    <div class="card">
+      <h3 class="sub">Pill pair (inbox status, broadcasts status)</h3>
+      <div class="tabs">
+        <button class="tab active">Awaiting reply</button>
+        <button class="tab">Replied</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVATARS -->
+  <section id="avatars">
+    <h2>Avatars</h2>
+    <span class="primitive-tag"><span class="dot"></span>Primitives: <strong>shadcn Avatar</strong> (Radix) wrapped as <strong>PetAvatar</strong> &middot; <code>components/ui/{avatar,pet-avatar}.tsx</code></span>
+    <p class="section-note">PetAvatar wraps the shadcn Avatar primitive: 3px fur-match ring carrying the pet's primary fur tone, 1.5px canvas bezel, inner photo. Three sizes: sm 36, md 46, lg 56. Fur tones are read from the seed; chrome NEVER uses fur tones.</p>
+
+    <div class="card">
+      <div class="avatar-row">
+        <div class="avatar avatar-sm" style="background: var(--fur-honey);">
+          <div class="inner"><svg width="14" height="14" style="color: var(--ink-faint);"><use href="#i-paw"/></svg></div>
+        </div>
+        <div class="avatar avatar-md" style="background: var(--fur-rust);">
+          <div class="inner"><svg width="18" height="18" style="color: var(--ink-faint);"><use href="#i-paw"/></svg></div>
+        </div>
+        <div class="avatar avatar-lg" style="background: var(--fur-sable);">
+          <div class="inner"><svg width="24" height="24" style="color: var(--ink-faint);"><use href="#i-paw"/></svg></div>
+        </div>
+        <span class="label">Sizes: sm 36 &middot; md 46 &middot; lg 56</span>
+      </div>
+
+      <div class="avatar-row" style="margin-top: 18px;">
+        <div class="avatar avatar-md" style="background: var(--fur-milk);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-vanilla);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-honey);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-peach);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-rust);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-mushroom);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-smoke);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-steel);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-bark);"><div class="inner"></div></div>
+        <div class="avatar avatar-md" style="background: var(--fur-sable);"><div class="inner"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ICONS -->
+  <section id="icons">
+    <h2>Icons</h2>
+    <span class="primitive-tag"><span class="dot"></span>Icon kit: <strong>Phosphor Icons</strong> &middot; <code>@phosphor-icons/react ^2.1.10</code> &middot; weight=<strong>fill</strong> (global default)</span>
+    <p class="section-note">Phosphor filled is the sole icon kit across the dashboard (locked 2026-05-15 evening). Lucide was ripped out the same evening. The global default <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">weight: "fill"</code> is set via <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">components/chrome/icon-provider.tsx</code> wrapping <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">{children}</code> in the root layout, so every <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">@phosphor-icons/react</code> import paints filled by default. Individual icons can override their own <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">weight</code> prop if a surface needs a lighter treatment. Sizes follow the 16 / 18 / 24 ladder. Mono-color via <code style="font-family: 'Inter', monospace; font-size: 11px; background: var(--canvas-2); padding: 1px 6px; border-radius: 4px;">currentColor</code>; never carry their own color outside this token system.</p>
+
+    <div class="icon-grid">
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-tray"/></svg><span class="name">Tray (Inbox)</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-megaphone"/></svg><span class="name">Megaphone</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-receipt"/></svg><span class="name">Receipt</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-gear"/></svg><span class="name">Gear</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-microphone"/></svg><span class="name">Microphone</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-paper-plane"/></svg><span class="name">PaperPlane</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-magnifier"/></svg><span class="name">Magnifier</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-paw"/></svg><span class="name">Paw</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-arrow-right"/></svg><span class="name">ArrowRight</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-check"/></svg><span class="name">Check</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-chat"/></svg><span class="name">Chat</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-clock"/></svg><span class="name">Clock</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-warning"/></svg><span class="name">Warning</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-x"/></svg><span class="name">X</span></div>
+      <div class="icon-cell"><svg width="22" height="22"><use href="#i-floppy"/></svg><span class="name">FloppyDisk</span></div>
+      <div class="icon-cell"><svg width="22" height="22" style="color: var(--berry);"><use href="#i-paw"/></svg><span class="name">Brand tinted</span></div>
+    </div>
+  </section>
+
+  <!-- COMPOSITE PATTERNS -->
+  <section id="patterns">
+    <h2>Composite patterns</h2>
+    <p class="section-note">Recurring assemblies of tokens + primitives. These are not new primitives; they're conventions for how the basics combine on real screens.</p>
+
+    <h3 class="sub">Awaiting bar (inbox, locked 2026-05-16)</h3>
+    <div class="awaiting-bar">
+      <h2><span class="num count">55</span> parents are waiting on you</h2>
+      <a href="#" class="btn btn-default btn-primary">Start reply queue <svg width="14" height="14"><use href="#i-arrow-right"/></svg></a>
+    </div>
+
+    <h3 class="sub">KPI cards (billing)</h3>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">Billed this month</div>
+        <div class="kpi-value">₹22,042</div>
+        <div class="kpi-meta">8 invoices</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Collected</div>
+        <div class="kpi-value">₹17,440</div>
+        <div class="kpi-meta">6 paid</div>
+      </div>
+      <div class="kpi warn">
+        <div class="kpi-label">Outstanding</div>
+        <div class="kpi-value">₹4,602</div>
+        <div class="kpi-meta">2 unpaid</div>
+      </div>
+    </div>
+
+    <h3 class="sub">Inbox row (Awaiting state)</h3>
+    <div class="inbox-row">
+      <div class="avatar avatar-lg" style="background: var(--fur-honey);">
+        <div class="inner"><svg width="22" height="22" style="color: var(--ink-faint);"><use href="#i-paw"/></svg></div>
+      </div>
+      <div class="pet-stack">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="lora pet-name">Galaxy</span>
+          <span class="pet-meta">Indie &middot; F &middot; 4 yr</span>
+        </div>
+        <span class="household">Fernandes household</span>
+      </div>
+      <p class="preview">She's been throwing up since this morning, three times. Eating less. Not playing.</p>
+      <div class="timeago">
+        <span class="live-dot" style="margin-right: 6px; vertical-align: middle;"></span>
+        oldest<br/>2h ago
+      </div>
+    </div>
+
+    <h3 class="sub">Section eyebrow (used above any small-caps label)</h3>
+    <div class="card" style="padding: 18px 22px;">
+      <div class="eyebrow" style="margin-bottom: 4px;">Recent activity</div>
+      <div style="font-size: 13px; color: var(--ink-70);">Eyebrow is text-xxs (10px), font-semibold, letter-spacing 0.14em, uppercase, ink-50. Tracking is invariant: never 0.12em or 0.16em.</div>
+    </div>
+  </section>
+
+  <!-- DISCIPLINE -->
+  <section id="discipline">
+    <h2>Discipline rules</h2>
+    <p class="section-note">Hard rules enforced on the build. Violations are reverted, not relitigated.</p>
+
+    <div class="rules">
+      <div class="rule-card">
+        <div class="rule-label">Locked 2026-05-15 final</div>
+        <div class="rule-title">NO hand-rolled UI primitives</div>
+        <div class="rule-body">Every interactive element in <code>apps/dashboard</code> must use a shadcn primitive from <code>components/ui/</code>. If a primitive is missing, install the matching <code>@radix-ui/react-*</code> package and add a shadcn wrapper BEFORE writing <code>&lt;button&gt;</code> / <code>&lt;input&gt;</code> / <code>&lt;textarea&gt;</code> with classnames.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Locked 2026-05-15 final</div>
+        <div class="rule-title">Type sizes from the Pawkit scale only</div>
+        <div class="rule-body">No <code>text-[Npx]</code> arbitrary values, no <code>style=&#123;&#123; fontSize: N &#125;&#125;</code> inline. Pull from <code>text-xxs</code> through <code>text-display</code>. Eyebrow letter-spacing is <code>tracking-[0.14em]</code> everywhere; never 0.12em or 0.16em.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Brand discipline</div>
+        <div class="rule-title">No em dashes anywhere</div>
+        <div class="rule-body">In docs, microcopy, UI strings, or code comments. Use commas, periods, colons, parentheses, or sentence breaks. Locked across project-wide voice.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Hardened 2026-05-08</div>
+        <div class="rule-title">Fur tones never in chrome</div>
+        <div class="rule-body">The 10 fur tokens are for pet fur matching only. The only allowed exception is Sable as the Sampling-state cover in fur-match, because the moment itself is about fur.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Surface architecture</div>
+        <div class="rule-title">No drop shadows</div>
+        <div class="rule-body">Elevation = tonal contrast + 1px <code>rule</code> hairline. Cards lift off the rail-tint ground by being canvas; rules separate sibling cards. Box-shadows are reserved for the focus ring only.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Colors</div>
+        <div class="rule-title">No pure white or pure black</div>
+        <div class="rule-body">All "white" in chrome is canvas <span class="tnum">#F8F7F5</span> or rail-tint <span class="tnum">#EFE6E8</span>. All "black" is ink <span class="tnum">#0F0C0A</span>. Pure <span class="tnum">#FFFFFF</span> and <span class="tnum">#000000</span> are forbidden.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="tail">
+    Pawkit v0 design system &middot; last updated 2026-05-16. Tokens live in <code>packages/design-tokens/src/{tokens.css,colors.ts,tailwind-preset.ts}</code> and <code>apps/dashboard/app/globals.css</code>. Locked decisions in <code>docs/decisions-log.md</code>. Brand discipline in <code>docs/brand-system.md</code>.
+  </footer>
+
+</div>
+
+</body>
+</html>

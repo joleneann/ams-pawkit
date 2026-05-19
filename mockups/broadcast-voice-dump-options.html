@@ -1,0 +1,1703 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pawkit · Broadcast voice-dump UI options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --canvas:        #F8F7F5;
+    --rail-tint:     #EFE6E8;
+    --ink:           #0F0C0A;
+    --ink-soft:      #5C5550;
+    --ink-faint:     #8F8B86;
+    --ink-70:        rgba(15, 12, 10, 0.72);
+    --ink-50:        rgba(15, 12, 10, 0.55);
+    --ink-30:        rgba(15, 12, 10, 0.35);
+    --rule:          rgba(15, 12, 10, 0.12);
+    --rule-soft:     rgba(15, 12, 10, 0.06);
+
+    --berry:         #9C2B5C;
+    --berry-deep:    #7C1F47;
+    --berry-soft:    rgba(156, 43, 92, 0.12);
+    --berry-tint:    rgba(156, 43, 92, 0.06);
+    --berry-ring:    rgba(156, 43, 92, 0.30);
+
+    --moss:          #5B7E5E;
+    --moss-soft:     rgba(91, 126, 94, 0.12);
+    --shell:         #6E6963;
+    --shell-soft:    rgba(110, 105, 99, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--rail-tint);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 56px 32px 96px; }
+
+  header.intro { margin-bottom: 56px; padding-bottom: 28px; border-bottom: 1px solid var(--rule); }
+  .eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50); margin-bottom: 12px; }
+  h1 { margin: 0 0 12px; font-size: 26px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; }
+  header.intro p { margin: 0; max-width: 760px; font-size: 14px; color: var(--ink-70); line-height: 1.55; }
+  .meta-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--berry-soft); border: 1px solid var(--berry-ring); border-radius: 999px; font-size: 11px; font-weight: 500; color: var(--berry-deep); margin-top: 14px; }
+  .meta-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--berry); }
+
+  section.option-block { margin-bottom: 80px; }
+  .option-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50); margin-bottom: 12px; }
+  h2 { margin: 0 0 6px; font-size: 22px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.2; }
+  h2 .label { color: var(--berry-deep); margin-right: 10px; }
+  .section-lede { margin: 0 0 28px; max-width: 720px; color: var(--ink-70); font-size: 14px; }
+
+  /* Dashboard frame shared across mockups */
+  .dash-frame {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(15,12,10,0.02), 0 12px 32px -16px rgba(15,12,10,0.08);
+  }
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--rule);
+    background: #FFFFFF;
+  }
+  .dash-title { font-size: 17px; font-weight: 600; letter-spacing: -0.005em; }
+  .dash-title-sub { font-size: 11px; color: var(--ink-faint); margin-top: 2px; }
+  .dash-actions { display: flex; gap: 10px; align-items: center; }
+  .autosave { font-size: 11px; color: var(--ink-faint); display: inline-flex; align-items: center; gap: 6px; }
+  .autosave::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--moss); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    background: #FFFFFF;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .btn:hover { border-color: var(--berry-ring); }
+  .btn.primary { background: var(--berry); color: #FFFFFF; border-color: var(--berry); }
+  .btn.primary:hover { background: var(--berry-deep); border-color: var(--berry-deep); }
+  .btn.ghost { background: transparent; border: 1px solid var(--rule); }
+
+  .dash-body { padding: 56px 64px; }
+
+  /* ===== OPTION A: VOICE-FIRST LANDING ===== */
+  .voice-first-canvas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 48px 32px;
+  }
+  .voice-first-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin-bottom: 18px;
+  }
+  .voice-first-headline {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0 0 12px;
+    max-width: 540px;
+  }
+  .voice-first-sub {
+    font-size: 15px;
+    color: var(--ink-70);
+    margin: 0 0 48px;
+    max-width: 480px;
+    line-height: 1.55;
+  }
+  .mic-cluster {
+    position: relative;
+    margin-bottom: 26px;
+  }
+
+  /* First-use coach mark (positioned above the mic) */
+  .coachmark {
+    position: absolute;
+    bottom: calc(100% + 36px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 380px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FCFAF7 100%);
+    color: var(--ink);
+    padding: 20px 24px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--berry-ring);
+    font-size: 13.5px;
+    line-height: 1.6;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 4px 16px -4px rgba(156,43,92,0.12),
+      0 16px 36px -12px rgba(15,12,10,0.14);
+    z-index: 10;
+    text-align: left;
+  }
+  .coachmark::before {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 14px;
+    height: 14px;
+    background: linear-gradient(135deg, transparent 50%, #FCFAF7 50%);
+    border-right: 1px solid var(--berry-ring);
+    border-bottom: 1px solid var(--berry-ring);
+  }
+  .coachmark-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--berry);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .coachmark-tag::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--berry);
+  }
+  .coachmark-body {
+    color: var(--ink);
+    margin: 0;
+  }
+  .coachmark-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .coachmark-dismiss {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--berry-deep);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.18s ease;
+  }
+  .coachmark-dismiss:hover {
+    background: var(--berry-soft);
+  }
+  .coachmark-dismiss .arrow {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* In-recording reassurance pill */
+  .recording-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: var(--berry-soft);
+    border: 1px solid var(--berry-ring);
+    color: var(--berry-deep);
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .recording-pill .recording-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--berry);
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 0.4; transform: scale(0.85); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  /* Live transcript area (during recording state) */
+  .live-transcript {
+    margin: 0 auto;
+    max-width: 620px;
+    padding: 20px 24px 22px;
+    background: #FFFFFF;
+    border: 1px solid var(--berry-ring);
+    border-radius: 14px;
+    text-align: left;
+    box-shadow: 0 4px 16px -4px rgba(156,43,92,0.18), 0 12px 32px -12px rgba(15,12,10,0.10);
+  }
+  .live-transcript-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .stop-mic-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    background: var(--ink);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .stop-mic-btn:hover { background: #1F1814; }
+  .stop-mic-btn .stop-square {
+    width: 9px;
+    height: 9px;
+    background: #FFFFFF;
+    border-radius: 2px;
+  }
+  .live-listening {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--berry-deep);
+    letter-spacing: 0.04em;
+  }
+  .live-listening .listening-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--berry);
+    animation: pulse-dot 1.2s ease-in-out infinite;
+  }
+  .live-duration {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .live-transcript-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0;
+  }
+  .live-transcript-text .said {
+    color: var(--ink);
+  }
+  .live-transcript-text .latest {
+    color: var(--ink);
+    background: var(--berry-tint);
+    padding: 2px 4px;
+    border-radius: 3px;
+    animation: highlight-fade 1.2s ease-out forwards;
+  }
+  @keyframes highlight-fade {
+    0% { background: var(--berry-soft); }
+    100% { background: transparent; }
+  }
+  .live-transcript-text .typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 16px;
+    background: var(--berry);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 1s steps(2, end) infinite;
+  }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+  .mic-button.recording {
+    background: linear-gradient(180deg, #B33C6E 0%, #9C2B5C 50%, #7C1F47 100%);
+    box-shadow: 0 0 0 4px rgba(156,43,92,0.18), 0 12px 28px -8px rgba(156,43,92,0.55);
+  }
+  .stop-hint {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .stop-hint .stop-link {
+    color: var(--berry-deep);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .mic-ring-outer, .mic-ring-mid, .mic-ring-inner {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid var(--berry-ring);
+    transform: translate(-50%, -50%);
+    left: 50%; top: 50%;
+    pointer-events: none;
+  }
+  .mic-ring-outer { width: 220px; height: 220px; opacity: 0.18; }
+  .mic-ring-mid   { width: 180px; height: 180px; opacity: 0.34; }
+  .mic-ring-inner { width: 140px; height: 140px; opacity: 0.50; }
+  .mic-button {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #A53565 0%, #9C2B5C 50%, #7C1F47 100%);
+    border: none;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 12px 28px -8px rgba(156,43,92,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+    z-index: 1;
+  }
+  .mic-button:hover { background: linear-gradient(180deg, #B33C6E 0%, #A53565 50%, #8A2552 100%); }
+  .mic-button svg { width: 36px; height: 36px; }
+  .mic-hint { font-size: 12px; color: var(--ink-faint); margin: 0; }
+
+  .voice-first-transcript-preview {
+    margin: 56px auto 0;
+    max-width: 460px;
+    padding: 20px 24px;
+    border: 1px dashed var(--rule);
+    border-radius: 12px;
+    background: var(--berry-tint);
+  }
+  .preview-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--berry-deep);
+    margin-bottom: 8px;
+  }
+  .preview-text {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .compose-manually {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .compose-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .compose-divider::before, .compose-divider::after {
+    content: "";
+    width: 60px;
+    height: 1px;
+    background: var(--rule);
+  }
+  .compose-link {
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--rule);
+    cursor: pointer;
+  }
+  .compose-link:hover { color: var(--berry-deep); text-decoration-color: var(--berry); }
+
+  /* ===== OPTION A POST-DICTATION (matches the real composer chrome) ===== */
+  .post-dictation { padding: 24px 32px 32px; }
+  .recorded-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: var(--moss-soft);
+    border: 1px solid rgba(91,126,94,0.20);
+    border-radius: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* The composer canvas card */
+  .composer-canvas {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Toolbar (lang toggle + auto-fill + mic) */
+  .composer-toolbar {
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .toolbar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .lang-pill {
+    display: inline-flex;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .lang-pill button {
+    border: none;
+    background: transparent;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .lang-pill button.active {
+    background: var(--berry);
+    color: var(--canvas);
+  }
+  .autofill-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+  .autofill-link:hover { color: var(--ink); }
+  .autofill-link svg { width: 13px; height: 13px; }
+  .composer-mic-cluster {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .composer-mic {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--berry-soft);
+    border: none;
+    color: var(--berry);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .composer-mic:hover { background: var(--berry); color: #FFFFFF; }
+  .composer-mic svg { width: 16px; height: 16px; }
+  .composer-mic-hint {
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+
+  /* Cover photo slot (empty dropzone state) */
+  .cover-slot-empty {
+    margin: 20px 24px 6px;
+    padding: 36px 24px;
+    background: var(--rule-soft);
+    border: 1.5px dashed var(--rule);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--ink-faint);
+    cursor: pointer;
+  }
+  .cover-slot-empty:hover { border-color: var(--berry-ring); color: var(--ink-soft); }
+  .cover-slot-empty .cover-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(15,12,10,0.06);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover-slot-empty .cover-icon svg { width: 18px; height: 18px; }
+  .cover-slot-empty .cover-text {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .cover-slot-empty .cover-sub {
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+
+  /* Field blocks (title, body) */
+  .field-block {
+    padding: 16px 24px 8px;
+  }
+  .field-block-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .field-block-label .req {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-faint);
+    text-transform: none;
+    letter-spacing: normal;
+  }
+  .composer-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #FFFFFF;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    line-height: 1.3;
+  }
+  .composer-input:focus { outline: none; border-color: var(--berry-ring); box-shadow: 0 0 0 3px var(--berry-soft); }
+  .composer-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #FFFFFF;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    resize: vertical;
+    min-height: 110px;
+  }
+  .composer-textarea:focus { outline: none; border-color: var(--berry-ring); box-shadow: 0 0 0 3px var(--berry-soft); }
+
+  /* Section editor */
+  .section-editor {
+    margin: 4px 24px 0;
+    padding: 14px 16px 12px;
+    background: #FFFFFF;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  .section-editor.warning {
+    border: 1.5px solid var(--ink);
+  }
+  .section-editor-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .section-editor-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-editor.warning .section-editor-label { color: var(--ink); }
+  .section-editor-label svg { width: 13px; height: 13px; }
+  .section-controls {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 2px;
+    color: var(--ink-faint);
+  }
+  .section-controls button {
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    color: var(--ink-faint);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .section-controls button:hover { background: var(--rule-soft); color: var(--ink); }
+  .section-controls button svg { width: 14px; height: 14px; }
+  .section-bullets {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .section-bullets li {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .section-bullets li::before {
+    content: "•";
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+  .section-body-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* Add-section chip row */
+  .add-section-row {
+    padding: 16px 24px 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .add-section-row .add-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    align-self: center;
+    margin-right: 4px;
+  }
+  .add-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: var(--canvas);
+    border: 1px dashed var(--rule);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .add-chip:hover { border-color: var(--berry-ring); border-style: solid; color: var(--berry-deep); background: var(--berry-tint); }
+  .add-chip svg { width: 12px; height: 12px; }
+
+  /* Audience strip (in-composer version) */
+  .composer-audience-strip {
+    margin: 8px 0 0;
+    padding: 18px 24px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .composer-audience-strip .strip-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .audience-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: var(--berry-soft);
+    border: 1px solid var(--berry-ring);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--berry-deep);
+  }
+  .audience-count-text {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .audience-count-text strong { color: var(--ink); font-weight: 600; }
+  .edit-filters-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: transparent;
+    border: none;
+    color: var(--berry);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .edit-filters-btn:hover { background: var(--berry-soft); }
+  .edit-filters-btn svg { width: 12px; height: 12px; }
+
+  /* Send footer */
+  .composer-send-footer {
+    padding: 16px 24px;
+    background: rgba(15,12,10,0.02);
+    border-top: 1px solid var(--rule);
+    border-radius: 0 0 16px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .send-footer-left { display: flex; flex-direction: column; gap: 2px; }
+  .send-footer-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .send-footer-sub { font-size: 13px; color: var(--ink-soft); }
+  .send-footer-sub strong { color: var(--ink); font-weight: 600; }
+  .send-footer-actions { margin-left: auto; display: inline-flex; gap: 10px; }
+  .preview-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .preview-btn:hover { border-color: var(--berry-ring); }
+  .preview-btn svg { width: 13px; height: 13px; }
+  .send-broadcast-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    background: var(--berry);
+    color: #FFFFFF;
+    border: 1px solid var(--berry);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .send-broadcast-btn:hover { background: var(--berry-deep); border-color: var(--berry-deep); }
+  .send-broadcast-btn svg { width: 13px; height: 13px; }
+  .recorded-strip .strip-mic {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--moss);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+  }
+  .recorded-strip .strip-mic svg { width: 16px; height: 16px; }
+  .recorded-strip .strip-text { font-size: 13px; color: var(--ink); flex: 1; }
+  .recorded-strip .strip-text strong { color: var(--ink); font-weight: 600; }
+  .recorded-strip .strip-text .duration { color: var(--ink-faint); margin-left: 8px; }
+  .recorded-strip .strip-waveform { display: flex; align-items: center; gap: 2px; height: 18px; }
+  .recorded-strip .strip-waveform .bar { width: 2px; background: var(--moss); border-radius: 1px; opacity: 0.78; }
+  .recorded-strip .actions { display: flex; gap: 8px; }
+  .recorded-strip .strip-link { font-size: 11px; color: var(--moss); font-weight: 500; cursor: pointer; }
+
+  .lang-toggle {
+    display: inline-flex;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 28px;
+  }
+  .lang-toggle button {
+    border: none;
+    background: transparent;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-faint);
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+  }
+  .lang-toggle button.active { background: #FFFFFF; color: var(--ink); box-shadow: 0 1px 2px rgba(15,12,10,0.06); }
+  .lang-toggle .auto-tag {
+    margin-left: 6px;
+    font-size: 9px;
+    padding: 2px 6px;
+    background: var(--berry-soft);
+    color: var(--berry-deep);
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+  }
+
+  .section-block {
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: #FFFFFF;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+  .section-block.topic { background: var(--berry-tint); border-color: var(--berry-ring); }
+  .section-block-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-block.topic .section-block-eyebrow { color: var(--berry-deep); }
+  .section-edit { color: var(--ink-faint); font-size: 11px; cursor: pointer; }
+  .section-edit:hover { color: var(--berry-deep); }
+  .section-title { font-size: 22px; font-weight: 600; letter-spacing: -0.005em; color: var(--ink); margin: 0; }
+  .section-body { font-size: 13.5px; line-height: 1.65; color: var(--ink-70); margin: 0; }
+  .section-bullet-list { margin: 4px 0 0; padding: 0 0 0 18px; }
+  .section-bullet-list li { font-size: 13.5px; line-height: 1.65; color: var(--ink-70); margin-bottom: 2px; }
+
+  .audience-strip {
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .audience-strip .label-cluster .lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); display: block; margin-bottom: 4px; }
+  .audience-strip .label-cluster .val { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .audience-strip .label-cluster .val .filter-chip { display: inline-block; margin-left: 6px; padding: 2px 8px; background: var(--rule-soft); border-radius: 4px; font-size: 11px; font-weight: 500; color: var(--ink-soft); }
+  .send-cta {
+    background: var(--berry);
+    color: #FFFFFF;
+    border: 1px solid var(--berry);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ===== OPTION B: DUAL-MODE PICKER ===== */
+  .picker-canvas {
+    padding: 64px 48px 48px;
+    text-align: center;
+  }
+  .picker-headline {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+  .picker-sub {
+    font-size: 14px;
+    color: var(--ink-70);
+    margin: 0 0 40px;
+  }
+  .picker-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    max-width: 740px;
+    margin: 0 auto 40px;
+  }
+  .picker-card {
+    background: #FFFFFF;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 32px 28px;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+  .picker-card:hover { border-color: var(--berry-ring); transform: translateY(-1px); }
+  .picker-card.primary { background: var(--berry); color: #FFFFFF; border-color: var(--berry); }
+  .picker-card.primary:hover { background: var(--berry-deep); border-color: var(--berry-deep); }
+  .picker-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: var(--berry-soft);
+    color: var(--berry);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+  .picker-card.primary .picker-icon { background: rgba(255,255,255,0.18); color: #FFFFFF; }
+  .picker-icon svg { width: 26px; height: 26px; }
+  .picker-card h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.005em; margin: 0 0 6px; line-height: 1.25; }
+  .picker-card p { font-size: 13px; line-height: 1.55; margin: 0 0 18px; color: var(--ink-70); }
+  .picker-card.primary p { color: rgba(255,255,255,0.78); }
+  .picker-card .time-cost { font-size: 11px; font-weight: 500; color: var(--ink-faint); letter-spacing: 0.04em; }
+  .picker-card.primary .time-cost { color: rgba(255,255,255,0.62); }
+  .picker-card .arrow {
+    margin-top: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--berry-deep);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .picker-card.primary .arrow { color: #FFFFFF; }
+
+  .recent-drafts {
+    margin: 0 auto;
+    max-width: 740px;
+    border-top: 1px solid var(--rule);
+    padding-top: 32px;
+  }
+  .recent-drafts h4 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin: 0 0 16px;
+    text-align: left;
+  }
+  .draft-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .draft-card {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .draft-card:hover { border-color: var(--berry-ring); }
+  .draft-card .draft-status { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--shell); margin-bottom: 6px; }
+  .draft-card .draft-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .draft-card .draft-meta { font-size: 11px; color: var(--ink-faint); }
+
+  /* ===== OPTION C: HYBRID ===== */
+  .hybrid-band {
+    background: linear-gradient(180deg, rgba(156,43,92,0.10) 0%, rgba(156,43,92,0.06) 100%);
+    border: 1px solid var(--berry-ring);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .hybrid-band .band-mic {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--berry);
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px -4px rgba(156,43,92,0.45);
+  }
+  .hybrid-band .band-mic svg { width: 24px; height: 24px; }
+  .hybrid-band .band-text { flex: 1; }
+  .hybrid-band .band-title { font-size: 15px; font-weight: 600; color: var(--ink); margin: 0 0 4px; }
+  .hybrid-band .band-sub { font-size: 12px; color: var(--ink-70); margin: 0; }
+  .hybrid-band .band-cta {
+    background: var(--berry);
+    color: #FFFFFF;
+    border: 1px solid var(--berry);
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .form-empty {
+    opacity: 0.5;
+  }
+  .form-section {
+    padding: 18px 22px;
+    background: #FFFFFF;
+    border: 1px dashed var(--rule);
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .form-section .field-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  .form-section .field-placeholder {
+    font-size: 14px;
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+  .form-section.title-field .field-placeholder { font-size: 22px; }
+
+  /* ===== ANNOTATION + CALLOUT ===== */
+  .annotation {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: var(--canvas);
+    border: 1px dashed var(--berry-ring);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--ink-70);
+    line-height: 1.55;
+  }
+  .annotation .kicker {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--berry);
+    margin-bottom: 4px;
+  }
+  .annotation strong { color: var(--berry-deep); font-weight: 600; }
+
+  /* ===== STATE BADGE ===== */
+  .state-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--berry-soft);
+    color: var(--berry-deep);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .state-badge.post { background: var(--moss-soft); color: var(--moss); }
+
+  /* ===== RECOMMENDATION CARD ===== */
+  .rec-card {
+    margin-top: 28px;
+    background: var(--berry);
+    color: #FFFFFF;
+    border-radius: 16px;
+    padding: 32px 36px;
+  }
+  .rec-card .rec-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 10px;
+  }
+  .rec-card h3 { margin: 0 0 14px; font-size: 22px; font-weight: 600; letter-spacing: -0.005em; }
+  .rec-card p { margin: 0 0 18px; max-width: 720px; font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.88); }
+  .rec-card p:last-child { margin-bottom: 0; }
+  .rec-card .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.20);
+  }
+  .rec-card .stat { font-size: 12px; color: rgba(255,255,255,0.65); letter-spacing: 0.04em; }
+  .rec-card .stat strong { display: block; font-size: 22px; font-weight: 600; color: #FFFFFF; margin-bottom: 4px; letter-spacing: -0.01em; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="intro">
+    <div class="eyebrow">Mockup · Broadcast voice-dump · v0 rebuild options</div>
+    <h1>How the voice-first broadcast composer could look</h1>
+    <p>
+      Three hi-fi options for the broadcast composer rebuild. Each lands the vet on a different starting state.
+      The flow downstream is identical: Sarvam transcribes the vet's voice (no length cap, speak for as long
+      as needed), Groq Llama 3.3 70B structures the transcript into 5 NHS-care-card sections, Sarvam Mayura
+      translates to MR, vet reviews and ships. Differences are in the FIRST screen the vet sees.
+    </p>
+    <span class="meta-pill"><span class="dot"></span> Recommendation at the bottom · Option A wins on demo impact</span>
+  </header>
+
+  <!-- ============================================================ -->
+  <!-- OPTION A: VOICE-FIRST LANDING (recommended)                   -->
+  <!-- ============================================================ -->
+  <section class="option-block">
+    <div class="option-eyebrow">Option A · Voice-first landing</div>
+    <h2><span class="label">A.</span> One mic, one prompt, full magic</h2>
+    <p class="section-lede">
+      Vet taps "New broadcast" → lands on a single hero prompt. Big mic button, no form visible.
+      Vet speaks for as long as they need, Pawkit structures the rest. This is the Cal AI moment. Build: 1.5-2 days.
+    </p>
+
+    <div class="dash-frame">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">New broadcast <span class="state-badge">Initial state</span></div>
+          <div class="dash-title-sub">For all parents at AMS</div>
+        </div>
+        <div class="dash-actions">
+          <span class="autosave">Autosaved · just now</span>
+          <button class="btn">
+            <svg viewBox="0 0 256 256" fill="currentColor" width="14" height="14"><path d="M219.31,80.69l-40-40A16,16,0,0,0,168,36H48A16,16,0,0,0,32,52V204a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V92A16,16,0,0,0,219.31,80.69ZM168,52l32,32V164H56V164a16,16,0,0,1,16-16h0Z"/></svg>
+            Save draft
+          </button>
+        </div>
+      </div>
+
+      <div class="voice-first-canvas">
+        <div class="voice-first-eyebrow">New broadcast</div>
+        <h2 class="voice-first-headline">Tell me about this broadcast.</h2>
+        <p class="voice-first-sub">Speak for as long as you need. Pawkit will structure your broadcast in English and Marathi for review before you publish.</p>
+        <p class="voice-first-sub" style="font-size: 13px; color: var(--ink-faint); margin-top: -28px; margin-bottom: 40px; max-width: 460px;">Speak naturally. Cover things in any order. Restarts and corrections are fine. Pawkit sorts it out.</p>
+
+        <div class="mic-cluster">
+          <div class="coachmark">
+            <div class="coachmark-tag">First-time tip</div>
+            <p class="coachmark-body">Don't worry about getting it perfect. Say something wrong? Just keep going. Pawkit organises it at the end.</p>
+            <div class="coachmark-row">
+              <span class="coachmark-dismiss">
+                Got it
+                <svg class="arrow" viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72A8,8,0,0,1,138.34,194.34L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66A8,8,0,0,1,149.66,50.34l72,72A8,8,0,0,1,221.66,133.66Z"/></svg>
+              </span>
+            </div>
+          </div>
+          <span class="mic-ring-outer"></span>
+          <span class="mic-ring-mid"></span>
+          <span class="mic-ring-inner"></span>
+          <button class="mic-button" aria-label="Start recording">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Zm40,143.6V232a8,8,0,0,1-16,0V207.6A80.11,80.11,0,0,1,48,128a8,8,0,0,1,16,0,64,64,0,0,0,128,0,8,8,0,0,1,16,0A80.11,80.11,0,0,1,136,207.6Z"/></svg>
+          </button>
+        </div>
+        <p class="mic-hint">Tap to start · stop when you're done</p>
+
+        <div class="voice-first-transcript-preview">
+          <div class="preview-eyebrow">Live transcript will appear here</div>
+          <p class="preview-text">"Monsoon is here, and we've already seen twelve tick fever cases this week. Parents should check their dogs daily, especially around the ears and between the toes. The drops we recommend are Bravecto or NexGard. If you see lethargy or pale gums, bring them in immediately..."</p>
+        </div>
+
+        <div class="compose-manually">
+          <div class="compose-divider">or</div>
+          <a class="compose-link">Compose manually instead</a>
+          <p style="font-size: 11px; color: var(--ink-faint); margin: 0; max-width: 320px;">
+            Per-field voice mic stays available. You structure as you go.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <span class="kicker">Why Option A</span>
+      Sagar opens Pawkit, taps Broadcast, hits the mic, and 30 seconds later sees a complete bilingual broadcast.
+      <strong>That's the Cal AI moment for vets.</strong> The "Compose manually" escape hatch protects the case where
+      he just wants to type a 2-line announcement. The transcript preview area starts empty and fills in real-time
+      as he speaks, building anticipation for the structured output.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- OPTION A DURING RECORDING STATE                               -->
+  <!-- ============================================================ -->
+  <section class="option-block">
+    <div class="option-eyebrow">Option A · During recording</div>
+    <h2><span class="label">A.2</span> While the vet is speaking</h2>
+    <p class="section-lede">
+      Live transcript builds word by word via Sarvam Saarika's streaming WebSocket. In-recording pill
+      sits above the transcript so the reassurance reaches the vet at the exact moment they panic about a misspoken sentence.
+    </p>
+
+    <div class="dash-frame">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">New broadcast <span class="state-badge">Recording</span></div>
+          <div class="dash-title-sub">For all parents at AMS</div>
+        </div>
+        <div class="dash-actions">
+          <span class="autosave">Listening</span>
+          <button class="btn">Save draft</button>
+        </div>
+      </div>
+
+      <div class="voice-first-canvas" style="padding: 32px 24px 40px;">
+        <div class="live-transcript">
+          <div class="live-transcript-header">
+            <span class="live-listening">
+              <span class="listening-dot"></span>
+              LISTENING
+            </span>
+            <span class="live-duration">0:42</span>
+            <button class="stop-mic-btn">
+              <span class="stop-square"></span>
+              Stop
+            </button>
+          </div>
+
+          <div class="recording-pill" style="margin: 0 0 16px;">
+            <span class="recording-pill-dot"></span>
+            You can restart sentences or jump topics. Keep going.
+          </div>
+
+          <p class="live-transcript-text">
+            <span class="said">Monsoon is here, and we've already seen twelve tick fever cases this week. Parents should check their dogs daily, especially around the ears and between the toes. </span><span class="said">Sorry, fourteen cases not twelve. </span><span class="latest">The drops we recommend are Bravecto or NexGard, and if you see lethargy or pale</span><span class="typing-cursor"></span>
+          </p>
+        </div>
+
+        <p class="stop-hint" style="margin-top: 20px;">Or <span class="stop-link">stop and structure now</span></p>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <span class="kicker">Three reassurance layers in action</span>
+      <strong>Layer 1 (subtext under headline, previous screen):</strong> "Speak naturally. Cover things in any order."
+      <strong>Layer 2 (first-use coach mark, previous screen):</strong> "Don't worry about getting it perfect."
+      <strong>Layer 3 (in-recording pill, this screen):</strong> "You can restart sentences or jump topics."
+      The vet just corrected "twelve cases" to "fourteen cases" mid-stream. The transcript captures both,
+      structuring will resolve to fourteen. The pill confirms this is fine before the vet panics and hits stop.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- OPTION A POST-DICTATION STATE                                 -->
+  <!-- ============================================================ -->
+  <section class="option-block">
+    <div class="option-eyebrow">Option A · Post-dictation review state</div>
+    <h2><span class="label">A.3</span> After the 30-second magic moment</h2>
+    <p class="section-lede">
+      The screen above transitions into this populated composer once Pawkit finishes structuring. Five sections
+      filled, MR auto-translated, vet edits inline before publishing.
+    </p>
+
+    <div class="dash-frame">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">New broadcast <span class="state-badge post">After dictation</span></div>
+          <div class="dash-title-sub">Autosaved · just now</div>
+        </div>
+        <div class="dash-actions">
+          <button class="btn">
+            <svg viewBox="0 0 256 256" fill="currentColor" width="14" height="14"><path d="M219.31,80.69l-40-40A16,16,0,0,0,168,36H48A16,16,0,0,0,32,52V204a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V92A16,16,0,0,0,219.31,80.69ZM168,52l32,32V164H56V164a16,16,0,0,1,16-16h0Z"/></svg>
+            Save draft
+          </button>
+        </div>
+      </div>
+
+      <div class="post-dictation">
+        <div class="recorded-strip">
+          <div class="strip-mic">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Z"/></svg>
+          </div>
+          <div class="strip-text">
+            <strong>Voice dump captured</strong>
+            <span class="duration">1:47 · 312 words</span>
+          </div>
+          <div class="strip-waveform">
+            <span class="bar" style="height: 9px;"></span><span class="bar" style="height: 13px;"></span><span class="bar" style="height: 7px;"></span><span class="bar" style="height: 15px;"></span><span class="bar" style="height: 11px;"></span><span class="bar" style="height: 16px;"></span><span class="bar" style="height: 8px;"></span><span class="bar" style="height: 14px;"></span><span class="bar" style="height: 10px;"></span><span class="bar" style="height: 12px;"></span><span class="bar" style="height: 17px;"></span><span class="bar" style="height: 9px;"></span><span class="bar" style="height: 13px;"></span><span class="bar" style="height: 7px;"></span><span class="bar" style="height: 15px;"></span>
+          </div>
+          <div class="actions">
+            <span class="strip-link">View transcript</span>
+            <span class="strip-link">Re-record</span>
+          </div>
+        </div>
+
+        <div class="composer-canvas">
+          <!-- Toolbar -->
+          <div class="composer-toolbar">
+            <span class="toolbar-label">Writing in</span>
+            <div class="lang-pill">
+              <button class="active">English</button>
+              <button>मराठी</button>
+            </div>
+            <button class="autofill-link">
+              <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm88,104a88.08,88.08,0,0,1-3,22.27l-26.5-26.5a32.06,32.06,0,0,0-19.32-19.32L141.5,77.95A89.13,89.13,0,0,1,216,128ZM128,144a16,16,0,1,1,16-16A16,16,0,0,1,128,144Zm-12.5-65.27,26.5,26.5a32.06,32.06,0,0,0-19.32,19.32L96.5,98.05A89.13,89.13,0,0,1,115.5,78.73ZM40,128a87.93,87.93,0,0,1,49-78.77l26.5,26.5A32.06,32.06,0,0,0,96.21,95.05L77.73,113.53A89.13,89.13,0,0,1,40,128Zm88,88A87.94,87.94,0,0,1,49.23,167l26.5-26.5a32.06,32.06,0,0,0,19.32,19.32l18.48,18.48A88.79,88.79,0,0,1,128,216Z"/></svg>
+              Auto-fill मराठी now
+            </button>
+            <div class="composer-mic-cluster">
+              <button class="composer-mic" aria-label="Voice mic (focus a field to dictate)">
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Zm40,143.6V232a8,8,0,0,1-16,0V207.6A80.11,80.11,0,0,1,48,128a8,8,0,0,1,16,0,64,64,0,0,0,128,0,8,8,0,0,1,16,0A80.11,80.11,0,0,1,136,207.6Z"/></svg>
+              </button>
+              <span class="composer-mic-hint">Click into a field first</span>
+            </div>
+          </div>
+
+          <!-- Cover photo dropzone (empty state) -->
+          <div class="cover-slot-empty">
+            <div class="cover-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V158.75l-26.07-26.06a16,16,0,0,0-22.63,0l-20,20-44-44a16,16,0,0,0-22.62,0L40,149.37V56ZM40,172l52-52,80,80H40Zm176,28H194.63l-36-36,20-20L216,181.38V200ZM144,100a12,12,0,1,1,12,12A12,12,0,0,1,144,100Z"/></svg>
+            </div>
+            <div>
+              <div class="cover-text">Add a cover photo</div>
+              <div class="cover-sub">16:5 ratio, JPG or PNG, up to 8 MB</div>
+            </div>
+          </div>
+
+          <!-- Title -->
+          <div class="field-block">
+            <div class="field-block-label">Title <span class="req">required</span></div>
+            <input class="composer-input" type="text" value="Monsoon tick prevention 2026" />
+          </div>
+
+          <!-- Body -->
+          <div class="field-block">
+            <div class="field-block-label">Body <span class="req">required</span></div>
+            <textarea class="composer-textarea">Monsoon brings tick activity to its peak in Pune. Ticks transmit ehrlichia and babesia, which cause fever, lethargy, and platelet drops. We've already seen fourteen cases this week and expect the count to rise through July. Daily tick checks plus a preventive (Bravecto every 12 weeks or NexGard monthly) reduce the risk significantly.</textarea>
+          </div>
+
+          <!-- Section: Key points (Summary type) -->
+          <div class="section-editor">
+            <div class="section-editor-header">
+              <span class="section-editor-label">Key points</span>
+              <div class="section-controls">
+                <button aria-label="Move up"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,165.66a8,8,0,0,1-11.32,0L128,99.31,61.66,165.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0l72,72A8,8,0,0,1,205.66,165.66Z"/></svg></button>
+                <button aria-label="Move down"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg></button>
+                <button aria-label="Remove section"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192Z"/></svg></button>
+              </div>
+            </div>
+            <ul class="section-bullets">
+              <li>14 tick fever cases at AMS this week, expected to rise through July</li>
+              <li>Check your dog daily around ears, between toes, under the collar</li>
+              <li>Bravecto (every 12 weeks) or NexGard (monthly) are our recommendations</li>
+              <li>Avoid stagnant water and tall grass walks where possible</li>
+            </ul>
+          </div>
+
+          <!-- Section: Warning signs (Warning type, ink frame + alert icon) -->
+          <div class="section-editor warning">
+            <div class="section-editor-header">
+              <span class="section-editor-label">
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8,188.09,149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z"/></svg>
+                Warning signs
+              </span>
+              <div class="section-controls">
+                <button aria-label="Move up"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,165.66a8,8,0,0,1-11.32,0L128,99.31,61.66,165.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0l72,72A8,8,0,0,1,205.66,165.66Z"/></svg></button>
+                <button aria-label="Move down"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg></button>
+                <button aria-label="Remove section"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192Z"/></svg></button>
+              </div>
+            </div>
+            <ul class="section-bullets">
+              <li>Lethargy or refusing food for more than 24 hours</li>
+              <li>Pale gums (gums should look pink, not white or grey)</li>
+              <li>Nosebleeds or gum bleeding</li>
+              <li>Fever (your dog feels warmer than usual to touch)</li>
+            </ul>
+          </div>
+
+          <!-- Section: When to call us -->
+          <div class="section-editor">
+            <div class="section-editor-header">
+              <span class="section-editor-label">
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06v-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46Z"/></svg>
+                When to call us
+              </span>
+              <div class="section-controls">
+                <button aria-label="Move up"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,165.66a8,8,0,0,1-11.32,0L128,99.31,61.66,165.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0l72,72A8,8,0,0,1,205.66,165.66Z"/></svg></button>
+                <button aria-label="Move down"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg></button>
+                <button aria-label="Remove section"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192Z"/></svg></button>
+              </div>
+            </div>
+            <p class="section-body-text">If you see any of the warning signs, walk in to AMS the same day. We're open 9am to 9pm Monday to Saturday. For after-hours emergencies, call us first on the clinic number and we'll guide you to the nearest 24-hour facility.</p>
+          </div>
+
+          <!-- Add-section chips -->
+          <div class="add-section-row">
+            <span class="add-label">Add section</span>
+            <button class="add-chip"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>Custom section</button>
+          </div>
+
+          <!-- Audience strip -->
+          <div class="composer-audience-strip">
+            <span class="strip-label">Who's this for?</span>
+            <span class="audience-pill">species: dog</span>
+            <span class="audience-count-text"><strong>116</strong> pets · 116 households</span>
+            <button class="edit-filters-btn">
+              <svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>
+              Edit filters
+            </button>
+          </div>
+
+          <!-- Send footer -->
+          <div class="composer-send-footer">
+            <div class="send-footer-left">
+              <span class="send-footer-eyebrow">Ready to send</span>
+              <span class="send-footer-sub">to <strong>116 pets</strong> across <strong>116</strong> households · in English & मराठी</span>
+            </div>
+            <div class="send-footer-actions">
+              <button class="preview-btn">
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Z"/></svg>
+                Preview as parent
+              </button>
+              <button class="send-broadcast-btn">
+                Send broadcast
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72A8,8,0,0,1,138.34,194.34L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66A8,8,0,0,1,149.66,50.34l72,72A8,8,0,0,1,221.66,133.66Z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <span class="kicker">This IS the existing composer, just populated</span>
+      Same toolbar (lang toggle + auto-fill + voice mic), same cover photo dropzone, same Title + Body fields,
+      same section editors with up/down/trash controls, same add-section chips, same audience strip, same send footer.
+      <strong>Voice dump lands the vet here with everything pre-filled.</strong> No new UX to learn. Every existing affordance still works:
+      per-field voice mic for editing, manual reordering, deleting a section, adding a Custom section if needed.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- OPTION B: DUAL-MODE PICKER                                    -->
+  <!-- ============================================================ -->
+  <section class="option-block">
+    <div class="option-eyebrow">Option B · Dual-mode picker</div>
+    <h2><span class="label">B.</span> Pick voice or text upfront</h2>
+    <p class="section-lede">
+      Two cards side-by-side. Voice on the left (primary, berry), Manual on the right (neutral). Vet picks first, then acts.
+      Adds a small friction step, but signals choice clearly. Build: 2 days.
+    </p>
+
+    <div class="dash-frame">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">New broadcast</div>
+          <div class="dash-title-sub">Choose how you want to compose</div>
+        </div>
+        <div class="dash-actions">
+          <button class="btn ghost">Cancel</button>
+        </div>
+      </div>
+
+      <div class="picker-canvas">
+        <h3 class="picker-headline">How do you want to compose?</h3>
+        <p class="picker-sub">Both paths produce a full bilingual broadcast. The fast one uses your voice.</p>
+
+        <div class="picker-grid">
+          <div class="picker-card primary">
+            <div class="picker-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Zm40,143.6V232a8,8,0,0,1-16,0V207.6A80.11,80.11,0,0,1,48,128a8,8,0,0,1,16,0,64,64,0,0,0,128,0,8,8,0,0,1,16,0A80.11,80.11,0,0,1,136,207.6Z"/></svg>
+            </div>
+            <h3>Speak it</h3>
+            <p>Talk as long as you need. Pawkit handles structure, sections, and Marathi.</p>
+            <div class="time-cost">SECONDS TO STRUCTURE · YOU EDIT BEFORE SEND</div>
+            <span class="arrow">Start speaking <svg viewBox="0 0 256 256" fill="currentColor" width="12" height="12"><path d="M221.66,133.66l-72,72A8,8,0,0,1,138.34,194.34L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66A8,8,0,0,1,149.66,50.34l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+          </div>
+          <div class="picker-card">
+            <div class="picker-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"/></svg>
+            </div>
+            <h3>Type it (with per-field voice)</h3>
+            <p>Start blank. Build section by section. Voice mic stays available on every field.</p>
+            <div class="time-cost">YOU STRUCTURE AS YOU GO · MIC ON EVERY FIELD</div>
+            <span class="arrow">Open composer <svg viewBox="0 0 256 256" fill="currentColor" width="12" height="12"><path d="M221.66,133.66l-72,72A8,8,0,0,1,138.34,194.34L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66A8,8,0,0,1,149.66,50.34l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+          </div>
+        </div>
+
+        <div class="recent-drafts">
+          <h4>Recent drafts</h4>
+          <div class="draft-row">
+            <div class="draft-card">
+              <div class="draft-status">Draft · 2 days ago</div>
+              <div class="draft-title">Diwali holiday hours and pet safety</div>
+              <div class="draft-meta">Topic + 3 sections · MR not started</div>
+            </div>
+            <div class="draft-card">
+              <div class="draft-status">Draft · 5 days ago</div>
+              <div class="draft-title">Senior dog wellness check campaign</div>
+              <div class="draft-meta">Topic only · audience set</div>
+            </div>
+            <div class="draft-card">
+              <div class="draft-status">Draft · 12 days ago</div>
+              <div class="draft-title">How to care for your dog in the summer</div>
+              <div class="draft-meta">All sections drafted · MR pending</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <span class="kicker">Trade-off</span>
+      Cleaner mental model, but the friction of "pick first" before "act" dilutes the wow.
+      <strong>Sagar's first interaction with the new flow is a choice screen, not the mic.</strong>
+      For everyday use after demo day, this is fine. For demo day itself, Option A lands harder.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- OPTION C: HYBRID                                              -->
+  <!-- ============================================================ -->
+  <section class="option-block">
+    <div class="option-eyebrow">Option C · Hybrid (existing form + voice band)</div>
+    <h2><span class="label">C.</span> Keep the form, add a prominent voice band</h2>
+    <p class="section-lede">
+      Current composer stays. New berry band at the top says "Speak your broadcast." Voice is additive,
+      manual is the default visual hierarchy. Build: 1 day. Lowest risk, lowest wow.
+    </p>
+
+    <div class="dash-frame">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">New broadcast</div>
+          <div class="dash-title-sub">For all parents at AMS</div>
+        </div>
+        <div class="dash-actions">
+          <span class="autosave">Empty draft</span>
+          <button class="btn">Save draft</button>
+        </div>
+      </div>
+
+      <div class="dash-body">
+        <div class="hybrid-band">
+          <div class="band-mic">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Zm40,143.6V232a8,8,0,0,1-16,0V207.6A80.11,80.11,0,0,1,48,128a8,8,0,0,1,16,0,64,64,0,0,0,128,0,8,8,0,0,1,16,0A80.11,80.11,0,0,1,136,207.6Z"/></svg>
+          </div>
+          <div class="band-text">
+            <p class="band-title">Speak your broadcast and skip the typing</p>
+            <p class="band-sub">Talk as long as you need. Pawkit will fill in every section below in EN and MR for you to review.</p>
+          </div>
+          <button class="band-cta">
+            <svg viewBox="0 0 256 256" fill="currentColor" width="14" height="14"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176Z"/></svg>
+            Start recording
+          </button>
+        </div>
+
+        <div class="form-empty">
+          <div class="form-section title-field">
+            <div class="field-label">Title</div>
+            <div class="field-placeholder">e.g. Monsoon tick prevention 2026</div>
+          </div>
+          <div class="form-section">
+            <div class="field-label">Body</div>
+            <div class="field-placeholder">Open with the key context. What's the situation, why now, what should the parent know first.</div>
+          </div>
+          <div class="form-section">
+            <div class="field-label">Section: Key points</div>
+            <div class="field-placeholder">3-5 short bullets · one idea per line</div>
+          </div>
+          <div class="form-section">
+            <div class="field-label">Section: Warning signs</div>
+            <div class="field-placeholder">When should the parent worry, in plain language</div>
+          </div>
+          <div class="form-section">
+            <div class="field-label">Section: When to call us</div>
+            <div class="field-placeholder">Clinic hours, escalation steps, when to walk in vs phone</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <span class="kicker">Why this loses</span>
+      Vet sees the form first. The voice band is "additive," not "primary." Fine for everyday use after demo;
+      <strong>weak for the demo because the wow is below the fold of attention.</strong> Sagar's eye goes to the form
+      before the band, and the magic moment never gets the room it deserves.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- RECOMMENDATION                                                -->
+  <!-- ============================================================ -->
+  <section class="option-block">
+    <div class="option-eyebrow">Recommendation</div>
+    <h2>Ship Option A in v0</h2>
+    <p class="section-lede">
+      Maximum demo impact, lowest extra build cost beyond what's already in the v0 plan,
+      and the escape hatch ("Compose manually") protects the non-magical use case.
+    </p>
+
+    <div class="rec-card">
+      <div class="rec-eyebrow">Option A · Voice-first landing</div>
+      <h3>The Cal AI moment for vets, in 30 seconds.</h3>
+      <p>
+        Sagar taps Broadcast → sees one prompt and one mic → speaks 2 minutes about monsoon ticks →
+        watches a complete bilingual broadcast appear, fully structured. He edits one sentence,
+        reviews the Marathi, and ships. That's the wow. Option B adds a choice screen before the wow.
+        Option C buries the wow behind a form. Only A puts the magic in the centre of the canvas.
+      </p>
+      <p>
+        Build difference vs Option C: ~1 extra day. Build difference vs Option B: ~equal.
+        The "Compose manually" link below the mic protects the case where Sagar just wants to type a 2-line
+        announcement and skip the magic. Same composer is the destination either way.
+      </p>
+      <div class="stats-strip">
+        <div class="stat"><strong>1.5-2 days</strong>Build time vs ~1 day for Option C</div>
+        <div class="stat"><strong>30 sec</strong>Time from voice end to structured broadcast</div>
+        <div class="stat"><strong>₹0.10</strong>API cost per broadcast (Groq Llama 3.3 70B)</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,2369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AMS Pawkit · Broadcast composer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Spectral:ital,wght@1,600&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --canvas:      #F8F7F5;
+    --ink:         #0F0C0A;
+    --berry:       #823159;
+    --berry-deep:  #6B1F44;
+
+    --ink-70:      rgba(15, 12, 10, 0.72);
+    --ink-50:      rgba(15, 12, 10, 0.55);
+    --ink-30:      rgba(15, 12, 10, 0.35);
+    --rule:        rgba(15, 12, 10, 0.12);
+    --rule-soft:   rgba(15, 12, 10, 0.06);
+    --canvas-2:    rgba(15, 12, 10, 0.04);
+    --rail-tint:   rgba(15, 12, 10, 0.045);
+    --berry-soft:  rgba(130, 49, 89, 0.12);
+    --berry-ring:  rgba(130, 49, 89, 0.28);
+
+    --warn:        #B33A3A;
+    --warn-soft:   rgba(179, 58, 58, 0.06);
+    --warn-border: rgba(179, 58, 58, 0.25);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--canvas); color: var(--ink); }
+  body {
+    font-family: 'DM Sans', 'Noto Sans Devanagari', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .num, time { font-variant-numeric: tabular-nums; }
+
+  .page {
+    padding: 32px 32px 80px;
+    max-width: 1480px;
+    min-width: 1240px;
+    margin: 0 auto;
+  }
+
+  /* ============ DOC HEAD ============ */
+  .page-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 26px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .page-head h1 {
+    font: 600 28px/1.15 'DM Sans', sans-serif;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .page-head .crumbs {
+    font: 500 13px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin-left: auto;
+  }
+  .page-head .crumbs b { color: var(--ink-70); font-weight: 600; }
+
+  .state { margin-bottom: 48px; }
+  .state-label {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .state-label .n {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .state-label h2 {
+    font: 600 18px 'DM Sans', sans-serif;
+    margin: 0;
+    color: var(--ink-70);
+    letter-spacing: -0.005em;
+  }
+  .state-label .note {
+    font: 400 13px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin-left: 6px;
+  }
+
+  /* ============ APP SHELL ============ */
+  .app {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 820px;
+  }
+  .app-body {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ============ TOP BAR ============ */
+  .topbar {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    align-items: stretch;
+    background: var(--rail-tint);
+  }
+  .topbar .clinic {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 22px;
+  }
+  .topbar .topbar-right {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 28px;
+  }
+  .clinic-mark {
+    width: 40px; height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--berry);
+    color: #fff;
+    display: grid; place-items: center;
+    font: 700 12px 'DM Sans', sans-serif;
+    letter-spacing: 0.03em;
+  }
+  .clinic-name {
+    font: 600 16px 'DM Sans', sans-serif;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .topbar-search {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 9px 14px;
+    font: 500 14px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    max-width: 540px;
+    width: 100%;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .topbar-search:focus-within {
+    border-color: var(--berry);
+    box-shadow: 0 0 0 3px var(--berry-ring);
+  }
+  .topbar-search svg { width: 16px; height: 16px; stroke: var(--ink-50); flex-shrink: 0; }
+  .topbar-search input {
+    flex: 1; border: none; background: transparent; outline: none;
+    font: inherit; color: var(--ink); min-width: 0;
+  }
+  .topbar-search input::placeholder { color: var(--ink-50); }
+
+  .doctor {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .doctor-name {
+    font: 600 14px 'DM Sans', sans-serif;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .doctor-av {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--canvas-2);
+    color: var(--ink-70);
+    display: grid; place-items: center;
+    font: 700 12px 'DM Sans', sans-serif;
+    border: 1px solid var(--rule);
+    letter-spacing: 0.02em;
+  }
+
+  /* ============ LEFT RAIL ============ */
+  .rail {
+    background: var(--rail-tint);
+    padding: 22px 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 100%;
+  }
+  .rail .workspace-label {
+    font: 600 10px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-50);
+    padding: 0 22px 10px;
+  }
+  .rail-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 12px;
+  }
+  .rail-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font: 600 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    text-decoration: none;
+    transition: background .12s, color .12s;
+  }
+  .rail-nav a .ico {
+    width: 18px; height: 18px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .rail-nav a .ico svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .rail-nav a:hover { background: var(--canvas-2); color: var(--ink); }
+  .rail-nav a.active {
+    background: var(--berry-soft);
+    color: var(--berry);
+  }
+  .rail > .settings-link {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    margin-left: 12px;
+    margin-right: 12px;
+    border-radius: 10px;
+    font: 600 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    text-decoration: none;
+    transition: background .12s, color .12s;
+  }
+  .rail > .settings-link .ico { width: 18px; height: 18px; display: grid; place-items: center; flex-shrink: 0; }
+  .rail > .settings-link .ico svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .rail > .settings-link:hover { background: var(--canvas-2); color: var(--ink); }
+
+  /* ============ MAIN AREA ============ */
+  .main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--rail-tint);
+  }
+
+  .page-header {
+    padding: 24px 32px 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .page-header h1 {
+    font: 600 30px/1 'DM Sans', sans-serif;
+    margin: 0;
+    letter-spacing: -0.015em;
+  }
+  .page-header .sub {
+    font: 500 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+  }
+  .page-header .actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* ============ THE BROADCAST PAGE (single canvas card) ============ */
+  .content {
+    padding: 0 32px 28px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .broadcast-card {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ----- audience block ----- */
+  .audience {
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .audience-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .audience-label {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-50);
+  }
+  .audience-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--berry);
+    color: #fff;
+    border-radius: 999px;
+    padding: 5px 12px;
+    font: 600 13px 'DM Sans', sans-serif;
+  }
+  .audience-pill svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+  .audience-pill.custom {
+    background: var(--canvas);
+    color: var(--berry);
+    border: 1px solid var(--berry);
+  }
+  .audience-count {
+    font: 500 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    font-variant-numeric: tabular-nums;
+  }
+  .audience-count b { color: var(--ink); font-weight: 600; }
+  .audience-cta {
+    margin-left: auto;
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--berry);
+    font: 600 13px 'DM Sans', sans-serif;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .audience-cta:hover { background: var(--berry-soft); }
+  .audience-cta svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+  /* pet sample row */
+  .pet-sample {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--rule-soft);
+  }
+  .pet-sample-label {
+    font: 600 10.5px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-50);
+    white-space: nowrap;
+  }
+  .pet-sample-row {
+    display: flex;
+    gap: 18px;
+    flex: 1;
+    overflow: hidden;
+    flex-wrap: wrap;
+  }
+  .pet-sample-pet {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+  }
+  .pet-sample-av {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--canvas-2);
+    border: 1px solid var(--rule);
+    display: grid; place-items: center;
+    font: 600 11px 'DM Sans', sans-serif;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .pet-sample-name {
+    font: 600 italic 14px 'Spectral', serif;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .pet-sample-breed {
+    font: 500 12px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    white-space: nowrap;
+  }
+  .pet-sample-more {
+    font: 500 12px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ----- toolbar row ----- */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--rule);
+    flex-wrap: wrap;
+  }
+  .toolbar-label {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-50);
+  }
+  .lang-tabs {
+    display: flex;
+    background: var(--canvas-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .lang-tabs button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 4px 12px;
+    font: 600 11.5px 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+    color: var(--ink-70);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .lang-tabs button.on { background: var(--berry); color: #fff; }
+  .autofill-btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--berry);
+    font: 600 12.5px 'DM Sans', sans-serif;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .autofill-btn:hover { background: var(--berry-soft); }
+  .autofill-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+  .mic-btn {
+    margin-left: auto;
+    appearance: none;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    background: var(--canvas);
+    color: var(--ink-70);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background .12s, color .12s, border-color .12s, box-shadow .12s;
+  }
+  .mic-btn:hover { background: var(--berry-soft); color: var(--berry); border-color: var(--berry); }
+  .mic-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .mic-btn.recording {
+    background: var(--berry);
+    color: #fff;
+    border-color: var(--berry);
+    box-shadow: 0 0 0 4px var(--berry-ring);
+  }
+  .mic-hint {
+    font: 500 12px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+  }
+
+  /* ----- cover slot ----- */
+  .cover-slot {
+    margin: 20px 28px 0;
+    border: 1px dashed var(--rule);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--ink-50);
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+  }
+  .cover-slot:hover {
+    border-color: var(--berry);
+    background: var(--berry-soft);
+    color: var(--berry);
+  }
+  .cover-slot .icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--canvas-2);
+    display: grid; place-items: center;
+    color: var(--ink-70);
+    flex-shrink: 0;
+  }
+  .cover-slot:hover .icon { background: var(--canvas); color: var(--berry); }
+  .cover-slot .icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .cover-slot .label {
+    font: 500 13.5px 'DM Sans', sans-serif;
+  }
+  .cover-slot .label b { display: block; color: var(--ink-70); font-weight: 600; font-size: 13.5px; margin-bottom: 1px; }
+  .cover-slot:hover .label b { color: var(--berry); }
+  .cover-slot .label .sub { font-size: 12px; }
+
+  /* populated cover */
+  .cover-slot.populated {
+    border-style: solid;
+    border-color: var(--rule);
+    padding: 0;
+    background: var(--canvas);
+    aspect-ratio: 16/5;
+    overflow: hidden;
+    position: relative;
+    cursor: default;
+  }
+  .cover-slot.populated:hover {
+    border-color: var(--rule);
+    background: var(--canvas);
+  }
+  .cover-slot.populated .cover-img {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2E251B 0%, #5C4636 100%);
+    position: relative;
+    display: grid;
+    place-items: center;
+    color: rgba(255,255,255,0.4);
+    font: 500 12px 'DM Sans', sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .cover-slot.populated .cover-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 6px;
+  }
+  .cover-slot.populated .cover-action {
+    appearance: none;
+    background: rgba(15,12,10,0.6);
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font: 600 11.5px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .cover-slot.populated .cover-action:hover { background: rgba(15,12,10,0.8); }
+
+  /* ----- title field ----- */
+  .field-block {
+    padding: 20px 28px 8px;
+  }
+  .field-block + .field-block { padding-top: 8px; }
+  .field-label {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-50);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .field-label .req {
+    font: 500 11px 'DM Sans', sans-serif;
+    color: var(--ink-30);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .title-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    font: 600 26px 'DM Sans', sans-serif;
+    color: var(--ink);
+    line-height: 1.2;
+    padding: 0;
+    letter-spacing: -0.015em;
+  }
+  .title-input::placeholder { color: var(--ink-30); font-style: normal; }
+  .title-input:focus { color: var(--ink); }
+
+  .body-textarea {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    font: 400 15px/1.6 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+    color: var(--ink);
+    min-height: 120px;
+    resize: none;
+    padding: 0;
+  }
+  .body-textarea::placeholder { color: var(--ink-30); }
+
+  /* ----- summary bullets ----- */
+  .summary-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .summary-bullet {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font: 400 14.5px/1.5 'DM Sans', sans-serif;
+    color: var(--ink);
+  }
+  .summary-bullet::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--ink-50);
+    border-radius: 50%;
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
+
+  /* ----- warning signs box ----- */
+  .field-block.warning {
+    margin: 8px 28px 0;
+    padding: 16px 18px;
+    background: var(--warn-soft);
+    border: 1px solid var(--warn-border);
+    border-radius: 12px;
+  }
+  .field-block.warning .field-label {
+    color: var(--warn);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .field-block.warning .field-label svg { width: 14px; height: 14px; stroke: var(--warn); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .field-block.warning .field-label .remove {
+    margin-left: auto;
+    font: 500 11.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    letter-spacing: 0;
+    text-transform: none;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+  .field-block.warning .field-label .remove:hover { color: var(--warn); }
+  .warning-bullets {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .warning-bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font: 400 14px/1.5 'DM Sans', sans-serif;
+    color: var(--ink);
+  }
+  .warning-bullets li::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--warn);
+    border-radius: 50%;
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
+
+  /* ----- add chips ----- */
+  .add-chips {
+    padding: 14px 28px 4px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .add-chip {
+    appearance: none;
+    background: transparent;
+    border: 1px dashed var(--rule);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font: 600 12.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: border-color .12s, color .12s, background .12s;
+  }
+  .add-chip:hover {
+    border-color: var(--berry);
+    color: var(--berry);
+    background: var(--berry-soft);
+    border-style: solid;
+  }
+  .add-chip svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
+  .more-options {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--ink-50);
+    font: 500 12.5px 'DM Sans', sans-serif;
+    cursor: pointer;
+    padding: 5px 8px;
+    border-radius: 6px;
+  }
+  .more-options:hover { color: var(--ink); background: var(--canvas-2); }
+
+  /* ----- send footer (pinned bottom of card) ----- */
+  .send-footer {
+    margin-top: 18px;
+    padding: 16px 22px;
+    background: var(--canvas-2);
+    border-top: 1px solid var(--rule);
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .send-footer .ready {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .send-footer .ready-label {
+    font: 600 10.5px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+  }
+  .send-footer .ready-detail {
+    font: 500 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    font-variant-numeric: tabular-nums;
+  }
+  .send-footer .ready-detail b { color: var(--ink); font-weight: 600; }
+  .send-footer .actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .btn {
+    appearance: none;
+    border: 1px solid var(--rule);
+    background: var(--canvas);
+    padding: 0 14px;
+    height: 36px;
+    border-radius: 10px;
+    font: 600 13px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .12s, color .12s, border-color .12s, box-shadow .12s;
+  }
+  .btn:hover { background: var(--canvas-2); color: var(--ink); border-color: var(--ink); }
+  .btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .btn.primary {
+    background: var(--berry);
+    border-color: var(--berry);
+    color: #fff;
+    height: 40px;
+    padding: 0 18px;
+  }
+  .btn.primary:hover { background: var(--berry-deep); border-color: var(--berry-deep); color: #fff; }
+  .btn.primary:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--berry-ring); }
+  .btn.lg { height: 40px; padding: 0 16px; }
+
+  /* ----- preview peek button ----- */
+  .preview-btn {
+    appearance: none;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    color: var(--ink-70);
+    padding: 0 14px;
+    height: 36px;
+    border-radius: 10px;
+    font: 600 13px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .preview-btn:hover { background: var(--canvas-2); color: var(--ink); border-color: var(--ink); }
+  .preview-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ============ DICTATION OVERLAY (illustrative state inside Card 02) ============ */
+  .dictation-overlay {
+    margin: 0 28px;
+    border: 1px solid var(--berry);
+    background: var(--berry-soft);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: -2px;
+  }
+  .dictation-overlay.expanded {
+    margin: 14px 28px 0;
+  }
+  .dictation-pulse {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--berry);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .dictation-pulse::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--berry);
+    opacity: 0.4;
+    animation: pulse 1.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0%   { transform: scale(0.85); opacity: 0.55; }
+    100% { transform: scale(1.15); opacity: 0; }
+  }
+  .dictation-pulse svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .dictation-info { display: flex; flex-direction: column; gap: 2px; }
+  .dictation-info .lbl {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--berry);
+  }
+  .dictation-info .body {
+    font: 500 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+  }
+  .dictation-info .body b { color: var(--ink); font-weight: 600; }
+  .dictation-stop {
+    margin-left: auto;
+    appearance: none;
+    background: var(--canvas);
+    border: 1px solid var(--berry);
+    color: var(--berry);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font: 600 12.5px 'DM Sans', sans-serif;
+    cursor: pointer;
+  }
+
+  /* ============ STATE 2 — EDUCATIONAL EXPANDED ============ */
+  /* Just minor adjustments specific to state 02 — covered by base classes */
+
+  /* utility */
+  .body-text { font: 400 15px/1.6 'DM Sans', 'Noto Sans Devanagari', sans-serif; color: var(--ink); white-space: pre-wrap; }
+
+  /* ============ STATE 3 — CUSTOM AUDIENCE BUILDER ============ */
+  .wizard {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 32px 18px;
+  }
+  .wizard .step {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 500 14px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    padding: 6px 0;
+  }
+  .wizard .step .num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+    font: 600 11px 'DM Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 22px;
+  }
+  .wizard .step.muted .num { background: rgba(15,12,10,0.18); color: #fff; }
+  .wizard .step.active {
+    color: var(--berry);
+    font-weight: 600;
+    border-bottom: 2px solid var(--berry);
+    padding-bottom: 4px;
+    margin-bottom: -6px;
+  }
+  .wizard .step.active .num { background: var(--berry); }
+  .wizard .sep {
+    width: 24px; height: 1px;
+    background: var(--rule);
+    flex: 0 0 24px;
+  }
+  .wizard .right {
+    margin-left: auto;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .wizard .autosaved {
+    font: 500 12.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+  }
+
+  .aud-page {
+    padding: 0 32px 28px;
+  }
+  .aud-context {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--rail-tint);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 28px;
+  }
+  .aud-context .lbl {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+  }
+  .aud-context .title {
+    font: 600 14.5px 'DM Sans', sans-serif;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .aud-context .edit {
+    margin-left: auto;
+    appearance: none;
+    background: #fff;
+    border: 1px solid var(--rule);
+    color: var(--ink-70);
+    padding: 0 12px;
+    height: 30px;
+    border-radius: 8px;
+    font: 600 12.5px 'DM Sans', sans-serif;
+    cursor: pointer;
+  }
+  .aud-context .edit:hover { color: var(--ink); border-color: var(--ink); }
+
+  .aud-q h3 {
+    font: 600 19px 'DM Sans', sans-serif;
+    margin: 0 0 4px;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .aud-q p {
+    font: 400 14px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin: 0 0 18px;
+  }
+
+  .group {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 14px 18px 18px;
+  }
+  .group .group-head {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .group .group-label {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+  }
+  .group .group-actions {
+    margin-left: auto;
+    display: flex; gap: 4px;
+  }
+  .group .group-actions button {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--ink-50);
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .group .group-actions button:hover { color: var(--ink); background: var(--canvas-2); }
+  .group .group-actions svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  .cond {
+    display: grid;
+    grid-template-columns: 80px 170px 40px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-top: 1px dashed var(--rule);
+  }
+  .cond:first-of-type { border-top: none; }
+  .cond .conn {
+    font: 600 10.5px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+    background: var(--canvas-2);
+    border-radius: 6px;
+    padding: 4px 8px;
+    width: fit-content;
+    justify-self: start;
+  }
+  .cond .field {
+    font: 600 14.5px 'DM Sans', sans-serif;
+    color: var(--ink);
+  }
+  .cond .op {
+    font: 400 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+  }
+  .cond .val {
+    display: flex; align-items: center; gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  /* segmented chip control */
+  .seg {
+    display: inline-flex;
+    background: var(--canvas-2);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .seg button {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--ink-70);
+    height: 30px;
+    padding: 0 14px;
+    font: 500 13px 'DM Sans', sans-serif;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: -0.005em;
+  }
+  .seg button.on {
+    background: var(--berry);
+    color: #fff;
+    font-weight: 600;
+  }
+  .seg button:hover:not(.on) { color: var(--ink); }
+
+  .num-input {
+    appearance: none;
+    width: 56px;
+    height: 30px;
+    border: 1px solid var(--rule);
+    background: #fff;
+    border-radius: 8px;
+    padding: 0 8px;
+    font: 600 13.5px 'DM Sans', sans-serif;
+    color: var(--ink);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .num-input:focus { outline: none; border-color: var(--ink); }
+  .val .conj {
+    font: 400 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin: 0 2px;
+  }
+  .val .unit {
+    font: 400 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    margin-left: 2px;
+  }
+
+  .add-cond {
+    margin-top: 14px;
+    appearance: none;
+    background: #fff;
+    border: 1px dashed var(--rule);
+    color: var(--ink-70);
+    padding: 0 14px;
+    height: 34px;
+    border-radius: 8px;
+    font: 600 13px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .add-cond:hover { color: var(--ink); border-color: var(--ink); }
+  .add-cond svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0;
+  }
+  .or-divider .line {
+    flex: 1;
+    height: 1px;
+    border-top: 1px dashed var(--rule);
+  }
+  .or-divider button {
+    appearance: none;
+    background: #fff;
+    border: 1px solid var(--rule);
+    color: var(--ink-70);
+    padding: 0 14px;
+    height: 32px;
+    border-radius: 999px;
+    font: 600 12.5px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .or-divider button:hover { color: var(--ink); border-color: var(--ink); }
+  .or-divider button .or {
+    font: 700 10px 'DM Sans', sans-serif;
+    letter-spacing: 0.16em;
+    color: var(--berry);
+    padding: 2px 6px;
+    border: 1px solid var(--berry-ring);
+    background: var(--berry-soft);
+    border-radius: 4px;
+  }
+
+  .aud-size {
+    margin-top: 22px;
+    background: var(--berry);
+    color: #fff;
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+  .aud-size .lbl {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 6px;
+  }
+  .aud-size .big {
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .aud-size .big .n {
+    font: 600 44px/1 'DM Sans', sans-serif;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .aud-size .big .unit {
+    font: 500 16px 'DM Sans', sans-serif;
+    color: rgba(255,255,255,0.7);
+  }
+  .aud-size .det {
+    font: 400 13.5px 'DM Sans', sans-serif;
+    color: rgba(255,255,255,0.78);
+    margin-top: 4px;
+  }
+  .aud-size .det b { color: #fff; font-weight: 600; }
+  .aud-size .meter {
+    width: 160px;
+  }
+  .aud-size .meter .bar {
+    width: 100%; height: 6px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .aud-size .meter .fill {
+    height: 100%;
+    width: 73%;
+    background: #fff;
+    border-radius: 999px;
+  }
+  .aud-size .meter .lbl-row {
+    margin-top: 8px;
+    font: 500 11.5px 'DM Sans', sans-serif;
+    color: rgba(255,255,255,0.7);
+    display: flex; justify-content: space-between;
+  }
+  .aud-size .sample-pop {
+    appearance: none;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 0 14px;
+    height: 34px;
+    border-radius: 8px;
+    font: 600 12.5px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+  }
+  .aud-size .sample-pop:hover { background: rgba(255,255,255,0.2); }
+
+  .aud-footer {
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+  }
+  .aud-footer .ghost {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-70);
+    padding: 0 14px;
+    height: 38px;
+    border-radius: 9px;
+    font: 600 13px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .aud-footer .ghost:hover { color: var(--ink); border-color: var(--ink); }
+  .aud-footer .next {
+    margin-left: auto;
+    appearance: none;
+    background: var(--berry);
+    color: #fff;
+    border: none;
+    padding: 0 18px;
+    height: 38px;
+    border-radius: 9px;
+    font: 600 13.5px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .aud-footer .next:hover { background: var(--berry-deep); }
+  .aud-footer .next svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ============ AUDIENCE MODAL (popup) ============ */
+  .aud-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 12, 10, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+  .aud-modal.open { display: flex; }
+  .aud-modal-card {
+    width: 100%;
+    max-width: 760px;
+    max-height: calc(100vh - 64px);
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .aud-modal-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--rule);
+    background: #fff;
+  }
+  .aud-modal-head h3 {
+    font: 600 18px 'DM Sans', sans-serif;
+    margin: 0 0 2px;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  .aud-modal-head .sub {
+    font: 400 13px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+  }
+  .aud-modal-head .x {
+    margin-left: auto;
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: var(--ink-50);
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex: 0 0 30px;
+  }
+  .aud-modal-head .x:hover { background: var(--canvas-2); color: var(--ink); }
+  .aud-modal-head .x svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .aud-modal-body {
+    padding: 18px 22px 8px;
+    overflow-y: auto;
+    flex: 1 1 auto;
+  }
+  .aud-modal-body .group { padding: 14px 16px 16px; }
+  .aud-modal-body .cond {
+    grid-template-columns: 64px 130px 36px 1fr;
+    gap: 12px;
+  }
+
+  .aud-modal-foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 22px;
+    background: #fff;
+    border-top: 1px solid var(--rule);
+  }
+  .aud-modal-foot .summary {
+    font: 500 13px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+  }
+  .aud-modal-foot .summary b {
+    color: var(--ink);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .aud-modal-foot .summary .dim {
+    color: var(--ink-50);
+    font-weight: 500;
+  }
+  .aud-modal-foot .spacer { flex: 1; }
+  .aud-modal-foot .cancel,
+  .aud-modal-foot .apply {
+    appearance: none;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 9px;
+    font: 600 13px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .aud-modal-foot .cancel {
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-70);
+  }
+  .aud-modal-foot .cancel:hover { color: var(--ink); border-color: var(--ink); }
+  .aud-modal-foot .apply {
+    background: var(--berry);
+    color: #fff;
+    border: none;
+  }
+  .aud-modal-foot .apply:hover { background: var(--berry-deep); }
+
+  /* ============ PREVIEW-AS-PARENT OVERLAY ============ */
+  .pv-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 12, 10, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+  .pv-overlay.open { display: flex; }
+  .pv-stage {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) 380px;
+    gap: 56px;
+    align-items: center;
+    max-width: 820px;
+  }
+  .pv-meta {
+    color: #fff;
+  }
+  .pv-meta .eyebrow {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: 14px;
+  }
+  .pv-meta h3 {
+    font: 600 26px/1.2 'DM Sans', sans-serif;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    color: #fff;
+  }
+  .pv-meta p {
+    font: 400 14px/1.55 'DM Sans', sans-serif;
+    color: rgba(255, 255, 255, 0.72);
+    margin: 0 0 22px;
+  }
+  .pv-meta .pv-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .pv-meta .pv-channels .row {
+    display: flex; align-items: center; gap: 10px;
+    font: 500 13px 'DM Sans', sans-serif;
+    color: rgba(255, 255, 255, 0.82);
+  }
+  .pv-meta .pv-channels .row .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: oklch(78% 0.14 145);
+    flex: 0 0 6px;
+  }
+  .pv-meta .pv-channels .row.muted .dot { background: rgba(255,255,255,0.3); }
+  .pv-meta .pv-channels .row.muted { color: rgba(255, 255, 255, 0.45); }
+  .pv-meta .pv-channels .row b { color: #fff; font-weight: 600; }
+  .pv-close {
+    margin-top: 22px;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 0 14px;
+    height: 34px;
+    border-radius: 8px;
+    font: 600 12px 'DM Sans', sans-serif;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+  .pv-close:hover { background: rgba(255, 255, 255, 0.14); }
+
+  /* phone */
+  .pv-phone {
+    width: 380px;
+    height: 760px;
+    background: #0F0C0A;
+    border-radius: 46px;
+    padding: 12px;
+    box-shadow:
+      0 0 0 1.5px rgba(255,255,255,0.08) inset,
+      0 30px 60px -20px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(0,0,0,0.4);
+    position: relative;
+  }
+  .pv-phone::after {
+    /* notch */
+    content: "";
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 28px;
+    background: #0F0C0A;
+    border-radius: 16px;
+    z-index: 5;
+  }
+  .pv-screen {
+    width: 100%;
+    height: 100%;
+    background: #F5F2EC;
+    border-radius: 36px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .pv-statusbar {
+    height: 48px;
+    padding: 14px 30px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font: 600 14px 'DM Sans', sans-serif;
+    color: var(--ink);
+    flex: 0 0 auto;
+  }
+  .pv-statusbar .icons {
+    display: flex; gap: 5px; align-items: center;
+  }
+  .pv-statusbar .icons svg { width: 15px; height: 11px; }
+
+  .pv-appbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 16px 12px;
+    flex: 0 0 auto;
+  }
+  .pv-appbar .back {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink);
+    margin-left: -6px;
+  }
+  .pv-appbar .back svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .pv-appbar .title {
+    font: 600 15px 'DM Sans', sans-serif;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .pv-appbar .right {
+    margin-left: auto;
+    display: flex; gap: 6px;
+  }
+  .pv-appbar .right .icon {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-70);
+  }
+  .pv-appbar .right .icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+  .pv-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 6px 20px 24px;
+  }
+  .pv-body::-webkit-scrollbar { width: 0; }
+
+  .pv-sender {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0 14px;
+  }
+  .pv-sender .av {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--berry);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font: 700 12px 'DM Sans', sans-serif;
+    letter-spacing: 0.04em;
+  }
+  .pv-sender .meta {
+    display: flex; flex-direction: column; line-height: 1.25;
+  }
+  .pv-sender .clinic {
+    font: 600 13.5px 'DM Sans', sans-serif;
+    color: var(--ink);
+  }
+  .pv-sender .time {
+    font: 500 11.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+  }
+  .pv-sender .for {
+    margin-left: auto;
+    font: 500 11px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    background: rgba(15,12,10,0.06);
+    padding: 4px 8px;
+    border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .pv-sender .for b { color: var(--ink); font: 600 italic 12px 'Spectral', serif; letter-spacing: -0.005em; }
+
+  .pv-cover {
+    height: 130px;
+    border-radius: 14px;
+    background:
+      repeating-linear-gradient(135deg, rgba(15,12,10,0.05) 0 8px, rgba(15,12,10,0.02) 8px 16px),
+      linear-gradient(180deg, #E9DFD0, #D9CBB4);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-50);
+    font: 500 11px 'DM Sans', monospace;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+  }
+
+  .pv-title {
+    font: 600 22px/1.22 'DM Sans', sans-serif;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    margin: 4px 0 14px;
+  }
+
+  .pv-summary {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .pv-summary .lbl {
+    font: 600 10.5px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .pv-summary ul {
+    margin: 0; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .pv-summary li {
+    display: flex; gap: 8px;
+    font: 400 13.5px/1.45 'DM Sans', sans-serif;
+    color: var(--ink);
+  }
+  .pv-summary li::before {
+    content: "";
+    width: 4px; height: 4px;
+    background: var(--berry);
+    border-radius: 50%;
+    margin-top: 8px;
+    flex: 0 0 4px;
+  }
+
+  .pv-body-text {
+    font: 400 14px/1.55 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+    color: var(--ink);
+    white-space: pre-wrap;
+    margin-bottom: 16px;
+  }
+
+  .pv-warning {
+    border: 1px solid var(--warn-border);
+    background: var(--warn-soft);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .pv-warning .lbl {
+    display: flex; align-items: center; gap: 6px;
+    font: 600 12px 'DM Sans', sans-serif;
+    color: var(--warn);
+    margin-bottom: 8px;
+  }
+  .pv-warning .lbl svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .pv-warning ul {
+    margin: 0; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .pv-warning li {
+    font: 400 13px/1.45 'DM Sans', sans-serif;
+    color: var(--ink);
+    padding-left: 14px;
+    position: relative;
+  }
+  .pv-warning li::before {
+    content: "";
+    position: absolute; left: 0; top: 8px;
+    width: 5px; height: 5px;
+    background: var(--warn);
+    border-radius: 50%;
+  }
+
+  .pv-cta {
+    display: flex; gap: 8px;
+    margin-top: 4px;
+  }
+  .pv-cta button {
+    flex: 1;
+    appearance: none;
+    height: 42px;
+    border-radius: 12px;
+    font: 600 13.5px 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .pv-cta .reply {
+    background: var(--berry);
+    color: #fff;
+    border: none;
+  }
+  .pv-cta .call {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+  }
+
+  .pv-homebar {
+    flex: 0 0 auto;
+    height: 22px;
+    display: flex; justify-content: center; align-items: flex-end;
+    padding-bottom: 8px;
+  }
+  .pv-homebar::after {
+    content: "";
+    width: 110px; height: 4px;
+    background: var(--ink);
+    opacity: 0.5;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body data-screen-label="Broadcast composer">
+
+<div class="page">
+
+  <header class="page-head">
+    <h1>Broadcast composer · hi-fi (Direction C)</h1>
+    <span class="crumbs"><b>Single-page · no wizard</b> · audience top · pinned send footer · all the same primitives</span>
+  </header>
+
+  <!-- ============================================================
+       STATE 01 · ANNOUNCEMENT (minimal)
+       ============================================================ -->
+  <section class="state">
+    <div class="state-label">
+      <span class="n">01</span>
+      <h2>Same form, low-density use</h2>
+      <span class="note">Vet just types Title + Body. Default audience. “Closed for Diwali” ships in 30 seconds.</span>
+    </div>
+
+    <div class="app">
+
+      <!-- top bar -->
+      <header class="topbar">
+        <div class="clinic">
+          <div class="clinic-mark">AMS</div>
+          <div class="clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-search">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" placeholder="Search broadcasts by keyword" />
+          </div>
+          <div class="doctor">
+            <span class="doctor-name">Dr Sagar Bhongale</span>
+            <div class="doctor-av">SB</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-body">
+
+        <!-- rail -->
+        <aside class="rail">
+          <div class="workspace-label">Workspace</div>
+          <div class="rail-nav">
+            <a href="#">
+              <span class="ico"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+              Inbox
+            </a>
+            <a href="#" class="active">
+              <span class="ico"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+              Broadcasts
+            </a>
+            <a href="#">
+              <span class="ico"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg></span>
+              Billing
+            </a>
+          </div>
+          <a href="#" class="settings-link">
+            <span class="ico"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            Settings
+          </a>
+        </aside>
+
+        <!-- main -->
+        <section class="main">
+          <header class="page-header">
+            <h1>New broadcast</h1>
+            <span class="sub">Autosaved 12s ago</span>
+            <div class="actions">
+              <button class="preview-btn" data-preview="1">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                Preview as parent
+              </button>
+              <button class="btn">Save draft</button>
+            </div>
+          </header>
+
+          <div class="content">
+            <article class="broadcast-card">
+
+              <!-- audience -->
+              <div class="audience">
+                <div class="audience-row">
+                  <span class="audience-label">Who's this for?</span>
+                  <span class="audience-pill">
+                    <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    All AMS parents
+                  </span>
+                  <span class="audience-count">· <b>5,847 pets</b> · 5,962 households</span>
+                  <button class="audience-cta" data-audience-open>
+                    Custom…
+                    <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M14 14h6v6h-6z"/></svg>
+                  </button>
+                </div>
+                <div class="pet-sample">
+                  <span class="pet-sample-label">Sample</span>
+                  <div class="pet-sample-row">
+                    <div class="pet-sample-pet"><span class="pet-sample-av">G</span><span class="pet-sample-name">Gabby</span><span class="pet-sample-breed">· Golden, 4y</span></div>
+                    <div class="pet-sample-pet"><span class="pet-sample-av">M</span><span class="pet-sample-name">Misha</span><span class="pet-sample-breed">· Persian, 7y</span></div>
+                    <div class="pet-sample-pet"><span class="pet-sample-av">B</span><span class="pet-sample-name">Bruno</span><span class="pet-sample-breed">· Labrador, 2y</span></div>
+                    <div class="pet-sample-pet"><span class="pet-sample-av">C</span><span class="pet-sample-name">Coco</span><span class="pet-sample-breed">· Indie, 3y</span></div>
+                  </div>
+                  <span class="pet-sample-more">+ 5,843 more</span>
+                </div>
+              </div>
+
+              <!-- toolbar -->
+              <div class="toolbar">
+                <span class="toolbar-label">Writing in</span>
+                <div class="lang-tabs">
+                  <button class="on">English</button>
+                  <button>मराठी</button>
+                </div>
+                <button class="autofill-btn">
+                  <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                  Auto-fill मराठी after sending
+                </button>
+                <button class="mic-btn" title="Dictate the whole broadcast">
+                  <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                </button>
+              </div>
+
+              <!-- title -->
+              <div class="field-block">
+                <div class="field-label">Title <span class="req">· required</span></div>
+                <input class="title-input" type="text" value="AMS will be closed Mon 9 Nov for Diwali" />
+              </div>
+
+              <!-- body -->
+              <div class="field-block">
+                <div class="field-label">Body <span class="req">· required</span></div>
+                <textarea class="body-textarea" placeholder="Write what you'd like your parents to know…">We'll reopen on Tue 10 Nov, 9am, on regular schedule.
+
+For after-hours emergencies on Diwali day, please call the 24×7 vet hotline: +91 98••• ••456.
+
+Wishing you and your pets a safe and peaceful Diwali. Keep them indoors, away from firecrackers.</textarea>
+              </div>
+
+              <!-- add chips -->
+              <div class="add-chips">
+                <button class="add-chip"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg> Summary bullets</button>
+                <button class="add-chip"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg> Warning signs</button>
+                <button class="add-chip"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg> When to call us</button>
+                <button class="add-chip"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg> Cover photo</button>
+                <button class="more-options">More options ▾</button>
+              </div>
+
+              <!-- send footer -->
+              <div class="send-footer">
+                <div class="ready">
+                  <span class="ready-label">Ready to send</span>
+                  <span class="ready-detail">to <b>5,847 pets</b> across <b>5,962 households</b> · in English &amp; मराठी</span>
+                </div>
+                <div class="actions">
+                  <button class="preview-btn" data-preview="1">
+                    <svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Preview
+                  </button>
+                  <button class="btn primary">
+                    Send broadcast
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+
+            </article>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STATE 02 · EDUCATIONAL (expanded)
+       ============================================================ -->
+  <section class="state">
+    <div class="state-label">
+      <span class="n">02</span>
+      <h2>Same form, high-density use</h2>
+      <span class="note">Vet adds optional sections, cover, custom audience. “Monsoon ear care” grows into the full structure.</span>
+    </div>
+
+    <div class="app" style="min-height: 980px;">
+
+      <header class="topbar">
+        <div class="clinic">
+          <div class="clinic-mark">AMS</div>
+          <div class="clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-search">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" placeholder="Search broadcasts by keyword" />
+          </div>
+          <div class="doctor">
+            <span class="doctor-name">Dr Sagar Bhongale</span>
+            <div class="doctor-av">SB</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-body">
+
+        <aside class="rail">
+          <div class="workspace-label">Workspace</div>
+          <div class="rail-nav">
+            <a href="#">
+              <span class="ico"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+              Inbox
+            </a>
+            <a href="#" class="active">
+              <span class="ico"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+              Broadcasts
+            </a>
+            <a href="#">
+              <span class="ico"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg></span>
+              Billing
+            </a>
+          </div>
+          <a href="#" class="settings-link">
+            <span class="ico"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            Settings
+          </a>
+        </aside>
+
+        <section class="main">
+          <header class="page-header">
+            <h1>New broadcast</h1>
+            <span class="sub">Autosaved just now</span>
+            <div class="actions">
+              <button class="preview-btn" data-preview="2">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                Preview as parent
+              </button>
+              <button class="btn">Save draft</button>
+            </div>
+          </header>
+
+          <div class="content">
+            <article class="broadcast-card">
+
+              <!-- audience (custom: dogs) -->
+              <div class="audience">
+                <div class="audience-row">
+                  <span class="audience-label">Who's this for?</span>
+                  <span class="audience-pill custom">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M14 14h6v6h-6z"/></svg>
+                    Custom: Dog parents, ages 1–12
+                  </span>
+                  <span class="audience-count">· <b>2,847 pets</b> · 2,612 households</span>
+                  <button class="audience-cta" data-audience-open>
+                    Edit filters
+                    <svg viewBox="0 0 24 24"><path d="m18 2 4 4-14 14H4v-4z"/></svg>
+                  </button>
+                </div>
+                <div class="pet-sample">
+                  <span class="pet-sample-label">Sample</span>
+                  <div class="pet-sample-row">
+                    <div class="pet-sample-pet"><span class="pet-sample-av">G</span><span class="pet-sample-name">Gabby</span><span class="pet-sample-breed">· Golden, 4y</span></div>
+                    <div class="pet-sample-pet"><span class="pet-sample-av">B</span><span class="pet-sample-name">Bruno</span><span class="pet-sample-breed">· Labrador, 2y</span></div>
+                    <div class="pet-sample-pet"><span class="pet-sample-av">C</span><span class="pet-sample-name">Coco</span><span class="pet-sample-breed">· Indie, 3y</span></div>
+                    <div class="pet-sample-pet"><span class="pet-sample-av">R</span><span class="pet-sample-name">Rocky</span><span class="pet-sample-breed">· Mixed, 6y</span></div>
+                  </div>
+                  <span class="pet-sample-more">+ 2,843 more</span>
+                </div>
+              </div>
+
+              <!-- toolbar with mic in recording state -->
+              <div class="toolbar">
+                <span class="toolbar-label">Writing in</span>
+                <div class="lang-tabs">
+                  <button class="on">English</button>
+                  <button>मराठी</button>
+                </div>
+                <button class="autofill-btn">
+                  <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                  Auto-fill मराठी after sending
+                </button>
+                <button class="mic-btn recording" title="Recording…">
+                  <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                </button>
+              </div>
+
+              <!-- dictation overlay (active) -->
+              <div class="dictation-overlay expanded">
+                <div class="dictation-pulse">
+                  <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                </div>
+                <div class="dictation-info">
+                  <span class="lbl">Dictating · 0:34</span>
+                  <span class="body">AI will sort what you say into <b>Title · Body · Summary · Warning signs · When to call us</b>. Edit any field after.</span>
+                </div>
+                <button class="dictation-stop">Stop &amp; insert</button>
+              </div>
+
+              <!-- cover photo (populated) -->
+              <div class="cover-slot populated">
+                <div class="cover-img">cover photo · 16:5</div>
+                <div class="cover-actions">
+                  <button class="cover-action">Replace</button>
+                  <button class="cover-action">Remove</button>
+                </div>
+              </div>
+
+              <!-- title -->
+              <div class="field-block">
+                <div class="field-label">Title <span class="req">· required</span></div>
+                <input class="title-input" type="text" value="Monsoon ear-infection watch for dogs" />
+              </div>
+
+              <!-- summary bullets -->
+              <div class="field-block">
+                <div class="field-label">
+                  Summary
+                  <span class="req">· optional</span>
+                </div>
+                <div class="summary-bullets">
+                  <div class="summary-bullet">Pune monsoon is here; humid weather flares ear infections in dogs.</div>
+                  <div class="summary-bullet">Check ears weekly, dry them after walks, and watch for head-shaking.</div>
+                  <div class="summary-bullet">Floppy-eared breeds (Goldens, Spaniels, Labs) are at higher risk.</div>
+                </div>
+              </div>
+
+              <!-- body -->
+              <div class="field-block">
+                <div class="field-label">Body <span class="req">· required</span></div>
+                <div class="body-text">As Pune's monsoon settles in, we see a sharp rise in canine ear infections. Humid air + trapped moisture in the ear canal is a breeding ground for bacteria and yeast. The good news: most flares are easy to catch early if you check the ears weekly and dry them after walks or baths.
+
+Use a cotton ball (not Q-tips) to gently wipe the outer ear. If you notice redness, dark discharge, smell, or head-shaking, message us — we have a 7-day recheck protocol that works well.</div>
+              </div>
+
+              <!-- warning box -->
+              <div class="field-block warning">
+                <div class="field-label">
+                  <svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                  Warning signs
+                  <button class="remove">Remove section</button>
+                </div>
+                <ul class="warning-bullets">
+                  <li>Repeated head-shaking or scratching at one ear</li>
+                  <li>Dark or smelly discharge from the ear canal</li>
+                  <li>Visible redness or swelling around the ear opening</li>
+                  <li>Whining or flinching when you touch the ear</li>
+                </ul>
+              </div>
+
+              <!-- add chips: only what hasn't been added shows -->
+              <div class="add-chips">
+                <button class="add-chip"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg> When to call us</button>
+                <button class="more-options">More options ▾</button>
+              </div>
+
+              <!-- send footer -->
+              <div class="send-footer">
+                <div class="ready">
+                  <span class="ready-label">Ready to send</span>
+                  <span class="ready-detail">to <b>2,847 pets</b> across <b>2,612 households</b> · in English &amp; मराठी</span>
+                </div>
+                <div class="actions">
+                  <button class="preview-btn" data-preview="2">
+                    <svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Preview
+                  </button>
+                  <button class="btn primary">
+                    Send broadcast
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+
+            </article>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+
+</div>
+
+<!-- ============================================================
+     CUSTOM AUDIENCE · popup over the composer
+     ============================================================ -->
+<div class="aud-modal" id="aud-modal">
+  <div class="aud-modal-card">
+    <div class="aud-modal-head">
+      <div>
+        <h3>Who's this for?</h3>
+        <div class="sub">Narrow this broadcast with conditions. Audience size updates as you change them.</div>
+      </div>
+      <button class="x" data-aud-close aria-label="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="aud-modal-body">
+      <div class="group">
+        <div class="group-head">
+          <span class="group-label">Condition group A</span>
+          <div class="group-actions">
+            <button title="Duplicate group"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+            <button title="Remove group"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6 18 20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+          </div>
+        </div>
+
+        <div class="cond">
+          <span class="conn">Where</span>
+          <span class="field">Species</span>
+          <span class="op">is</span>
+          <span class="val">
+            <span class="seg">
+              <button class="on">Dogs</button>
+              <button>Cats</button>
+              <button>Dogs and cats</button>
+            </span>
+          </span>
+        </div>
+
+        <div class="cond">
+          <span class="conn">And</span>
+          <span class="field">Age range</span>
+          <span class="op">is</span>
+          <span class="val">
+            <span class="conj">from</span>
+            <input class="num-input" type="text" value="1" />
+            <span class="conj">to</span>
+            <input class="num-input" type="text" value="12" />
+            <span class="unit">years</span>
+          </span>
+        </div>
+
+        <div class="cond">
+          <span class="conn">And</span>
+          <span class="field">Deceased pets</span>
+          <span class="op">is</span>
+          <span class="val">
+            <span class="seg">
+              <button>Include</button>
+              <button class="on">Exclude</button>
+            </span>
+          </span>
+        </div>
+
+        <div class="cond">
+          <span class="conn">And</span>
+          <span class="field">Last visit</span>
+          <span class="op">within</span>
+          <span class="val">
+            <span class="seg">
+              <button>3 months</button>
+              <button class="on">12 months</button>
+              <button>24 months</button>
+              <button>Any</button>
+            </span>
+          </span>
+        </div>
+
+        <button class="add-cond">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+          Add condition
+        </button>
+      </div>
+    </div>
+
+    <div class="aud-modal-foot">
+      <div class="summary">
+        <b>187 pets</b> <span class="dim">· 142 households · 73% of dog parents</span>
+      </div>
+      <div class="spacer"></div>
+      <button class="cancel" data-aud-close>Cancel</button>
+      <button class="apply" data-aud-close>Apply audience</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MOBILE PREVIEW · How a parent sees this in Pawkit Parents
+     ============================================================ -->
+
+<!-- Preview 1 · Diwali closure (state 01) -->
+<div class="pv-overlay" id="pv-1" data-pv-id="1">
+  <div class="pv-stage">
+    <div class="pv-meta">
+      <div class="eyebrow">Preview as parent</div>
+      <h3>This is what Gabby's family will see.</h3>
+      <p>Rendered as a push notification + broadcast detail in the Pawkit Parents app. Same in मराठी for parents with a Marathi preference.</p>
+      <div class="pv-channels">
+        <div class="row"><span class="dot"></span> Push to <b>Pawkit Parents</b> app · 5,962 devices</div>
+        <div class="row muted"><span class="dot"></span> WhatsApp · off for this broadcast</div>
+      </div>
+      <button class="pv-close" data-pv-close>Close preview · esc</button>
+    </div>
+
+    <div class="pv-phone">
+      <div class="pv-screen">
+        <div class="pv-statusbar">
+          <span>9:41</span>
+          <div class="icons">
+            <svg viewBox="0 0 18 12" fill="currentColor"><path d="M1 9h2v2H1zM5 7h2v4H5zM9 5h2v6H9zM13 3h2v8h-2z"/></svg>
+            <svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 6a8 8 0 0 1 14 0"/><path d="M3.5 7.5a5 5 0 0 1 9 0"/><path d="M6 9a2.5 2.5 0 0 1 4 0"/><circle cx="8" cy="10.5" r="0.6" fill="currentColor"/></svg>
+            <svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="17" height="8" rx="1.6"/><rect x="3" y="4" width="13" height="4" rx="0.6" fill="currentColor"/><path d="M19.5 5v2"/></svg>
+          </div>
+        </div>
+        <div class="pv-appbar">
+          <span class="back"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span>
+          <span class="title">From your vet</span>
+          <span class="right">
+            <span class="icon"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></span>
+          </span>
+        </div>
+        <div class="pv-body">
+          <div class="pv-sender">
+            <div class="av">AMS</div>
+            <div class="meta">
+              <span class="clinic">Animal Medical Services</span>
+              <span class="time">Today · 9:40 am</span>
+            </div>
+            <span class="for">for <b>Gabby</b></span>
+          </div>
+
+          <h2 class="pv-title">AMS will be closed Mon 9 Nov for Diwali</h2>
+
+          <div class="pv-body-text">We'll reopen on Tue 10 Nov, 9am, on regular schedule.
+
+For after-hours emergencies on Diwali day, please call the 24×7 vet hotline: +91 98••• ••456.
+
+Wishing you and your pets a safe and peaceful Diwali. Keep them indoors, away from firecrackers.</div>
+
+          <div class="pv-cta">
+            <button class="call">Call hotline</button>
+            <button class="reply">Reply to AMS</button>
+          </div>
+        </div>
+        <div class="pv-homebar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Preview 2 · Monsoon ear care (state 02) -->
+<div class="pv-overlay" id="pv-2" data-pv-id="2">
+  <div class="pv-stage">
+    <div class="pv-meta">
+      <div class="eyebrow">Preview as parent</div>
+      <h3>This is what Bruno's family will see.</h3>
+      <p>Cover photo, summary bullets and the warning block all render natively. The body text scales for readability; long sections collapse with a "Read more".</p>
+      <div class="pv-channels">
+        <div class="row"><span class="dot"></span> Push to <b>Pawkit Parents</b> app · 2,612 devices</div>
+        <div class="row muted"><span class="dot"></span> WhatsApp · off for this broadcast</div>
+      </div>
+      <button class="pv-close" data-pv-close>Close preview · esc</button>
+    </div>
+
+    <div class="pv-phone">
+      <div class="pv-screen">
+        <div class="pv-statusbar">
+          <span>9:41</span>
+          <div class="icons">
+            <svg viewBox="0 0 18 12" fill="currentColor"><path d="M1 9h2v2H1zM5 7h2v4H5zM9 5h2v6H9zM13 3h2v8h-2z"/></svg>
+            <svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 6a8 8 0 0 1 14 0"/><path d="M3.5 7.5a5 5 0 0 1 9 0"/><path d="M6 9a2.5 2.5 0 0 1 4 0"/><circle cx="8" cy="10.5" r="0.6" fill="currentColor"/></svg>
+            <svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="17" height="8" rx="1.6"/><rect x="3" y="4" width="13" height="4" rx="0.6" fill="currentColor"/><path d="M19.5 5v2"/></svg>
+          </div>
+        </div>
+        <div class="pv-appbar">
+          <span class="back"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></span>
+          <span class="title">From your vet</span>
+          <span class="right">
+            <span class="icon"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></span>
+          </span>
+        </div>
+        <div class="pv-body">
+          <div class="pv-sender">
+            <div class="av">AMS</div>
+            <div class="meta">
+              <span class="clinic">Animal Medical Services</span>
+              <span class="time">Today · 8:12 am</span>
+            </div>
+            <span class="for">for <b>Bruno</b></span>
+          </div>
+
+          <div class="pv-cover">cover photo · monsoon dog</div>
+
+          <h2 class="pv-title">Monsoon ear-infection watch for dogs</h2>
+
+          <div class="pv-summary">
+            <span class="lbl">Summary</span>
+            <ul>
+              <li>Pune monsoon is here; humid weather flares ear infections in dogs.</li>
+              <li>Check ears weekly, dry them after walks, and watch for head-shaking.</li>
+              <li>Floppy-eared breeds (Goldens, Spaniels, Labs) are at higher risk.</li>
+            </ul>
+          </div>
+
+          <div class="pv-body-text">As Pune's monsoon settles in, we see a sharp rise in canine ear infections. Humid air + trapped moisture in the ear canal is a breeding ground for bacteria and yeast. The good news: most flares are easy to catch early if you check the ears weekly and dry them after walks or baths.
+
+Use a cotton ball (not Q-tips) to gently wipe the outer ear. If you notice redness, dark discharge, smell, or head-shaking, message us — we have a 7-day recheck protocol that works well.</div>
+
+          <div class="pv-warning">
+            <div class="lbl">
+              <svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              Warning signs
+            </div>
+            <ul>
+              <li>Repeated head-shaking or scratching at one ear</li>
+              <li>Dark or smelly discharge from the ear canal</li>
+              <li>Visible redness or swelling around the ear opening</li>
+              <li>Whining or flinching when you touch the ear</li>
+            </ul>
+          </div>
+
+          <div class="pv-cta">
+            <button class="call">Book a check-up</button>
+            <button class="reply">Message AMS</button>
+          </div>
+        </div>
+        <div class="pv-homebar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var overlays = document.querySelectorAll('.pv-overlay');
+    function open(id) {
+      var el = document.getElementById('pv-' + id);
+      if (el) el.classList.add('open');
+    }
+    function closeAll() {
+      overlays.forEach(function (o) { o.classList.remove('open'); });
+    }
+    document.querySelectorAll('[data-preview]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        open(btn.getAttribute('data-preview'));
+      });
+    });
+    overlays.forEach(function (o) {
+      o.addEventListener('click', function (e) {
+        if (e.target === o) closeAll();
+      });
+    });
+    document.querySelectorAll('[data-pv-close]').forEach(function (b) {
+      b.addEventListener('click', closeAll);
+    });
+
+    // ---- Audience modal ----
+    var audModal = document.getElementById('aud-modal');
+    function audOpen() { if (audModal) audModal.classList.add('open'); }
+    function audClose() { if (audModal) audModal.classList.remove('open'); }
+    document.querySelectorAll('[data-audience-open]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        audOpen();
+      });
+    });
+    document.querySelectorAll('[data-aud-close]').forEach(function (b) {
+      b.addEventListener('click', audClose);
+    });
+    if (audModal) {
+      audModal.addEventListener('click', function (e) {
+        if (e.target === audModal) audClose();
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closeAll(); audClose(); }
+    });
+  })();
+</script>
+
+</body>
+</html>

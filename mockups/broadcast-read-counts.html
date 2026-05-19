@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pawkit · Broadcast read counts (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --canvas:        #F8F7F5;
+    --rail-tint:     #EFE6E8;
+    --ink:           #0F0C0A;
+    --ink-soft:      #5C5550;
+    --ink-faint:     #8F8B86;
+    --ink-70:        rgba(15, 12, 10, 0.72);
+    --ink-50:        rgba(15, 12, 10, 0.55);
+    --rule:          rgba(15, 12, 10, 0.12);
+    --rule-soft:     rgba(15, 12, 10, 0.06);
+
+    --berry:         #9C2B5C;
+    --berry-deep:    #7C1F47;
+    --berry-soft:    rgba(156, 43, 92, 0.12);
+    --berry-ring:    rgba(156, 43, 92, 0.30);
+
+    --moss:          #5B7E5E;
+    --moss-soft:     rgba(91, 126, 94, 0.12);
+    --amber:         #B8843A;
+    --amber-soft:    rgba(184, 132, 58, 0.14);
+    --shell:         #6E6963;
+    --shell-soft:    rgba(110, 105, 99, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--rail-tint);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 56px 32px 96px; }
+
+  header.intro { margin-bottom: 56px; padding-bottom: 28px; border-bottom: 1px solid var(--rule); }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin-bottom: 12px;
+  }
+  h1 {
+    margin: 0 0 12px;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  header.intro p { margin: 0; max-width: 760px; font-size: 14px; color: var(--ink-70); line-height: 1.55; }
+  .meta-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--berry-soft); border: 1px solid var(--berry-ring); border-radius: 999px; font-size: 11px; font-weight: 500; color: var(--berry-deep); margin-top: 14px; }
+  .meta-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--berry); }
+
+  section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50); margin-bottom: 12px; }
+  h2 { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.2; }
+  .section-lede { margin: 0 0 28px; max-width: 720px; color: var(--ink-70); font-size: 14px; }
+
+  /* ===== SURFACE 1: BROADCAST LIST CARD ===== */
+  .surface-frame {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 1px 0 rgba(15,12,10,0.02), 0 12px 32px -16px rgba(15,12,10,0.08);
+  }
+  .surface-frame-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--rule); }
+  .surface-frame-title { font-size: 17px; font-weight: 600; letter-spacing: -0.005em; }
+  .surface-frame-meta { font-size: 11px; color: var(--ink-faint); font-weight: 500; }
+
+  .broadcast-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+  .broadcast-card {
+    background: #FFFFFF;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: start;
+    transition: border-color 0.18s ease;
+  }
+  .broadcast-card:hover { border-color: var(--berry-ring); }
+
+  .broadcast-card .left { min-width: 0; }
+  .status-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .status-badge { padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+  .status-badge.sent { background: var(--moss-soft); color: var(--moss); }
+  .status-badge.draft { background: var(--shell-soft); color: var(--shell); }
+  .sent-meta { font-size: 11px; color: var(--ink-faint); font-weight: 500; }
+  .broadcast-topic { font-size: 14px; font-weight: 600; color: var(--ink); margin: 0 0 6px; line-height: 1.35; }
+  .broadcast-filter { font-size: 11px; color: var(--ink-faint); }
+  .broadcast-filter .filter-chip { display: inline-block; padding: 2px 7px; background: var(--rule-soft); border-radius: 4px; font-weight: 500; color: var(--ink-soft); margin-right: 4px; }
+
+  /* === The read-count pill (the new thing) === */
+  .read-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    min-width: 140px;
+  }
+  .read-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 7px 12px 7px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--berry-soft);
+    color: var(--berry-deep);
+    border: 1px solid var(--berry-ring);
+  }
+  .read-pill .pct { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .read-pill .frac { font-variant-numeric: tabular-nums; opacity: 0.78; }
+
+  .read-stat.draft .read-pill { background: var(--shell-soft); color: var(--shell); border-color: rgba(110, 105, 99, 0.20); }
+
+  .read-microbar {
+    width: 140px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--rule-soft);
+    overflow: hidden;
+  }
+  .read-microbar .fill { height: 100%; background: var(--berry); border-radius: 2px; }
+
+  /* ===== SURFACE 2: BROADCAST DETAIL HEADER ===== */
+  .detail-frame { margin-top: 32px; background: var(--canvas); border: 1px solid var(--rule); border-radius: 16px; padding: 32px; box-shadow: 0 1px 0 rgba(15,12,10,0.02), 0 12px 32px -16px rgba(15,12,10,0.08); }
+
+  .detail-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--moss); margin-bottom: 14px; display: flex; gap: 10px; align-items: center; }
+  .detail-eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--moss); }
+
+  .detail-topic { font-size: 22px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.2; margin: 0 0 4px; }
+  .detail-sent-when { font-size: 12px; color: var(--ink-faint); margin: 0 0 28px; }
+
+  .detail-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 22px 0 4px;
+    border-top: 1px solid var(--rule);
+  }
+  .detail-metric { display: flex; flex-direction: column; gap: 4px; }
+  .detail-metric .label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+  .detail-metric .value { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); letter-spacing: -0.01em; }
+  .detail-metric .value.muted { color: var(--ink-soft); font-size: 22px; }
+  .detail-metric .sub { font-size: 11px; color: var(--ink-faint); }
+
+  .read-curve-host { margin-top: 22px; }
+  .read-curve { display: flex; align-items: flex-end; gap: 2px; height: 56px; padding-top: 4px; }
+  .read-curve .bar { flex: 1; background: var(--berry); border-radius: 2px 2px 0 0; opacity: 0.78; }
+  .read-curve .bar.faint { opacity: 0.32; }
+  .read-curve-axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--ink-faint); margin-top: 8px; font-weight: 500; }
+
+  /* ===== ANNOTATION CALLOUTS ===== */
+  .callout-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .callout { padding: 14px 16px; background: var(--canvas); border: 1px dashed var(--berry-ring); border-radius: 10px; font-size: 12px; color: var(--ink-70); line-height: 1.55; }
+  .callout strong { color: var(--berry-deep); font-weight: 600; }
+  .callout .kicker { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--berry); margin-bottom: 4px; }
+
+  /* ===== DATA TABLE (seed reference) ===== */
+  .data-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--canvas); border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; font-size: 12px; }
+  .data-table th, .data-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--rule); }
+  .data-table th { background: var(--canvas-2, rgba(15,12,10,0.04)); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-50); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table .num { font-variant-numeric: tabular-nums; }
+  .data-table .pct { font-weight: 600; color: var(--berry-deep); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="intro">
+    <div class="eyebrow">Mockup · Broadcast read counts</div>
+    <h1>How <span style="color: var(--berry-deep);">"X of Y read"</span> renders on the dashboard</h1>
+    <p>
+      Two surfaces showing the read-receipt feature now that <code>broadcasts_read</code> is seeded.
+      Definition of read: parent taps the broadcast detail screen from their inbox. One row per
+      parent per broadcast, idempotent. Seeded rates: 88% / 68% / 41% for the three sent broadcasts.
+    </p>
+    <span class="meta-pill"><span class="dot"></span> Data is live · pulled from the seeded DB</span>
+  </header>
+
+  <!-- ============================================================ -->
+  <!-- SURFACE 1: BROADCAST LIST WITH READ PILLS                     -->
+  <!-- ============================================================ -->
+  <section>
+    <div class="section-eyebrow">Surface 1 · Broadcast list (dashboard sidebar)</div>
+    <h2>The list page</h2>
+    <p class="section-lede">
+      Where Sagar lands when he taps "Broadcasts" in the rail. Three sent, three draft.
+      Sent cards carry the read pill in the top-right; draft cards show a muted "draft" state
+      with no count.
+    </p>
+
+    <div class="surface-frame">
+      <div class="surface-frame-header">
+        <div class="surface-frame-title">Broadcasts</div>
+        <div class="surface-frame-meta">6 broadcasts · 3 sent · 3 drafts</div>
+      </div>
+
+      <div class="broadcast-list">
+
+        <!-- Monsoon ticks (sent, 88%) -->
+        <div class="broadcast-card">
+          <div class="left">
+            <div class="status-row">
+              <span class="status-badge sent">Sent</span>
+              <span class="sent-meta">May 5 · 2:39pm</span>
+            </div>
+            <p class="broadcast-topic">Monsoon is here, protect your pets from ticks</p>
+            <div class="broadcast-filter">
+              <span class="filter-chip">species: dog</span> · attached kit: <em>Monsoon tick prevention basics</em>
+            </div>
+          </div>
+          <div class="read-stat">
+            <div class="read-pill">
+              <span class="pct">88<span style="font-size: 10px;">%</span></span>
+              <span class="frac">102 / 116 read</span>
+            </div>
+            <div class="read-microbar"><div class="fill" style="width: 88%;"></div></div>
+          </div>
+        </div>
+
+        <!-- Vaccination drive (sent, 68%) -->
+        <div class="broadcast-card">
+          <div class="left">
+            <div class="status-row">
+              <span class="status-badge sent">Sent</span>
+              <span class="sent-meta">Apr 29 · 2:39pm</span>
+            </div>
+            <p class="broadcast-topic">Annual vaccination drive, bring your pet by month-end</p>
+            <div class="broadcast-filter">
+              <span class="filter-chip">vaccination due ≤ 30d</span>
+            </div>
+          </div>
+          <div class="read-stat">
+            <div class="read-pill">
+              <span class="pct">68<span style="font-size: 10px;">%</span></span>
+              <span class="frac">34 / 50 read</span>
+            </div>
+            <div class="read-microbar"><div class="fill" style="width: 68%;"></div></div>
+          </div>
+        </div>
+
+        <!-- Holiday hours (sent, 41%) -->
+        <div class="broadcast-card">
+          <div class="left">
+            <div class="status-row">
+              <span class="status-badge sent">Sent</span>
+              <span class="sent-meta">Apr 22 · 2:39pm</span>
+            </div>
+            <p class="broadcast-topic">Holiday hours, closed Aug 15 (Independence Day)</p>
+            <div class="broadcast-filter">
+              <span class="filter-chip">all parents</span>
+            </div>
+          </div>
+          <div class="read-stat">
+            <div class="read-pill">
+              <span class="pct">41<span style="font-size: 10px;">%</span></span>
+              <span class="frac">61 / 150 read</span>
+            </div>
+            <div class="read-microbar"><div class="fill" style="width: 41%;"></div></div>
+          </div>
+        </div>
+
+        <!-- Drafts (no read pill) -->
+        <div class="broadcast-card">
+          <div class="left">
+            <div class="status-row">
+              <span class="status-badge draft">Draft</span>
+              <span class="sent-meta">Saved May 15</span>
+            </div>
+            <p class="broadcast-topic">How to care for your dog in the summer</p>
+            <div class="broadcast-filter">
+              <span class="filter-chip">species: dog</span> · summer-care kit not yet attached
+            </div>
+          </div>
+          <div class="read-stat draft">
+            <div class="read-pill"><span class="frac">Not sent</span></div>
+          </div>
+        </div>
+
+        <div class="broadcast-card">
+          <div class="left">
+            <div class="status-row">
+              <span class="status-badge draft">Draft</span>
+              <span class="sent-meta">Saved May 12</span>
+            </div>
+            <p class="broadcast-topic">Senior dog wellness check campaign</p>
+            <div class="broadcast-filter">
+              <span class="filter-chip">age ≥ 8 yrs</span>
+            </div>
+          </div>
+          <div class="read-stat draft">
+            <div class="read-pill"><span class="frac">Not sent</span></div>
+          </div>
+        </div>
+
+        <div class="broadcast-card">
+          <div class="left">
+            <div class="status-row">
+              <span class="status-badge draft">Draft</span>
+              <span class="sent-meta">Saved May 10</span>
+            </div>
+            <p class="broadcast-topic">Diwali holiday hours and pet safety reminders</p>
+            <div class="broadcast-filter">
+              <span class="filter-chip">all parents</span>
+            </div>
+          </div>
+          <div class="read-stat draft">
+            <div class="read-pill"><span class="frac">Not sent</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="callout-row">
+      <div class="callout">
+        <span class="kicker">Pill anatomy</span>
+        Big tabular percent on the left, <strong>fraction reading</strong> on the right.
+        Both inside the berry-soft pill so it reads as the broadcast's most-glanced stat.
+        Width is fixed (140px) so columns align vertically across all cards.
+      </div>
+      <div class="callout">
+        <span class="kicker">Draft state</span>
+        Drafts show a muted shell-tinted pill saying <strong>"Not sent"</strong> instead of
+        a count. Same pill shape, different hue. Keeps the row geometry consistent.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SURFACE 2: BROADCAST DETAIL HEADER                            -->
+  <!-- ============================================================ -->
+  <section>
+    <div class="section-eyebrow">Surface 2 · Broadcast detail page</div>
+    <h2>The detail page</h2>
+    <p class="section-lede">
+      When Sagar taps into a sent broadcast he sees the original content + the engagement metrics.
+      Four numbers across the top: audience, reads, rate, attached kit. Below: a 24-hour
+      reads-over-time curve so he can see whether the broadcast hit on send or trickled in over the day.
+    </p>
+
+    <div class="detail-frame">
+      <div class="detail-eyebrow">Sent · May 5 · 2:39pm</div>
+      <h3 class="detail-topic">Monsoon is here, protect your pets from ticks</h3>
+      <p class="detail-sent-when">Audience filter: <em>species = dog</em> · attached: <em>Monsoon tick prevention basics</em></p>
+
+      <div class="detail-metrics">
+        <div class="detail-metric">
+          <span class="label">Audience</span>
+          <span class="value num">116</span>
+          <span class="sub">dog-owning households</span>
+        </div>
+        <div class="detail-metric">
+          <span class="label">Read</span>
+          <span class="value num" style="color: var(--berry-deep);">102</span>
+          <span class="sub">tapped the message</span>
+        </div>
+        <div class="detail-metric">
+          <span class="label">Read rate</span>
+          <span class="value num" style="color: var(--berry-deep);">88<span style="font-size: 16px;">%</span></span>
+          <span class="sub">strong urgency lift</span>
+        </div>
+        <div class="detail-metric">
+          <span class="label">Care kit views</span>
+          <span class="value muted num">0</span>
+          <span class="sub">v1+ instrumentation</span>
+        </div>
+      </div>
+
+      <div class="read-curve-host">
+        <div class="eyebrow" style="margin-bottom: 12px;">Reads over time</div>
+        <div class="read-curve">
+          <!-- 24 bars representing hour-by-hour reads. First 6 spike, then taper. -->
+          <div class="bar" style="height: 95%;"></div>
+          <div class="bar" style="height: 78%;"></div>
+          <div class="bar" style="height: 62%;"></div>
+          <div class="bar" style="height: 48%;"></div>
+          <div class="bar" style="height: 42%;"></div>
+          <div class="bar" style="height: 36%;"></div>
+          <div class="bar faint" style="height: 24%;"></div>
+          <div class="bar faint" style="height: 18%;"></div>
+          <div class="bar faint" style="height: 16%;"></div>
+          <div class="bar faint" style="height: 14%;"></div>
+          <div class="bar faint" style="height: 12%;"></div>
+          <div class="bar faint" style="height: 10%;"></div>
+          <div class="bar faint" style="height: 12%;"></div>
+          <div class="bar faint" style="height: 14%;"></div>
+          <div class="bar faint" style="height: 18%;"></div>
+          <div class="bar faint" style="height: 22%;"></div>
+          <div class="bar faint" style="height: 28%;"></div>
+          <div class="bar faint" style="height: 32%;"></div>
+          <div class="bar faint" style="height: 26%;"></div>
+          <div class="bar faint" style="height: 18%;"></div>
+          <div class="bar faint" style="height: 14%;"></div>
+          <div class="bar faint" style="height: 10%;"></div>
+          <div class="bar faint" style="height: 8%;"></div>
+          <div class="bar faint" style="height: 6%;"></div>
+        </div>
+        <div class="read-curve-axis">
+          <span>2:39pm send</span>
+          <span>+6h</span>
+          <span>+12h</span>
+          <span>+18h</span>
+          <span>+24h</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout-row">
+      <div class="callout">
+        <span class="kicker">Four metrics, not twenty</span>
+        Audience / Read / Rate / Care-kit views. Anything more is dashboard bloat and
+        Sagar doesn't need it. <strong>Care kit views</strong> is muted because v0 only
+        tracks broadcast taps, not deep clicks into the attached kit (v1+).
+      </div>
+      <div class="callout">
+        <span class="kicker">Time curve</span>
+        Hour-by-hour reads after send. The seed staggers <strong>70% of reads in the first 6h</strong>
+        and 30% in the remaining 18h, producing the spike-then-taper shape vets will recognize
+        from real consumer messaging tools.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SEED REFERENCE                                                -->
+  <!-- ============================================================ -->
+  <section>
+    <div class="section-eyebrow">Reference · Seeded values</div>
+    <h2>What's in the live DB right now</h2>
+    <p class="section-lede">
+      Verifiable via <code>SELECT topic_en, audience_count, (SELECT COUNT(*) FROM broadcasts_read r WHERE r.broadcast_id = b.id) FROM broadcasts b WHERE sent_at IS NOT NULL;</code>
+    </p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Broadcast</th>
+          <th>Audience filter</th>
+          <th class="num">Audience</th>
+          <th class="num">Read</th>
+          <th class="num">Rate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Monsoon tick prevention</td>
+          <td>species: dog</td>
+          <td class="num">116</td>
+          <td class="num">102</td>
+          <td class="num pct">88%</td>
+        </tr>
+        <tr>
+          <td>Annual vaccination drive</td>
+          <td>vaccination due ≤ 30 days</td>
+          <td class="num">50</td>
+          <td class="num">34</td>
+          <td class="num pct">68%</td>
+        </tr>
+        <tr>
+          <td>Holiday hours Aug 15</td>
+          <td>all parents</td>
+          <td class="num">150</td>
+          <td class="num">61</td>
+          <td class="num pct">41%</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AMS Pawkit · Inbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Spectral:ital,wght@1,500;1,600;1,700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* ============================================================
+       APPROVED PALETTE — exactly what the design system specifies
+       ============================================================ */
+    --canvas:      #F8F7F5;   /* background */
+    --ink:         #0F0C0A;   /* text + structural strokes */
+    --berry:       #823159;   /* primary action / brand amplification */
+
+    /* ============================================================
+       DERIVED TOKENS — opacity blends of the approved colors
+       (no new hex values introduced)
+       ============================================================ */
+    --ink-70:      rgba(15, 12, 10, 0.72);   /* secondary text */
+    --ink-50:      rgba(15, 12, 10, 0.55);   /* tertiary text */
+    --ink-30:      rgba(15, 12, 10, 0.35);   /* placeholder / disabled */
+    --rule:        rgba(15, 12, 10, 0.12);   /* dividers */
+    --rule-soft:   rgba(15, 12, 10, 0.06);   /* faint dividers */
+    --canvas-2:    rgba(15, 12, 10, 0.04);   /* faint surface tint over canvas */
+    --rail-tint:   rgba(15, 12, 10, 0.045);  /* tone shift between rail and main */
+
+    --berry-deep:  #6B1F44;                  /* hover state */
+    --berry-soft:  rgba(130, 49, 89, 0.12);  /* active nav background */
+    --berry-ring:  rgba(130, 49, 89, 0.28);  /* focus ring */
+
+    --shadow-card: none;
+    --shadow-soft: none;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', 'Noto Sans Devanagari', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--canvas);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* tabular nums for invoices, counts, timestamps */
+  .num, time, .count { font-variant-numeric: tabular-nums; }
+
+  /* page chrome */
+  .page {
+    padding: 32px 32px 80px;
+    max-width: 1440px;
+    min-width: 1240px;
+    margin: 0 auto;
+  }
+  .page-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 26px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .page-head h1 {
+    font: 600 28px/1.15 'DM Sans', sans-serif;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .page-head .crumbs {
+    font: 500 13px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin-left: auto;
+  }
+  .page-head .crumbs b { color: var(--ink-70); font-weight: 600; }
+
+  .state { margin-bottom: 48px; }
+  .state-label {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .state-label .n {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .state-label h2 {
+    font: 600 18px 'DM Sans', sans-serif;
+    margin: 0;
+    color: var(--ink-70);
+    letter-spacing: -0.005em;
+  }
+  .state-label .note {
+    font: 400 13px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin-left: 6px;
+  }
+
+  /* =====================================================
+     APP SHELL — topbar + body (rail + main)
+     ===================================================== */
+  .app {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    min-height: 820px;
+  }
+  .app-body {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ----- topbar ----- */
+  .topbar {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    align-items: stretch;
+    background: var(--rail-tint);
+  }
+  .topbar .clinic {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 22px;
+  }
+  .topbar .topbar-right {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 28px;
+  }
+  .clinic-mark {
+    width: 40px; height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--berry);
+    color: #fff;
+    display: grid; place-items: center;
+    font: 700 12px 'DM Sans', sans-serif;
+    letter-spacing: 0.03em;
+  }
+  .clinic-name {
+    font: 600 16px 'DM Sans', sans-serif;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .topbar-search {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 9px 14px;
+    font: 500 14px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    max-width: 540px;
+    width: 100%;
+    justify-self: center;
+    transition: border-color .15s, box-shadow .15s, background .15s;
+  }
+  .topbar-search:focus-within {
+    border-color: var(--berry);
+    box-shadow: 0 0 0 3px var(--berry-ring);
+  }
+  .topbar-search svg { width: 16px; height: 16px; stroke: var(--ink-50); fill: none; stroke-width: 1.8; flex-shrink: 0; }
+  .topbar-search input {
+    flex: 1; border: none; background: transparent; outline: none;
+    font: inherit; color: var(--ink); min-width: 0;
+  }
+  .topbar-search input::placeholder { color: var(--ink-50); }
+
+  .doctor {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .doctor-name {
+    font: 600 14px 'DM Sans', sans-serif;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .doctor-av {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--canvas-2);
+    color: var(--ink-70);
+    display: grid; place-items: center;
+    font: 700 12px 'DM Sans', sans-serif;
+    border: 1px solid var(--rule);
+    letter-spacing: 0.02em;
+  }
+
+  /* ----- left rail ----- */
+  .rail {
+    background: var(--rail-tint);
+    padding: 22px 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 100%;
+  }
+  .rail .workspace-label {
+    font: 600 10px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-50);
+    padding: 0 22px 10px;
+  }
+  .rail-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 12px;
+  }
+  .rail-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font: 600 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    text-decoration: none;
+    transition: background .12s, color .12s;
+  }
+  .rail-nav a .ico {
+    width: 18px; height: 18px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .rail-nav a .ico svg {
+    width: 18px; height: 18px;
+  }
+  .rail-nav a:hover { background: var(--canvas-2); color: var(--ink); }
+  .rail-nav a.active {
+    background: var(--berry-soft);
+    color: var(--berry);
+  }
+  .rail-nav a .badge {
+    margin-left: auto;
+    font: 600 12px 'DM Sans', sans-serif;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-50);
+  }
+  .rail-nav a.active .badge { color: var(--berry); }
+
+  /* Settings — direct flex child of .rail, mt:auto pushes to bottom */
+  .rail > .settings-link {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    margin-left: 12px;
+    margin-right: 12px;
+    border-radius: 10px;
+    font: 600 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    text-decoration: none;
+    transition: background .12s, color .12s;
+  }
+  .rail > .settings-link .ico {
+    width: 18px; height: 18px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .rail > .settings-link .ico svg {
+    width: 18px; height: 18px;
+  }
+  .rail > .settings-link:hover {
+    background: var(--canvas-2);
+    color: var(--ink);
+  }
+
+  /* ----- main area ----- */
+  .main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--canvas);
+  }
+
+  .appbar {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 28px;
+    background: var(--rail-tint);
+  }
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--canvas-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .tabs button {
+    appearance: none; border: none; background: transparent;
+    padding: 6px 16px;
+    font: 600 13px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background .15s, color .15s;
+  }
+  .tabs button .n {
+    font-variant-numeric: tabular-nums;
+    font-size: 11.5px;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 0 7px;
+    color: var(--ink-70);
+    font-weight: 600;
+  }
+  .tabs button:hover { color: var(--ink); }
+  .tabs button.on { background: var(--berry); color: #fff; }
+  .tabs button.on .n { background: #fff; color: var(--berry); border-color: var(--berry); }
+
+  .progress-wrap {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 10px;
+    color: var(--ink-70);
+    font: 500 12.5px 'DM Sans', sans-serif;
+  }
+  .progress {
+    width: 96px; height: 6px;
+    background: var(--canvas-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress .fill { height: 100%; background: var(--berry); }
+  .progress-wrap b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .content {
+    padding: 24px 28px 28px;
+    flex: 1;
+    display: flex; flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    background: var(--rail-tint);
+  }
+
+  /* =====================================================
+     PET AVATAR
+     ===================================================== */
+  /* Pet avatar — neutral monogram, single style. In production this
+     becomes either (a) the parent-uploaded photo or (b) a Lucide
+     <PawPrint /> glyph on canvas-2. No fur-color palette. */
+  .pet-av {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    display: grid; place-items: center;
+    font: 600 15px 'DM Sans', sans-serif;
+    background: var(--canvas-2);
+    color: var(--ink);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .pet-av.lg {
+    width: 72px; height: 72px;
+    border-width: 1.5px;
+    font: 600 italic 26px 'Spectral', serif;
+  }
+
+  /* =====================================================
+     CHIPS
+     ===================================================== */
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font: 600 12px 'DM Sans', sans-serif;
+    padding: 4px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--canvas);
+    color: var(--ink-70);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip.case { background: var(--canvas-2); }
+
+  /* =====================================================
+     FOCUS CARD
+     ===================================================== */
+  .focus-card {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+
+  .pet-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    padding: 22px 28px 18px;
+    align-items: center;
+    border-bottom: 1px solid var(--rule);
+  }
+  .pet-head .titles { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .pet-head h2 {
+    font: 600 italic 32px/1 'Spectral', serif;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+  .pet-head .bio {
+    font: 500 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  }
+  .pet-head .bio .sep { color: var(--rule); }
+  .pet-head .bio .hh { color: var(--ink); font-weight: 600; }
+  .pet-head .actions { display: flex; gap: 6px; }
+
+  .iconbtn {
+    appearance: none;
+    width: 36px; height: 36px;
+    border: 1px solid var(--rule);
+    background: var(--canvas);
+    border-radius: 10px;
+    display: grid; place-items: center;
+    cursor: pointer;
+    color: var(--ink-70);
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .iconbtn:hover { background: var(--canvas-2); color: var(--ink); border-color: var(--ink); }
+  .iconbtn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* context strip (SOAP) */
+  .ctx {
+    background: var(--canvas);
+    border-bottom: 1px solid var(--rule);
+  }
+  .ctx-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto auto;
+    gap: 14px;
+    padding: 12px 28px;
+    align-items: center;
+  }
+  .ctx-head .label {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-50);
+  }
+  .ctx-head .summary {
+    font: 500 13.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .ctx-head .summary .when { color: var(--ink-50); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  .ctx-head .summary .ttl { color: var(--ink); font-weight: 600; }
+  .ctx-head .summary .dx { color: var(--ink-70); }
+  .ctx-toggle {
+    appearance: none;
+    border: 1px solid var(--rule);
+    background: var(--canvas);
+    padding: 5px 11px;
+    border-radius: 999px;
+    font: 600 12px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 5px;
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .ctx-toggle:hover { background: var(--canvas-2); color: var(--ink); border-color: var(--ink); }
+  .ctx-toggle .arr { display: inline-block; }
+  .btn-link {
+    background: none; border: none; padding: 5px 8px;
+    font: 600 12.5px 'DM Sans', sans-serif;
+    color: var(--berry);
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .btn-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* SOAP expanded body */
+  .ctx-body {
+    display: none;
+    padding: 4px 28px 20px;
+    background: var(--canvas);
+    border-top: 1px dashed var(--rule);
+  }
+  .ctx.open .ctx-body { display: block; }
+  .soap {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 10px 22px;
+    margin-top: 14px;
+  }
+  .soap .head-row {
+    grid-column: 1 / -1;
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 6px;
+    gap: 18px;
+  }
+  .soap .head-row .ttl { font: 600 16px 'DM Sans', sans-serif; letter-spacing: -0.005em; }
+  .soap .head-row .when {
+    font: 500 12.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+    margin-top: 2px;
+  }
+  .soap .tags { display: flex; gap: 6px; flex-shrink: 0; }
+  .soap .ttag {
+    font: 600 10.5px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 3px 9px;
+    color: var(--ink-70);
+  }
+  .soap dt {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+    padding-top: 3px;
+    margin: 0;
+  }
+  .soap dd {
+    margin: 0;
+    font: 400 14px/1.55 'DM Sans', sans-serif;
+    color: var(--ink);
+  }
+  .ctx-foot {
+    margin-top: 12px;
+    display: flex; gap: 14px; align-items: center;
+    font: 500 12.5px 'DM Sans', sans-serif;
+    flex-wrap: wrap;
+  }
+  .ctx-foot a {
+    color: var(--berry);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .ctx-foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .ctx-foot .older { color: var(--ink-50); font-variant-numeric: tabular-nums; }
+
+  /* thread */
+  .thread {
+    padding: 22px 28px 18px;
+    display: flex; flex-direction: column; gap: 12px;
+    background: var(--canvas);
+  }
+  .bubble {
+    max-width: 64%;
+    border-radius: 16px;
+    padding: 12px 16px;
+    font: 400 14.5px/1.5 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+    position: relative;
+  }
+  .bubble.them {
+    align-self: flex-start;
+    background: var(--canvas-2);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    border-bottom-left-radius: 4px;
+  }
+  .bubble.me {
+    align-self: flex-end;
+    background: var(--berry);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble .meta {
+    margin-top: 6px;
+    font: 500 11.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bubble.me .meta { color: rgba(255, 255, 255, 0.7); }
+  .bubble + .bubble.them { margin-top: -4px; }
+  .bubble + .bubble.me   { margin-top: -4px; }
+
+  /* composer */
+  .composer {
+    background: var(--canvas);
+    border-top: 1px solid var(--rule);
+    padding: 14px 28px 18px;
+  }
+  .composer-lang {
+    display: flex; align-items: center; gap: 10px;
+    font: 500 12.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin-bottom: 10px;
+  }
+  .composer-lang .ltabs {
+    display: flex; gap: 2px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 2px;
+    background: var(--canvas);
+  }
+  .composer-lang .ltabs button {
+    border: none; background: transparent;
+    padding: 4px 12px;
+    font: 600 11.5px 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+    color: var(--ink-70);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .composer-lang .ltabs button.on {
+    background: var(--berry);
+    color: #fff;
+  }
+  .composer-box {
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 14px 16px;
+    background: transparent;
+    min-height: 72px;
+    font: 400 14.5px/1.55 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+    color: var(--ink-50);
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .composer-box:hover, .composer-box:focus-within {
+    border-color: var(--berry);
+    box-shadow: 0 0 0 3px var(--berry-ring);
+  }
+  .composer-actions {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 10px;
+  }
+  .composer-actions .right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+  /* buttons */
+  .btn {
+    appearance: none;
+    border: 1px solid var(--rule);
+    background: var(--canvas);
+    padding: 0 14px;
+    height: 36px;
+    border-radius: 10px;
+    font: 600 13px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 7px;
+    transition: background .12s, color .12s, border-color .12s, box-shadow .12s;
+  }
+  .btn:hover { background: var(--canvas-2); color: var(--ink); border-color: var(--ink); }
+  .btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .btn.primary {
+    background: var(--berry);
+    border-color: var(--berry);
+    color: #fff;
+    height: 40px;
+    padding: 0 18px;
+    font-weight: 600;
+  }
+  .btn.primary:hover { background: var(--berry-deep); border-color: var(--berry-deep); color: #fff; }
+  .btn.primary:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--berry-ring); }
+  .btn.skip { color: var(--ink-50); }
+
+  /* up next */
+  .up-next-label {
+    font: 600 11px 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-50);
+    margin-top: 4px;
+    margin-bottom: -6px;
+  }
+  .up-next {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .next-card {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color .12s, box-shadow .12s, transform .12s;
+    box-shadow: var(--shadow-soft);
+  }
+  .next-card:hover {
+    border-color: var(--ink);
+  }
+  .next-card .head { display: flex; align-items: center; gap: 10px; }
+  .next-card .pet-av { width: 32px; height: 32px; font-size: 13px; border-width: 2px; }
+  .next-card .name {
+    font: 600 italic 16px 'Spectral', serif;
+    line-height: 1;
+  }
+  .next-card .breed {
+    font: 500 12px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin-top: 2px;
+  }
+  .next-card .snip {
+    font: 400 13px/1.45 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+    color: var(--ink-70);
+    overflow: hidden; text-overflow: ellipsis;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    min-height: 38px;
+  }
+  .next-card .foot {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: auto;
+    font: 500 12px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+  }
+
+
+  /* =====================================================
+     AWAITING LIST (default landing)
+     ===================================================== */
+  .awaiting-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: var(--canvas);
+    box-shadow: var(--shadow-soft);
+  }
+  .awaiting-bar .head {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .awaiting-bar h2 {
+    margin: 0;
+    font: 600 italic 22px 'Spectral', serif;
+    letter-spacing: -0.005em;
+  }
+  .awaiting-bar .sub {
+    font: 500 13px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+  }
+  .awaiting-bar .cta-wrap {
+    margin-left: auto;
+  }
+  .awaiting-bar .cta-wrap .hint {
+    font: 500 11.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    text-align: right;
+    margin-bottom: 4px;
+  }
+
+  .awaiting-list {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .row.awaiting {
+    grid-template-columns: 14px auto 1fr auto;
+    gap: 14px;
+    align-items: start;
+    padding: 18px 22px;
+  }
+  .row.awaiting .dot-col {
+    padding-top: 10px;
+  }
+  .row.awaiting .unread-dot {
+    width: 8px; height: 8px;
+    background: var(--berry);
+    border-radius: 50%;
+    display: block;
+  }
+  .row.awaiting.read .unread-dot { background: transparent; }
+  .row.awaiting .who { gap: 3px; }
+  .row.awaiting .pet-name { font-weight: 600; }
+  .row.awaiting .snippet {
+    -webkit-line-clamp: 2;
+    max-width: 640px;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+  .row.awaiting .snippet b { color: var(--ink); }
+  .row.awaiting.read .pet-name { font-weight: 500; }
+  .row.awaiting.read .snippet { color: var(--ink-70); }
+  .row.awaiting .meta { gap: 8px; align-items: flex-end; }
+  .row.awaiting .wait {
+    font: 600 12px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    font-variant-numeric: tabular-nums;
+  }
+  .row.awaiting.urgent .wait { color: var(--berry); }
+
+  /* Back-to-list — slim button living directly inside .appbar */
+  .appbar-back {
+    appearance: none;
+    border: none;
+    background: transparent;
+    margin-left: -10px;
+    padding: 7px 10px;
+    font: 600 13px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    border-radius: 8px;
+    transition: background .12s, color .12s;
+  }
+  .appbar-back:hover {
+    background: var(--canvas-2);
+    color: var(--ink);
+  }
+  .appbar-back svg { width: 15px; height: 15px; }
+
+  /* =====================================================
+     REPLIED LIST
+     ===================================================== */
+  .replied-list {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+    cursor: pointer;
+    transition: background .1s;
+  }
+  .row:hover { background: var(--canvas-2); }
+  .row:last-child { border-bottom: none; }
+  .row .who { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .row .pet-name {
+    font: 600 italic 17px 'Spectral', serif;
+    line-height: 1.15;
+  }
+  .row .pet-name .breed {
+    font: 500 12.5px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    margin-left: 6px;
+    font-style: normal;
+  }
+  .row .hh { font: 500 12.5px 'DM Sans'; color: var(--ink-70); margin-top: 1px; }
+  .row .snippet {
+    font: 400 13.5px/1.4 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+    color: var(--ink-70);
+    margin-top: 6px;
+    overflow: hidden; text-overflow: ellipsis;
+    display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical;
+    max-width: 720px;
+  }
+  .row .snippet b { color: var(--ink); font-weight: 600; }
+  .row .meta {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+  }
+  .row .time {
+    font: 500 12px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    font-variant-numeric: tabular-nums;
+  }
+  .replied-foot {
+    text-align: center;
+    padding: 14px;
+    font: 500 13px 'DM Sans', sans-serif;
+    color: var(--ink-50);
+    border-top: 1px solid var(--rule);
+  }
+  .replied-foot a { color: var(--berry); text-decoration: none; font-weight: 600; }
+  .replied-foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* =====================================================
+     INBOX ZERO
+     ===================================================== */
+  .empty {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 80px 24px;
+    gap: 14px;
+  }
+  .empty .mark-zero {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    display: grid; place-items: center;
+    background: var(--canvas);
+    margin-bottom: 6px;
+  }
+  .empty .mark-zero svg { width: 28px; height: 28px; stroke: var(--ink); fill: none; stroke-width: 1.5; }
+  .empty h2 {
+    font: 600 italic 36px/1.05 'Spectral', serif;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+  .empty p {
+    margin: 0;
+    font: 500 15.5px 'DM Sans', sans-serif;
+    color: var(--ink-70);
+    max-width: 340px;
+  }
+</style>
+</head>
+<body data-screen-label="Inbox v1">
+
+<div class="page">
+
+  <header class="page-head">
+    <h1>Inbox · hi-fi build</h1>
+    <span class="crumbs"><b>Design system:</b> Canvas · Ink · Boysenberry · DM Sans · Spectral italic for pet names</span>
+  </header>
+
+
+  <!-- ============================================================
+       STATE 1 · AWAITING / LIST VIEW  (default landing)
+       ============================================================ -->
+  <section class="state">
+    <div class="state-label">
+      <span class="n">01</span>
+      <h2>Awaiting · list view</h2>
+      <span class="note">what the vet sees on opening Pawkit · oldest awaiting at top</span>
+    </div>
+
+    <div class="app">
+
+      <!-- top bar -->
+      <header class="topbar">
+        <div class="clinic">
+          <div class="clinic-mark">AMS</div>
+          <div class="clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-search">
+          <svg data-lucide="search" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search pets, parents, phone numbers" />
+        </div>
+          <div class="doctor">
+            <span class="doctor-name">Dr Sagar Bhongale</span>
+            <div class="doctor-av">SB</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-body">
+
+        <aside class="rail">
+          <div class="workspace-label">Workspace</div>
+          <div class="rail-nav">
+            <a href="#" class="active">
+              <span class="ico"><svg data-lucide="inbox" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+              Inbox
+              <span class="badge">4</span>
+            </a>
+            <a href="#">
+              <span class="ico"><svg data-lucide="megaphone" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+              Broadcasts
+            </a>
+            <a href="#">
+              <span class="ico"><svg data-lucide="receipt" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg></span>
+              Billing
+            </a>
+          </div>
+          <a href="#" class="settings-link">
+            <span class="ico"><svg data-lucide="settings" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            Settings
+          </a>
+        </aside>
+
+        <section class="main">
+
+          <header class="appbar">
+            <div class="tabs">
+              <button class="on">Awaiting reply <span class="n">4</span></button>
+              <button>Replied <span class="n">12</span></button>
+            </div>
+          </header>
+
+          <div class="content">
+
+            <!-- Entry bar with the "start queue" CTA -->
+            <div class="awaiting-bar">
+              <div class="head">
+                <h2>4 parents are waiting on you</h2>
+              </div>
+              <div class="cta-wrap">
+                <button class="btn primary">
+                  Start reply queue
+                  <svg data-lucide="arrow-right" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="awaiting-list">
+
+              <div class="row awaiting urgent">
+                <div class="dot-col"><span class="unread-dot"></span></div>
+                <div class="pet-av">G</div>
+                <div class="who">
+                  <div class="pet-name">Gabby<span class="breed">Golden Retriever · M · 4 years</span></div>
+                  <div class="hh">Fernandes household</div>
+                  <div class="snippet">He's been scratching at his ear since this morning, should I be worried? It looks a bit red on the inside but he isn't crying out.</div>
+                </div>
+                <div class="meta">
+                  <span class="wait">1d 4h</span>
+                  <span class="chip case">Ear infection check</span>
+                </div>
+              </div>
+
+              <div class="row awaiting">
+                <div class="dot-col"><span class="unread-dot"></span></div>
+                <div class="pet-av">C</div>
+                <div class="who">
+                  <div class="pet-name">Coco<span class="breed">Indie · F · 3 years</span></div>
+                  <div class="hh">Sharma household</div>
+                  <div class="snippet">Doc, sending you a video of how she's doing today. The wound looks fine but she's been licking it when we're not watching.</div>
+                </div>
+                <div class="meta">
+                  <span class="wait">12h</span>
+                  <span class="chip case">Post-op recheck</span>
+                </div>
+              </div>
+
+              <div class="row awaiting">
+                <div class="dot-col"><span class="unread-dot"></span></div>
+                <div class="pet-av">M</div>
+                <div class="who">
+                  <div class="pet-name">Misha<span class="breed">Persian · F · 7 years</span></div>
+                  <div class="hh">Khan household</div>
+                  <div class="snippet">तिने काल अँटिबायोटिक्स पूर्ण केले. आणखी काही लक्ष ठेवण्यासारखे आहे का, की आता हे सत्र संपले?</div>
+                </div>
+                <div class="meta">
+                  <span class="wait">6h</span>
+                  <span class="chip case">UTI recheck</span>
+                </div>
+              </div>
+
+              <div class="row awaiting">
+                <div class="dot-col"><span class="unread-dot"></span></div>
+                <div class="pet-av">B</div>
+                <div class="who">
+                  <div class="pet-name">Bruno<span class="breed">Labrador · M · 2 years</span></div>
+                  <div class="hh">Patil household</div>
+                  <div class="snippet">Doc see this redness on his belly, started yesterday after his walk. Should we bring him in?</div>
+                </div>
+                <div class="meta">
+                  <span class="wait">1h</span>
+                  <span class="chip case">Skin issue</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STATE 2 · REPLY QUEUE (entered via "Start reply queue")
+       ============================================================ -->
+  <section class="state">
+    <div class="state-label">
+      <span class="n">02</span>
+      <h2>Reply queue · focus mode</h2>
+      <span class="note">entered via the "Start reply queue" button · auto-advances to next</span>
+    </div>
+
+    <div class="app">
+
+      <!-- top bar -->
+      <header class="topbar">
+        <div class="clinic">
+          <div class="clinic-mark">AMS</div>
+          <div class="clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-search">
+          <svg data-lucide="search" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search pets, parents, phone numbers" />
+        </div>
+          <div class="doctor">
+            <span class="doctor-name">Dr Sagar Bhongale</span>
+            <div class="doctor-av">SB</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-body">
+
+        <!-- left rail -->
+        <aside class="rail">
+          <div class="workspace-label">Workspace</div>
+          <div class="rail-nav">
+            <a href="#" class="active">
+              <span class="ico"><svg data-lucide="inbox" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+              Inbox
+              <span class="badge">4</span>
+            </a>
+            <a href="#">
+              <span class="ico"><svg data-lucide="megaphone" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+              Broadcasts
+            </a>
+            <a href="#">
+              <span class="ico"><svg data-lucide="receipt" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg></span>
+              Billing
+            </a>
+          </div>
+          <a href="#" class="settings-link">
+            <span class="ico"><svg data-lucide="settings" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            Settings
+          </a>
+        </aside>
+
+        <!-- main -->
+        <section class="main">
+
+          <header class="appbar">
+            <button class="appbar-back">
+              <svg data-lucide="arrow-left" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+              Back to list
+            </button>
+            <div class="progress-wrap">
+              <span><b>1</b> of <b>4</b></span>
+              <div class="progress"><div class="fill" style="width:25%"></div></div>
+            </div>
+          </header>
+
+          <div class="content">
+
+            <!-- focus card -->
+            <article class="focus-card">
+
+              <!-- pet header -->
+              <header class="pet-head">
+                <div class="pet-av lg">G</div>
+                <div class="titles">
+                  <h2>Gabby</h2>
+                  <div class="bio">
+                    Golden Retriever <span class="sep">·</span>
+                    M <span class="sep">·</span>
+                    4 years <span class="sep">·</span>
+                    28.0 kg <span class="sep">·</span>
+                    <span class="hh">Fernandes household</span>
+                  </div>
+                </div>
+                <div class="actions">
+                  <button class="iconbtn" title="Open Gabby's profile">
+                    <svg data-lucide="user-round" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                  </button>
+                </div>
+              </header>
+
+              <!-- SOAP context strip -->
+              <div class="ctx" id="ctx-1">
+                <div class="ctx-head">
+                  <span class="label">Last visit</span>
+                  <span class="summary">
+                    <span class="when">6 May · Dr Sagar</span>
+                    <span class="ttl">Ear infection check (right)</span>
+                    <span class="dx"> · cefadroxil 250mg BID × 7d · recheck 16 May</span>
+                  </span>
+                  <button class="btn-link">Invoices ↗</button>
+                  <button class="btn-link">All visits ↗</button>
+                  <button class="ctx-toggle" onclick="this.parentElement.parentElement.classList.toggle('open'); this.querySelector('.arr').textContent = this.parentElement.parentElement.classList.contains('open') ? '▴' : '▾'">SOAP <span class="arr">▾</span></button>
+                </div>
+                <div class="ctx-body">
+                  <div class="soap">
+                    <div class="head-row">
+                      <div>
+                        <div class="ttl">Ear infection check (right)</div>
+                        <div class="when">6 May 2026 · Dr Sagar Bhongale · edited 12m ago</div>
+                      </div>
+                      <div class="tags">
+                        <span class="ttag">Sick visit</span>
+                        <span class="ttag">Otitis</span>
+                      </div>
+                    </div>
+                    <dt>Subjective</dt>
+                    <dd>Parent reports right ear scratching for 3 days, head-shaking, mildly lethargic. Appetite normal.</dd>
+                    <dt>Objective</dt>
+                    <dd>T 38.6°C, P 92, R 24. Weight 31.2 kg. BCS 5/9. Right ear: erythematous canal, mild yellow-brown discharge, pain on palpation, drum intact. Cytology: cocci +++, yeast +. Remainder NSF.</dd>
+                    <dt>Assessment</dt>
+                    <dd>Otitis externa, right ear (bacterial with secondary yeast). Suspected trigger: seasonal allergies.</dd>
+                    <dt>Plan</dt>
+                    <dd>In-clinic ear flush. Cefadroxil 250mg PO BID × 7 days. Otic cleansing solution + Mometasone otic drops BID. Recheck 16 May.</dd>
+                  </div>
+                  <div class="ctx-foot">
+                    <a href="#">Open full clinical history (2 visits) ↗</a>
+                    <span class="older">Older: 22 Apr · Annual wellness + DHPP booster</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- thread -->
+              <div class="thread">
+                <div class="bubble me">
+                  Hi Mrs Fernandes. Just checking in on Gabby's ear. The cefadroxil should be helping by now. Please let me know if anything looks off, or if you notice him scratching more.
+                  <div class="meta">Dr Sagar · 6 May, 11:42</div>
+                </div>
+                <div class="bubble them">
+                  Thanks Doctor. He seems okay so far. We're giving the medicine on time.
+                  <div class="meta">Anjali Fernandes · 7 May, 18:30</div>
+                </div>
+                <div class="bubble me">
+                  Good. Watch for head-shaking or any new discharge.
+                  <div class="meta">Dr Sagar · 7 May, 19:05</div>
+                </div>
+                <div class="bubble them">
+                  He's been scratching at his ear since this morning, should I be worried? It looks a bit red on the inside but he isn't crying out.
+                  <div class="meta">Anjali Fernandes · 13 May, 11:55</div>
+                </div>
+              </div>
+
+              <!-- composer -->
+              <footer class="composer">
+                <div class="composer-lang">
+                  <span>This parent writes in English.</span>
+                  <span style="color:var(--ink-50)">·</span>
+                  <span style="color:var(--ink-70)">Reply in:</span>
+                  <div class="ltabs">
+                    <button class="on">English</button>
+                    <button>मराठी</button>
+                  </div>
+                </div>
+                <div class="composer-box">Reply to Anjali…</div>
+                <div class="composer-actions">
+                  <button class="btn">
+                    <svg data-lucide="paperclip" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M13.234 20.252 21 12.3"/><path d="m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486"/></svg>
+                    Attach
+                  </button>
+                  <button class="btn">
+                    <svg data-lucide="mic" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                    Voice
+                  </button>
+                  <div class="right">
+                    <button class="btn skip">Skip · later</button>
+                    <button class="btn primary">
+                      Send &amp; next
+                      <svg data-lucide="arrow-right" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </footer>
+            </article>
+
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STATE 3 · REPLIED
+       ============================================================ -->
+  <section class="state">
+    <div class="state-label">
+      <span class="n">03</span>
+      <h2>Replied · past conversations</h2>
+      <span class="note">most recent reply first · filters held back per your call</span>
+    </div>
+
+    <div class="app" style="min-height: 720px;">
+
+      <header class="topbar">
+        <div class="clinic">
+          <div class="clinic-mark">AMS</div>
+          <div class="clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-search">
+          <svg data-lucide="search" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search pets, parents, phone numbers" />
+        </div>
+          <div class="doctor">
+            <span class="doctor-name">Dr Sagar Bhongale</span>
+            <div class="doctor-av">SB</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-body">
+
+        <aside class="rail">
+          <div class="workspace-label">Workspace</div>
+          <div class="rail-nav">
+            <a href="#" class="active">
+              <span class="ico"><svg data-lucide="inbox" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+              Inbox
+            </a>
+            <a href="#">
+              <span class="ico"><svg data-lucide="megaphone" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+              Broadcasts
+            </a>
+            <a href="#">
+              <span class="ico"><svg data-lucide="receipt" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg></span>
+              Billing
+            </a>
+          </div>
+          <a href="#" class="settings-link">
+            <span class="ico"><svg data-lucide="settings" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            Settings
+          </a>
+        </aside>
+
+        <section class="main">
+
+          <header class="appbar">
+            <div class="tabs">
+              <button>Awaiting reply <span class="n">4</span></button>
+              <button class="on">Replied <span class="n">12</span></button>
+            </div>
+          </header>
+
+          <div class="content">
+
+            <div class="replied-list">
+
+              <div class="row">
+                <div class="pet-av">B</div>
+                <div class="who">
+                  <div class="pet-name">Bruno<span class="breed">Labrador · M · 2 years</span></div>
+                  <div class="hh">Patil household</div>
+                  <div class="snippet"><b>You:</b> From the photo it looks like contact dermatitis — try the hypoallergenic shampoo we discussed. Bring him in if there's no change by Friday.</div>
+                </div>
+                <div class="meta">
+                  <span class="time">today, 10:14</span>
+                  <span class="chip case">Annual wellness</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="pet-av">G</div>
+                <div class="who">
+                  <div class="pet-name">Gabby<span class="breed">Golden Retriever · M · 4 years</span></div>
+                  <div class="hh">Fernandes household</div>
+                  <div class="snippet"><b>You:</b> Good. Watch for head-shaking or any new discharge.</div>
+                </div>
+                <div class="meta">
+                  <span class="time">7 May, 19:05</span>
+                  <span class="chip case">Ear infection check</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="pet-av">R</div>
+                <div class="who">
+                  <div class="pet-name">Rocky<span class="breed">Mixed · M · 6 years</span></div>
+                  <div class="hh">Joshi household</div>
+                  <div class="snippet"><b>You:</b> Glad the limping has settled. Continue the joint supplement for another 4 weeks and let's re-evaluate at his annual.</div>
+                </div>
+                <div class="meta">
+                  <span class="time">6 May, 16:22</span>
+                  <span class="chip case">Limping evaluation</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="pet-av">M</div>
+                <div class="who">
+                  <div class="pet-name">Misha<span class="breed">Persian · F · 7 years</span></div>
+                  <div class="hh">Khan household</div>
+                  <div class="snippet"><b>You:</b> हो, सत्र संपले. आता पुढच्या आठवड्यात पुन्हा एक चेक-अप करूया.</div>
+                </div>
+                <div class="meta">
+                  <span class="time">5 May, 12:40</span>
+                  <span class="chip case">UTI recheck</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="pet-av">C</div>
+                <div class="who">
+                  <div class="pet-name">Coco<span class="breed">Indie · F · 3 years</span></div>
+                  <div class="hh">Sharma household</div>
+                  <div class="snippet"><b>You:</b> Sounds like she's adjusting well. Continue with twice-daily feeds and gradually introduce the new kibble over the next 10 days.</div>
+                </div>
+                <div class="meta">
+                  <span class="time">4 May, 09:18</span>
+                  <span class="chip case">Annual wellness</span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="pet-av">B</div>
+                <div class="who">
+                  <div class="pet-name">Bruno<span class="breed">Labrador · M · 2 years</span></div>
+                  <div class="hh">Patil household</div>
+                  <div class="snippet"><b>You:</b> Vaccination is overdue by 2 months — let's not delay further. Can you bring him in this week?</div>
+                </div>
+                <div class="meta">
+                  <span class="time">2 May, 15:55</span>
+                  <span class="chip case">Annual wellness</span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="replied-foot">
+              Showing 6 of 12 recent replies · <a href="#">Load older →</a>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STATE 4 · INBOX ZERO
+       ============================================================ -->
+  <section class="state">
+    <div class="state-label">
+      <span class="n">04</span>
+      <h2>Inbox zero</h2>
+      <span class="note">zen · no clutter · no follow-up suggestions per your call</span>
+    </div>
+
+    <div class="app" style="min-height: 640px;">
+
+      <header class="topbar">
+        <div class="clinic">
+          <div class="clinic-mark">AMS</div>
+          <div class="clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-search">
+          <svg data-lucide="search" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search pets, parents, phone numbers" />
+        </div>
+          <div class="doctor">
+            <span class="doctor-name">Dr Sagar Bhongale</span>
+            <div class="doctor-av">SB</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="app-body">
+
+        <aside class="rail">
+          <div class="workspace-label">Workspace</div>
+          <div class="rail-nav">
+            <a href="#" class="active">
+              <span class="ico"><svg data-lucide="inbox" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+              Inbox
+            </a>
+            <a href="#">
+              <span class="ico"><svg data-lucide="megaphone" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+              Broadcasts
+            </a>
+            <a href="#">
+              <span class="ico"><svg data-lucide="receipt" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg></span>
+              Billing
+            </a>
+          </div>
+          <a href="#" class="settings-link">
+            <span class="ico"><svg data-lucide="settings" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            Settings
+          </a>
+        </aside>
+
+        <section class="main">
+
+          <header class="appbar">
+            <div class="tabs">
+              <button class="on">Awaiting reply <span class="n">0</span></button>
+              <button>Replied <span class="n">12</span></button>
+            </div>
+          </header>
+
+          <div class="content empty">
+            <div class="mark-zero">
+              <svg data-lucide="check" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <h2>Inbox zero.</h2>
+            <p>Every parent has heard back from you. Go grab a chai.</p>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

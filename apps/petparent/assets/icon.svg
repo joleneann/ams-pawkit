@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pawkit app icon · Direction C (locked May 5, letterform updated 2026-05-15 evening).
+
+  Canonical vector source for the parent-app icon. Spec per
+  `docs/premium-feel/first-run.md`:
+    - Background: 135° gradient from Honey #E5C896 (top-left) to Peach #E8A87C
+      (bottom-right). Provenance: Gabby's actual fur-match result.
+    - Letter: uppercase "P" in Lora italic 600, in canvas #F8F7F5.
+      Optically centred, slight downward bias to compensate for the italic
+      descender. P fills approximately 75% of icon height.
+    - Frame: none. Gradient fills edge-to-edge.
+    - Corner radius: 22% of icon size (system mask handles this on iOS/Android).
+
+  Export targets (PNG, 32-bit, transparent corner-padding handled by system):
+    - apps/petparent/assets/icon.png            512×512  (Expo `icon` ref)
+    - apps/petparent/assets/adaptive-icon.png   1024×1024 (Android adaptive
+      foreground; safe zone is the centre 66%)
+    - apps/petparent/assets/favicon.png         48×48   (web)
+    - Play Store listing                        512×512
+    - iOS v1+ (placeholder)                     1024 master / 60 / 76 / 120 /
+                                                152 / 180
+
+  Export with Figma, Inkscape, or `npx @resvg/resvg-js`. Once exported and
+  wired into app.json, this SVG stays as the canonical vector source.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="furmatch" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E5C896"/>
+      <stop offset="100%" stop-color="#E8A87C"/>
+    </linearGradient>
+  </defs>
+  <!-- Full-bleed gradient. System mask handles rounded corners. -->
+  <rect width="512" height="512" fill="url(#furmatch)"/>
+  <!-- Letterform: Lora italic 600 P, canvas-coloured, optically centred.
+       Uses the Google Fonts Lora face; embedders should ensure the font is
+       available during raster export. Falls back to Georgia italic which has
+       a similar ascender geometry but a smaller terminal flourish. -->
+  <text
+    x="50%"
+    y="62%"
+    text-anchor="middle"
+    dominant-baseline="alphabetic"
+    font-family="Lora, Georgia, 'Times New Roman', serif"
+    font-style="italic"
+    font-weight="600"
+    font-size="384"
+    fill="#F8F7F5"
+  >P</text>
+</svg>

@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit Phase 2 — Admin loading skeletons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --skel: rgba(168, 163, 158, 0.5);     /* --ink-faint at 50% — locked skeleton fill */
+    --skel-strong: rgba(168, 163, 158, 0.75);
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #1f1f1f;
+    color: var(--bg-canvas);
+    padding: 48px 32px 96px;
+    line-height: 1.4;
+  }
+  .doc {
+    max-width: 1360px;
+    margin: 0 auto;
+  }
+  .doc-header {
+    border-bottom: 1px solid #444;
+    padding-bottom: 24px;
+    margin-bottom: 48px;
+  }
+  .doc-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--bg-canvas);
+  }
+  .doc-sub {
+    font-size: 13px;
+    color: #bbb;
+    margin-top: 12px;
+    max-width: 760px;
+  }
+
+  /* Screen frame */
+  .screen {
+    margin-bottom: 72px;
+  }
+  .screen-caption {
+    margin-bottom: 14px;
+  }
+  .screen-num {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+    margin-right: 12px;
+  }
+  .screen-name {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--bg-canvas);
+    letter-spacing: -0.01em;
+  }
+  .screen-spec {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* Paper canvas */
+  .frame {
+    background: var(--bg-canvas);
+    width: 1280px;
+    max-width: 100%;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid #333;
+  }
+
+  /* ============ APP SHELL primitives ============ */
+  .shell {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 720px;
+  }
+  .header {
+    grid-column: 1 / -1;
+    height: 64px;
+    border-bottom: 1px solid var(--ink-faint);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 24px;
+  }
+  .header .wordmark {
+    width: 96px;
+    height: 18px;
+    background: var(--skel-strong);
+    border-radius: 2px;
+  }
+  .header .brand-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--skel-strong);
+    border-radius: 50%;
+  }
+  .header .search {
+    flex: 1;
+    max-width: 480px;
+    height: 32px;
+    background: var(--skel);
+    border-radius: 4px;
+    margin-left: 32px;
+  }
+  .rail {
+    border-right: 1px solid var(--ink-faint);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .rail-item {
+    height: 36px;
+    border-radius: 4px;
+    background: var(--skel);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 10px;
+  }
+  .rail-item.active {
+    border-left: 3px solid var(--teal);
+    padding-left: 9px;
+    background: var(--skel-strong);
+  }
+  .main {
+    padding: 32px 40px;
+    overflow: hidden;
+  }
+
+  /* ============ Generic skeleton primitives ============ */
+  .sk {
+    background: var(--skel);
+    border-radius: 4px;
+  }
+  .sk-strong { background: var(--skel-strong); }
+  .sk-line { height: 12px; border-radius: 3px; }
+  .sk-line-thin { height: 9px; border-radius: 3px; }
+  .sk-line-thick { height: 16px; border-radius: 3px; }
+  .sk-title { height: 24px; border-radius: 3px; }
+  .sk-circle { border-radius: 50%; }
+  .sk-pill { border-radius: 999px; height: 22px; }
+  .sk-chip { border-radius: 999px; height: 26px; }
+  .card {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    padding: 20px;
+  }
+  .card-thin {
+    background: var(--bg-canvas);
+    border: 1px solid var(--ink-soft);
+    border-radius: 4px;
+    padding: 16px;
+  }
+
+  /* ============ Screen 1: App shell + nav ============ */
+  .shell-only .main {
+    /* intentionally empty body, just the chrome */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-faint);
+    font-size: 11px;
+    font-style: italic;
+    letter-spacing: 0.04em;
+  }
+
+  /* ============ Screen 2: Inbox ============ */
+  .subtabs {
+    display: flex;
+    gap: 28px;
+    border-bottom: 1px solid var(--ink-faint);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+  }
+  .subtab {
+    width: 72px;
+    height: 14px;
+    background: var(--skel-strong);
+    border-radius: 3px;
+  }
+  .subtab.muted { background: var(--skel); width: 64px; }
+  .inbox-row {
+    display: grid;
+    grid-template-columns: 48px 1fr 72px;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .inbox-row .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--skel-strong);
+  }
+  .inbox-row .lines { display: flex; flex-direction: column; gap: 8px; }
+  .inbox-row .timestamp {
+    height: 10px;
+    width: 56px;
+    background: var(--skel);
+    border-radius: 2px;
+    justify-self: end;
+  }
+
+  /* ============ Screen 3: Pet profile ============ */
+  .breadcrumb {
+    height: 11px;
+    width: 220px;
+    background: var(--skel);
+    margin-bottom: 16px;
+  }
+  .pet-header-card {
+    height: 96px;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 16px;
+  }
+  .pet-header-card .avatar { width: 64px; height: 64px; background: var(--skel-strong); border-radius: 50%; }
+  .pet-header-card .chips { display: flex; gap: 8px; }
+  .pet-header-card .chips .sk-chip { width: 88px; }
+  .followup-banner {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-left: 4px solid var(--teal);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pet-body {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 32px;
+  }
+  .pet-tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid var(--ink-faint);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .pet-tab { width: 64px; height: 12px; background: var(--skel); border-radius: 3px; }
+  .pet-tab.active { background: var(--skel-strong); }
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .timeline-icon { width: 18px; height: 18px; background: var(--skel-strong); border-radius: 3px; margin-top: 2px; }
+  .timeline-lines { display: flex; flex-direction: column; gap: 8px; }
+  .quick-facts { display: flex; flex-direction: column; gap: 14px; }
+  .qf-row { display: flex; flex-direction: column; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid var(--ink-faint); }
+  .mark-deceased-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ink-faint);
+    display: flex;
+    justify-content: flex-end;
+  }
+  .mark-deceased-footer .sk { width: 120px; height: 11px; }
+
+  /* ============ Screen 4: Invoice ============ */
+  .invoice-letterhead {
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .invoice-letterhead .left { display: flex; flex-direction: column; gap: 10px; }
+  .invoice-letterhead .right { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+  .owner-pet-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--ink-soft);
+    margin-bottom: 24px;
+  }
+  .strip-block { display: flex; flex-direction: column; gap: 8px; }
+  .invoice-section {
+    margin-bottom: 24px;
+  }
+  .section-header {
+    height: 10px;
+    width: 120px;
+    background: var(--skel-strong);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    letter-spacing: 0.12em;
+  }
+  .line-item {
+    display: grid;
+    grid-template-columns: 1fr 16px 80px;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--ink-faint);
+    align-items: center;
+  }
+  .line-item .info { width: 14px; height: 14px; background: var(--skel-strong); border-radius: 50%; }
+  .totals-stack {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .totals-row { display: flex; gap: 16px; align-items: center; }
+  .totals-row .label { width: 80px; height: 10px; background: var(--skel); border-radius: 2px; }
+  .totals-row .value { width: 96px; height: 12px; background: var(--skel-strong); border-radius: 2px; }
+  .totals-row.grand .value { height: 18px; width: 120px; }
+  .status-pill { width: 56px; height: 22px; background: var(--skel-strong); border-radius: 999px; margin-top: 12px; }
+
+  /* ============ Screen 6: Broadcast composer ============ */
+  .broadcast-shell {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    min-height: 100%;
+  }
+  .sub-rail {
+    border-right: 1px solid var(--ink-faint);
+    padding: 24px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sub-rail-header {
+    height: 11px;
+    width: 80px;
+    background: var(--skel-strong);
+    border-radius: 2px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+  }
+  .sub-rail-item {
+    height: 32px;
+    border-radius: 4px;
+    background: var(--skel);
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+  }
+  .sub-rail-item.active { background: var(--skel-strong); }
+  .sub-rail .cta-block {
+    margin-top: 16px;
+    height: 36px;
+    border-radius: 4px;
+    background: var(--teal);
+    opacity: 0.4;
+  }
+  .composer {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 32px;
+    padding: 24px;
+  }
+  .composer-fields { display: flex; flex-direction: column; gap: 20px; }
+  .lang-tabs { display: flex; gap: 8px; margin-bottom: 4px; }
+  .lang-tab { width: 56px; height: 26px; background: var(--skel); border-radius: 4px; }
+  .lang-tab.active { background: var(--skel-strong); }
+  .field-block { display: flex; flex-direction: column; gap: 8px; }
+  .field-label { height: 10px; width: 80px; background: var(--skel); border-radius: 2px; }
+  .field-input { height: 40px; background: var(--skel); border-radius: 4px; border: 1px solid var(--ink-faint); }
+  .field-textarea { height: 140px; background: var(--skel); border-radius: 4px; border: 1px solid var(--ink-faint); }
+  .audience-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 4px;
+    background: var(--bg-canvas);
+  }
+  .audience-bar .chip { width: 140px; height: 22px; background: var(--skel-strong); border-radius: 999px; }
+  .composer-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
+  .composer-actions .ghost { width: 96px; height: 36px; background: transparent; border: 1px solid var(--ink-faint); border-radius: 4px; }
+  .composer-actions .primary { width: 120px; height: 36px; background: var(--teal); opacity: 0.4; border-radius: 4px; }
+  .phone-frame {
+    border: 1.5px solid var(--ink);
+    border-radius: 28px;
+    padding: 12px 10px;
+    width: 280px;
+    height: 560px;
+    background: var(--bg-canvas);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .phone-screen-top { height: 24px; background: var(--skel); border-radius: 4px; margin: 0 8px; }
+  .phone-card { margin: 8px; padding: 12px; border: 1.5px solid var(--ink); border-radius: 6px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+  /* ============ Screen 6: Style guide ============ */
+  .styleguide-shell {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    min-height: 100%;
+  }
+  .scroll-spy {
+    border-right: 1px solid var(--ink-faint);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .spy-item {
+    height: 11px;
+    border-radius: 2px;
+    background: var(--skel);
+  }
+  .spy-item.active { background: var(--skel-strong); }
+  .sg-body { padding: 24px 32px; display: flex; flex-direction: column; gap: 32px; }
+  .sg-section { display: flex; flex-direction: column; gap: 14px; padding-bottom: 24px; border-bottom: 1px solid var(--ink-faint); }
+  .sg-section-header { display: flex; align-items: baseline; gap: 12px; }
+  .sg-section-header .h { height: 14px; width: 120px; background: var(--skel-strong); border-radius: 2px; }
+  .sg-section-header .s { height: 9px; width: 200px; background: var(--skel); border-radius: 2px; }
+  .sg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .sg-tile { height: 64px; background: var(--skel); border-radius: 4px; border: 1px solid var(--ink-faint); }
+
+  /* ============ Screen 7b: Settings ============ */
+  .settings-body {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 8px 0;
+  }
+  .settings-card-header {
+    height: 10px;
+    width: 90px;
+    background: var(--skel-strong);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    letter-spacing: 0.12em;
+  }
+  .settings-card { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .settings-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 16px;
+    gap: 16px;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .settings-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .settings-row .label { height: 11px; background: var(--skel); border-radius: 2px; }
+  .settings-row .value { height: 14px; background: var(--skel-strong); border-radius: 2px; }
+  .settings-row .chevron { width: 12px; height: 12px; background: var(--skel); border-radius: 2px; }
+  .profile-photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--skel-strong);
+    margin-bottom: 8px;
+  }
+  .signout-ghost {
+    width: 100%;
+    height: 44px;
+    border: 1px solid var(--ink);
+    border-radius: 4px;
+    background: transparent;
+    margin-top: 8px;
+  }
+
+  /* Width helpers */
+  .w-30 { width: 30%; }
+  .w-40 { width: 40%; }
+  .w-50 { width: 50%; }
+  .w-55 { width: 55%; }
+  .w-60 { width: 60%; }
+  .w-65 { width: 65%; }
+  .w-70 { width: 70%; }
+  .w-75 { width: 75%; }
+  .w-80 { width: 80%; }
+  .w-85 { width: 85%; }
+  .w-90 { width: 90%; }
+  .w-95 { width: 95%; }
+  .w-full { width: 100%; }
+  .stack { display: flex; flex-direction: column; }
+  .gap-2 { gap: 8px; }
+  .gap-3 { gap: 12px; }
+  .gap-4 { gap: 16px; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Phase 2 · Admin · Loading skeletons</div>
+    <div class="doc-title">Seven admin dashboard skeleton states, in order</div>
+    <div class="doc-sub">
+      Structural shells for the 7 dashboard screens (Sections 1, 2, 3, 4, 5, 7, 7b of layout-spec).
+      Fills: solid <code>--ink-faint @ 50%</code>, no shimmer (per states.md §Loading skeleton).
+      Dimensions are sketch-only pending Phase 2 dimensions-and-color-placements lock.
+    </div>
+  </div>
+
+  <!-- ============ 1 · App shell + nav ============ -->
+  <section class="screen">
+    <div class="screen-caption">
+      <span class="screen-num">01</span><span class="screen-name">App shell + nav</span>
+      <div class="screen-spec">Header wordmark + brand dot + context-aware search · Left rail with 3 destinations · empty body (this screen IS the chrome)</div>
+    </div>
+    <div class="frame">
+      <div class="shell shell-only">
+        <div class="header">
+          <div class="wordmark"></div>
+          <div class="brand-dot"></div>
+          <div class="search"></div>
+        </div>
+        <div class="rail">
+          <div class="rail-item active"><div class="sk sk-line-thin w-70"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-60"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-50"></div></div>
+        </div>
+        <div class="main">routed-content slot</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · Inbox ============ -->
+  <section class="screen">
+    <div class="screen-caption">
+      <span class="screen-num">02</span><span class="screen-name">Inbox</span>
+      <div class="screen-spec">Active/Inactive subtabs · 5 row outlines per spec (40-48px avatar circle + 2 text lines per row)</div>
+    </div>
+    <div class="frame">
+      <div class="shell">
+        <div class="header">
+          <div class="wordmark"></div>
+          <div class="brand-dot"></div>
+          <div class="search"></div>
+        </div>
+        <div class="rail">
+          <div class="rail-item active"><div class="sk sk-line-thin w-60"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-70"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-50"></div></div>
+        </div>
+        <div class="main">
+          <div class="subtabs">
+            <div class="subtab"></div>
+            <div class="subtab muted"></div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="lines"><div class="sk sk-line w-30"></div><div class="sk sk-line-thin w-80"></div></div>
+            <div class="timestamp"></div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="lines"><div class="sk sk-line w-40"></div><div class="sk sk-line-thin w-70"></div></div>
+            <div class="timestamp"></div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="lines"><div class="sk sk-line w-30"></div><div class="sk sk-line-thin w-85"></div></div>
+            <div class="timestamp"></div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="lines"><div class="sk sk-line w-40"></div><div class="sk sk-line-thin w-60"></div></div>
+            <div class="timestamp"></div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar"></div>
+            <div class="lines"><div class="sk sk-line w-30"></div><div class="sk sk-line-thin w-75"></div></div>
+            <div class="timestamp"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · Per-pet medical profile (Gabby) ============ -->
+  <section class="screen">
+    <div class="screen-caption">
+      <span class="screen-num">03</span><span class="screen-name">Per-pet medical profile (Gabby)</span>
+      <div class="screen-spec">Breadcrumb · 96px header card with chronic-condition chips · Open-window banner (4px Teal left bar) · Timeline default · Quick Facts right rail · "Mark deceased" footer (quiet) [no per-spec skeleton given; structural sketch]</div>
+    </div>
+    <div class="frame">
+      <div class="shell">
+        <div class="header">
+          <div class="wordmark"></div>
+          <div class="brand-dot"></div>
+          <div class="search"></div>
+        </div>
+        <div class="rail">
+          <div class="rail-item active"><div class="sk sk-line-thin w-60"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-70"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-50"></div></div>
+        </div>
+        <div class="main">
+          <div class="breadcrumb"></div>
+
+          <div class="pet-header-card">
+            <div class="avatar"></div>
+            <div class="stack gap-3">
+              <div class="sk sk-title w-40"></div>
+              <div class="sk sk-line-thin w-60"></div>
+            </div>
+            <div class="chips">
+              <div class="sk sk-chip"></div>
+              <div class="sk sk-chip"></div>
+            </div>
+          </div>
+
+          <div class="followup-banner">
+            <div class="sk sk-line w-50"></div>
+            <div class="sk sk-line-thin w-70"></div>
+          </div>
+
+          <div class="pet-body">
+            <div>
+              <div class="pet-tabs">
+                <div class="pet-tab active"></div>
+                <div class="pet-tab"></div>
+                <div class="pet-tab"></div>
+                <div class="pet-tab"></div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-icon"></div>
+                <div class="timeline-lines"><div class="sk sk-line w-40"></div><div class="sk sk-line-thin w-90"></div><div class="sk sk-line-thin w-65"></div></div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-icon"></div>
+                <div class="timeline-lines"><div class="sk sk-line w-50"></div><div class="sk sk-line-thin w-80"></div></div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-icon"></div>
+                <div class="timeline-lines"><div class="sk sk-line w-30"></div><div class="sk sk-line-thin w-90"></div><div class="sk sk-line-thin w-55"></div></div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-icon"></div>
+                <div class="timeline-lines"><div class="sk sk-line w-40"></div><div class="sk sk-line-thin w-75"></div></div>
+              </div>
+
+              <div class="mark-deceased-footer">
+                <div class="sk"></div>
+              </div>
+            </div>
+
+            <aside class="quick-facts">
+              <div class="qf-row">
+                <div class="sk sk-line-thin w-40"></div>
+                <div class="sk sk-line w-70"></div>
+              </div>
+              <div class="qf-row">
+                <div class="sk sk-line-thin w-50"></div>
+                <div class="sk sk-line w-60"></div>
+              </div>
+              <div class="qf-row">
+                <div class="sk sk-line-thin w-40"></div>
+                <div class="sk sk-line w-80"></div>
+              </div>
+              <div class="qf-row">
+                <div class="sk sk-line-thin w-50"></div>
+                <div class="sk sk-line w-65"></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · Itemised invoice (view-only) ============ -->
+  <section class="screen">
+    <div class="screen-caption">
+      <span class="screen-num">04</span><span class="screen-name">Itemised invoice (view-only)</span>
+      <div class="screen-spec">Letterhead block · Owner/pet strip · Line items grouped by item_type with always-visible info icons · Right-aligned totals stack · Paid pill · NO Mark paid CTA [no per-spec skeleton given; structural sketch]</div>
+    </div>
+    <div class="frame">
+      <div class="shell">
+        <div class="header">
+          <div class="wordmark"></div>
+          <div class="brand-dot"></div>
+          <div class="search"></div>
+        </div>
+        <div class="rail">
+          <div class="rail-item active"><div class="sk sk-line-thin w-60"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-70"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-50"></div></div>
+        </div>
+        <div class="main">
+          <div class="invoice-letterhead">
+            <div class="left">
+              <div class="sk sk-title w-full" style="width:200px;"></div>
+              <div class="sk sk-line-thin" style="width:160px;"></div>
+              <div class="sk sk-line-thin" style="width:140px;"></div>
+            </div>
+            <div class="right">
+              <div class="sk sk-line" style="width:120px;"></div>
+              <div class="sk sk-line-thin" style="width:100px;"></div>
+            </div>
+          </div>
+
+          <div class="owner-pet-strip">
+            <div class="strip-block">
+              <div class="sk sk-line-thin" style="width:60px;"></div>
+              <div class="sk sk-line w-70"></div>
+              <div class="sk sk-line-thin w-50"></div>
+            </div>
+            <div class="strip-block">
+              <div class="sk sk-line-thin" style="width:60px;"></div>
+              <div class="sk sk-line w-50"></div>
+              <div class="sk sk-line-thin w-40"></div>
+            </div>
+          </div>
+
+          <div class="invoice-section">
+            <div class="section-header"></div>
+            <div class="line-item">
+              <div class="sk sk-line w-65"></div>
+              <div class="info"></div>
+              <div class="sk sk-line" style="justify-self:end;width:64px;"></div>
+            </div>
+            <div class="line-item">
+              <div class="sk sk-line w-55"></div>
+              <div class="info"></div>
+              <div class="sk sk-line" style="justify-self:end;width:64px;"></div>
+            </div>
+            <div class="line-item">
+              <div class="sk sk-line w-70"></div>
+              <div class="info"></div>
+              <div class="sk sk-line" style="justify-self:end;width:64px;"></div>
+            </div>
+          </div>
+
+          <div class="invoice-section">
+            <div class="section-header"></div>
+            <div class="line-item">
+              <div class="sk sk-line w-60"></div>
+              <div class="info"></div>
+              <div class="sk sk-line" style="justify-self:end;width:64px;"></div>
+            </div>
+            <div class="line-item">
+              <div class="sk sk-line w-50"></div>
+              <div class="info"></div>
+              <div class="sk sk-line" style="justify-self:end;width:64px;"></div>
+            </div>
+          </div>
+
+          <div class="totals-stack">
+            <div class="totals-row"><div class="label"></div><div class="value"></div></div>
+            <div class="totals-row"><div class="label"></div><div class="value"></div></div>
+            <div class="totals-row grand"><div class="label"></div><div class="value"></div></div>
+            <div class="status-pill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6 · Broadcast composer ============ -->
+  <section class="screen">
+    <div class="screen-caption">
+      <span class="screen-num">06</span><span class="screen-name">Broadcast composer</span>
+      <div class="screen-spec">Sub-rail: Drafts / Published + Create new CTA · Two-column editor: bilingual EN/MR fields + structured-section affordances · Live phone-frame preview on right · Audience count chip [no per-spec skeleton given; structural sketch]</div>
+    </div>
+    <div class="frame">
+      <div class="shell">
+        <div class="header">
+          <div class="wordmark"></div>
+          <div class="brand-dot"></div>
+          <div class="search"></div>
+        </div>
+        <div class="rail">
+          <div class="rail-item"><div class="sk sk-line-thin w-60"></div></div>
+          <div class="rail-item active"><div class="sk sk-line-thin w-70"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-50"></div></div>
+        </div>
+        <div class="main" style="padding:0;">
+          <div class="broadcast-shell">
+            <div class="sub-rail">
+              <div class="sub-rail-header"></div>
+              <div class="sub-rail-item active"><div class="sk sk-line-thin w-65"></div></div>
+              <div class="sub-rail-item"><div class="sk sk-line-thin w-80"></div></div>
+              <div class="cta-block"></div>
+            </div>
+            <div class="composer">
+              <div class="composer-fields">
+                <div class="lang-tabs">
+                  <div class="lang-tab active"></div>
+                  <div class="lang-tab"></div>
+                </div>
+                <div class="field-block">
+                  <div class="field-label"></div>
+                  <div class="field-input"></div>
+                </div>
+                <div class="field-block">
+                  <div class="field-label"></div>
+                  <div class="field-textarea"></div>
+                </div>
+                <div class="field-block">
+                  <div class="field-label" style="width:120px;"></div>
+                  <div class="stack gap-2">
+                    <div class="sk sk-line-thick w-90"></div>
+                    <div class="sk sk-line-thick w-85"></div>
+                    <div class="sk sk-line-thick w-80"></div>
+                  </div>
+                </div>
+                <div class="audience-bar">
+                  <div class="stack gap-2">
+                    <div class="sk sk-line-thin" style="width:100px;"></div>
+                    <div class="sk sk-line" style="width:80px;"></div>
+                  </div>
+                  <div class="chip"></div>
+                </div>
+                <div class="composer-actions">
+                  <div class="ghost"></div>
+                  <div class="primary"></div>
+                </div>
+              </div>
+              <div>
+                <div class="phone-frame">
+                  <div class="phone-screen-top"></div>
+                  <div class="phone-card">
+                    <div class="sk sk-line w-50"></div>
+                    <div class="sk sk-line-thin w-30"></div>
+                    <div class="sk sk-line-thin w-full"></div>
+                    <div class="sk sk-line-thin w-90"></div>
+                    <div class="sk sk-line-thin w-95"></div>
+                    <div class="sk sk-line-thin w-70"></div>
+                    <div style="flex:1;"></div>
+                    <div class="sk sk-line-thin w-40" style="margin-top:auto;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6 · Style guide ============ -->
+  <section class="screen">
+    <div class="screen-caption">
+      <span class="screen-num">06</span><span class="screen-name">Style guide (/style-guide)</span>
+      <div class="screen-spec">Scroll-spy nav on left (Tokens / Type / Buttons / Forms / Cards / Tabs / Tooltips / Badges / Sheets / Avatars / Empty / Loading / Error / Teal audit / Fur kit / Spacing audit / Vellum audit) · Section content blocks on right [no per-spec skeleton given; structural sketch]</div>
+    </div>
+    <div class="frame">
+      <div class="styleguide-shell">
+        <div class="scroll-spy" style="padding:32px 16px;">
+          <div class="spy-item active w-90"></div>
+          <div class="spy-item w-70"></div>
+          <div class="spy-item w-80"></div>
+          <div class="spy-item w-60"></div>
+          <div class="spy-item w-75"></div>
+          <div class="spy-item w-65"></div>
+          <div class="spy-item w-85"></div>
+          <div class="spy-item w-70"></div>
+          <div class="spy-item w-55"></div>
+          <div class="spy-item w-80"></div>
+          <div class="spy-item w-60"></div>
+          <div class="spy-item w-70"></div>
+          <div class="spy-item w-75"></div>
+          <div class="spy-item w-90"></div>
+          <div class="spy-item w-65"></div>
+          <div class="spy-item w-85"></div>
+          <div class="spy-item w-70"></div>
+        </div>
+        <div class="sg-body">
+          <div class="sg-section">
+            <div class="sg-section-header"><div class="h"></div><div class="s"></div></div>
+            <div class="sg-grid">
+              <div class="sg-tile"></div><div class="sg-tile"></div><div class="sg-tile"></div><div class="sg-tile"></div>
+              <div class="sg-tile"></div><div class="sg-tile"></div><div class="sg-tile"></div><div class="sg-tile"></div>
+            </div>
+          </div>
+          <div class="sg-section">
+            <div class="sg-section-header"><div class="h"></div><div class="s"></div></div>
+            <div class="stack gap-3">
+              <div class="sk sk-title w-50"></div>
+              <div class="sk sk-line w-30"></div>
+              <div class="sk sk-line-thin w-80"></div>
+              <div class="sk sk-line-thin w-70"></div>
+            </div>
+          </div>
+          <div class="sg-section">
+            <div class="sg-section-header"><div class="h"></div><div class="s"></div></div>
+            <div class="sg-grid">
+              <div class="sg-tile"></div><div class="sg-tile"></div><div class="sg-tile"></div><div class="sg-tile"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7b · Dashboard Settings ============ -->
+  <section class="screen">
+    <div class="screen-caption">
+      <span class="screen-num">07b</span><span class="screen-name">Dashboard Settings</span>
+      <div class="screen-spec">Scrollable single column · Profile card (photo + name + license + email) · Account card (read-only phone + EN/MR chrome toggle) · Sign out ghost button (Ink border, no Teal) · Per states.md: section header outlines + 2-3 row outlines per card</div>
+    </div>
+    <div class="frame">
+      <div class="shell">
+        <div class="header">
+          <div class="wordmark"></div>
+          <div class="brand-dot"></div>
+          <div class="search" style="visibility:hidden;"></div>
+        </div>
+        <div class="rail">
+          <div class="rail-item"><div class="sk sk-line-thin w-60"></div></div>
+          <div class="rail-item"><div class="sk sk-line-thin w-70"></div></div>
+          <div class="rail-item active"><div class="sk sk-line-thin w-50"></div></div>
+        </div>
+        <div class="main">
+          <div class="settings-body">
+            <div>
+              <div class="settings-card-header"></div>
+              <div class="card settings-card">
+                <div class="profile-photo"></div>
+                <div class="settings-row">
+                  <div class="label"></div>
+                  <div class="value w-60"></div>
+                  <div class="chevron"></div>
+                </div>
+                <div class="settings-row">
+                  <div class="label"></div>
+                  <div class="value w-40"></div>
+                  <div class="chevron"></div>
+                </div>
+                <div class="settings-row">
+                  <div class="label"></div>
+                  <div class="value w-70"></div>
+                  <div class="chevron"></div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="settings-card-header"></div>
+              <div class="card settings-card">
+                <div class="settings-row">
+                  <div class="label"></div>
+                  <div class="value w-50"></div>
+                  <div class="chevron" style="visibility:hidden;"></div>
+                </div>
+                <div class="settings-row">
+                  <div class="label"></div>
+                  <div style="display:flex;gap:6px;">
+                    <div class="value" style="width:48px;height:26px;border-radius:4px;"></div>
+                    <div class="sk" style="width:48px;height:26px;border-radius:4px;"></div>
+                  </div>
+                  <div class="chevron" style="visibility:hidden;"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="signout-ghost" aria-label="Sign out placeholder"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

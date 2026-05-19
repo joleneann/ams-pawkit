@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit Phase 2 · Screen 05 · Clinical history full screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --honey: #C8A467;
+  }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #1f1f1f; color: var(--bg-canvas); padding: 48px 32px 96px; line-height: 1.4; }
+  .doc { max-width: 1360px; margin: 0 auto; }
+  .doc-header { border-bottom: 1px solid #444; padding-bottom: 24px; margin-bottom: 40px; }
+  .doc-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+  .doc-title { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: var(--bg-canvas); margin-bottom: 12px; }
+  .doc-sub { font-size: 13px; color: #aaa; line-height: 1.6; max-width: 820px; }
+  .doc-sub .key { color: var(--bg-canvas); font-weight: 500; }
+
+  .section-header { margin: 32px 0 16px; }
+  .section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #999; margin-bottom: 4px; }
+  .section-title { font-family: 'Satoshi', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -0.015em; color: var(--bg-canvas); }
+
+  .ref-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .ref-card { background: var(--bg-canvas); border: 1px solid #444; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; }
+  .ref-image { aspect-ratio: 16/10; background: #ddd; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .ref-image img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .ref-meta { padding: 12px 14px; color: var(--ink); }
+  .ref-name { font-family: 'Satoshi', sans-serif; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .ref-caption { font-size: 11px; line-height: 1.5; color: var(--ink-soft); }
+  .ref-caption .verb { font-weight: 600; color: var(--ink); }
+
+  .reading-note { background: rgba(255,255,255,0.04); border-left: 3px solid var(--teal); padding: 14px 18px; margin: 32px 0 40px; font-size: 13px; line-height: 1.6; color: #ccc; }
+  .reading-note .key { color: var(--bg-canvas); font-weight: 600; }
+
+  .direction { margin-bottom: 64px; }
+  .direction-header-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  .direction-label { font-family: 'Satoshi', sans-serif; font-size: 13px; font-weight: 700; color: var(--teal); letter-spacing: 0.06em; text-transform: uppercase; }
+  .direction-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--bg-canvas); letter-spacing: -0.015em; }
+  .direction-sub { font-size: 12px; color: #999; max-width: 820px; line-height: 1.55; margin-bottom: 16px; }
+  .frame { width: 1280px; min-height: 760px; background: var(--bg-canvas); color: var(--ink); border: 1px solid #444; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Locked dashboard chrome (Screen 01 anatomy) */
+  .chrome-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 28px; height: 64px; border-bottom: 1px solid var(--ink-faint); gap: 28px; flex-shrink: 0; }
+  .chrome-wordmark { display: flex; flex-direction: column; line-height: 1; justify-self: start; }
+  .chrome-wordmark .line1 { font-family: 'Satoshi', sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); letter-spacing: -0.015em; }
+  .chrome-wordmark .line2 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.14em; margin-top: 3px; }
+  .chrome-search { width: 460px; height: 36px; background: rgba(168, 163, 158, 0.15); border-radius: 4px; display: flex; align-items: center; padding: 0 12px; gap: 10px; justify-self: center; }
+  .chrome-search svg { width: 14px; height: 14px; color: var(--ink-soft); flex-shrink: 0; stroke: currentColor; fill: none; }
+  .chrome-search .placeholder { font-size: 14px; color: var(--ink-soft); }
+  .chrome-right { justify-self: end; }
+  .chrome-shell { display: grid; grid-template-columns: 240px 1fr; min-height: 696px; }
+  .chrome-rail { border-right: 1px solid var(--ink-faint); padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; }
+  .chrome-rail-label { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); padding: 0 16px; margin: 4px 0 8px; }
+  .chrome-rail-item { height: 40px; display: flex; align-items: center; gap: 14px; padding: 0 16px; border-left: 4px solid transparent; margin-left: -12px; padding-left: 24px; font-size: 15px; font-weight: 400; color: var(--ink-soft); border-radius: 0 6px 6px 0; }
+  .chrome-rail-item svg { width: 16px; height: 16px; color: currentColor; flex-shrink: 0; stroke: currentColor; fill: none; }
+  .chrome-rail-item.active { border-left-color: var(--teal); color: var(--ink); font-weight: 600; }
+  .chrome-main { background: var(--bg-canvas); overflow-y: auto; display: flex; flex-direction: column; }
+
+  /* Shared Back affordance */
+  .s5-back { padding: 18px 32px 0; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); cursor: pointer; max-width: 100%; }
+  .s5-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+  .s5-back:hover { color: var(--ink); }
+
+  .direction-notes { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; color: #bbb; font-size: 12px; line-height: 1.6; }
+  .direction-notes .note-block { background: rgba(255,255,255,0.04); padding: 14px 16px; border-radius: 4px; }
+  .direction-notes .note-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+
+  /* ============ Direction A — NEJM / case-report-channeled ============ */
+  .dir-a .editorial { max-width: 640px; margin: 0 auto; padding: 28px 24px 64px; }
+  .dir-a .ed-header { padding-bottom: 16px; margin-bottom: 28px; border-bottom: 2px solid var(--ink); }
+  .dir-a .ed-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  .dir-a .ed-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 4px; }
+  .dir-a .ed-sub { font-size: 11px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .dir-a .ed-visit { margin-bottom: 36px; }
+  .dir-a .ed-visit-header { display: grid; grid-template-columns: 110px 1fr auto; gap: 14px; align-items: baseline; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--ink-faint); }
+  .dir-a .ed-visit-date { font-size: 13px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .dir-a .ed-visit-reason { font-size: 13px; color: var(--ink); font-weight: 600; }
+  .dir-a .ed-visit-vet { font-size: 11px; color: var(--ink-soft); font-style: italic; }
+  .dir-a .ed-soap { margin-top: 14px; }
+  .dir-a .ed-soap-label { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
+  .dir-a .ed-soap-body { font-size: 13px; color: var(--ink); line-height: 1.7; }
+
+  /* ============ Direction B — Notion-channeled (collapsible blocks) ============ */
+  .dir-b .notion { max-width: 720px; margin: 0 auto; padding: 36px 32px 64px; }
+  .dir-b .nt-title { font-family: 'Satoshi', sans-serif; font-size: 26px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
+  .dir-b .nt-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 28px; }
+  .dir-b .nt-visit { border-top: 1px solid var(--ink-faint); padding: 14px 0; }
+  .dir-b .nt-visit:last-of-type { border-bottom: 1px solid var(--ink-faint); }
+  .dir-b .nt-visit-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .dir-b .nt-chevron { width: 12px; height: 12px; color: var(--ink-soft); transition: transform 0.15s; flex-shrink: 0; stroke: currentColor; fill: none; }
+  .dir-b .nt-visit.expanded .nt-chevron { transform: rotate(90deg); }
+  .dir-b .nt-visit-meta { display: grid; grid-template-columns: 100px 1fr auto; gap: 14px; align-items: baseline; flex: 1; }
+  .dir-b .nt-visit-date { font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 500; }
+  .dir-b .nt-visit-reason { font-size: 14px; color: var(--ink); font-weight: 600; }
+  .dir-b .nt-visit-vet { font-size: 11px; color: var(--ink-faint); font-style: italic; }
+  .dir-b .nt-visit-body { padding-top: 18px; padding-left: 22px; display: none; }
+  .dir-b .nt-visit.expanded .nt-visit-body { display: block; }
+  .dir-b .nt-soap { margin-bottom: 14px; }
+  .dir-b .nt-soap-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
+  .dir-b .nt-soap-body { font-size: 13px; color: var(--ink); line-height: 1.65; }
+
+  /* ============ Direction C — Linear-channeled (cards with metadata row) ============ */
+  .dir-c .linear { max-width: 800px; margin: 0 auto; padding: 28px 28px 64px; }
+  .dir-c .lin-header { padding-bottom: 14px; border-bottom: 1px solid var(--ink-faint); margin-bottom: 22px; }
+  .dir-c .lin-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 6px; }
+  .dir-c .lin-sub { font-size: 12px; color: var(--ink-soft); }
+  .dir-c .lin-card { background: rgba(15,12,10,0.02); border: 1px solid var(--ink-faint); border-radius: 6px; padding: 18px 22px; margin-bottom: 14px; }
+  .dir-c .lin-card-header { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--ink-faint); flex-wrap: wrap; }
+  .dir-c .lin-card-date { font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .dir-c .lin-card-reason { font-size: 14px; color: var(--ink); font-weight: 600; }
+  .dir-c .lin-pills { display: flex; gap: 6px; margin-left: auto; }
+  .dir-c .lin-pill { font-size: 10px; padding: 3px 8px; border-radius: 3px; background: rgba(15,12,10,0.08); color: var(--ink-soft); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+  .dir-c .lin-card-vet { font-size: 11px; color: var(--ink-faint); font-style: italic; width: 100%; }
+  .dir-c .lin-soap { display: grid; grid-template-columns: 80px 1fr; gap: 16px; margin-bottom: 12px; align-items: start; }
+  .dir-c .lin-soap:last-child { margin-bottom: 0; }
+  .dir-c .lin-soap-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); padding-top: 2px; }
+  .dir-c .lin-soap-body { font-size: 13px; color: var(--ink); line-height: 1.6; }
+
+  /* ============ Direction D — Scribenote / Digitail-channeled (color-coded SOAP cards) ============ */
+  .dir-d .scribe { max-width: 800px; margin: 0 auto; padding: 28px 28px 64px; }
+  .dir-d .sc-header { padding-bottom: 16px; border-bottom: 1px solid var(--ink-faint); margin-bottom: 22px; }
+  .dir-d .sc-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .dir-d .sc-sub { font-size: 12px; color: var(--ink-soft); }
+  .dir-d .sc-visit { margin-bottom: 32px; }
+  .dir-d .sc-visit-head { display: flex; gap: 14px; align-items: baseline; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--ink-faint); }
+  .dir-d .sc-visit-date { font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 600; min-width: 100px; }
+  .dir-d .sc-visit-reason { font-size: 14px; color: var(--ink); font-weight: 700; flex: 1; }
+  .dir-d .sc-visit-vet { font-size: 11px; color: var(--ink-faint); font-style: italic; }
+  .dir-d .sc-cards { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .dir-d .sc-card { background: var(--bg-canvas); border: 1px solid var(--ink-faint); border-left: 3px solid; border-radius: 4px; padding: 12px 16px; }
+  .dir-d .sc-card.s { border-left-color: var(--ink-faint); }
+  .dir-d .sc-card.o { border-left-color: var(--honey); }
+  .dir-d .sc-card.a { border-left-color: var(--ink-soft); }
+  .dir-d .sc-card.p { border-left-color: var(--ink); }
+  .dir-d .sc-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .dir-d .sc-card-body { font-size: 13px; color: var(--ink); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Phase 2 · Screen 05 · Clinical history full screen (view-only SOAP preview)</div>
+    <div class="doc-title">Four SOAP-history directions on the locked chrome</div>
+    <div class="doc-sub">
+      Opens from the Screen 03 pet record panel's <span class="key">Clinical history</span> tab by tapping a row. Full-screen view-only surface showing this pet's clinical history as SOAP notes (Subjective / Objective / Assessment / Plan per visit), a preview of the production data-entry path that replaces VetBuddy. v0 content hand-written per pet (Gabby's full history seeded for the demo). Back affordance top-left returns to the inbox thread with Clinical history tab still active.
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-eyebrow">Strand A · Design references · UI taste</div>
+    <div class="section-title">Four cross-industry editorial / clinical-notes benchmarks</div>
+  </div>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-05-refs/nejm.jpg" alt="NEJM 1928 cover reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">NEJM</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> 1928 issue contents page, serif masthead over a quiet sectioned table of articles. Sets the editorial-authority register for clinical body copy. Substitute for the live NEJM site (paywalled, 403s on scrape).</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-05-refs/notion.png" alt="Notion document reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Notion</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> editorial document with bold H1 over quiet H2, generous left-rail breathing, no app chrome competing with body text. Document-as-the-product.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-05-refs/linear.png" alt="Linear issue peek reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Linear</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> Linear issue peek card, ID + title + tight row of typed metadata chips (status, priority, cycle) above body copy. Metadata-then-prose rhythm maps onto visit-header-then-SOAP-body.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-05-refs/athena.png" alt="Athena Health ambient note reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Athena Health</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> human-EHR ambient note with stacked labeled sections (Reason for visit, HPI, ROS) where each label sits above a dense paragraph block. Section-as-landmark scanning pattern in clinical setting.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-eyebrow">Strand B · Category competitors · vet / healthcare clinical-notes UI</div>
+    <div class="section-title">Four vet PMS + AI scribe benchmarks</div>
+  </div>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-05-refs/ezyvet.png" alt="ezyVet clinical record reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">ezyVet</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> vet PMS clinical record with collapsible Presenting problem / Master problems / Health status / Subjective sections stacked vertically, each with vet+date byline. Closest to expanded-newest, collapsed-older visit card model.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-05-refs/provet.webp" alt="Provet Cloud consultation list reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Provet Cloud</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> consultation-list with client + patient + start-time + reason + doctor columns in a tight row rhythm. Visit-list header anatomy specifically. (Provet hides actual SOAP composer publicly.)</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-05-refs/digitail.png" alt="Digitail SOAP tabs reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Digitail</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> vet PMS clinical record with explicit S / O / A / P tabs across the top header + right-rail summary. Direct evidence of S/O/A/P navigational landmark pattern in a vet-specific UI.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-05-refs/scribenote.png" alt="Scribenote SOAP cards reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Scribenote</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> vet AI scribe output with explicit color-coded S/O/A/P cards stacked vertically, each header above its own body. Closest visual analog to Pawkit's planned per-visit SOAP rendering.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reading-note">
+    <span class="key">Reading the directions below.</span> Same chrome (locked Screen 01 anatomy: AMS wordmark + centered search + empty chrome-right, 240px rail with Inbox active / Broadcasts / Settings, no Pets rail per locked mental model). Same content (Gabby's clinical history: three visits shown for brevity, May 6 2026 ear infection check, Apr 22 2026 annual wellness + DHPP, Jan 15 2026 allergy flare; v0 ships with the full ~8-visit history). Each direction renders the same SOAP content with a different visual treatment. Back affordance top-left returns to inbox thread with Clinical history tab still active.
+  </div>
+
+  <!-- ============ Direction A · NEJM / case-report-channeled ============ -->
+  <div class="direction dir-a">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction A</div>
+      <div class="direction-title">NEJM / case-report-channeled · editorial document</div>
+    </div>
+    <div class="direction-sub">Single-column ~640px editorial flow. Document opens with a quiet title block, then each visit is a section with date / reason / vet byline above, S/O/A/P labels rendered as small-caps eyebrows with body paragraphs below. Maximum clinical authority via discipline, no decorative cards, no card chrome. Reads like a case-report article (Inter not serif, since locked type system bans new fonts, but the editorial rhythm comes through).</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="s5-back">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to thread with Fernandes household
+          </div>
+          <div class="editorial">
+            <div class="ed-header">
+              <div class="ed-eyebrow">Clinical history · view-only</div>
+              <div class="ed-title">Gabby · Golden Retriever · 4y M</div>
+              <div class="ed-sub">Fernandes household · 8 visits since Apr 2025 · seasonal allergies (chronic)</div>
+            </div>
+
+            <div class="ed-visit">
+              <div class="ed-visit-header">
+                <div class="ed-visit-date">6 May 2026</div>
+                <div class="ed-visit-reason">Ear infection check (right ear)</div>
+                <div class="ed-visit-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Subjective</div>
+                <div class="ed-soap-body">Parent reports right ear scratching for 3 days, head-shaking, mildly lethargic. Appetite normal. No vomiting or diarrhea. No prior treatment attempted at home.</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Objective</div>
+                <div class="ed-soap-body">T 38.6°C, P 92, R 24. Weight 31.2 kg (stable). BCS 5/9. Right ear: erythematous canal, mild yellow-brown discharge, pain on palpation, tympanic membrane intact. Left ear: normal. Cytology: cocci +++, yeast +. Remainder of physical exam NSF.</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Assessment</div>
+                <div class="ed-soap-body">Otitis externa, right ear (bacterial with secondary yeast). Suspected trigger: seasonal allergies (chronic dermatitis history).</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Plan</div>
+                <div class="ed-soap-body">In-clinic ear flush performed. Cefadroxil 250mg PO BID × 7 days. Otic cleansing solution BID. Mometasone otic drops BID × 7 days. Recheck 16 May. Parent shown ear-cleaning technique. Watch for head-shaking, increased discharge, fever.</div>
+              </div>
+            </div>
+
+            <div class="ed-visit">
+              <div class="ed-visit-header">
+                <div class="ed-visit-date">22 Apr 2026</div>
+                <div class="ed-visit-reason">Annual wellness + DHPP booster</div>
+                <div class="ed-visit-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Subjective</div>
+                <div class="ed-soap-body">Annual wellness visit. Parent reports good appetite, normal energy, regular bowel movements. No coughing or sneezing. No concerns.</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Objective</div>
+                <div class="ed-soap-body">T 38.4°C, P 88, R 22. Weight 31.2 kg. BCS 5/9. Coat condition good. Heart auscultation: regular rhythm, no murmur. Lungs clear bilaterally. Abdomen soft, non-painful, no organomegaly. Mucous membranes pink, CRT under 2s. Mild seasonal dermatitis on hindquarters (chronic).</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Assessment</div>
+                <div class="ed-soap-body">Healthy adult Golden Retriever. Chronic mild seasonal dermatitis (managed). Otitis externa history (right ear, 2025), monitor.</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Plan</div>
+                <div class="ed-soap-body">DHPP booster administered IM (left thigh). Continue Apoquel 5.4mg PRN for allergy flares. Next wellness due Apr 2027. Rabies booster due Nov 2028.</div>
+              </div>
+            </div>
+
+            <div class="ed-visit">
+              <div class="ed-visit-header">
+                <div class="ed-visit-date">15 Jan 2026</div>
+                <div class="ed-visit-reason">Allergy flare</div>
+                <div class="ed-visit-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Subjective</div>
+                <div class="ed-soap-body">Parent reports increased scratching, mild redness on belly and inner thighs over past 4 days. No diet changes. No new exposures noted.</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Objective</div>
+                <div class="ed-soap-body">T 38.3°C, P 90, R 22. Weight 31.2 kg. BCS 5/9. Mild erythema on ventral abdomen and inguinal area. No primary lesions, no pustules. Coat otherwise normal. Ears clear.</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Assessment</div>
+                <div class="ed-soap-body">Mild contact dermatitis, likely seasonal allergy flare (chronic).</div>
+              </div>
+              <div class="ed-soap">
+                <div class="ed-soap-label">Plan</div>
+                <div class="ed-soap-body">Cetirizine 10mg PO BID × 7 days. Watch for worsening or spread. Recheck only if not improving by 22 Jan. Parent advised to bathe with hypoallergenic shampoo if symptoms persist.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>None on the canvas. Locked one-Teal rule preserved (Teal lives in the rail brand bar only).</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal NEJM editorial rhythm, Athena's label-above-paragraph stack, generous line-height 1.7. Pitfall: pages turn into wall-of-text when 8 visits stack. Mitigation: each visit's 2px Ink divider keeps sectional rhythm crisp.</div>
+      <div class="note-block"><div class="note-label">Risk</div>No scannability when Sagar wants to jump to a specific visit. Counter: in production, browser ctrl-F searches the page; v1+ could add a date sidebar.</div>
+    </div>
+  </div>
+
+  <!-- ============ Direction B · Notion-channeled (collapsible blocks) ============ -->
+  <div class="direction dir-b">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction B</div>
+      <div class="direction-title">Notion-channeled · collapsible visit blocks</div>
+    </div>
+    <div class="direction-sub">Document-feel ~720px column. Newest visit is expanded by default; older visits collapsed to a single header row (date / reason / vet name) with a chevron. Click any row to expand. Best when there are many historic visits and Sagar mostly cares about the recent one. S/O/A/P inside each expanded block as inline section labels with quiet Notion-like indentation. (Click the chevrons in the preview to toggle.)</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="s5-back">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to thread with Fernandes household
+          </div>
+          <div class="notion">
+            <div class="nt-title">Gabby · Clinical history</div>
+            <div class="nt-sub">Golden Retriever · 4y M · Fernandes household · 8 visits since Apr 2025</div>
+
+            <div class="nt-visit expanded">
+              <div class="nt-visit-toggle">
+                <svg class="nt-chevron" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                <div class="nt-visit-meta">
+                  <div class="nt-visit-date">6 May 2026</div>
+                  <div class="nt-visit-reason">Ear infection check (right ear)</div>
+                  <div class="nt-visit-vet">Dr Sagar</div>
+                </div>
+              </div>
+              <div class="nt-visit-body">
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Subjective</div>
+                  <div class="nt-soap-body">Parent reports right ear scratching for 3 days, head-shaking, mildly lethargic. Appetite normal.</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Objective</div>
+                  <div class="nt-soap-body">T 38.6°C, P 92, R 24. Weight 31.2 kg. BCS 5/9. Right ear: erythematous canal, mild yellow-brown discharge, pain on palpation, drum intact. Cytology: cocci +++, yeast +. Remainder NSF.</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Assessment</div>
+                  <div class="nt-soap-body">Otitis externa, right ear (bacterial with secondary yeast). Suspected trigger: seasonal allergies.</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Plan</div>
+                  <div class="nt-soap-body">In-clinic ear flush. Cefadroxil 250mg PO BID × 7 days. Otic cleansing solution + Mometasone otic drops BID. Recheck 16 May. Parent shown ear-cleaning technique.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="nt-visit">
+              <div class="nt-visit-toggle">
+                <svg class="nt-chevron" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                <div class="nt-visit-meta">
+                  <div class="nt-visit-date">22 Apr 2026</div>
+                  <div class="nt-visit-reason">Annual wellness + DHPP booster</div>
+                  <div class="nt-visit-vet">Dr Sagar</div>
+                </div>
+              </div>
+              <div class="nt-visit-body">
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Subjective</div>
+                  <div class="nt-soap-body">Annual wellness visit. Parent reports good appetite, normal energy. No concerns.</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Objective</div>
+                  <div class="nt-soap-body">T 38.4°C, P 88, R 22. Weight 31.2 kg (stable). BCS 5/9. Heart and lungs clear. Abdomen NSF. Mild chronic seasonal dermatitis on hindquarters.</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Assessment</div>
+                  <div class="nt-soap-body">Healthy adult Golden Retriever. Chronic mild seasonal dermatitis (managed). Otitis history (monitor).</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Plan</div>
+                  <div class="nt-soap-body">DHPP booster administered IM. Continue Apoquel 5.4mg PRN. Next wellness Apr 2027.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="nt-visit">
+              <div class="nt-visit-toggle">
+                <svg class="nt-chevron" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                <div class="nt-visit-meta">
+                  <div class="nt-visit-date">15 Jan 2026</div>
+                  <div class="nt-visit-reason">Allergy flare</div>
+                  <div class="nt-visit-vet">Dr Sagar</div>
+                </div>
+              </div>
+              <div class="nt-visit-body">
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Subjective</div>
+                  <div class="nt-soap-body">Increased scratching, mild redness on belly and inner thighs over past 4 days. No diet changes.</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Objective</div>
+                  <div class="nt-soap-body">T 38.3°C, P 90, R 22. Mild erythema on ventral abdomen and inguinal area. No primary lesions. Ears clear.</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Assessment</div>
+                  <div class="nt-soap-body">Mild contact dermatitis, likely seasonal allergy flare (chronic).</div>
+                </div>
+                <div class="nt-soap">
+                  <div class="nt-soap-label">Plan</div>
+                  <div class="nt-soap-body">Cetirizine 10mg PO BID × 7 days. Recheck if not improving by 22 Jan. Hypoallergenic shampoo if persists.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>None on the canvas. Locked one-Teal rule preserved.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Notion's chevron-toggle row + indented expanded body, ezyVet's stacked-section pattern. Pitfall: discoverability (parent calling, Sagar can't remember which visit to expand). Mitigation: keep newest expanded by default.</div>
+      <div class="note-block"><div class="note-label">Risk</div>The interaction adds a tap layer between Sagar and the data. Counter: at 8 visits, the alternative (all expanded) becomes a wall.</div>
+    </div>
+  </div>
+
+  <!-- ============ Direction C · Linear-channeled (cards with metadata row) ============ -->
+  <div class="direction dir-c">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction C</div>
+      <div class="direction-title">Linear-channeled · visit cards with metadata row</div>
+    </div>
+    <div class="direction-sub">Each visit is a subtle bordered card. Header row carries date + reason + pill-style tags (visit type: Vaccination / Sick visit / Wellness; alerts: Allergy / Otitis). Below header, SOAP rendered as 80px-label + body two-column grid. Most scannable when there are many visits and Sagar wants to skim metadata before diving in.</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="s5-back">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to thread with Fernandes household
+          </div>
+          <div class="linear">
+            <div class="lin-header">
+              <div class="lin-title">Gabby · Clinical history</div>
+              <div class="lin-sub">Golden Retriever · 4y M · Fernandes household · 8 visits since Apr 2025</div>
+            </div>
+
+            <div class="lin-card">
+              <div class="lin-card-header">
+                <div class="lin-card-date">6 May 2026</div>
+                <div class="lin-card-reason">Ear infection check (right ear)</div>
+                <div class="lin-pills">
+                  <span class="lin-pill">Sick visit</span>
+                  <span class="lin-pill">Otitis</span>
+                </div>
+                <div class="lin-card-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="lin-soap"><div class="lin-soap-label">Subjective</div><div class="lin-soap-body">Parent reports right ear scratching for 3 days, head-shaking, mildly lethargic. Appetite normal.</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Objective</div><div class="lin-soap-body">T 38.6°C, P 92, R 24. Weight 31.2 kg. BCS 5/9. Right ear: erythematous canal, mild yellow-brown discharge, pain on palpation, drum intact. Cytology: cocci +++, yeast +. Remainder NSF.</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Assessment</div><div class="lin-soap-body">Otitis externa, right ear (bacterial with secondary yeast). Suspected trigger: seasonal allergies.</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Plan</div><div class="lin-soap-body">In-clinic ear flush. Cefadroxil 250mg PO BID × 7 days. Otic cleansing solution + Mometasone otic drops BID. Recheck 16 May.</div></div>
+            </div>
+
+            <div class="lin-card">
+              <div class="lin-card-header">
+                <div class="lin-card-date">22 Apr 2026</div>
+                <div class="lin-card-reason">Annual wellness + DHPP booster</div>
+                <div class="lin-pills">
+                  <span class="lin-pill">Wellness</span>
+                  <span class="lin-pill">Vaccination</span>
+                </div>
+                <div class="lin-card-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="lin-soap"><div class="lin-soap-label">Subjective</div><div class="lin-soap-body">Annual wellness visit. Parent reports good appetite, normal energy. No concerns.</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Objective</div><div class="lin-soap-body">T 38.4°C, P 88, R 22. Weight 31.2 kg. BCS 5/9. Heart and lungs clear. Abdomen NSF. Mild chronic seasonal dermatitis on hindquarters.</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Assessment</div><div class="lin-soap-body">Healthy adult Golden Retriever. Chronic mild seasonal dermatitis (managed). Otitis history (monitor).</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Plan</div><div class="lin-soap-body">DHPP booster administered IM. Continue Apoquel 5.4mg PRN. Next wellness Apr 2027.</div></div>
+            </div>
+
+            <div class="lin-card">
+              <div class="lin-card-header">
+                <div class="lin-card-date">15 Jan 2026</div>
+                <div class="lin-card-reason">Allergy flare</div>
+                <div class="lin-pills">
+                  <span class="lin-pill">Sick visit</span>
+                  <span class="lin-pill">Allergy</span>
+                </div>
+                <div class="lin-card-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="lin-soap"><div class="lin-soap-label">Subjective</div><div class="lin-soap-body">Increased scratching, mild redness on belly and inner thighs over past 4 days. No diet changes.</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Objective</div><div class="lin-soap-body">T 38.3°C, P 90, R 22. Mild erythema on ventral abdomen and inguinal area. No primary lesions. Ears clear.</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Assessment</div><div class="lin-soap-body">Mild contact dermatitis, likely seasonal allergy flare (chronic).</div></div>
+              <div class="lin-soap"><div class="lin-soap-label">Plan</div><div class="lin-soap-body">Cetirizine 10mg PO BID × 7 days. Recheck if not improving by 22 Jan. Hypoallergenic shampoo if persists.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>None on the canvas. Locked one-Teal rule preserved.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Linear's metadata-row + pill chips, Digitail's labeled-section pattern. Pitfall: pill tag taxonomy creep (every visit invents a new tag). Mitigation: lock a small tag vocabulary (Wellness, Vaccination, Sick visit + body system: Allergy, Otitis, GI etc.) at production-build time.</div>
+      <div class="note-block"><div class="note-label">Risk</div>Card chrome adds visual weight; less editorial than A. May feel "app-like" rather than "document." Counter: card tint is subtle (rgba 0.02), border thin.</div>
+    </div>
+  </div>
+
+  <!-- ============ Direction D · Scribenote / Digitail-channeled (color-coded SOAP cards) ============ -->
+  <div class="direction dir-d">
+    <div class="direction-header-row">
+      <div class="direction-label">Direction D</div>
+      <div class="direction-title">Scribenote / Digitail-channeled · color-coded SOAP cards</div>
+    </div>
+    <div class="direction-sub">Per visit, four small cards stacked vertically (Subjective / Objective / Assessment / Plan), each with a quiet category color on the 3px left border (Ink-faint for S, Honey for O, Ink-soft for A, Ink for P). Sagar sees where the production AI will put content. Strongest "AI scribe output" feel and best for the growth pitch's "this is what your dictation becomes" moment.</div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="chrome-main">
+          <div class="s5-back">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to thread with Fernandes household
+          </div>
+          <div class="scribe">
+            <div class="sc-header">
+              <div class="sc-title">Gabby · Clinical history</div>
+              <div class="sc-sub">Golden Retriever · 4y M · Fernandes household · 8 visits since Apr 2025</div>
+            </div>
+
+            <div class="sc-visit">
+              <div class="sc-visit-head">
+                <div class="sc-visit-date">6 May 2026</div>
+                <div class="sc-visit-reason">Ear infection check (right ear)</div>
+                <div class="sc-visit-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="sc-cards">
+                <div class="sc-card s"><div class="sc-card-label">Subjective</div><div class="sc-card-body">Parent reports right ear scratching for 3 days, head-shaking, mildly lethargic. Appetite normal.</div></div>
+                <div class="sc-card o"><div class="sc-card-label">Objective</div><div class="sc-card-body">T 38.6°C, P 92, R 24. Weight 31.2 kg. BCS 5/9. Right ear: erythematous canal, mild yellow-brown discharge, pain on palpation, drum intact. Cytology: cocci +++, yeast +. Remainder NSF.</div></div>
+                <div class="sc-card a"><div class="sc-card-label">Assessment</div><div class="sc-card-body">Otitis externa, right ear (bacterial with secondary yeast). Suspected trigger: seasonal allergies.</div></div>
+                <div class="sc-card p"><div class="sc-card-label">Plan</div><div class="sc-card-body">In-clinic ear flush. Cefadroxil 250mg PO BID × 7 days. Otic cleansing solution + Mometasone otic drops BID. Recheck 16 May. Parent shown ear-cleaning technique.</div></div>
+              </div>
+            </div>
+
+            <div class="sc-visit">
+              <div class="sc-visit-head">
+                <div class="sc-visit-date">22 Apr 2026</div>
+                <div class="sc-visit-reason">Annual wellness + DHPP booster</div>
+                <div class="sc-visit-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="sc-cards">
+                <div class="sc-card s"><div class="sc-card-label">Subjective</div><div class="sc-card-body">Annual wellness visit. Parent reports good appetite, normal energy. No concerns.</div></div>
+                <div class="sc-card o"><div class="sc-card-label">Objective</div><div class="sc-card-body">T 38.4°C, P 88, R 22. Weight 31.2 kg. BCS 5/9. Heart and lungs clear. Abdomen NSF. Mild chronic seasonal dermatitis on hindquarters.</div></div>
+                <div class="sc-card a"><div class="sc-card-label">Assessment</div><div class="sc-card-body">Healthy adult Golden Retriever. Chronic mild seasonal dermatitis (managed). Otitis history (monitor).</div></div>
+                <div class="sc-card p"><div class="sc-card-label">Plan</div><div class="sc-card-body">DHPP booster administered IM. Continue Apoquel 5.4mg PRN. Next wellness Apr 2027.</div></div>
+              </div>
+            </div>
+
+            <div class="sc-visit">
+              <div class="sc-visit-head">
+                <div class="sc-visit-date">15 Jan 2026</div>
+                <div class="sc-visit-reason">Allergy flare</div>
+                <div class="sc-visit-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="sc-cards">
+                <div class="sc-card s"><div class="sc-card-label">Subjective</div><div class="sc-card-body">Increased scratching, mild redness on belly and inner thighs over past 4 days. No diet changes.</div></div>
+                <div class="sc-card o"><div class="sc-card-label">Objective</div><div class="sc-card-body">T 38.3°C, P 90, R 22. Mild erythema on ventral abdomen and inguinal area. No primary lesions. Ears clear.</div></div>
+                <div class="sc-card a"><div class="sc-card-label">Assessment</div><div class="sc-card-body">Mild contact dermatitis, likely seasonal allergy flare (chronic).</div></div>
+                <div class="sc-card p"><div class="sc-card-label">Plan</div><div class="sc-card-body">Cetirizine 10mg PO BID × 7 days. Recheck if not improving by 22 Jan. Hypoallergenic shampoo if persists.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="direction-notes">
+      <div class="note-block"><div class="note-label">Teal</div>None on the canvas. Locked one-Teal rule preserved. Category colors on the 3px left borders are neutrals (Ink-faint / Honey / Ink-soft / Ink), no Teal abuse.</div>
+      <div class="note-block"><div class="note-label">Steal · Pitfall</div>Steal Scribenote's color-coded SOAP cards, Digitail's labeled-section discipline. Pitfall: colors reading as "status" (good / bad / urgent) instead of category. Mitigation: neutrals only, all four borders sit in the same warm earth-tone family.</div>
+      <div class="note-block"><div class="note-label">Risk</div>Most chrome of the four directions (3 visits × 4 cards = 12 card surfaces). Heaviest scroll. Counter: the visual signal "this is your AI's output" is the strongest demo moment, especially for the growth pitch.</div>
+    </div>
+  </div>
+
+</div>
+<script>
+  // Direction B Notion-style collapsible toggle
+  document.querySelectorAll('.dir-b .nt-visit-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      toggle.closest('.nt-visit').classList.toggle('expanded');
+    });
+  });
+</script>
+</body>
+</html>

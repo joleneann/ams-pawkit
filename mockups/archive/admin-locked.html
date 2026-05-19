@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit Phase 2 · Admin · Locked screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Spectral:ital,wght@1,500;1,600;1,700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --milk: #FFFCF2;
+    --vanilla: #EAE0C8;
+    --honey: #E5C896;
+    --peach: #E8A87C;
+    --rust: #B05E2E;
+    --mushroom: #A8927A;
+    --smoke: #8B928A;
+    --steel: #5F6961;
+    --bark: #5C4A3A;
+    --sable: #2B221A;
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #1f1f1f;
+    color: var(--bg-canvas);
+    padding: 48px 32px 96px;
+    line-height: 1.4;
+  }
+  .doc { max-width: 1360px; margin: 0 auto; }
+  .doc-header { border-bottom: 1px solid #444; padding-bottom: 24px; margin-bottom: 32px; }
+  .doc-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: #999; margin-bottom: 8px;
+  }
+  .doc-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 30px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .doc-sub { font-size: 13px; color: #bbb; margin-top: 12px; max-width: 760px; }
+  .doc-sub .key { color: #e8d18a; }
+
+  /* TOC */
+  .toc {
+    margin-top: 24px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 14px 18px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+  }
+  .toc-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #888; margin-right: 4px;
+    align-self: center;
+  }
+  .toc a {
+    font-size: 12px; color: #ddd;
+    text-decoration: none;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 6px 10px;
+    background: #1f1f1f;
+  }
+  .toc a:hover { background: #2a2a2a; border-color: #555; }
+  .toc a.pending { color: #666; border-color: #2f2f2f; background: transparent; cursor: default; }
+
+  /* Section per screen */
+  .screen { margin-top: 56px; scroll-margin-top: 24px; }
+  .screen-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #888; margin-bottom: 6px;
+  }
+  .screen-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--bg-canvas);
+    margin-bottom: 6px;
+  }
+  .screen-sub { font-size: 12px; color: #aaa; margin-bottom: 22px; max-width: 760px; }
+  .screen-sub .key { color: #e8d18a; }
+
+  .anatomy {
+    margin-bottom: 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 16px 20px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #bbb;
+    line-height: 1.55;
+  }
+  .anatomy .row { display: flex; gap: 10px; }
+  .anatomy .label {
+    font-weight: 600;
+    color: #e8d18a;
+    flex-shrink: 0;
+    min-width: 110px;
+  }
+  .anatomy .val { color: #ddd; }
+
+  .frame {
+    background: var(--bg-canvas);
+    width: 1280px;
+    max-width: 100%;
+    border: 1px solid #333;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ============ LOCKED CHROME (Screen 01 pick — used by every screen frame) ============ */
+  .chrome-header {
+    height: 64px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--ink-faint);
+    gap: 28px;
+  }
+  .chrome-wordmark { display: flex; flex-direction: column; line-height: 1; justify-self: start; }
+  .chrome-wordmark .line1 {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 700; font-size: 14px;
+    color: var(--ink); letter-spacing: -0.015em;
+  }
+  .chrome-wordmark .line2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600; font-size: 10px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-top: 3px;
+  }
+  .chrome-search {
+    width: 460px;
+    height: 36px;
+    background: rgba(168, 163, 158, 0.15);
+    border-radius: 4px;
+    display: flex; align-items: center;
+    padding: 0 12px; gap: 10px;
+    justify-self: center;
+  }
+  .chrome-search svg { width: 14px; height: 14px; color: var(--ink-soft); flex-shrink: 0; }
+  .chrome-search .placeholder { font-size: 14px; color: var(--ink-soft); }
+  .chrome-right { justify-self: end; }
+
+  .chrome-shell {
+    display: grid; grid-template-columns: 240px 1fr;
+    min-height: 620px;
+  }
+  .chrome-rail {
+    border-right: 1px solid var(--ink-faint);
+    padding: 20px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .chrome-rail-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 16px; margin: 4px 0 8px;
+  }
+  .chrome-rail-item {
+    height: 40px;
+    display: flex; align-items: center;
+    gap: 14px;
+    padding: 0 16px;
+    border-left: 4px solid transparent;
+    margin-left: -12px; padding-left: 24px;
+    font-size: 15px; font-weight: 400;
+    color: var(--ink-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .chrome-rail-item svg { width: 16px; height: 16px; color: currentColor; flex-shrink: 0; }
+  .chrome-rail-item.active {
+    border-left-color: var(--teal);
+    color: var(--ink); font-weight: 600;
+  }
+
+  /* ============ Screen 01 main area — Route container placeholder ============ */
+  .main { padding: 24px 32px; }
+  .empty-route {
+    height: 540px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+  .empty-eyebrow {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .empty-text {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--ink-faint);
+    max-width: 360px;
+    line-height: 1.5;
+  }
+
+  /* ============ Screen 02 main area — Inbox (Hey-channeled, locked) ============ */
+  .inbox-tabs {
+    display: flex; gap: 28px;
+    border-bottom: 1px solid var(--ink-faint);
+    padding-bottom: 12px; margin-bottom: 16px;
+  }
+  .inbox-tab {
+    font-size: 14px; font-weight: 500;
+    color: var(--ink-soft);
+    position: relative;
+    padding-bottom: 12px;
+    margin-bottom: -13px;
+  }
+  .inbox-tab.active {
+    color: var(--ink); font-weight: 600;
+    border-bottom: 2px solid var(--ink);
+  }
+  .inbox-tab .count {
+    font-size: 11px; font-weight: 600;
+    color: var(--ink-faint); margin-left: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .inbox-tab.active .count { color: var(--ink); }
+
+  .avatar-ring {
+    border-radius: 50%;
+    padding: 3px;
+    flex-shrink: 0;
+    width: 46px; height: 46px;
+  }
+  .avatar-ring.honey { background: var(--honey); }
+  .avatar-ring.sable { background: var(--sable); }
+  .avatar-ring.milk { background: linear-gradient(135deg, var(--milk), var(--vanilla)); }
+  .avatar-ring.steel { background: var(--steel); }
+  .avatar-photo {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background-color: rgba(168, 163, 158, 0.16);
+    border: 1.5px solid var(--bg-canvas);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A8A39E' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='4' r='2'/%3E%3Ccircle cx='18' cy='8' r='2'/%3E%3Ccircle cx='20' cy='16' r='2'/%3E%3Cpath d='M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 55%;
+  }
+  .inbox-row {
+    display: grid;
+    grid-template-columns: 46px 180px 1fr auto;
+    gap: 16px;
+    align-items: start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .sender-cell { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding-top: 2px; }
+  .pet-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .household { font-size: 11px; color: var(--ink-soft); }
+  .preview {
+    font-size: 13px; color: var(--ink-soft);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.45;
+    padding-top: 2px;
+  }
+  .timestamp {
+    font-size: 12px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    padding-top: 4px;
+  }
+
+  /* ============ Screen 03 main area — Inbox thread detail (locked, hybrid B+C) ============ */
+  .td-main { display: grid; grid-template-columns: 1fr 468px; min-height: 696px; }
+  .conv-col { display: flex; flex-direction: column; min-width: 0; }
+  .breadcrumb { font-size: 12px; color: var(--ink-soft); padding: 14px 28px; }
+  .breadcrumb a { color: var(--ink-soft); text-decoration: none; }
+  .breadcrumb .sep { color: var(--ink-faint); margin: 0 6px; }
+  .breadcrumb .current { color: var(--ink); font-weight: 500; }
+  .followup { margin: 0 28px 16px; background: var(--bg-canvas); border: 1.5px solid var(--ink); border-left: 4px solid var(--teal); border-radius: 4px; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .followup .lead { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .followup .meta-line { font-size: 12px; color: var(--ink-soft); }
+  .conv-body { flex: 1; padding: 8px 28px 16px; display: flex; flex-direction: column; gap: 14px; }
+  .bubble-row { display: flex; }
+  .bubble-row.parent { justify-content: flex-start; }
+  .bubble-row.vet { justify-content: flex-end; }
+  .bubble-wrap { max-width: 65%; display: flex; flex-direction: column; gap: 4px; }
+  .bubble-row.parent .bubble-wrap { align-items: flex-start; }
+  .bubble-row.vet .bubble-wrap { align-items: flex-end; }
+  .bubble { padding: 10px 14px; font-size: 13px; line-height: 1.5; border-radius: 14px; }
+  .bubble-row.parent .bubble { background: var(--bg-canvas); color: var(--ink); border: 1px solid var(--ink-faint); border-bottom-left-radius: 4px; }
+  .bubble-row.vet .bubble { background: var(--ink); color: var(--bg-canvas); border-bottom-right-radius: 4px; }
+  .bubble-stamp { font-size: 10px; color: var(--ink-faint); font-variant-numeric: tabular-nums; padding: 0 6px; }
+  .compose { border-top: 1px solid var(--ink-faint); padding: 14px 28px; background: var(--bg-canvas); display: flex; gap: 10px; align-items: center; }
+  .compose-field { flex: 1; border: 1px solid var(--ink-faint); border-radius: 6px; padding: 0 14px; height: 44px; display: flex; align-items: center; background: var(--bg-canvas); font-size: 13px; color: var(--ink-faint); font-style: italic; }
+  .compose-mic, .compose-send { height: 44px; display: flex; align-items: center; border-radius: 4px; }
+  .compose-mic { width: 44px; justify-content: center; border: 1px solid var(--ink-faint); color: var(--ink-soft); }
+  .compose-mic svg { width: 17px; height: 17px; }
+  .compose-send { padding: 0 20px; background: var(--teal); color: var(--bg-canvas); font-size: 13px; font-weight: 600; gap: 8px; }
+  .compose-send svg { width: 14px; height: 14px; color: currentColor; }
+  .pet-panel { width: 468px; border-left: 1px solid var(--ink-faint); background: var(--bg-canvas); display: flex; flex-direction: column; max-height: 760px; overflow: hidden; }
+  .pp-scroll { padding: 20px 22px 0; overflow-y: auto; flex: 1; }
+  .pp-header { display: flex; align-items: center; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--ink-faint); margin-bottom: 16px; }
+  .pp-photo-ring { width: 56px; height: 56px; border-radius: 50%; background: var(--honey); padding: 3px; flex-shrink: 0; }
+  .pp-photo { width: 100%; height: 100%; border-radius: 50%; background-color: rgba(168, 163, 158, 0.16); border: 1.5px solid var(--bg-canvas); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A8A39E' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='4' r='2'/%3E%3Ccircle cx='18' cy='8' r='2'/%3E%3Ccircle cx='20' cy='16' r='2'/%3E%3Cpath d='M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z'/%3E%3C/svg%3E"); background-position: center; background-repeat: no-repeat; background-size: 55%; }
+  .pp-name { font-family: 'Satoshi', sans-serif; font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .pp-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  .pp-block { margin-bottom: 18px; }
+  .pp-quick { /* no card, no border — inline label/value rows with hairline dividers */ }
+  .pp-quick .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--ink-faint); }
+  .pp-quick .row:last-child { border-bottom: none; }
+  .pp-quick .label { font-size: 12px; color: var(--ink-soft); }
+  .pp-quick .val { font-size: 13px; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+  .ch-row { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--ink-faint); cursor: pointer; transition: background 0.1s; }
+  .ch-row:last-of-type { border-bottom: none; }
+  .ch-row:hover { background: rgba(168, 163, 158, 0.08); }
+  .ch-date { width: 60px; flex-shrink: 0; font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .ch-body { flex: 1; }
+  .ch-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+  .ch-meta { font-size: 12px; color: var(--ink-soft); line-height: 1.55; }
+  /* Pet panel tabs (Clinical history / Invoices), locked 2026-05-12 */
+  .pp-tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--ink-faint); margin-bottom: 14px; }
+  .pp-tab { background: transparent; border: none; padding: 8px 0; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; color: var(--ink-soft); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.1s; }
+  .pp-tab:hover { color: var(--ink); }
+  .pp-tab.active { color: var(--ink); font-weight: 600; border-bottom-color: var(--ink); }
+  .pp-tab-content { display: none; }
+  .pp-tab-content.active { display: block; }
+  /* Invoice list rows (Invoices tab content), locked 2026-05-12 */
+  .inv-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--ink-faint); cursor: pointer; transition: background 0.1s; }
+  .inv-row:last-of-type { border-bottom: none; }
+  .inv-row:hover { background: rgba(168, 163, 158, 0.08); }
+  .inv-date { width: 60px; flex-shrink: 0; font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .inv-body { flex: 1; min-width: 0; }
+  .inv-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .inv-amount { font-size: 13px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  /* Year marker for grouped clinical history / invoices, louder treatment 2026-05-12 */
+  .ch-row:has(+ .pp-year-marker), .inv-row:has(+ .pp-year-marker) { border-bottom: none; }
+  .pp-year-marker { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); font-variant-numeric: tabular-nums; padding: 14px 0 8px; border-top: 1px solid var(--ink-faint); }
+  .pp-year-marker:first-child { border-top: none; padding-top: 0; }
+
+  /* ============ Design system reference (top of doc) ============ */
+  .dsr {
+    background: var(--bg-canvas);
+    border: 1px solid #333;
+    padding: 32px 40px;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 56px;
+  }
+  .dsr-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  .dsr-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 8px; }
+  .dsr-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 28px; max-width: 760px; }
+  .dsr-row { padding: 20px 0; border-top: 1px solid var(--ink-faint); }
+  .dsr-row:last-child { border-bottom: 1px solid var(--ink-faint); }
+  .dsr-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+  .dsr-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  .dsr-swatch { width: 96px; height: 80px; border-radius: 4px; border: 1px solid var(--ink-faint); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 8px; }
+  .dsr-swatch-name { font-size: 11px; font-weight: 600; color: var(--ink); background: rgba(245, 241, 232, 0.85); padding: 2px 5px; border-radius: 2px; }
+  .dsr-swatch-hex { font-size: 9px; color: var(--ink-soft); background: rgba(245, 241, 232, 0.7); padding: 1px 5px; border-radius: 2px; margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .dsr-swatch.dark .dsr-swatch-name { background: rgba(15, 12, 10, 0.55); color: var(--bg-canvas); }
+  .dsr-swatch.dark .dsr-swatch-hex { background: rgba(15, 12, 10, 0.45); color: var(--bg-canvas); }
+  .dsr-type-grid { display: grid; grid-template-columns: 200px 1fr; gap: 14px 24px; align-items: baseline; }
+  .dsr-type-meta { font-size: 10px; color: var(--ink-faint); letter-spacing: 0.06em; text-transform: uppercase; }
+  .dsr-type-display { font-family: 'Satoshi', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+  .dsr-type-body { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; font-size: 14px; color: var(--ink); }
+  .dsr-type-devanagari { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; font-size: 14px; color: var(--ink); line-height: 1.6; }
+  .dsr-type-spectral { font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 28px; color: var(--ink); }
+  .dsr-type-tnum { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; font-size: 15px; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .dsr-btn-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .dsr-btn-teal { background: var(--teal); color: var(--bg-canvas); padding: 12px 20px; font-size: 13px; font-weight: 600; border: none; border-radius: 4px; cursor: default; }
+  .dsr-btn-ghost { background: transparent; color: var(--ink); padding: 12px 20px; font-size: 13px; font-weight: 600; border: 1px solid var(--ink); border-radius: 4px; cursor: default; }
+  .dsr-btn-disabled { background: rgba(168, 163, 158, 0.18); color: var(--ink-faint); padding: 12px 20px; font-size: 13px; font-weight: 600; border: none; border-radius: 4px; cursor: not-allowed; }
+  .dsr-btn-note { font-size: 11px; color: var(--ink-soft); font-style: italic; margin-left: 8px; }
+  .dsr-callout { padding: 14px 18px; border: 1.5px solid var(--ink); background: var(--bg-canvas); border-radius: 4px; }
+  .dsr-callout-rule { font-family: 'Satoshi', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .dsr-callout-meta { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  .dsr-fur-warning { padding: 12px 16px; background: var(--bg-canvas); border: 1.5px solid var(--ink); border-left: 4px solid var(--ink); border-radius: 4px; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+  .dsr-fur-warning svg { width: 18px; height: 18px; color: var(--ink); flex-shrink: 0; }
+  .dsr-fur-warning-text { font-size: 13px; font-weight: 600; color: var(--ink); }
+
+  /* ============ Screen 04 main area — Itemised invoice (view-only, locked 2026-05-12 Direction A) ============ */
+  .s4-main { overflow-y: auto; }
+  .s4-back { padding: 18px 32px 0; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); cursor: pointer; }
+  .s4-back svg { width: 14px; height: 14px; }
+  .s4-back:hover { color: var(--ink); }
+  .s4-stage { padding: 24px 32px 48px; max-width: 800px; margin: 0 auto; }
+  .s4-letterhead { display: flex; justify-content: space-between; padding-bottom: 22px; border-bottom: 2px solid var(--ink); margin-bottom: 24px; }
+  .s4-ams-name { font-family: 'Satoshi', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .s4-ams-meta { font-size: 11px; color: var(--ink-soft); }
+  .s4-right { text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .s4-num { font-family: 'Satoshi', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .s4-date { font-size: 11px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .s4-cat-section { margin-bottom: 16px; }
+  .s4-cat-header { padding-bottom: 8px; border-bottom: 1px solid var(--ink-faint); margin-bottom: 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+  .s4-line-row { display: grid; grid-template-columns: 1fr 100px; gap: 12px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--ink-faint); }
+  .s4-line-row.simple { align-items: center; padding: 12px 0; }
+  .s4-line-row:last-of-type { border-bottom: none; }
+  .s4-line-name { font-size: 13px; color: var(--ink); font-weight: 500; margin-bottom: 3px; }
+  .s4-line-row.simple .s4-line-name { margin-bottom: 0; }
+  .s4-line-tip { font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
+  .s4-line-amt { text-align: right; font-size: 13px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .s4-totals { margin-top: 28px; padding-top: 16px; border-top: 2px solid var(--ink); display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .s4-total-row { display: flex; gap: 28px; align-items: baseline; width: 280px; justify-content: space-between; }
+  .s4-total-row .lbl { font-family: 'Satoshi', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); }
+  .s4-total-row .val { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .s4-gst-note { font-size: 11px; color: var(--ink-faint); text-align: right; width: 280px; font-style: italic; padding-top: 4px; }
+
+  /* ============ Screen 05 main area — Clinical history full screen (view-only SOAP preview, Direction C Linear-channeled, locked 2026-05-12) ============ */
+  .s5-main { overflow-y: auto; }
+  .s5-back { padding: 18px 32px 0; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); cursor: pointer; }
+  .s5-back svg { width: 14px; height: 14px; }
+  .s5-back:hover { color: var(--ink); }
+  .s5-stage { max-width: 800px; margin: 0 auto; padding: 24px 32px 64px; }
+  .s5-header { padding-bottom: 14px; border-bottom: 1px solid var(--ink-faint); margin-bottom: 22px; }
+  .s5-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 6px; }
+  .s5-sub { font-size: 12px; color: var(--ink-soft); }
+  .s5-card { background: rgba(15,12,10,0.02); border: 1px solid var(--ink-faint); border-radius: 6px; padding: 18px 22px; margin-bottom: 14px; }
+  .s5-card-header { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--ink-faint); flex-wrap: wrap; }
+  .s5-card-date { font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .s5-card-reason { font-size: 14px; color: var(--ink); font-weight: 600; }
+  .s5-pills { display: flex; gap: 6px; margin-left: auto; }
+  .s5-pill { font-size: 10px; padding: 3px 8px; border-radius: 3px; background: rgba(15,12,10,0.08); color: var(--ink-soft); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+  .s5-card-vet { font-size: 11px; color: var(--ink-faint); font-style: italic; width: 100%; }
+  .s5-soap { display: grid; grid-template-columns: 80px 1fr; gap: 16px; margin-bottom: 12px; align-items: start; }
+  .s5-soap:last-child { margin-bottom: 0; }
+  .s5-soap-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); padding-top: 2px; }
+  .s5-soap-body { font-size: 13px; color: var(--ink); line-height: 1.6; }
+
+  /* ============ Screen 06 main area — Broadcast composer (compose half, Direction A faithful, locked 2026-05-12) ============ */
+  .s6-main { overflow-y: auto; }
+  .s6-step-nav { display: flex; gap: 0; padding: 0 32px; height: 48px; align-items: stretch; border-bottom: 1px solid var(--ink-faint); flex-shrink: 0; }
+  .s6-step { display: flex; align-items: center; gap: 8px; padding: 0 22px; font-size: 12px; color: var(--ink-soft); border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
+  .s6-step.active { color: var(--ink); font-weight: 700; border-bottom-color: var(--ink); }
+  .s6-step-num { width: 18px; height: 18px; border-radius: 50%; background: rgba(15,12,10,0.08); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--ink-soft); }
+  .s6-step.active .s6-step-num { background: var(--ink); color: var(--bg-canvas); }
+  .s6-split { display: grid; grid-template-columns: 1fr 360px; gap: 32px; padding: 24px 32px 32px; }
+  .s6-editor { display: flex; flex-direction: column; gap: 18px; }
+  .s6-cover { aspect-ratio: 16/5; border: 1.5px dashed var(--ink-faint); border-radius: 6px; background: rgba(168, 163, 158, 0.06); display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--ink-soft); }
+  .s6-url-bar { display: flex; align-items: center; gap: 14px; padding: 8px 14px; background: rgba(15,12,10,0.04); border-radius: 6px; font-size: 12px; color: var(--ink-soft); }
+  .s6-url-text { flex: 1; font-family: 'Inter', monospace; color: var(--ink); font-weight: 500; }
+  .s6-url-btn { background: var(--bg-canvas); border: 1px solid var(--ink-faint); padding: 4px 10px; border-radius: 4px; font-size: 11px; color: var(--ink); cursor: pointer; }
+  .s6-url-meta { font-size: 11px; color: var(--ink-faint); }
+  .s6-lang-row { display: flex; align-items: center; gap: 8px; padding: 12px 14px; background: rgba(15,12,10,0.04); border-radius: 6px; }
+  .s6-lang-label { font-size: 11px; color: var(--ink-soft); margin-right: 4px; font-weight: 500; }
+  .s6-lang-pill { padding: 4px 12px; font-size: 11px; border-radius: 4px; cursor: pointer; background: rgba(15,12,10,0.04); color: var(--ink-soft); font-weight: 500; }
+  .s6-lang-pill.active { background: var(--ink); color: var(--bg-canvas); font-weight: 600; }
+  .s6-lang-note { font-size: 11px; color: var(--ink-faint); margin-left: auto; font-style: italic; }
+  .s6-field { display: flex; flex-direction: column; gap: 6px; }
+  .s6-field-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .s6-field-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); display: flex; align-items: center; gap: 8px; }
+  .s6-red-dot { width: 6px; height: 6px; background: #B33A3A; border-radius: 50%; }
+  .s6-mic { width: 28px; height: 28px; border: 1px solid var(--ink-faint); border-radius: 4px; background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink-soft); flex-shrink: 0; }
+  .s6-mic:hover { color: var(--ink); border-color: var(--ink); background: rgba(15,12,10,0.02); }
+  .s6-mic svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+  .s6-input { padding: 10px 14px; border: 1px solid var(--ink-faint); border-radius: 4px; font-size: 14px; color: var(--ink); background: var(--bg-canvas); font-family: 'Inter', sans-serif; }
+  .s6-input.title-input { font-size: 16px; font-weight: 600; }
+  .s6-input.audience-input { font-size: 13px; color: var(--ink-soft); border-style: dashed; }
+  .s6-bullets { padding: 12px 14px; border: 1px solid var(--ink-faint); border-radius: 4px; background: var(--bg-canvas); }
+  .s6-bullet-row { display: flex; gap: 10px; padding: 4px 0; border-bottom: 1px dashed var(--ink-faint); font-size: 13px; color: var(--ink); align-items: center; }
+  .s6-bullet-row:last-child { border-bottom: none; }
+  .s6-bullet-dot { color: var(--ink-faint); }
+  .s6-textarea { padding: 12px 14px; border: 1px solid var(--ink-faint); border-radius: 4px; background: var(--bg-canvas); font-size: 13px; color: var(--ink); line-height: 1.6; font-family: 'Inter', sans-serif; min-height: 80px; }
+  .s6-warning-box, .s6-escalation-box { padding: 14px 16px; border: 1.5px solid #B33A3A; border-radius: 6px; background: rgba(179, 58, 58, 0.06); }
+  .s6-warning-bullets { font-size: 13px; color: var(--ink); line-height: 1.6; padding-left: 16px; }
+  .s6-warning-bullets li { list-style-type: "·  "; padding-left: 4px; margin-bottom: 3px; }
+  .s6-escalation-text { font-size: 13px; color: var(--ink); line-height: 1.6; }
+  .s6-escalation-text p { margin-bottom: 6px; }
+  .s6-escalation-text p:last-child { margin-bottom: 0; }
+  .s6-publish-row { display: flex; justify-content: flex-end; padding-top: 8px; border-top: 1px solid var(--ink-faint); }
+  .s6-publish-btn { background: var(--teal); color: var(--bg-canvas); border: none; padding: 12px 20px; font-size: 13px; font-weight: 600; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .s6-publish-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+  .s6-phone-wrap { position: sticky; top: 80px; align-self: start; }
+  .s6-preview-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; text-align: center; }
+  .s6-phone { width: 290px; background: var(--ink); border-radius: 32px; padding: 4px; flex-shrink: 0; margin: 0 auto; }
+  .s6-phone-inner { background: var(--bg-canvas); border-radius: 28px; max-height: 580px; overflow: hidden auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .s6-phone-inner::-webkit-scrollbar { display: none; width: 0; height: 0; }
+  .s6-phone-statusbar { height: 22px; display: flex; justify-content: space-between; align-items: center; padding: 0 18px; font-size: 10px; font-weight: 600; color: var(--ink); background: var(--bg-canvas); }
+  .s6-phone-content { padding: 0 0 20px; }
+  .s6-phone-header-row { padding: 12px 16px 10px; border-bottom: 1px solid var(--ink-faint); display: flex; align-items: center; gap: 8px; }
+  .s6-phone-back { width: 16px; height: 16px; color: var(--ink-soft); stroke: currentColor; fill: none; }
+  .s6-phone-header-title { font-size: 11px; font-weight: 600; color: var(--ink); letter-spacing: 0.04em; }
+  .s6-phone-cover { aspect-ratio: 16/9; background: rgba(168, 163, 158, 0.18); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--ink-faint); font-style: italic; }
+  .s6-phone-body { padding: 14px 16px; }
+  .s6-phone-byline { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .s6-phone-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--ink-faint); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--ink); }
+  .s6-phone-byline-meta { display: flex; flex-direction: column; }
+  .s6-phone-byline-name { font-size: 11px; font-weight: 600; color: var(--ink); }
+  .s6-phone-byline-clinic { font-size: 9px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em; }
+  .s6-phone-title { font-family: 'Satoshi', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 8px; line-height: 1.25; letter-spacing: -0.01em; }
+  .s6-phone-audience-tag { display: inline-block; font-size: 9px; padding: 2px 8px; background: rgba(15,12,10,0.06); border-radius: 3px; color: var(--ink-soft); margin-bottom: 14px; letter-spacing: 0.04em; }
+  .s6-phone-section { margin-bottom: 14px; }
+  .s6-phone-section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .s6-phone-summary { font-size: 11px; color: var(--ink); line-height: 1.55; padding-left: 14px; }
+  .s6-phone-summary li { margin-bottom: 4px; list-style-type: "·  "; padding-left: 4px; }
+  .s6-phone-body-text { font-size: 11px; color: var(--ink); line-height: 1.6; }
+  .s6-phone-card { border: 1.5px solid #B33A3A; border-radius: 6px; padding: 10px 12px; background: rgba(179, 58, 58, 0.06); margin-bottom: 12px; }
+  .s6-phone-card-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .s6-phone-card-icon { width: 13px; height: 13px; color: #B33A3A; stroke: currentColor; fill: none; }
+  .s6-phone-card-title { font-size: 10px; font-weight: 700; color: #B33A3A; letter-spacing: 0.06em; text-transform: uppercase; }
+  .s6-phone-card-body { font-size: 11px; color: var(--ink); line-height: 1.55; }
+  .s6-phone-card-body ul { padding-left: 14px; }
+  .s6-phone-card-body li { list-style-type: "·  "; padding-left: 4px; margin-bottom: 3px; }
+  .s6-phone-card-body p { margin-bottom: 4px; }
+  .s6-phone-card-body p:last-child { margin-bottom: 0; }
+  .s6-phone-share-btn { background: var(--teal); color: var(--bg-canvas); width: 100%; padding: 10px; border-radius: 6px; font-size: 11px; font-weight: 600; border: none; margin-top: 8px; }
+  .s6-step.done { color: var(--ink); }
+  .s6-step.done .s6-step-num { background: var(--ink-soft); color: var(--bg-canvas); }
+
+  /* ============ Screen 06b main area — Broadcast audience (Klaviyo AND/OR conditional groups, locked 2026-05-12) ============ */
+  .s6b-shell { padding: 24px 32px 32px; max-width: 980px; margin: 0 auto; }
+  .s6b-eyebrow { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: rgba(15,12,10,0.04); border-radius: 6px; margin-bottom: 22px; font-size: 12px; color: var(--ink-soft); }
+  .s6b-eyebrow .label { font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); font-size: 10px; }
+  .s6b-eyebrow .title { color: var(--ink); font-weight: 600; }
+  .s6b-eyebrow .edit { margin-left: auto; color: var(--ink-soft); font-size: 11px; padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; cursor: pointer; }
+  .s6b-title { font-family: 'Satoshi', sans-serif; font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 6px; }
+  .s6b-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 28px; }
+  .s6b-group { padding: 16px; border: 1px solid var(--ink-faint); border-radius: 6px; background: rgba(15,12,10,0.02); margin-bottom: 12px; position: relative; }
+  .s6b-group.disabled { opacity: 0.5; }
+  .s6b-group-header { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--ink-soft); margin-bottom: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .s6b-condition-row { display: grid; grid-template-columns: auto 130px 110px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; }
+  .s6b-condition-row + .s6b-condition-row { border-top: 1px dashed var(--ink-faint); }
+  .s6b-cond-conn { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--ink-soft); padding: 3px 8px; background: rgba(15,12,10,0.06); border-radius: 3px; min-width: 36px; text-align: center; }
+  .s6b-cond-prop { font-size: 13px; color: var(--ink); font-weight: 600; }
+  .s6b-cond-value { font-size: 12px; color: var(--ink); }
+  .s6b-cond-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+  .s6b-cond-pill { padding: 4px 10px; font-size: 11px; border-radius: 3px; background: rgba(15,12,10,0.04); color: var(--ink-soft); cursor: pointer; }
+  .s6b-cond-pill.selected { background: var(--ink); color: var(--bg-canvas); }
+  .s6b-cond-remove { color: var(--ink-faint); font-size: 14px; cursor: pointer; padding: 4px; }
+  .s6b-add-cond { padding: 8px 12px; border: 1px dashed var(--ink-faint); border-radius: 4px; color: var(--ink-soft); font-size: 11px; cursor: pointer; margin-top: 8px; display: inline-block; }
+  .s6b-add-or-group { text-align: center; margin: 16px 0 0; }
+  .s6b-age-range { display: flex; align-items: center; gap: 8px; }
+  .s6b-age-input { width: 56px; padding: 7px 10px; border: 1px solid var(--ink-faint); border-radius: 4px; font-size: 12px; color: var(--ink); background: var(--bg-canvas); font-variant-numeric: tabular-nums; font-family: 'Inter', sans-serif; }
+  .s6b-age-label { font-size: 12px; color: var(--ink-soft); }
+  .s6b-group-conn { display: flex; gap: 0; padding: 3px; background: rgba(15,12,10,0.04); border-radius: 4px; width: fit-content; margin: 4px auto; position: relative; z-index: 1; }
+  .s6b-group-conn-pill { padding: 4px 12px; font-size: 11px; font-weight: 600; color: var(--ink-soft); border-radius: 3px; cursor: pointer; }
+  .s6b-group-conn-pill.active { background: var(--ink); color: var(--bg-canvas); }
+  .s6b-count-strip { display: flex; align-items: center; gap: 16px; padding: 16px 22px; background: var(--ink); color: var(--bg-canvas); border-radius: 6px; margin-top: 22px; }
+  .s6b-count-num { font-family: 'Satoshi', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .s6b-count-meta { font-size: 12px; opacity: 0.85; }
+  .s6b-actions-bar { display: flex; justify-content: space-between; align-items: center; padding-top: 22px; border-top: 1px solid var(--ink-faint); margin-top: 28px; }
+  .s6b-back-btn { background: transparent; border: 1px solid var(--ink-faint); color: var(--ink-soft); padding: 10px 18px; font-size: 13px; border-radius: 4px; cursor: pointer; }
+  .s6b-next-btn { background: var(--teal); color: var(--bg-canvas); padding: 12px 20px; font-size: 13px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .s6b-next-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+  /* ============ Screen 06c main area — Broadcast send (final review + Send-to-N-parents Teal CTA, locked 2026-05-12) ============ */
+  .s6c-stage { padding: 24px 32px 32px; max-width: 1080px; margin: 0 auto; }
+  .s6c-eyebrow { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: rgba(15,12,10,0.04); border-radius: 6px; margin-bottom: 22px; font-size: 12px; color: var(--ink-soft); }
+  .s6c-eyebrow .label { font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); font-size: 10px; }
+  .s6c-eyebrow .title { color: var(--ink); font-weight: 600; }
+  .s6c-eyebrow .edit { margin-left: auto; color: var(--ink-soft); font-size: 11px; padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; cursor: pointer; }
+  .s6c-title { font-family: 'Satoshi', sans-serif; font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 6px; }
+  .s6c-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 28px; }
+  .s6c-split { display: grid; grid-template-columns: 320px 1fr; gap: 36px; align-items: start; }
+  .s6c-preview-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; text-align: center; }
+  .s6c-confirm-col { display: flex; flex-direction: column; gap: 22px; }
+  .s6c-confirm-hero { background: var(--ink); color: var(--bg-canvas); padding: 28px 32px; border-radius: 8px; }
+  .s6c-confirm-hero-eyebrow { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.7; margin-bottom: 10px; }
+  .s6c-confirm-hero-num { font-family: 'Satoshi', sans-serif; font-size: 48px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 6px; }
+  .s6c-confirm-hero-meta { font-size: 13px; opacity: 0.85; }
+  .s6c-confirm-block { background: var(--bg-canvas); border: 1px solid var(--ink-faint); border-radius: 6px; padding: 18px 22px; }
+  .s6c-confirm-block-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+  .s6c-confirm-filter-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--ink-faint); font-size: 13px; }
+  .s6c-confirm-filter-row:last-child { border-bottom: none; }
+  .s6c-confirm-filter-prop { color: var(--ink-soft); font-weight: 500; }
+  .s6c-confirm-filter-value { color: var(--ink); font-weight: 600; }
+  .s6c-confirm-channels { background: rgba(15,12,10,0.025); border: 1px solid var(--ink-faint); border-radius: 6px; padding: 18px 22px; }
+  .s6c-confirm-channel-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 12px; color: var(--ink); }
+  .s6c-confirm-channel-row svg { width: 14px; height: 14px; color: var(--ink); stroke: currentColor; fill: none; flex-shrink: 0; }
+  .s6c-confirm-channel-row .meta { color: var(--ink-soft); margin-left: auto; font-size: 11px; }
+  .s6c-send-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 22px; border-top: 1px solid var(--ink-faint); margin-top: 32px; }
+  .s6c-send-undo-hint { font-size: 11px; color: var(--ink-faint); font-style: italic; display: flex; align-items: center; gap: 6px; }
+  .s6c-send-undo-hint svg { width: 12px; height: 12px; stroke: currentColor; fill: none; }
+  .s6c-send-buttons { display: flex; gap: 12px; }
+  .s6c-send-back-btn { background: transparent; border: 1px solid var(--ink-faint); color: var(--ink-soft); padding: 11px 22px; font-size: 13px; border-radius: 4px; cursor: pointer; }
+  .s6c-send-confirm-btn { background: var(--teal); color: var(--bg-canvas); padding: 12px 20px; font-size: 13px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .s6c-send-confirm-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+  /* ============ Screen 07b main area — Settings (Linear-channeled, locked 2026-05-12) ============ */
+  .s7-main { overflow-y: auto; }
+  .s7-stage { max-width: 720px; margin: 0 auto; padding: 32px 32px 64px; }
+  .s7-page-title { font-family: 'Satoshi', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.015em; margin-bottom: 4px; }
+  .s7-page-sub { font-size: 12px; color: var(--ink-soft); margin-bottom: 32px; }
+  .s7-section { margin-bottom: 32px; }
+  .s7-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
+  .s7-photo-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-top: 1px solid var(--ink-faint); border-bottom: 1px solid var(--ink-faint); }
+  .s7-photo-slot { width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--ink-faint); background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .s7-photo-slot svg { width: 20px; height: 20px; color: var(--ink-faint); stroke: currentColor; fill: none; }
+  .s7-photo-text { flex: 1; min-width: 0; }
+  .s7-photo-name { font-size: 13px; color: var(--ink); font-weight: 600; }
+  .s7-photo-help { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+  .s7-photo-edit { font-size: 11px; color: var(--ink-soft); padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; cursor: pointer; flex-shrink: 0; }
+  .s7-field-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--ink-faint); }
+  .s7-field-row:last-child { border-bottom: none; }
+  .s7-field-label { font-size: 12px; color: var(--ink-soft); flex-shrink: 0; width: 160px; }
+  .s7-field-value { flex: 1; font-size: 13px; color: var(--ink); font-weight: 500; min-width: 0; }
+  .s7-field-value.readonly { color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 400; }
+  .s7-field-value.placeholder { color: var(--ink-faint); font-weight: 400; font-style: italic; }
+  .s7-field-value.tabular { font-variant-numeric: tabular-nums; }
+  .s7-field-edit { font-size: 11px; color: var(--ink-soft); padding: 4px 10px; border: 1px solid var(--ink-faint); border-radius: 3px; cursor: pointer; flex-shrink: 0; }
+  .s7-lang-toggle { display: inline-flex; padding: 3px; background: rgba(15,12,10,0.04); border-radius: 4px; }
+  .s7-lang-pill { padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--ink-soft); border-radius: 3px; cursor: pointer; }
+  .s7-lang-pill.active { background: var(--ink); color: var(--bg-canvas); }
+  .s7-stacked-help { font-size: 11px; color: var(--ink-faint); padding: 6px 0 0 176px; line-height: 1.55; max-width: 520px; }
+  .s7-clinic-lines { padding: 4px 0; }
+  .s7-clinic-name { font-family: 'Satoshi', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.005em; }
+  .s7-clinic-line { font-size: 12px; color: var(--ink-soft); line-height: 1.65; }
+  .s7-clinic-line.tabular { font-variant-numeric: tabular-nums; }
+  .s7-signout-btn { width: 100%; padding: 11px; font-size: 13px; font-weight: 600; color: var(--ink); background: transparent; border: 1px solid var(--ink); border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .s7-signout-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+  .s7-vendor { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--ink-faint); display: flex; justify-content: center; gap: 8px; align-items: baseline; }
+  .s7-vendor-brand { font-family: 'Satoshi', sans-serif; font-size: 11px; font-weight: 700; color: var(--ink-faint); }
+  .s7-vendor-sep { font-size: 10px; color: var(--ink-faint); }
+  .s7-vendor-version { font-size: 10px; color: var(--ink-faint); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Phase 2 · Admin · Locked screens (in order)</div>
+    <div class="doc-title">Pawkit dashboard, picked anatomy rendered</div>
+    <div class="doc-sub">
+      Single file holding every locked admin screen. Each section gains its own anatomy block + 1280px rendered frame as that screen is picked. The chrome from Screen 01 reappears in every subsequent screen's frame; the difference is the main-area content.
+      <br><br>
+      Full spec lives in <span class="key">docs/decisions-log.md</span> (Platform and demo target) and <span class="key">docs/layout-spec.md</span> Section per screen.
+    </div>
+    <div class="toc">
+      <div class="toc-label">Locked so far</div>
+      <a href="#screen-01">01 · App shell + nav</a>
+      <a href="#screen-02">02 · Inbox</a>
+      <a href="#screen-03">03 · Inbox thread detail</a>
+      <a href="#screen-04">04 · Invoice full screen</a>
+      <a href="#screen-05">05 · Clinical history full screen</a>
+      <a href="#screen-06">06 · Broadcast composer (compose)</a>
+      <a href="#screen-06b">06b · Broadcast audience</a>
+      <a href="#screen-06c">06c · Broadcast send</a>
+      <a href="#screen-07b">07b · Settings</a>
+    </div>
+  </div>
+
+  <!-- ============ Design system reference (top) ============ -->
+  <section class="dsr">
+    <div class="dsr-eyebrow">Design system reference · brand v1.3 + premium-feel</div>
+    <div class="dsr-title">Pawkit design system</div>
+    <div class="dsr-sub">The locked brand v1.3 tokens, type, buttons, and audit rules used by every screen below. Lives at <code style="background:rgba(168,163,158,0.15);padding:1px 5px;border-radius:2px;font-size:11px;">/style-guide</code> in the dashboard build for dev reference; rendered here at the top of the locked-screens doc as a key for what the screens are composed from.</div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Structural neutrals · 4 tokens · chrome only</div>
+      <div class="dsr-swatches">
+        <div class="dsr-swatch" style="background:var(--bg-canvas);"><span class="dsr-swatch-name">Paper</span><span class="dsr-swatch-hex">#F5F1E8</span></div>
+        <div class="dsr-swatch dark" style="background:var(--ink);"><span class="dsr-swatch-name">Ink</span><span class="dsr-swatch-hex">#0F0C0A</span></div>
+        <div class="dsr-swatch" style="background:var(--ink-soft);"><span class="dsr-swatch-name">Ink-soft</span><span class="dsr-swatch-hex">#5C5550</span></div>
+        <div class="dsr-swatch" style="background:var(--ink-faint);"><span class="dsr-swatch-name">Ink-faint</span><span class="dsr-swatch-hex">#A8A39E</span></div>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Hero · 1 token · primary action per screen</div>
+      <div class="dsr-swatches">
+        <div class="dsr-swatch dark" style="background:var(--teal);"><span class="dsr-swatch-name">Teal</span><span class="dsr-swatch-hex">#006D6F</span></div>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Type · 4 families</div>
+      <div class="dsr-type-grid">
+        <div class="dsr-type-meta">Satoshi Bold 26-28px · display</div>
+        <div class="dsr-type-display">Animal Medical Services</div>
+        <div class="dsr-type-meta">Inter 14px · body · Latin glyphs</div>
+        <div class="dsr-type-body">All body text, microcopy, labels. Inter handles Latin only.</div>
+        <div class="dsr-type-meta">Noto Sans Devanagari 14px · fallback · Marathi rendering</div>
+        <div class="dsr-type-devanagari">पावसाळ्यात कुत्र्यांच्या कानांची काळजी घ्या. खाज, डोके हलवणे, किंवा कोणताही असामान्य स्त्राव असल्यास, आम्हाला कळवा.</div>
+        <div class="dsr-type-meta">Spectral semibold italic 28-32px · pet names HERO ONLY</div>
+        <div class="dsr-type-spectral">Gabby</div>
+        <div class="dsr-type-meta">Inter tabular-nums · invoices, counts, timestamps</div>
+        <div class="dsr-type-tnum">₹2,450 · 31.2 kg · 142 households</div>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Buttons · 3 variants</div>
+      <div class="dsr-btn-row">
+        <button class="dsr-btn-teal">Publish</button>
+        <button class="dsr-btn-ghost">Save draft</button>
+        <button class="dsr-btn-disabled">Publish</button>
+        <span class="dsr-btn-note">primary Teal · ghost Ink-outline · disabled Ink-faint</span>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Teal audit · the one rule</div>
+      <div class="dsr-callout">
+        <div class="dsr-callout-rule">One Teal per screen.</div>
+        <div class="dsr-callout-meta">The single Teal element per route is the primary action (or the active rail item). Dev-time invariant in <code style="font-family:monospace;font-size:11px;">&lt;TealCTA /&gt;</code> warns if exceeded.</div>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Fur kit · 10 tones · pet content ONLY</div>
+      <div class="dsr-fur-warning">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span class="dsr-fur-warning-text">Pet content only · NEVER chrome (avatars, fur-match rings, Pet Page accents)</span>
+      </div>
+      <div class="dsr-swatches">
+        <div class="dsr-swatch" style="background:var(--milk);"><span class="dsr-swatch-name">Milk</span><span class="dsr-swatch-hex">#FFFCF2</span></div>
+        <div class="dsr-swatch" style="background:var(--vanilla);"><span class="dsr-swatch-name">Vanilla</span><span class="dsr-swatch-hex">#EAE0C8</span></div>
+        <div class="dsr-swatch" style="background:var(--honey);"><span class="dsr-swatch-name">Honey</span><span class="dsr-swatch-hex">#E5C896</span></div>
+        <div class="dsr-swatch" style="background:var(--peach);"><span class="dsr-swatch-name">Peach</span><span class="dsr-swatch-hex">#E8A87C</span></div>
+        <div class="dsr-swatch dark" style="background:var(--rust);"><span class="dsr-swatch-name">Rust</span><span class="dsr-swatch-hex">#B05E2E</span></div>
+        <div class="dsr-swatch" style="background:var(--mushroom);"><span class="dsr-swatch-name">Mushroom</span><span class="dsr-swatch-hex">#A8927A</span></div>
+        <div class="dsr-swatch" style="background:var(--smoke);"><span class="dsr-swatch-name">Smoke</span><span class="dsr-swatch-hex">#8B928A</span></div>
+        <div class="dsr-swatch dark" style="background:var(--steel);"><span class="dsr-swatch-name">Steel</span><span class="dsr-swatch-hex">#5F6961</span></div>
+        <div class="dsr-swatch dark" style="background:var(--bark);"><span class="dsr-swatch-name">Bark</span><span class="dsr-swatch-hex">#5C4A3A</span></div>
+        <div class="dsr-swatch dark" style="background:var(--sable);"><span class="dsr-swatch-name">Sable</span><span class="dsr-swatch-hex">#2B221A</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 01 · App shell + nav ============ -->
+  <section class="screen" id="screen-01">
+    <div class="screen-eyebrow">Locked 2026-05-11 late evening · Direction C (Notion) + Direction B's search bar centered</div>
+    <div class="screen-title">01 · App shell + nav</div>
+    <div class="screen-sub">
+      <span class="key">Screen 01 = the chrome only</span> (header + rail). Main area is empty here on purpose. Route content (Inbox / Broadcasts / Settings) is the work of Screens 02 / 05 / 07b respectively; their locked anatomy will render inside this same chrome, each as its own section below.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Header</div><div class="val">64px tall · 1px Ink-faint bottom border · 3-zone grid (1fr / auto / 1fr) · 28px h-padding · 28px gap</div></div>
+      <div class="row"><div class="label">Wordmark</div><div class="val">left zone · "Animal Medical Services" Satoshi Bold 14px + "PUNE" Inter 10px small-caps 0.14em letter-spacing · stacked</div></div>
+      <div class="row"><div class="label">Search bar</div><div class="val">centered · 460px wide · 36px tall · filled tint rgba(168,163,158,.15) · 4px radius · Lucide magnifier 14px stroke 1.75 Ink-soft · Inter 14px Ink-soft placeholder</div></div>
+      <div class="row"><div class="label">Right zone</div><div class="val">empty reserve (vet avatar / sign-out hook for later)</div></div>
+      <div class="row"><div class="label">Rail</div><div class="val">240px wide · 1px Ink-faint right border · 20px v-padding · 12px h-padding · 4px gap between items</div></div>
+      <div class="row"><div class="label">Section label</div><div class="val">"WORKSPACE" Inter 10px medium Ink-faint · 0.16em letter-spacing · uppercase · 16px h-padding inside rail · 4px top / 8px bottom margin</div></div>
+      <div class="row"><div class="label">Rail items</div><div class="val">40px tall · 16px h-padding · 14px icon-label gap · Inter 15px regular Ink-soft (resting) / Inter 15px semibold Ink (active)</div></div>
+      <div class="row"><div class="label">Active state</div><div class="val">4px Teal left border (transparent otherwise) · the one Teal usage per screen</div></div>
+      <div class="row"><div class="label">Rail icons</div><div class="val">Lucide 16px stroke 1.75 · mail (Inbox) · megaphone (Broadcasts) · settings (Settings)</div></div>
+      <div class="row"><div class="label">Behavior</div><div class="val">search context-aware: patient/parent records on Inbox · keyword on Broadcasts · hidden on Settings (Section 1 spec)</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="main">
+          <div class="empty-route">
+            <div class="empty-eyebrow">Route container</div>
+            <div class="empty-text">Inbox, Broadcasts, or Settings content renders here based on which rail item is active. Each of those is a separate locked screen below.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 02 · Inbox ============ -->
+  <section class="screen" id="screen-02">
+    <div class="screen-eyebrow">Locked 2026-05-11 late evening · Direction C (Hey-channeled)</div>
+    <div class="screen-title">02 · Inbox</div>
+    <div class="screen-sub">
+      Inbox content rendered inside the locked Screen 01 chrome. <span class="key">Active subtab</span> with 5 threads, sorted oldest-waiting at the top (Rocky's 3-day wait at the top, Gabby's 2-hour wait at the bottom). Each row carries pet avatar with fur-match ring + stacked pet name / household + 2-line preview wrap + relative timestamp.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Row height</div><div class="val">56px · 16px v-padding · 1px Ink-faint divider between rows</div></div>
+      <div class="row"><div class="label">Avatar</div><div class="val">46px outer ring · 3px fur-match band carrying primary tone (Honey for Gabby, Milk+Vanilla for Angel, etc.) · 40px inner photo · 1.5px Paper bezel</div></div>
+      <div class="row"><div class="label">Sender column</div><div class="val">180px fixed width · pet name Inter 14px semibold Ink · household subline Inter 11px Ink-soft · stacked</div></div>
+      <div class="row"><div class="label">Preview</div><div class="val">flex column · Inter 13px Ink-soft · MAX 2 lines via -webkit-line-clamp: 2 · longer messages truncate with trailing "..." (auto-rendered by webkit/blink); full message visible after vet opens thread · "Photo" / "Video" microcopy when last message is media (exempt from truncation)</div></div>
+      <div class="row"><div class="label">Timestamp</div><div class="val">Inter 12px Ink-faint · tabular-nums · right-aligned · top-of-row align · relative format ("3d ago", "2h ago")</div></div>
+      <div class="row"><div class="label">Subtab strip</div><div class="val">Active (label + count + 2px Ink underline when active) · Inactive (no count) · 14px h-gap, 1px Ink-faint divider below</div></div>
+      <div class="row"><div class="label">Sort</div><div class="val">Active = oldest-waiting at top (per Section 2 spec); Inactive = latest message at top</div></div>
+      <div class="row"><div class="label">Empty state</div><div class="val">"No open windows right now. Take a breath." Satoshi 16px italic Ink-faint (per states.md)</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="main">
+          <div class="inbox-tabs">
+            <div class="inbox-tab active">Active <span class="count">5</span></div>
+            <div class="inbox-tab">Inactive</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring steel"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Rocky</span>
+              <span class="household">Joshi household</span>
+            </div>
+            <div class="preview">He's been off his food since Saturday morning, just lying around mostly. Slept through lunch yesterday too and didn't want his evening walk either. Should we be worried? Should I bring him in today or is this just one of his moods?</div>
+            <div class="timestamp">3d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Coco</span>
+              <span class="household">Sharma household</span>
+            </div>
+            <div class="preview">Video</div>
+            <div class="timestamp">2d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring milk"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Misha</span>
+              <span class="household">Khan household</span>
+            </div>
+            <div class="preview">She finished the antibiotics yesterday. Anything else we should watch for, or are we done with this round?</div>
+            <div class="timestamp">1d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring sable"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Bruno</span>
+              <span class="household">Patil household</span>
+            </div>
+            <div class="preview">Photo</div>
+            <div class="timestamp">5h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Gabby</span>
+              <span class="household">Fernandes household</span>
+            </div>
+            <div class="preview">He's been scratching at his ear since this morning, should I be worried? It looks a bit red on the inside but he isn't crying out.</div>
+            <div class="timestamp">2h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 03 · Inbox thread detail ============ -->
+  <section class="screen" id="screen-03">
+    <div class="screen-eyebrow">Locked 2026-05-11 late evening · Hybrid: Direction B Quick Facts + Direction C Clinical History</div>
+    <div class="screen-title">03 · Inbox thread detail (with pet record panel)</div>
+    <div class="screen-sub">
+      Opens when Sagar taps a row in Screen 02. <span class="key">Conversation + reply compose on the LEFT (~640px), pet record panel on the RIGHT (400px)</span>. No standalone per-pet route exists; the pet record surfaces only here as a panel. Bubble grammar from Sagar's view: parent (received) Paper-LEFT, Sagar (sent) Ink-RIGHT — WhatsApp grammar inverted to the Pawkit palette.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Layout</div><div class="val">2-column main area · ~640px conversation column LEFT · 400px pet panel RIGHT · 1px Ink-faint divider between columns</div></div>
+      <div class="row"><div class="label">Breadcrumb</div><div class="val">Inter 12px Ink-soft · format "Inbox › [Pet] · [Household]" · current segment in Ink semibold</div></div>
+      <div class="row"><div class="label">Follow-up banner</div><div class="val">Paper card · 1.5px Ink border · 4px Teal LEFT bar · 12-16px padding · lead Inter 13px semibold Ink · meta Inter 12px Ink-soft</div></div>
+      <div class="row"><div class="label">Bubbles · parent</div><div class="val">LEFT · Paper bg + 1px Ink-faint border · Ink text · 14px radius (bottom-left 4px) · max-width 65% · received messages</div></div>
+      <div class="row"><div class="label">Bubbles · vet (Sagar)</div><div class="val">RIGHT · Ink filled · Paper text · 14px radius (bottom-right 4px) · max-width 65% · sent messages</div></div>
+      <div class="row"><div class="label">Compose</div><div class="val">44px text field + 44px Mic ghost (1px Ink-faint border) + filled Teal Send CTA · 1px Ink-faint top border</div></div>
+      <div class="row"><div class="label">Pet panel header</div><div class="val">56px photo + 3px Honey fur-match ring + pet name (Satoshi 19px Bold) ONLY · no meta lines · 1px Ink-faint bottom divider</div></div>
+      <div class="row"><div class="label">Quick Facts</div><div class="val">inline label/value rows with 1px Ink-faint hairline dividers (NO card, NO outer border, NO padding container) · "QUICK FACTS" small-caps section label above · 5 rows: Breed / Age / Weight (month) / Chronic / Last visit · label Inter 12px Ink-soft LEFT + value Inter 13px Ink semibold tabular RIGHT (right-aligned) · 11px row padding · hierarchy mirrors Clinical History (12px Ink-soft labels ≈ 12px ch-meta · 13px Ink semibold values ≈ 13px ch-title)</div></div>
+      <div class="row"><div class="label">Clinical history</div><div class="val">2-col editorial · 60px date column (Ink-faint tabular) + body column (title Inter 13px semibold + meta Inter 12px Ink-soft line-height 1.55) · hairline dividers · scrollable for older entries</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="td-main">
+          <div class="conv-col">
+            <div class="breadcrumb"><a>Inbox</a><span class="sep">›</span><span class="current">Gabby · Fernandes household</span></div>
+            <div class="followup">
+              <div class="lead">Dr Sagar is here for Gabby until May 16</div>
+              <div class="meta-line">Opened May 6 after ear-infection visit. Closes May 16.</div>
+            </div>
+            <div class="conv-body">
+              <div class="bubble-row vet"><div class="bubble-wrap"><div class="bubble">Hi Mrs Fernandes! Just checking in on Gabby's ear. The cefadroxil should be helping by now. Please let me know if anything looks off, or if you notice him scratching more.</div><div class="bubble-stamp">Dr Sagar · May 6, 11:42</div></div></div>
+              <div class="bubble-row parent"><div class="bubble-wrap"><div class="bubble">Thanks Doctor! He seems okay so far. We're giving the medicine on time.</div><div class="bubble-stamp">May 7, 18:30</div></div></div>
+              <div class="bubble-row vet"><div class="bubble-wrap"><div class="bubble">Good. Watch for head-shaking or any new discharge.</div><div class="bubble-stamp">Dr Sagar · May 7, 19:05</div></div></div>
+              <div class="bubble-row parent"><div class="bubble-wrap"><div class="bubble">He's been scratching at his ear since this morning, should I be worried? It looks a bit red on the inside but he isn't crying out.</div><div class="bubble-stamp">Today, 09:20</div></div></div>
+            </div>
+            <div class="compose">
+              <div class="compose-field">Reply…</div>
+              <div class="compose-mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg></div>
+              <div class="compose-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>Send</div>
+            </div>
+          </div>
+          <aside class="pet-panel">
+            <div class="pp-scroll">
+              <div class="pp-header">
+                <div class="pp-photo-ring"><div class="pp-photo"></div></div>
+                <div class="pp-name">Gabby</div>
+              </div>
+              <div class="pp-block">
+                <div class="pp-section-label">Quick Facts</div>
+                <div class="pp-quick">
+                  <div class="row"><span class="label">Breed</span><span class="val">Golden Retriever</span></div>
+                  <div class="row"><span class="label">Age</span><span class="val">4 years</span></div>
+                  <div class="row"><span class="label">Weight (Apr 22)</span><span class="val">31.2 kg</span></div>
+                  <div class="row"><span class="label">Chronic</span><span class="val">Otitis externa · Seasonal allergies</span></div>
+                  <div class="row"><span class="label">Last visit</span><span class="val">May 6 · Ear infection</span></div>
+                </div>
+              </div>
+              <div class="pp-block">
+                <div class="pp-tabs">
+                  <button class="pp-tab active" data-tab="clinical">Clinical history</button>
+                  <button class="pp-tab" data-tab="invoices">Invoices</button>
+                </div>
+                <div class="pp-tab-content active" data-tab-content="clinical">
+                  <div class="pp-year-marker">2026</div>
+                  <div class="ch-row"><div class="ch-date">May 6</div><div class="ch-body"><div class="ch-title">Visit · Ear infection check</div><div class="ch-meta">Right ear inflamed with mild discharge. Cefadroxil 250mg twice daily for 7 days. Recheck in 10 days.</div></div></div>
+                  <div class="ch-row"><div class="ch-date">Apr 22</div><div class="ch-body"><div class="ch-title">Vaccination · DHPP booster</div><div class="ch-meta">Annual booster administered. Next due Apr 2027.</div></div></div>
+                  <div class="ch-row"><div class="ch-date">Apr 22</div><div class="ch-body"><div class="ch-title">Visit · Annual wellness</div><div class="ch-meta">Weight 31.2 kg (BCS 5/9). Heart and lungs clear.</div></div></div>
+                  <div class="ch-row"><div class="ch-date">Jan 15</div><div class="ch-body"><div class="ch-title">Visit · Allergy flare</div><div class="ch-meta">Mild contact dermatitis. Cetirizine 10mg. Resolved within 5 days.</div></div></div>
+                  <div class="pp-year-marker">2025</div>
+                  <div class="ch-row"><div class="ch-date">Nov 28</div><div class="ch-body"><div class="ch-title">Vaccination · Rabies</div><div class="ch-meta">Triannual booster. Next due Nov 2028.</div></div></div>
+                  <div class="ch-row"><div class="ch-date">Aug 4</div><div class="ch-body"><div class="ch-title">Visit · Ear infection (left)</div><div class="ch-meta">Left ear inflamed. Cefadroxil for 7 days. Resolved.</div></div></div>
+                  <div class="ch-row"><div class="ch-date">Apr 18</div><div class="ch-body"><div class="ch-title">Visit · Annual wellness</div><div class="ch-meta">Weight 30.6 kg. Otherwise healthy.</div></div></div>
+                  <div class="ch-row"><div class="ch-date">Apr 18</div><div class="ch-body"><div class="ch-title">Vaccination · DHPP</div><div class="ch-meta">Annual booster.</div></div></div>
+                </div>
+                <div class="pp-tab-content" data-tab-content="invoices">
+                  <div class="pp-year-marker">2026</div>
+                  <div class="inv-row"><div class="inv-date">May 6</div><div class="inv-body"><div class="inv-title">Ear infection check</div></div><div class="inv-amount">₹3,150</div></div>
+                  <div class="inv-row"><div class="inv-date">Apr 22</div><div class="inv-body"><div class="inv-title">Annual wellness + DHPP booster</div></div><div class="inv-amount">₹2,400</div></div>
+                  <div class="inv-row"><div class="inv-date">Jan 15</div><div class="inv-body"><div class="inv-title">Allergy flare</div></div><div class="inv-amount">₹950</div></div>
+                  <div class="pp-year-marker">2025</div>
+                  <div class="inv-row"><div class="inv-date">Nov 28</div><div class="inv-body"><div class="inv-title">Rabies booster</div></div><div class="inv-amount">₹850</div></div>
+                  <div class="inv-row"><div class="inv-date">Aug 4</div><div class="inv-body"><div class="inv-title">Ear infection (left)</div></div><div class="inv-amount">₹2,100</div></div>
+                  <div class="inv-row"><div class="inv-date">Apr 18</div><div class="inv-body"><div class="inv-title">Annual wellness + DHPP</div></div><div class="inv-amount">₹2,200</div></div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 04 · Itemised invoice (view-only) ============ -->
+  <section class="screen" id="screen-04">
+    <div class="screen-eyebrow">Locked 2026-05-12 · Direction A (Stripe-channeled, classic invoice document)</div>
+    <div class="screen-title">04 · Itemised invoice (view-only)</div>
+    <div class="screen-sub">
+      Opens from the Screen 03 pet record panel's <span class="key">Invoices tab</span> by tapping an invoice row. View-only: no Paid pill, no owner/pet identity strip, no Download PDF in v0. Three categories only: Examination, Medication, Procedure. Examination + Procedure carry always-visible info icon with flexible plain-English tooltip; Medication shows name + quantity + price only. Totals stack: grand Total prominent + "GST included" italic note. Back affordance top-left returns to thread (Invoices tab still active).
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Letterhead</div><div class="val">Clinic name (Satoshi 17px Bold) + meta (Inter 11px Ink-soft, GSTIN included) LEFT · invoice number (Satoshi 13px semibold tabular) + issued date (Inter 11px Ink-soft tabular) RIGHT · 2px Ink bottom border</div></div>
+      <div class="row"><div class="label">No identity strip</div><div class="val">Patient + Household identity removed (already lives in inbox thread above); invoice opened contextually from that thread</div></div>
+      <div class="row"><div class="label">Category headers</div><div class="val">Inter 10px Ink-faint semibold uppercase letter-spacing 0.14em · 1px Ink-faint bottom border · NO per-section subtotals (category name only)</div></div>
+      <div class="row"><div class="label">Examination + Procedure rows</div><div class="val">Grid 1fr/18px/100px · line name (Inter 13px Ink semibold) + flexible plain-English tip beneath (Inter 11px Ink-soft) · lucide info-circle 14px Ink-faint middle · amount (Inter 13px Ink semibold tabular) right-aligned</div></div>
+      <div class="row"><div class="label">Medication rows</div><div class="val">Grid 1fr/100px · name with quantity inline (Inter 13px Ink semibold) LEFT · amount RIGHT · NO info icon · NO tooltip · NO usage instructions (locked rule, 2026-05-12)</div></div>
+      <div class="row"><div class="label">Totals</div><div class="val">2px Ink top border · grand Total only (no Subtotal/GST breakdown row) · label Satoshi 14px Bold + value Satoshi 22px Bold tabular · 280px right-aligned container · "GST included" italic Inter 11px Ink-faint note underneath</div></div>
+      <div class="row"><div class="label">Back affordance</div><div class="val">Top-left chevron + "Back to thread with [household]" · Inter 12px Ink-soft · returns to inbox thread with Invoices tab still active</div></div>
+      <div class="row"><div class="label">Removed for v0</div><div class="val">Paid pill · owner/pet identity strip · per-section subtotals · Follow-up / pre-paid recheck category · Download PDF (all deferred per user-stated reasons; see decisions-log 2026-05-12)</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s4-main">
+          <div class="s4-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to thread with Fernandes household
+          </div>
+          <div class="s4-stage">
+            <div class="s4-letterhead">
+              <div>
+                <div class="s4-ams-name">Animal Medical Services</div>
+                <div class="s4-ams-meta">Pune · GSTIN 27ABCDE1234F1Z2</div>
+              </div>
+              <div class="s4-right">
+                <div class="s4-num">Invoice INV-2026-0451</div>
+                <div class="s4-date">Issued 6 May 2026</div>
+              </div>
+            </div>
+
+            <div class="s4-cat-section">
+              <div class="s4-cat-header">Examination</div>
+              <div class="s4-line-row">
+                <div>
+                  <div class="s4-line-name">Consultation</div>
+                  <div class="s4-line-tip">This is for Dr Sagar's time with Gabby.</div>
+                </div>
+                <div class="s4-line-amt">₹500</div>
+              </div>
+              <div class="s4-line-row">
+                <div>
+                  <div class="s4-line-name">Otoscope examination</div>
+                  <div class="s4-line-tip">Visual examination of Gabby's ear canal.</div>
+                </div>
+                <div class="s4-line-amt">₹200</div>
+              </div>
+              <div class="s4-line-row">
+                <div>
+                  <div class="s4-line-name">Cytology · ear swab</div>
+                  <div class="s4-line-tip">A sample taken from the ear for lab analysis.</div>
+                </div>
+                <div class="s4-line-amt">₹350</div>
+              </div>
+            </div>
+
+            <div class="s4-cat-section">
+              <div class="s4-cat-header">Medication</div>
+              <div class="s4-line-row simple">
+                <div class="s4-line-name">Cefadroxil 250mg · 14 tabs</div>
+                <div class="s4-line-amt">₹500</div>
+              </div>
+              <div class="s4-line-row simple">
+                <div class="s4-line-name">Otic cleansing solution · 60ml</div>
+                <div class="s4-line-amt">₹350</div>
+              </div>
+              <div class="s4-line-row simple">
+                <div class="s4-line-name">Mometasone otic drops · 10ml</div>
+                <div class="s4-line-amt">₹800</div>
+              </div>
+            </div>
+
+            <div class="s4-cat-section">
+              <div class="s4-cat-header">Procedure</div>
+              <div class="s4-line-row">
+                <div>
+                  <div class="s4-line-name">In-clinic ear flush</div>
+                  <div class="s4-line-tip">Cleaning of the ear canal performed at the clinic.</div>
+                </div>
+                <div class="s4-line-amt">₹450</div>
+              </div>
+            </div>
+
+            <div class="s4-totals">
+              <div class="s4-total-row"><div class="lbl">Total</div><div class="val">₹3,150</div></div>
+              <div class="s4-gst-note">GST included</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 05 · Clinical history full screen (view-only SOAP preview) ============ -->
+  <section class="screen" id="screen-05">
+    <div class="screen-eyebrow">Locked 2026-05-12 · Direction C (Linear-channeled, bordered visit cards with metadata pills)</div>
+    <div class="screen-title">05 · Clinical history full screen (view-only SOAP preview)</div>
+    <div class="screen-sub">
+      Opens from the Screen 03 pet record panel's <span class="key">Clinical history tab</span> by tapping any row. Full-screen view-only surface showing this pet's history as SOAP-structured visit cards (Subjective / Objective / Assessment / Plan), a preview of the production data-entry path that replaces VetBuddy. v0 content hand-written per pet (Gabby's full history). Back affordance top-left returns to the inbox thread with Clinical history tab still active.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Container</div><div class="val">~800px max-width centered stage · 28px padding · paper-tone background</div></div>
+      <div class="row"><div class="label">Header</div><div class="val">"Gabby · Clinical history" Satoshi 22px Bold · Inter 12px Ink-soft signalment subhead · 1px Ink-faint bottom divider</div></div>
+      <div class="row"><div class="label">Visit card</div><div class="val">Subtle rgba(15,12,10,0.02) tint + 1px Ink-faint border + 6px radius · 18px / 22px padding · 14px bottom margin between cards</div></div>
+      <div class="row"><div class="label">Card header</div><div class="val">Flex row: date (Inter 12px Ink-soft tabular semibold) + visit reason (Inter 14px Ink semibold) + pill-tags right-aligned; vet byline on its own row (Inter 11px Ink-faint italic) · 1px Ink-faint bottom divider</div></div>
+      <div class="row"><div class="label">Pill tags</div><div class="val">Inter 10px uppercase letter-spacing 0.04em · rgba(15,12,10,0.08) bg · 3px radius · 3px / 8px padding · Ink-soft text</div></div>
+      <div class="row"><div class="label">SOAP grid</div><div class="val">Two-column 80px label / 1fr body · 16px gap · 12px between rows · label Inter 10px Ink-faint uppercase semibold letter-spacing 0.14em · body Inter 13px Ink line-height 1.6</div></div>
+      <div class="row"><div class="label">Back affordance</div><div class="val">Top-left chevron + "Back to thread with [household]" · Inter 12px Ink-soft · returns to inbox thread with Clinical history tab still active</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s5-main">
+          <div class="s5-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to thread with Fernandes household
+          </div>
+          <div class="s5-stage">
+            <div class="s5-header">
+              <div class="s5-title">Gabby · Clinical history</div>
+              <div class="s5-sub">Golden Retriever · 4y M · Fernandes household · 8 visits since Apr 2025</div>
+            </div>
+
+            <div class="s5-card">
+              <div class="s5-card-header">
+                <div class="s5-card-date">6 May 2026</div>
+                <div class="s5-card-reason">Ear infection check (right ear)</div>
+                <div class="s5-pills">
+                  <span class="s5-pill">Sick visit</span>
+                  <span class="s5-pill">Otitis</span>
+                </div>
+                <div class="s5-card-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="s5-soap"><div class="s5-soap-label">Subjective</div><div class="s5-soap-body">Parent reports right ear scratching for 3 days, head-shaking, mildly lethargic. Appetite normal.</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Objective</div><div class="s5-soap-body">T 38.6°C, P 92, R 24. Weight 31.2 kg. BCS 5/9. Right ear: erythematous canal, mild yellow-brown discharge, pain on palpation, drum intact. Cytology: cocci +++, yeast +. Remainder NSF.</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Assessment</div><div class="s5-soap-body">Otitis externa, right ear (bacterial with secondary yeast). Suspected trigger: seasonal allergies.</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Plan</div><div class="s5-soap-body">In-clinic ear flush. Cefadroxil 250mg PO BID × 7 days. Otic cleansing solution + Mometasone otic drops BID. Recheck 16 May.</div></div>
+            </div>
+
+            <div class="s5-card">
+              <div class="s5-card-header">
+                <div class="s5-card-date">22 Apr 2026</div>
+                <div class="s5-card-reason">Annual wellness + DHPP booster</div>
+                <div class="s5-pills">
+                  <span class="s5-pill">Wellness</span>
+                  <span class="s5-pill">Vaccination</span>
+                </div>
+                <div class="s5-card-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="s5-soap"><div class="s5-soap-label">Subjective</div><div class="s5-soap-body">Annual wellness visit. Parent reports good appetite, normal energy. No concerns.</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Objective</div><div class="s5-soap-body">T 38.4°C, P 88, R 22. Weight 31.2 kg. BCS 5/9. Heart and lungs clear. Abdomen NSF. Mild chronic seasonal dermatitis on hindquarters.</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Assessment</div><div class="s5-soap-body">Healthy adult Golden Retriever. Chronic mild seasonal dermatitis (managed). Otitis history (monitor).</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Plan</div><div class="s5-soap-body">DHPP booster administered IM. Continue Apoquel 5.4mg PRN. Next wellness Apr 2027.</div></div>
+            </div>
+
+            <div class="s5-card">
+              <div class="s5-card-header">
+                <div class="s5-card-date">15 Jan 2026</div>
+                <div class="s5-card-reason">Allergy flare</div>
+                <div class="s5-pills">
+                  <span class="s5-pill">Sick visit</span>
+                  <span class="s5-pill">Allergy</span>
+                </div>
+                <div class="s5-card-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="s5-soap"><div class="s5-soap-label">Subjective</div><div class="s5-soap-body">Increased scratching, mild redness on belly and inner thighs over past 4 days. No diet changes.</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Objective</div><div class="s5-soap-body">T 38.3°C, P 90, R 22. Mild erythema on ventral abdomen and inguinal area. No primary lesions. Ears clear.</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Assessment</div><div class="s5-soap-body">Mild contact dermatitis, likely seasonal allergy flare (chronic).</div></div>
+              <div class="s5-soap"><div class="s5-soap-label">Plan</div><div class="s5-soap-body">Cetirizine 10mg PO BID × 7 days. Recheck if not improving by 22 Jan. Hypoallergenic shampoo if persists.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 06 · Broadcast composer (compose half) ============ -->
+  <section class="screen" id="screen-06">
+    <div class="screen-eyebrow">Locked 2026-05-12 · Direction A (faithful + 3-step nav + global lang toggle + voice mics + normal-size phone)</div>
+    <div class="screen-title">06 · Broadcast composer (compose)</div>
+    <div class="screen-sub">
+      Compose half of the locked 06 / 06b broadcast split. Sagar composes a bilingual EN+MR broadcast for AMS pet parents. <span class="key">3-step flow nav</span> at the top (Compose · Audience · Send), Compose active. Cover image placeholder, planned-public-URL bar, global "Composing in: EN / MR" toggle (Sarvam Translate auto-pairs the other), six fields (Title · Who applies optional · Summary · Body · Warning signs · Escalation), every field carries a Sarvam voice-input mic in the header. Warning signs + Escalation render as red-bordered NHS Care Cards. Right column: parent-side mobile preview at normal phone width (290px) with 580px viewport, internally scrollable. "Next: Audience →" CTA passes to Screen 06b.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">3-step nav</div><div class="val">Compose · Audience · Send across top of main area · Compose active (Ink underline + Ink-filled num); Audience / Send muted · 48px tall · 1px Ink-faint bottom border</div></div>
+      <div class="row"><div class="label">Layout</div><div class="val">Two-column split below the step nav: editor LEFT (1fr) + parent-side phone preview RIGHT (360px column, sticky top 80px) · 32px gap · 24/32/40px padding</div></div>
+      <div class="row"><div class="label">Cover</div><div class="val">Dashed Ink-faint placeholder, 16/5 aspect ratio · 1.5px dashed border + 6px radius · "+ Cover image (optional)" label · paper-tone tint</div></div>
+      <div class="row"><div class="label">URL preview bar</div><div class="val">Compact bar with planned slug `pawkit.app/broadcasts/[slug]` + "Copy URL" ghost button + "generated on publish" hint · rgba(15,12,10,0.04) bg · 6px radius</div></div>
+      <div class="row"><div class="label">Lang toggle</div><div class="val">Single GLOBAL toggle right after URL bar: "Composing in: [EN] [MR]" pills + "Sarvam Translate auto-pairs the other language" italic note · no per-field EN/MR tabs</div></div>
+      <div class="row"><div class="label">Fields</div><div class="val">6 fields stacked: Title (required) · Who this applies to (optional, dashed border) · Summary (bullet list) · Body (textarea) · Warning signs (red NHS Care Card) · Escalation (red NHS Care Card with phone number + hours + after-hours fallback) · each carries a Sarvam voice-input mic in the field header</div></div>
+      <div class="row"><div class="label">Mic button</div><div class="val">28px square ghost · 1px Ink-faint border · lucide mic 13px Ink-soft · hover Ink + 2% Ink bg · sits right-aligned in every field header</div></div>
+      <div class="row"><div class="label">NHS Care Cards</div><div class="val">Warning signs + Escalation use 1.5px #B33A3A red border + rgba(179,58,58,0.06) bg + 6px radius · red-dot prefix in label · color is supplementary, bold heading + icon do the urgency work first (color-blind / screen-reader safe)</div></div>
+      <div class="row"><div class="label">Mobile preview</div><div class="val">iPhone-style frame · 290px wide (normal phone size) · 580px max-height with internal scroll · sticky top 80px · "Parent-side preview" label above · renders the broadcast as a parent sees it (cover placeholder + Sagar byline + title + Who-applies chip + Summary + Body + red Warning card + red Escalation card + Teal Share button at bottom)</div></div>
+      <div class="row"><div class="label">Next CTA</div><div class="val">"Next: Audience →" Teal button at bottom-right, passes to Screen 06b (Audience + send)</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s6-main">
+          <div class="s6-step-nav">
+            <div class="s6-step active"><div class="s6-step-num">1</div>Compose</div>
+            <div class="s6-step"><div class="s6-step-num">2</div>Audience</div>
+            <div class="s6-step"><div class="s6-step-num">3</div>Send</div>
+          </div>
+          <div class="s6-split">
+            <div class="s6-editor">
+              <div class="s6-cover">+ Cover image (optional)</div>
+              <div class="s6-url-bar">
+                <span>URL preview:</span>
+                <span class="s6-url-text">pawkit.app/broadcasts/summer-dog-care</span>
+                <button class="s6-url-btn">Copy URL</button>
+                <span class="s6-url-meta">generated on publish</span>
+              </div>
+              <div class="s6-lang-row">
+                <span class="s6-lang-label">Composing in:</span>
+                <span class="s6-lang-pill active">EN</span>
+                <span class="s6-lang-pill">MR</span>
+                <span class="s6-lang-note">Sarvam Translate auto-pairs the other language</span>
+              </div>
+              <div class="s6-field">
+                <div class="s6-field-header">
+                  <div class="s6-field-label">Title</div>
+                  <button class="s6-mic" title="Voice input via Sarvam Audio">
+                    <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                  </button>
+                </div>
+                <input class="s6-input title-input" value="How to care for your dog in the summer">
+              </div>
+              <div class="s6-field">
+                <div class="s6-field-header">
+                  <div class="s6-field-label">Who this applies to <span style="font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--ink-faint); font-size: 11px;">(optional)</span></div>
+                  <button class="s6-mic" title="Voice input via Sarvam Audio">
+                    <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                  </button>
+                </div>
+                <input class="s6-input audience-input" value="All dog parents">
+              </div>
+              <div class="s6-field">
+                <div class="s6-field-header">
+                  <div class="s6-field-label">Summary (bullet list)</div>
+                  <button class="s6-mic" title="Voice input via Sarvam Audio">
+                    <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                  </button>
+                </div>
+                <div class="s6-bullets">
+                  <div class="s6-bullet-row"><span class="s6-bullet-dot">·</span>Provide unlimited fresh water, change it twice daily</div>
+                  <div class="s6-bullet-row"><span class="s6-bullet-dot">·</span>Protect their paws, asphalt above 50°C burns paw pads in seconds</div>
+                  <div class="s6-bullet-row"><span class="s6-bullet-dot">·</span>NEVER leave them in a parked car, even with windows cracked</div>
+                  <div class="s6-bullet-row"><span class="s6-bullet-dot">·</span>Walk before 7am or after 7pm only</div>
+                  <div class="s6-bullet-row"><span class="s6-bullet-dot">·</span>Recognise heat stroke: panting, drooling, vomiting, collapse</div>
+                </div>
+              </div>
+              <div class="s6-field">
+                <div class="s6-field-header">
+                  <div class="s6-field-label">Body</div>
+                  <button class="s6-mic" title="Voice input via Sarvam Audio">
+                    <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                  </button>
+                </div>
+                <div class="s6-textarea">Maharashtra summers are tough on dogs. Their bodies don't sweat like ours and they can overheat quickly, especially short-nosed breeds (pugs, bulldogs) and senior dogs. This guide covers the basics of keeping your dog safe through May to August.</div>
+              </div>
+              <div class="s6-field">
+                <div class="s6-field-header">
+                  <div class="s6-field-label"><span class="s6-red-dot"></span>Warning signs</div>
+                  <button class="s6-mic" title="Voice input via Sarvam Audio">
+                    <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                  </button>
+                </div>
+                <div class="s6-warning-box">
+                  <ul class="s6-warning-bullets">
+                    <li>Excessive panting that doesn't slow with rest</li>
+                    <li>Thick drool</li>
+                    <li>Vomiting</li>
+                    <li>Bright red gums</li>
+                    <li>Stumbling or collapse</li>
+                    <li>Body temperature above 39.5°C measured rectally</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="s6-field">
+                <div class="s6-field-header">
+                  <div class="s6-field-label"><span class="s6-red-dot"></span>Escalation · when to call us</div>
+                  <button class="s6-mic" title="Voice input via Sarvam Audio">
+                    <svg viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg>
+                  </button>
+                </div>
+                <div class="s6-escalation-box">
+                  <div class="s6-escalation-text">
+                    <p>If rectal temperature exceeds 39.5°C OR your dog cannot stand, this is an emergency.</p>
+                    <p>Call AMS immediately at +91 20 2612 3456.</p>
+                    <p>While en route, wet your dog with cool (NOT cold) water and run AC at full blast.</p>
+                    <p style="color: var(--ink-soft); font-size: 12px;">AMS hours: 9am to 9pm, Monday to Saturday.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="s6-publish-row">
+                <button class="s6-publish-btn">
+                  Next: Audience
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="s6-phone-wrap">
+              <div class="s6-preview-label">Parent-side preview</div>
+              <div class="s6-phone">
+                <div class="s6-phone-inner">
+                  <div class="s6-phone-statusbar"><span>9:41</span><span>● ● ●</span></div>
+                  <div class="s6-phone-content">
+                    <div class="s6-phone-header-row">
+                      <svg class="s6-phone-back" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                      <div class="s6-phone-header-title">Broadcasts</div>
+                    </div>
+                    <div class="s6-phone-cover">No cover · Vanilla placeholder</div>
+                    <div class="s6-phone-body">
+                      <div class="s6-phone-byline">
+                        <div class="s6-phone-avatar">SB</div>
+                        <div class="s6-phone-byline-meta">
+                          <div class="s6-phone-byline-name">Dr Sagar Bhongale</div>
+                          <div class="s6-phone-byline-clinic">AMS Pune · 6 May 2026</div>
+                        </div>
+                      </div>
+                      <div class="s6-phone-title">How to care for your dog in the summer</div>
+                      <span class="s6-phone-audience-tag">For: All dog parents</span>
+                      <div class="s6-phone-section">
+                        <div class="s6-phone-section-label">Summary</div>
+                        <ul class="s6-phone-summary">
+                          <li>Unlimited fresh water, change twice daily</li>
+                          <li>Protect paws, asphalt over 50°C burns</li>
+                          <li>NEVER leave in a parked car</li>
+                          <li>Walk before 7am or after 7pm</li>
+                          <li>Heat stroke: panting, drool, vomiting, collapse</li>
+                        </ul>
+                      </div>
+                      <div class="s6-phone-section">
+                        <div class="s6-phone-body-text">Maharashtra summers are tough on dogs. They don't sweat like us and can overheat quickly, especially short-nosed breeds and seniors.</div>
+                      </div>
+                      <div class="s6-phone-card">
+                        <div class="s6-phone-card-head">
+                          <svg class="s6-phone-card-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                          <div class="s6-phone-card-title">Warning signs</div>
+                        </div>
+                        <div class="s6-phone-card-body"><ul><li>Excessive panting that doesn't slow with rest</li><li>Thick drool</li><li>Vomiting</li><li>Bright red gums</li><li>Stumbling or collapse</li><li>Body temp above 39.5°C</li></ul></div>
+                      </div>
+                      <div class="s6-phone-card">
+                        <div class="s6-phone-card-head">
+                          <svg class="s6-phone-card-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                          <div class="s6-phone-card-title">When to call us</div>
+                        </div>
+                        <div class="s6-phone-card-body">
+                          <p>If temp over 39.5°C OR dog can't stand, emergency.</p>
+                          <p>Call AMS: +91 20 2612 3456</p>
+                          <p>En route: cool (not cold) water + AC full blast.</p>
+                          <p style="color: var(--ink-soft); font-size: 10px;">AMS hours: 9am to 9pm, Mon-Sat</p>
+                        </div>
+                      </div>
+                      <button class="s6-phone-share-btn">Share · WhatsApp / Social / Email</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 06b · Broadcast audience (Klaviyo AND/OR conditional groups) ============ -->
+  <section class="screen" id="screen-06b">
+    <div class="screen-eyebrow">Locked 2026-05-12 · Direction C (Klaviyo AND/OR conditional groups)</div>
+    <div class="screen-title">06b · Broadcast audience</div>
+    <div class="screen-sub">
+      Audience-filter half of the locked 06 / 06b / 06c broadcast flow. After Sagar composed the broadcast on 06, he picks who receives it here. <span class="key">3-step nav</span> at top (Compose done · Audience active · Send pending). Conditional-group filter with AND/OR connectors between groups: powerful enough to express "Dogs 0-15 years, excluding deceased" today and "Dogs over 5 years OR cats with chronic conditions" later when filter properties grow. Live audience count strip in Ink black below the filter. "Next: Send →" passes to Screen 06c.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">3-step nav</div><div class="val">Compose done (Teal-filled num) · Audience active (Ink underline + Ink-filled num) · Send pending · 48px tall · 1px Ink-faint bottom border</div></div>
+      <div class="row"><div class="label">In-flight reminder</div><div class="val">Eyebrow strip near top with "Broadcast in-flight" label + the broadcast title + "Edit" ghost CTA (jumps back to 06 Compose)</div></div>
+      <div class="row"><div class="label">Condition group</div><div class="val">1px Ink-faint border · 6px radius · rgba(15,12,10,0.02) bg · 16px padding · group header "Condition group A · all of the following" in Inter 11px small-caps Ink-soft</div></div>
+      <div class="row"><div class="label">Condition row</div><div class="val">5-column grid: connector chip (WHERE / AND / OR) + property select (Species / Age / Deceased) + value verb (is / between) + value pills or range inputs + remove × · 10px row padding · 1px dashed Ink-faint divider between rows</div></div>
+      <div class="row"><div class="label">Age range</div><div class="val">Two Inter 12px tabular inputs (56px wide, 7px/10px padding, 1px Ink-faint border, 4px radius) flanking "to" and "years" labels in Inter 12px Ink-soft (matches the rest of Direction C's form controls)</div></div>
+      <div class="row"><div class="label">Second group (optional)</div><div class="val">Lazy-revealed via "+ Add OR group" CTA centered below Group A (8px 12px padding, 1px dashed Ink-faint border, Ink-soft 11pt text, 16px top margin) · clicking promotes the CTA into a second Group B block with its own conditions plus an AND/OR connector pill between the two groups · matches Klaviyo / Mailchimp / HubSpot industry pattern · keeps default audience surface compact for the common single-group case (refined 2026-05-12 via heuristic audit ESC-5; was always-visible disabled placeholder before)</div></div>
+      <div class="row"><div class="label">Count strip</div><div class="val">Ink-on-Paper hero strip: Satoshi 26px count number + Inter 12px meta line ("pets · 143 households · 94% of AMS dog parents") · 6px radius · 22px above the actions bar</div></div>
+      <div class="row"><div class="label">Actions bar</div><div class="val">2px Ink-faint top divider · "← Back to Compose" ghost (Ink-faint border, Ink-soft text) LEFT · "Next: Send →" Teal CTA RIGHT (no longer "Publish" since Send moved to 06c, no undo hint since undo lives on 06c)</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s6-main">
+          <div class="s6-step-nav">
+            <div class="s6-step done"><div class="s6-step-num">1</div>Compose</div>
+            <div class="s6-step active"><div class="s6-step-num">2</div>Audience</div>
+            <div class="s6-step"><div class="s6-step-num">3</div>Send</div>
+          </div>
+          <div class="s6b-shell">
+            <div class="s6b-eyebrow">
+              <span class="label">Broadcast in-flight</span>
+              <span class="title">How to care for your dog in the summer</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="s6b-title">Pick who receives this broadcast</div>
+            <div class="s6b-sub">Group conditions with AND / OR. More powerful for layered filters; overkill for simple species + age cases.</div>
+
+            <div class="s6b-group">
+              <div class="s6b-group-header">Condition group A · all of the following</div>
+              <div class="s6b-condition-row">
+                <span class="s6b-cond-conn">WHERE</span>
+                <span class="s6b-cond-prop">Species</span>
+                <span class="s6b-cond-value">is</span>
+                <div class="s6b-cond-pills"><span class="s6b-cond-pill selected">Dogs</span><span class="s6b-cond-pill">Cats</span><span class="s6b-cond-pill">Both</span></div>
+                <span class="s6b-cond-remove">×</span>
+              </div>
+              <div class="s6b-condition-row">
+                <span class="s6b-cond-conn">AND</span>
+                <span class="s6b-cond-prop">Age</span>
+                <span class="s6b-cond-value">between</span>
+                <div class="s6b-age-range">
+                  <input class="s6b-age-input" value="0">
+                  <span class="s6b-age-label">to</span>
+                  <input class="s6b-age-input" value="15">
+                  <span class="s6b-age-label">years</span>
+                </div>
+                <span class="s6b-cond-remove">×</span>
+              </div>
+              <div class="s6b-condition-row">
+                <span class="s6b-cond-conn">AND</span>
+                <span class="s6b-cond-prop">Deceased</span>
+                <span class="s6b-cond-value">is</span>
+                <div class="s6b-cond-pills"><span class="s6b-cond-pill">True</span><span class="s6b-cond-pill selected">False</span></div>
+                <span class="s6b-cond-remove">×</span>
+              </div>
+              <span class="s6b-add-cond">+ Add condition</span>
+            </div>
+
+            <div class="s6b-add-or-group">
+              <span class="s6b-add-cond">+ Add OR group</span>
+            </div>
+
+            <div class="s6b-count-strip">
+              <div class="s6b-count-num">187</div>
+              <div class="s6b-count-meta">pets · 143 households · 94% of AMS dog parents</div>
+            </div>
+
+            <div class="s6b-actions-bar">
+              <button class="s6b-back-btn">← Back to Compose</button>
+              <button class="s6b-next-btn">
+                Next: Send
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 06c · Broadcast send (final review + Send-to-N-parents) ============ -->
+  <section class="screen" id="screen-06c">
+    <div class="screen-eyebrow">Locked 2026-05-12 · Single direction · mobile preview LEFT + audience confirmation RIGHT</div>
+    <div class="screen-title">06c · Broadcast send</div>
+    <div class="screen-sub">
+      Final-review surface, third step of the broadcast flow (06 Compose → 06b Audience → 06c Send). <span class="key">3-step nav</span> at top with all three steps tracked (Compose done · Audience done · Send active). Side-by-side review: what the parent will read on the LEFT (290px mobile preview), who it's going to on the RIGHT (hero count + audience filter conditions + delivery channels). "Send to N parents" Teal CTA (dynamic with live audience count) fires the publish with a 15-second undo window.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">3-step nav</div><div class="val">Compose done · Audience done (both Teal-filled nums) · Send active (Ink underline + Ink-filled num)</div></div>
+      <div class="row"><div class="label">Layout</div><div class="val">Two-column grid: 320px mobile-preview column LEFT + 1fr confirmation column RIGHT · 36px gap · max-width 1080px stage</div></div>
+      <div class="row"><div class="label">Mobile preview</div><div class="val">Same 290px iPhone-style frame as Screen 06 (locked s6-phone styles: 4px Ink bezel, 32px radius, internal scroll with hidden scrollbar); renders the final broadcast for one last visual check</div></div>
+      <div class="row"><div class="label">Confirm hero</div><div class="val">Ink-on-Paper-inverted block at top of right column: small Ink-faint eyebrow "Sending to" + Satoshi 48px count "187 pets" + Inter 13px meta "across 143 households · 94% of AMS dog parents" · 8px radius · 28/32px padding</div></div>
+      <div class="row"><div class="label">Audience filter</div><div class="val">Paper card · 1px Ink-faint border · 18/22px padding · "Audience filter" small-caps label · three filter rows (Species / Age range / Deceased pets) as prop-value pairs with 1px Ink-faint dividers</div></div>
+      <div class="row"><div class="label">Delivery</div><div class="val">Paper-tint card (rgba(15,12,10,0.025) bg) · 1px Ink-faint border · "Delivery" small-caps label · three rows showing in-app Broadcasts tab + push notification + public web URL · Teal Lucide icons + Ink-soft meta tags on the right</div></div>
+      <div class="row"><div class="label">Actions bar</div><div class="val">2px Ink-faint top divider · 15s undo hint with rotate-icon LEFT · "← Back to Audience" ghost + "Send to N parents" Teal (with send-icon; dynamic with live audience count) RIGHT</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s6-main">
+          <div class="s6-step-nav">
+            <div class="s6-step done"><div class="s6-step-num">1</div>Compose</div>
+            <div class="s6-step done"><div class="s6-step-num">2</div>Audience</div>
+            <div class="s6-step active"><div class="s6-step-num">3</div>Send</div>
+          </div>
+          <div class="s6c-stage">
+            <div class="s6c-eyebrow">
+              <span class="label">Broadcast ready to send</span>
+              <span class="title">How to care for your dog in the summer</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="s6c-title">Final check before sending</div>
+            <div class="s6c-sub">Check what parents will read on the left. Check who's getting it on the right. Send has a 15-second undo.</div>
+
+            <div class="s6c-split">
+              <div>
+                <div class="s6c-preview-label">What parents will read</div>
+                <div class="s6-phone">
+                  <div class="s6-phone-inner">
+                    <div class="s6-phone-statusbar"><span>9:41</span><span>● ● ●</span></div>
+                    <div class="s6-phone-content">
+                      <div class="s6-phone-header-row">
+                        <svg class="s6-phone-back" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                        <div class="s6-phone-header-title">Broadcasts</div>
+                      </div>
+                      <div class="s6-phone-cover">No cover · Vanilla placeholder</div>
+                      <div class="s6-phone-body">
+                        <div class="s6-phone-byline">
+                          <div class="s6-phone-avatar">SB</div>
+                          <div class="s6-phone-byline-meta">
+                            <div class="s6-phone-byline-name">Dr Sagar Bhongale</div>
+                            <div class="s6-phone-byline-clinic">AMS Pune · 6 May 2026</div>
+                          </div>
+                        </div>
+                        <div class="s6-phone-title">How to care for your dog in the summer</div>
+                        <span class="s6-phone-audience-tag">For: All dog parents</span>
+                        <div class="s6-phone-section">
+                          <div class="s6-phone-section-label">Summary</div>
+                          <ul class="s6-phone-summary">
+                            <li>Unlimited fresh water, change twice daily</li>
+                            <li>Protect paws, asphalt over 50°C burns</li>
+                            <li>NEVER leave in a parked car</li>
+                            <li>Walk before 7am or after 7pm</li>
+                            <li>Heat stroke: panting, drool, vomiting, collapse</li>
+                          </ul>
+                        </div>
+                        <div class="s6-phone-section">
+                          <div class="s6-phone-body-text">Maharashtra summers are tough on dogs. They don't sweat like us and can overheat quickly, especially short-nosed breeds and seniors.</div>
+                        </div>
+                        <div class="s6-phone-card">
+                          <div class="s6-phone-card-head">
+                            <svg class="s6-phone-card-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                            <div class="s6-phone-card-title">Warning signs</div>
+                          </div>
+                          <div class="s6-phone-card-body"><ul><li>Excessive panting that doesn't slow</li><li>Thick drool · vomiting</li><li>Bright red gums</li><li>Stumbling or collapse</li><li>Temp above 39.5°C</li></ul></div>
+                        </div>
+                        <div class="s6-phone-card">
+                          <div class="s6-phone-card-head">
+                            <svg class="s6-phone-card-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <div class="s6-phone-card-title">When to call us</div>
+                          </div>
+                          <div class="s6-phone-card-body">
+                            <p>If temp over 39.5°C OR dog can't stand, emergency.</p>
+                            <p>Call AMS: +91 20 2612 3456</p>
+                            <p>En route: cool water + AC full blast.</p>
+                            <p style="color: var(--ink-soft); font-size: 10px;">AMS hours: 9am to 9pm, Mon-Sat</p>
+                          </div>
+                        </div>
+                        <button class="s6-phone-share-btn">Share · WhatsApp / Social / Email</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="s6c-confirm-col">
+                <div class="s6c-confirm-hero">
+                  <div class="s6c-confirm-hero-eyebrow">Sending to</div>
+                  <div class="s6c-confirm-hero-num">187 pets</div>
+                  <div class="s6c-confirm-hero-meta">across 143 households · 94% of AMS dog parents</div>
+                </div>
+                <div class="s6c-confirm-block">
+                  <div class="s6c-confirm-block-label">Audience filter</div>
+                  <div class="s6c-confirm-filter-row"><span class="s6c-confirm-filter-prop">Species</span><span class="s6c-confirm-filter-value">Dogs only</span></div>
+                  <div class="s6c-confirm-filter-row"><span class="s6c-confirm-filter-prop">Age range</span><span class="s6c-confirm-filter-value">0 to 15 years</span></div>
+                  <div class="s6c-confirm-filter-row"><span class="s6c-confirm-filter-prop">Deceased pets</span><span class="s6c-confirm-filter-value">Excluded</span></div>
+                </div>
+                <div class="s6c-confirm-channels">
+                  <div class="s6c-confirm-block-label">Delivery</div>
+                  <div class="s6c-confirm-channel-row">
+                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6l-4 4V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></svg>
+                    Appears in each parent's Broadcasts tab
+                    <span class="meta">in-app · instant</span>
+                  </div>
+                  <div class="s6c-confirm-channel-row">
+                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                    Push notification fires
+                    <span class="meta">in-app · instant</span>
+                  </div>
+                  <div class="s6c-confirm-channel-row">
+                    <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    Public web URL goes live
+                    <span class="meta">pawkit.app/broadcasts/summer-dog-care</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="s6c-send-actions">
+              <div class="s6c-send-undo-hint">
+                <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></svg>
+                Send has a 15-second undo window
+              </div>
+              <div class="s6c-send-buttons">
+                <button class="s6c-send-back-btn">← Back to Audience</button>
+                <button class="s6c-send-confirm-btn">
+                  Send to 187 parents
+                  <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 07b · Settings ============ -->
+  <section class="screen" id="screen-07b">
+    <div class="screen-eyebrow">Locked 2026-05-12 · Direction A (Linear-channeled) · dense inline-edit, hairlines only</div>
+    <div class="screen-title">07b · Settings</div>
+    <div class="screen-sub">
+      Settings rail item active. <span class="key">Header search bar hidden</span> per Section 1 spec (Settings has no searchable content). Single-column scrollable page, 720px max-width. Four content blocks: <span class="key">Profile</span> (photo + name + license + email, all inline-editable), <span class="key">Account</span> (read-only phone tied to auth + EN/MR chrome-language toggle), <span class="key">Clinic info</span> (hard-coded AMS Pune in v0, no edit affordance), <span class="key">Sign out</span> (Ink ghost, no Teal). Quiet "Pawkit · v0.1" vendor mark at the bottom is the only place Pawkit-as-vendor appears in the dashboard chrome (white-label discipline).
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Stage</div><div class="val">Single column · 720px max-width · 36px top / 64px bottom / 32px h-padding · 36px gap between section blocks</div></div>
+      <div class="row"><div class="label">Header search</div><div class="val">Hidden on Settings tab per Section 1 spec · empty middle column in chrome grid preserves wordmark-left / right-zone grid integrity</div></div>
+      <div class="row"><div class="label">Page header</div><div class="val">"Settings" Satoshi 22pt bold Ink + "Your profile, account, and clinic details." Inter 12pt Ink-soft sub · 36px bottom margin</div></div>
+      <div class="row"><div class="label">Section labels</div><div class="val">Inter 10pt 700 Ink-faint · 0.14em letter-spacing · uppercase · 10px bottom margin · Notion-channeled small caps · no card chrome, hairline dividers do the structural work</div></div>
+      <div class="row"><div class="label">Profile photo row</div><div class="val">1px Ink-faint top + bottom borders · 48px circular slot with Lucide user icon Ink-faint stroke 1.75 · "Profile photo" + help line "Appears in your byline on every Broadcast and inbox reply." · "Upload" pill on the right (4/10 padding, Ink-faint border, 3px radius)</div></div>
+      <div class="row"><div class="label">Field rows</div><div class="val">Linear-density: 160px label column Inter 12pt Ink-soft + value flex Inter 13pt Ink semibold + "Edit" Inter 11pt Ink-soft pill (1px Ink-faint border, 3px radius) right · 12px v-padding · 1px Ink-faint dividers between rows · empty-state value renders italic Ink-faint placeholder + "Add" pill verb</div></div>
+      <div class="row"><div class="label">Vet license</div><div class="val">Surfaced ONLY here, NEVER in `&lt;VetByline /&gt;` per `docs/premium-feel/byline.md` locked 2026-05-09 (byline carries clinic affiliation, not credentials list)</div></div>
+      <div class="row"><div class="label">Phone</div><div class="val">Read-only · tied to auth identifier · Ink-soft value + tabular-nums · no Edit pill (absence of pill = read-only, Linear pattern consistent with pet panel pp-quick rows)</div></div>
+      <div class="row"><div class="label">EN/MR toggle</div><div class="val">Segmented pill pair · 3px inset padding · 5/12px pill padding · active = Ink fill + Paper text · inactive = transparent + Ink-soft · helper line below at 176px indent: "Changes labels and buttons in your dashboard. Broadcasts always ship to parents in both languages."</div></div>
+      <div class="row"><div class="label">Clinic info</div><div class="val">Plain prose lines, no card chrome, no tinted background, no Edit (hard-coded in v0, clinic-edit ships v1+) · Satoshi 14pt clinic name + Inter 12pt Ink-soft address / GSTIN tabular / hours lines</div></div>
+      <div class="row"><div class="label">Sign out</div><div class="val">Full-width Ink ghost button · 11px v-padding · 1px Ink border + Ink text + transparent fill · Lucide log-out icon prefix · no Teal (one-Teal-per-screen rule honoured by the rail active border alone)</div></div>
+      <div class="row"><div class="label">Vendor mark</div><div class="val">Centred footer · 48px top margin · 24px top padding · 1px Ink-faint top border · "Pawkit" Satoshi 11pt Ink-faint + middle dot + "v0.1" Inter 10pt Ink-faint tabular · the ONLY place Pawkit-as-vendor appears in dashboard chrome (white-label discipline)</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div></div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s7-main">
+          <div class="s7-stage">
+            <div class="s7-page-title">Settings</div>
+            <div class="s7-page-sub">Your profile, account, and clinic details.</div>
+
+            <div class="s7-section">
+              <div class="s7-section-label">Profile</div>
+              <div class="s7-photo-row">
+                <div class="s7-photo-slot">
+                  <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="s7-photo-text">
+                  <div class="s7-photo-name">Profile photo</div>
+                  <div class="s7-photo-help">Appears in your byline on every Broadcast and inbox reply.</div>
+                </div>
+                <div class="s7-photo-edit">Upload</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Full name</div>
+                <div class="s7-field-value">Dr Sagar Bhongale</div>
+                <div class="s7-field-edit">Edit</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Vet license</div>
+                <div class="s7-field-value tabular">MVC/2008/04821</div>
+                <div class="s7-field-edit">Edit</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Email</div>
+                <div class="s7-field-value placeholder">Not added</div>
+                <div class="s7-field-edit">Add</div>
+              </div>
+            </div>
+
+            <div class="s7-section">
+              <div class="s7-section-label">Account</div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Phone</div>
+                <div class="s7-field-value readonly">+91 98220 47561</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Dashboard language</div>
+                <div class="s7-field-value">
+                  <div class="s7-lang-toggle">
+                    <span class="s7-lang-pill active">English</span>
+                    <span class="s7-lang-pill">मराठी</span>
+                  </div>
+                </div>
+              </div>
+              <div class="s7-stacked-help">Changes labels and buttons in your dashboard. Broadcasts always ship to parents in both languages.</div>
+            </div>
+
+            <div class="s7-section">
+              <div class="s7-section-label">Clinic</div>
+              <div class="s7-clinic-lines">
+                <div class="s7-clinic-name">Animal Medical Services</div>
+                <div class="s7-clinic-line">Karve Road, Kothrud, Pune 411038</div>
+                <div class="s7-clinic-line">Maharashtra, India</div>
+                <div class="s7-clinic-line tabular">GSTIN 27ABCDE1234F1Z2</div>
+                <div class="s7-clinic-line">Open 9am to 9pm, Mon to Sat</div>
+              </div>
+            </div>
+
+            <button class="s7-signout-btn">
+              <svg viewBox="0 0 24 24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sign out
+            </button>
+
+            <div class="s7-vendor">
+              <span class="s7-vendor-brand">Pawkit</span>
+              <span class="s7-vendor-sep">·</span>
+              <span class="s7-vendor-version">v0.1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+<script>
+  // Pet panel tab toggle (locked 2026-05-12)
+  document.querySelectorAll('.pp-tabs').forEach(tabs => {
+    tabs.addEventListener('click', e => {
+      const tab = e.target.closest('.pp-tab');
+      if (!tab) return;
+      const target = tab.dataset.tab;
+      const parent = tabs.closest('.pp-block');
+      parent.querySelectorAll('.pp-tab').forEach(t => t.classList.toggle('active', t === tab));
+      parent.querySelectorAll('.pp-tab-content').forEach(c => c.classList.toggle('active', c.dataset.tabContent === target));
+    });
+  });
+</script>
+</body>
+</html>

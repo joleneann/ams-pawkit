@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit Phase 2 · Screen 02 · Inbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --honey: #E5C896;
+    --milk: #FFFCF2;
+    --vanilla: #EAE0C8;
+    --sable: #2B221A;
+    --steel: #5F6961;
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #1f1f1f;
+    color: var(--bg-canvas);
+    padding: 48px 32px 96px;
+    line-height: 1.4;
+  }
+  .doc { max-width: 1360px; margin: 0 auto; }
+
+  /* Doc header */
+  .doc-header { border-bottom: 1px solid #444; padding-bottom: 24px; margin-bottom: 40px; }
+  .doc-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: #999; margin-bottom: 8px;
+  }
+  .doc-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 30px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .doc-sub { font-size: 13px; color: #bbb; margin-top: 12px; max-width: 760px; }
+  .doc-sub .key { color: #e8d18a; }
+
+  /* Section header */
+  .section-header { margin: 56px 0 18px; }
+  .section-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #888; margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--bg-canvas);
+  }
+
+  /* Reference cards (deferred until agent returns) */
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .ref-grid.cat { grid-template-columns: repeat(3, 1fr); }
+  .ref-card {
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .ref-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #1a1a1a;
+    border-bottom: 1px solid #3a3a3a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 11px;
+    font-style: italic;
+    overflow: hidden;
+    flex-direction: column; gap: 8px; padding: 16px;
+  }
+  .ref-image img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .ref-image .placeholder-name {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: #888;
+    font-style: normal;
+  }
+  .ref-image .placeholder-status { color: #555; }
+  .ref-meta { padding: 12px 14px; }
+  .ref-name {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--bg-canvas); margin-bottom: 6px;
+  }
+  .ref-caption {
+    font-size: 12px; color: #aaa;
+    line-height: 1.45;
+  }
+  .ref-caption .verb { color: #ddd; font-weight: 600; }
+
+  /* Direction frames */
+  .direction { margin-top: 56px; }
+  .direction-caption { margin-bottom: 14px; }
+  .direction-letter {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: #888; margin-right: 10px;
+  }
+  .direction-name {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--bg-canvas);
+  }
+  .direction-channels { color: #888; font-weight: 400; font-size: 13px; margin-left: 8px; }
+  .direction-spec { font-size: 11px; color: #999; margin-top: 4px; font-style: italic; }
+
+  /* Paper frame */
+  .frame {
+    background: var(--bg-canvas);
+    width: 1280px;
+    max-width: 100%;
+    border: 1px solid #333;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ============ LOCKED CHROME (Screen 01 pick: Notion + B-search centered) ============ */
+  .chrome-header {
+    height: 64px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--ink-faint);
+    gap: 28px;
+  }
+  .chrome-wordmark { display: flex; flex-direction: column; line-height: 1; justify-self: start; }
+  .chrome-wordmark .line1 {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 700; font-size: 14px;
+    color: var(--ink); letter-spacing: -0.015em;
+  }
+  .chrome-wordmark .line2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600; font-size: 10px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-top: 3px;
+  }
+  .chrome-search {
+    width: 460px;
+    height: 36px;
+    background: rgba(168, 163, 158, 0.15);
+    border-radius: 4px;
+    display: flex; align-items: center;
+    padding: 0 12px; gap: 10px;
+    justify-self: center;
+  }
+  .chrome-search svg { width: 14px; height: 14px; color: var(--ink-soft); flex-shrink: 0; }
+  .chrome-search .placeholder { font-size: 14px; color: var(--ink-soft); }
+  .chrome-right { justify-self: end; }
+
+  .chrome-shell {
+    display: grid; grid-template-columns: 240px 1fr;
+    min-height: 620px;
+  }
+  .chrome-rail {
+    border-right: 1px solid var(--ink-faint);
+    padding: 20px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .chrome-rail-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 16px; margin: 4px 0 8px;
+  }
+  .chrome-rail-item {
+    height: 40px;
+    display: flex; align-items: center;
+    gap: 14px;
+    padding: 0 16px;
+    border-left: 4px solid transparent;
+    margin-left: -12px; padding-left: 24px;
+    font-size: 15px; font-weight: 400;
+    color: var(--ink-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .chrome-rail-item svg { width: 16px; height: 16px; color: currentColor; flex-shrink: 0; }
+  .chrome-rail-item.active {
+    border-left-color: var(--teal);
+    color: var(--ink); font-weight: 600;
+  }
+
+  /* ============ Inbox main area — shared ============ */
+  .inbox-main { padding: 24px 32px; }
+  .inbox-tabs {
+    display: flex; gap: 28px;
+    border-bottom: 1px solid var(--ink-faint);
+    padding-bottom: 12px; margin-bottom: 16px;
+  }
+  .inbox-tab {
+    font-size: 14px; font-weight: 500;
+    color: var(--ink-soft);
+    cursor: default;
+    position: relative;
+    padding-bottom: 12px;
+    margin-bottom: -13px;
+  }
+  .inbox-tab.active {
+    color: var(--ink); font-weight: 600;
+    border-bottom: 2px solid var(--ink);
+  }
+  .inbox-tab .count {
+    font-size: 11px; font-weight: 600;
+    color: var(--ink-faint); margin-left: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .inbox-tab.active .count { color: var(--ink); }
+
+  /* Avatar with fur-match ring */
+  .avatar-ring {
+    border-radius: 50%;
+    padding: 3px;
+    flex-shrink: 0;
+  }
+  .avatar-ring.honey { background: var(--honey); }
+  .avatar-ring.sable { background: var(--sable); }
+  .avatar-ring.milk { background: linear-gradient(135deg, var(--milk), var(--vanilla)); }
+  .avatar-ring.steel { background: var(--steel); }
+  .avatar-photo {
+    border-radius: 50%;
+    background-color: rgba(168, 163, 158, 0.16);
+    border: 1.5px solid var(--bg-canvas);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A8A39E' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='4' r='2'/%3E%3Ccircle cx='18' cy='8' r='2'/%3E%3Ccircle cx='20' cy='16' r='2'/%3E%3Cpath d='M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 55%;
+  }
+
+  /* ============ Direction A — LINEAR (tight + hover-reveal) ============ */
+  .frame-a .inbox-row {
+    display: grid;
+    grid-template-columns: 38px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 6px;
+    border-bottom: 1px solid var(--ink-faint);
+    position: relative;
+    border-radius: 4px;
+  }
+  .frame-a .avatar-ring { width: 38px; height: 38px; }
+  .frame-a .avatar-photo { width: 32px; height: 32px; }
+  .frame-a .row-body { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .frame-a .pet-name { font-size: 13px; font-weight: 600; color: var(--ink); flex-shrink: 0; }
+  .frame-a .household { font-size: 12px; color: var(--ink-soft); flex-shrink: 0; }
+  .frame-a .household::before { content: '· '; color: var(--ink-faint); }
+  .frame-a .preview {
+    font-size: 12px; color: var(--ink-soft);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    flex: 1;
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 1px solid var(--ink-faint);
+  }
+  .frame-a .timestamp {
+    font-size: 11px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    font-family: 'Inter', monospace;
+  }
+  .frame-a .inbox-row.hover-state { background: rgba(168, 163, 158, 0.08); }
+  .frame-a .hover-action {
+    position: absolute; right: 6px;
+    color: var(--ink-soft);
+    display: flex; align-items: center; gap: 4px;
+    background: var(--bg-canvas);
+    padding: 4px 6px;
+    font-size: 11px;
+    border: 1px solid var(--ink-faint);
+    border-radius: 3px;
+  }
+
+  /* ============ Direction B — SUPERHUMAN (tabular + absolute date) ============ */
+  .frame-b .inbox-row {
+    display: grid;
+    grid-template-columns: 36px 260px 1fr 70px;
+    gap: 14px;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .frame-b .avatar-ring { width: 36px; height: 36px; }
+  .frame-b .avatar-photo { width: 30px; height: 30px; }
+  .frame-b .sender-cell { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .frame-b .pet-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .frame-b .household { font-size: 12px; color: var(--ink-soft); }
+  .frame-b .household::before { content: '· '; color: var(--ink-faint); }
+  .frame-b .preview {
+    font-size: 13px; color: var(--ink-soft);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .frame-b .timestamp {
+    font-size: 11px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .frame-b .unread .pet-name { font-weight: 700; }
+  .frame-b .unread .preview { color: var(--ink); }
+
+  /* ============ Direction C — HEY (generous + 2-line preview) ============ */
+  .frame-c .inbox-row {
+    display: grid;
+    grid-template-columns: 46px 180px 1fr auto;
+    gap: 16px;
+    align-items: start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .frame-c .avatar-ring { width: 46px; height: 46px; }
+  .frame-c .avatar-photo { width: 40px; height: 40px; }
+  .frame-c .sender-cell { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding-top: 2px; }
+  .frame-c .pet-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .frame-c .household { font-size: 11px; color: var(--ink-soft); }
+  .frame-c .preview {
+    font-size: 13px; color: var(--ink-soft);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.45;
+    padding-top: 2px;
+  }
+  .frame-c .timestamp {
+    font-size: 12px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    padding-top: 4px;
+  }
+
+  /* ============ Direction D — THINGS 3 (urgency-bucketed) ============ */
+  .frame-d .bucket-header {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 16px 0 10px;
+    border-bottom: 1px solid var(--ink-faint);
+    margin-top: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .frame-d .bucket-header:first-of-type { margin-top: 0; padding-top: 0; }
+  .frame-d .bucket-header .count {
+    font-weight: 500;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .frame-d .bucket-header.overdue { color: var(--ink); }
+  .frame-d .inbox-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .frame-d .avatar-ring { width: 44px; height: 44px; }
+  .frame-d .avatar-photo { width: 38px; height: 38px; }
+  .frame-d .row-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .frame-d .row-meta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 600; color: var(--ink);
+  }
+  .frame-d .household {
+    font-size: 12px; font-weight: 400; color: var(--ink-soft);
+  }
+  .frame-d .household::before { content: '· '; color: var(--ink-faint); }
+  .frame-d .preview {
+    font-size: 12px; color: var(--ink-soft);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .frame-d .timestamp {
+    font-size: 11px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Reading note */
+  .reading-note {
+    background: #2a2a2a;
+    border: 1px dashed #444;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 12px 0 20px;
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.5;
+  }
+  .reading-note .key { color: #ddd; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Phase 2 · Screen 02 · Inbox</div>
+    <div class="doc-title">Four inbox-row directions on the locked chrome</div>
+    <div class="doc-sub">
+      Screen 01 chrome locked: Notion-channeled (64px header / 240px rail / faint WORKSPACE label / 4px Teal active border) with Direction B's filled-tint search bar centered in the header. All four Screen 02 directions inherit that chrome unchanged; only the Inbox main-area anatomy varies (row height, avatar size, sender-column treatment, timestamp placement/format, divider weight, optional bucket headers).
+      <br><br>
+      <span class="key">Sort order per spec.</span> Active rows are sorted oldest-waiting at the top (the message that has been awaiting reply the longest). Rocky (3d) is therefore at the top of the queue and Gabby (2h) at the bottom.
+      <br><br>
+      Reference compilation deck (Linear / Superhuman / Hey / Things 3 design refs + Klara / Petdesk / Weave category competitors) is wired in below with placeholder cards; agent is fetching screenshots in the background and they will populate when verified.
+    </div>
+  </div>
+
+  <!-- ============ Reference compilation: design refs (placeholders pending agent) ============ -->
+  <div class="section-header">
+    <div class="section-eyebrow">Strand A · Design references · UI taste</div>
+    <div class="section-title">Four cross-industry inbox / list benchmarks</div>
+  </div>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-02-refs/linear.png" alt="Linear inbox reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Linear</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> row marries circle avatar to single-line title + muted meta-line + far-right time-since, with a tiny status dot doing all the read/unread work — clean anatomy for pet avatar + last-message preview + time.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-02-refs/superhuman.jpg" alt="Superhuman inbox reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Superhuman</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> tabs run as plain text labels with small count badges, active tab is just brightened (no pill, no underline tweenery); adapt for Pawkit's Active/Inactive subtabs + awaiting-reply count.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-02-refs/hey.png" alt="Hey Imbox reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Hey by Basecamp</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> sender name bolder than preview, date column grey + right-flush; the only unread cue is a single dot left of avatar — minimal unread signal that maps directly to Pawkit's pet-name/preview stack.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-02-refs/things3.png" alt="Things 3 list reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Things 3</div>
+        <div class="ref-caption"><span class="verb">Steal:</span> generous vertical padding + almost-invisible hairline divider; quiet left gutter for avatars (where Things uses checkboxes); 20 rows feel calm, not packed.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Reference compilation: category competitors ============ -->
+  <div class="section-header">
+    <div class="section-eyebrow">Strand B · Category competitors · feature grounding</div>
+    <div class="section-title">Three vet / healthcare practice mgmt inboxes</div>
+  </div>
+  <div class="ref-grid cat">
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-02-refs/klara.png" alt="Klara inbox reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Klara</div>
+        <div class="ref-caption"><span class="verb">Note:</span> mixed-unit relative time strings ("Jan 1", "1 day", "18 hours", "1 hour", "30 minutes") — more human than absolute dates and exactly right for Pawkit's time-since requirement.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><div class="placeholder-name">Petdesk</div><div class="placeholder-status">no public screenshot</div></div>
+      <div class="ref-meta">
+        <div class="ref-name">Petdesk</div>
+        <div class="ref-caption"><span class="verb">Note:</span> uses Active / Archived subtab split (closest analogue to Pawkit's Active / Inactive). Inbox screenshots gated behind login; lesson from docs only, not screenshot.</div>
+      </div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-image"><img src="assets/screen-02-refs/weave.jpg" alt="Weave Messages reference"></div>
+      <div class="ref-meta">
+        <div class="ref-name">Weave</div>
+        <div class="ref-caption"><span class="verb">Note:</span> small colored tag-chips ("Billing", "Outstanding", "Review") sit beneath the preview line — a way to surface follow-up state ("Post-Op Day 3", "Med refill") without adding a column. NOT in Pawkit v0 scope; flagged for future.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reading-note">
+    <span class="key">Reading the directions below.</span> Each frame shows the FULL Pawkit dashboard with the locked Screen 01 chrome (Notion + B-search centered) on top and the Inbox main area below, Active subtab selected. Only the Inbox row anatomy varies. Compare row height, avatar size + fur-match ring carrier, sender-column treatment, preview length + wrap, timestamp placement + format (relative vs absolute), divider weight, and optional bucket-header grouping.
+  </div>
+
+  <!-- ============ Direction A — LINEAR ============ -->
+  <div class="direction">
+    <div class="direction-caption">
+      <span class="direction-letter">Direction A</span><span class="direction-name">Linear-channeled</span>
+      <span class="direction-channels">tight, hover-reveal, monospace time</span>
+      <div class="direction-spec">38px rows · 32px avatar + 3px fur ring · inline pet name + household + preview separated by hairline · monospace relative time · 1px Ink-faint dividers · hover reveals action chip on right</div>
+    </div>
+    <div class="frame frame-a">
+      <!-- locked chrome -->
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="inbox-main">
+          <div class="inbox-tabs">
+            <div class="inbox-tab active">Active <span class="count">5</span></div>
+            <div class="inbox-tab">Inactive</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring steel"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <span class="pet-name">Rocky</span><span class="household">Joshi household</span>
+              <span class="preview">He's been off his food since Saturday morning, just lying around mostly.</span>
+            </div>
+            <div class="timestamp">3d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <span class="pet-name">Coco</span><span class="household">Sharma household</span>
+              <span class="preview">Video</span>
+            </div>
+            <div class="timestamp">2d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring milk"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <span class="pet-name">Misha</span><span class="household">Khan household</span>
+              <span class="preview">She finished the antibiotics yesterday. Anything else we should watch for?</span>
+            </div>
+            <div class="timestamp">1d ago</div>
+          </div>
+          <div class="inbox-row hover-state">
+            <div class="avatar-ring sable"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <span class="pet-name">Bruno</span><span class="household">Patil household</span>
+              <span class="preview">Photo</span>
+            </div>
+            <div class="hover-action">Open</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <span class="pet-name">Gabby</span><span class="household">Fernandes household</span>
+              <span class="preview">He's been scratching at his ear since this morning, should I be worried?</span>
+            </div>
+            <div class="timestamp">2h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Direction B — SUPERHUMAN ============ -->
+  <div class="direction">
+    <div class="direction-caption">
+      <span class="direction-letter">Direction B</span><span class="direction-name">Superhuman-channeled</span>
+      <span class="direction-channels">tabular density, absolute date in small caps</span>
+      <div class="direction-spec">36px rows · 30px avatar + 3px fur ring · tabular layout (sender 260px · preview flex · time 70px) · ABSOLUTE date format ("May 8") in small caps · bold name + Ink preview on unread · 1px Ink-faint dividers</div>
+    </div>
+    <div class="frame frame-b">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="inbox-main">
+          <div class="inbox-tabs">
+            <div class="inbox-tab active">Active <span class="count">5</span></div>
+            <div class="inbox-tab">Inactive</div>
+          </div>
+          <div class="inbox-row unread">
+            <div class="avatar-ring steel"><div class="avatar-photo"></div></div>
+            <div class="sender-cell"><span class="pet-name">Rocky</span><span class="household">Joshi</span></div>
+            <div class="preview">He's been off his food since Saturday morning, just lying around mostly.</div>
+            <div class="timestamp">May 8</div>
+          </div>
+          <div class="inbox-row unread">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="sender-cell"><span class="pet-name">Coco</span><span class="household">Sharma</span></div>
+            <div class="preview">Video</div>
+            <div class="timestamp">May 9</div>
+          </div>
+          <div class="inbox-row unread">
+            <div class="avatar-ring milk"><div class="avatar-photo"></div></div>
+            <div class="sender-cell"><span class="pet-name">Misha</span><span class="household">Khan</span></div>
+            <div class="preview">She finished the antibiotics yesterday. Anything else we should watch for?</div>
+            <div class="timestamp">May 10</div>
+          </div>
+          <div class="inbox-row unread">
+            <div class="avatar-ring sable"><div class="avatar-photo"></div></div>
+            <div class="sender-cell"><span class="pet-name">Bruno</span><span class="household">Patil</span></div>
+            <div class="preview">Photo</div>
+            <div class="timestamp">06:45</div>
+          </div>
+          <div class="inbox-row unread">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="sender-cell"><span class="pet-name">Gabby</span><span class="household">Fernandes</span></div>
+            <div class="preview">He's been scratching at his ear since this morning, should I be worried?</div>
+            <div class="timestamp">09:20</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Direction C — HEY ============ -->
+  <div class="direction">
+    <div class="direction-caption">
+      <span class="direction-letter">Direction C</span><span class="direction-name">Hey-channeled</span>
+      <span class="direction-channels">generous, sender column, 2-line preview</span>
+      <div class="direction-spec">56px rows · 40px avatar + 3px fur ring · sender column 180px (pet name + household stacked) · preview wraps to 2 lines · relative time top-right · airy breathing room · 1px Ink-faint dividers</div>
+    </div>
+    <div class="frame frame-c">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="inbox-main">
+          <div class="inbox-tabs">
+            <div class="inbox-tab active">Active <span class="count">5</span></div>
+            <div class="inbox-tab">Inactive</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring steel"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Rocky</span>
+              <span class="household">Joshi household</span>
+            </div>
+            <div class="preview">He's been off his food since Saturday morning, just lying around mostly. Slept through lunch yesterday too. Should we be worried?</div>
+            <div class="timestamp">3d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Coco</span>
+              <span class="household">Sharma household</span>
+            </div>
+            <div class="preview">Video</div>
+            <div class="timestamp">2d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring milk"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Misha</span>
+              <span class="household">Khan household</span>
+            </div>
+            <div class="preview">She finished the antibiotics yesterday. Anything else we should watch for, or are we done with this round?</div>
+            <div class="timestamp">1d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring sable"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Bruno</span>
+              <span class="household">Patil household</span>
+            </div>
+            <div class="preview">Photo</div>
+            <div class="timestamp">5h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="sender-cell">
+              <span class="pet-name">Gabby</span>
+              <span class="household">Fernandes household</span>
+            </div>
+            <div class="preview">He's been scratching at his ear since this morning, should I be worried? It looks a bit red on the inside but he isn't crying out.</div>
+            <div class="timestamp">2h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Direction D — THINGS 3 ============ -->
+  <div class="direction">
+    <div class="direction-caption">
+      <span class="direction-letter">Direction D</span><span class="direction-name">Things 3-channeled</span>
+      <span class="direction-channels">urgency-bucketed grouping</span>
+      <div class="direction-spec">48px rows · 38px avatar + 3px fur ring · grouped under bucket headers ("Overdue" 3+ days · "Today's awaiting") · Inter 11px small-caps headers with count · relative time · 1px Ink-faint dividers</div>
+    </div>
+    <div class="frame frame-d">
+      <div class="chrome-header">
+        <div class="chrome-wordmark"><span class="line1">Animal Medical Services</span><span class="line2">Pune</span></div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-right"></div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="inbox-main">
+          <div class="inbox-tabs">
+            <div class="inbox-tab active">Active <span class="count">5</span></div>
+            <div class="inbox-tab">Inactive</div>
+          </div>
+          <div class="bucket-header overdue">Overdue <span class="count">2</span></div>
+          <div class="inbox-row">
+            <div class="avatar-ring steel"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <div class="row-meta">Rocky <span class="household">Joshi household</span></div>
+              <div class="preview">He's been off his food since Saturday morning, just lying around mostly.</div>
+            </div>
+            <div class="timestamp">3d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <div class="row-meta">Coco <span class="household">Sharma household</span></div>
+              <div class="preview">Video</div>
+            </div>
+            <div class="timestamp">2d ago</div>
+          </div>
+          <div class="bucket-header">Awaiting today <span class="count">3</span></div>
+          <div class="inbox-row">
+            <div class="avatar-ring milk"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <div class="row-meta">Misha <span class="household">Khan household</span></div>
+              <div class="preview">She finished the antibiotics yesterday. Anything else we should watch for?</div>
+            </div>
+            <div class="timestamp">1d ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring sable"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <div class="row-meta">Bruno <span class="household">Patil household</span></div>
+              <div class="preview">Photo</div>
+            </div>
+            <div class="timestamp">5h ago</div>
+          </div>
+          <div class="inbox-row">
+            <div class="avatar-ring honey"><div class="avatar-photo"></div></div>
+            <div class="row-body">
+              <div class="row-meta">Gabby <span class="household">Fernandes household</span></div>
+              <div class="preview">He's been scratching at his ear since this morning, should I be worried?</div>
+            </div>
+            <div class="timestamp">2h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

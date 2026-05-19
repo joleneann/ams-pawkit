@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+<title>Pawkit v1.3 - Palette revisit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,600;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F8F6EE;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #2a2a2a;
+    color: var(--ink);
+    line-height: 1.4;
+    padding: 32px;
+  }
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--bg-canvas);
+    padding: 48px;
+  }
+  .sheet-header { border-bottom: 2px solid var(--ink); padding-bottom: 24px; margin-bottom: 40px; }
+  .sheet-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+  .sheet-title { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 40px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.05; }
+  .sheet-sub { font-size: 14px; color: var(--ink-soft); margin-top: 12px; max-width: 920px; }
+
+  .section { margin-bottom: 56px; }
+  .section-title { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.015em; margin-bottom: 6px; }
+  .section-desc { font-size: 14px; color: var(--ink-soft); margin-bottom: 24px; max-width: 760px; line-height: 1.5; }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .swatch-card {
+    border: 1.5px solid var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-canvas);
+  }
+  .swatch-card.locked { border-color: var(--teal); border-width: 2px; }
+  .swatch-card.recommend { border-color: var(--teal); border-width: 2px; }
+  .swatch-block {
+    height: 140px;
+    display: flex;
+    align-items: flex-end;
+    padding: 12px;
+    color: var(--ink);
+    position: relative;
+  }
+  .swatch-block.dark { color: var(--bg-canvas); }
+  .swatch-tag {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,109,111,0.95);
+    color: var(--bg-canvas);
+    font-family: 'Satoshi', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 7px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .swatch-tag.current { background: var(--ink); }
+  .swatch-tag.alt { background: var(--ink-soft); }
+  .swatch-hex {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .swatch-meta {
+    padding: 12px 14px;
+  }
+  .swatch-name {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .swatch-breeds {
+    font-family: Inter;
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+  }
+  .mini-swatch {
+    border: 1px solid var(--ink-faint);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--bg-canvas);
+  }
+  .mini-block {
+    height: 80px;
+    position: relative;
+  }
+  .mini-block .swatch-tag { font-size: 9px; padding: 2px 5px; }
+  .mini-meta { padding: 8px 10px; }
+  .mini-hex { font-family: 'Satoshi', sans-serif; font-size: 11px; font-weight: 700; }
+  .mini-name { font-family: Inter; font-size: 10px; color: var(--ink-soft); margin-top: 1px; }
+
+  .full-palette {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .full-swatch {
+    height: 64px;
+    border: 1px solid var(--ink);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 5px;
+  }
+  .full-swatch .label {
+    font-family: Inter;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--ink);
+    background: rgba(248,246,238,0.85);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  .full-swatch.dark .label {
+    color: var(--bg-canvas);
+    background: rgba(15,12,10,0.7);
+  }
+  .palette-label {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .reference-block {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-top: 16px;
+    font-family: Inter;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .reference-block strong { color: var(--ink); font-weight: 600; }
+  .reference-block code { font-family: 'Satoshi', sans-serif; font-weight: 700; background: rgba(15,12,10,0.04); padding: 1px 5px; border-radius: 3px; }
+
+  .criteria-callout {
+    background: var(--bg-canvas);
+    border: 1.5px solid var(--ink);
+    border-left: 4px solid var(--teal);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 32px;
+    max-width: 920px;
+  }
+  .criteria-callout h3 {
+    font-family: 'Satoshi', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .criteria-callout ul { list-style: none; }
+  .criteria-callout li {
+    padding: 4px 0 4px 16px;
+    position: relative;
+    font-family: Inter;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .criteria-callout li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    background: var(--teal);
+    border-radius: 50%;
+  }
+  .criteria-callout strong { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="sheet-header">
+    <div class="sheet-eyebrow">Pawkit v1.3 &middot; Palette revisit</div>
+    <h1 class="sheet-title">Palette revisit &middot; Paper, Smoke, Steel</h1>
+    <p class="sheet-sub">
+      Teal #006D6F stays locked (the hero). This sheet revisits Paper (the canvas) and the two
+      cool-toned fur tokens (Smoke, Steel) that read more like Apple-product cool greys than
+      actual pet fur. Real-world references for Russian Blue, Schnauzer, and Weimaraner all sit
+      in warm-neutral grey territory, not cool blue-grey. Alternatives proposed below; visuals
+      to compare. Nothing edited in `decisions-log.md` or `colors.ts` until you decide.
+    </p>
+  </div>
+
+  <!-- LOCKED: TEAL -->
+  <div class="section">
+    <h2 class="section-title">Locked &middot; Teal</h2>
+    <p class="section-desc">No change. The hero colour. Already woven into every CTA, every
+      open-window banner, every unread dot. Working as intended.</p>
+    <div class="swatch-grid" style="grid-template-columns: 220px;">
+      <div class="swatch-card locked">
+        <div class="swatch-block dark" style="background: #006D6F;">
+          <span class="swatch-tag">LOCKED</span>
+          <span class="swatch-hex">#006D6F</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Teal</div>
+          <div class="swatch-breeds">Hero CTA, brand mark, status indicators. One per screen.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAPER REVISIT -->
+  <div class="section">
+    <h2 class="section-title">Paper &middot; revisit</h2>
+    <p class="section-desc">Current Paper #F8F6EE is a warm cream with a noticeable yellow cast
+      (HSL 51° hue, 38% saturation). It pairs well with the Honey-Peach gradient on the app icon
+      but can feel slightly yellow-shifted on long reading surfaces (Pet Page body, Health Kit
+      reading). Three alternatives below, all warm but with different neutrality.</p>
+    <div class="swatch-grid">
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #F8F6EE;">
+          <span class="swatch-tag current">CURRENT</span>
+          <span class="swatch-hex">#F8F6EE</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Paper (current)</div>
+          <div class="swatch-breeds">Warm cream, noticeable yellow cast. Pairs with Honey-Peach gradient.</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #FAF7F0;">
+          <span class="swatch-tag alt">ALT A</span>
+          <span class="swatch-hex">#FAF7F0</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Slightly desaturated</div>
+          <div class="swatch-breeds">Same hue family, slightly less yellow. Minimal change. Safest refinement.</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #F5F1E8;">
+          <span class="swatch-tag alt">ALT B</span>
+          <span class="swatch-hex">#F5F1E8</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">More taupe</div>
+          <div class="swatch-breeds">Cooler, more neutral. Less "yellow cream", more "warm stone". Reads more grown-up.</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #FCFAF4;">
+          <span class="swatch-tag alt">ALT C</span>
+          <span class="swatch-hex">#FCFAF4</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Lighter, less saturated</div>
+          <div class="swatch-breeds">Closer to a warm white. Reads as bright magazine paper. Almost no yellow.</div>
+        </div>
+      </div>
+    </div>
+    <div class="reference-block">
+      <strong>Reference points.</strong> Substack uses #F9F8F3 (warm cream, very close to current
+      Pawkit). Apple Books uses #F7EEDC (warmer, more yellow). iA Writer uses #F2EEE5 (more taupe,
+      similar to ALT B). Things 3 uses #F5F5F0 (most neutral). Current Pawkit Paper sits at the
+      warm-yellow end of this range; ALT A or B nudges it toward editorial-neutral.
+    </div>
+  </div>
+
+  <!-- PER-TOKEN AUDIT (ALL 10) -->
+  <div class="section">
+    <h2 class="section-title">Per-token audit &middot; all 10 fur tokens</h2>
+    <p class="section-desc">Each fur token cross-checked against authoritative paint references and
+      breed-color sources. Verdicts: <strong>KEEP</strong> (current value is plausible),
+      <strong>REFINE</strong> (minor adjustment suggested), <strong>WARM</strong> (significant
+      shift recommended). Smoke and Steel are the only two that strongly warrant change. Milk is
+      the only other token where a refinement is suggested. The other seven hold up against
+      real-world fur references.</p>
+    <div class="swatch-grid">
+
+      <!-- MILK -->
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #FFFCF2;">
+          <span class="swatch-tag current">KEEP</span>
+          <span class="swatch-hex">#FFFCF2</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Milk &middot; KEEP</div>
+          <div class="swatch-breeds"><strong>Real references:</strong> Dalmatian base coat IS
+            essentially pure white (~<code style="font-family: 'Satoshi'; font-size: 10px;">#F8F4ED</code>
+            in soft window light); Samoyed white-white (~<code style="font-family: 'Satoshi'; font-size: 10px;">#F5F0E5</code>);
+            White Persian (~<code style="font-family: 'Satoshi'; font-size: 10px;">#F5F0E5</code>
+            with very slight warm cast). Real white pet fur IS near-pure-white with at most a
+            tiny warm hint. Current Milk <code style="font-family: 'Satoshi'; font-size: 10px;">#FFFCF2</code>
+            is correct. Earlier suggestion to warm to <code style="font-family: 'Satoshi'; font-size: 10px;">#F5EDDC</code>
+            was wrong &mdash; that's ivory/cream, not white fur. The Milk-vs-Paper clash gets
+            solved by shifting Paper, not Milk.</div>
+        </div>
+      </div>
+
+      <!-- VANILLA -->
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #EAE0C8;">
+          <span class="swatch-tag current">KEEP</span>
+          <span class="swatch-hex">#EAE0C8</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Vanilla &middot; KEEP</div>
+          <div class="swatch-breeds"><strong>Real reference:</strong> "Labrador color"
+            <code style="font-family: 'Satoshi'; font-size: 10px;">#F2ECD9</code> (lighter cream
+            Lab). Yellow Lab / cream Golden: ~#E8DCBC. Current Vanilla sits in plausible range.
+            No change needed.</div>
+        </div>
+      </div>
+
+      <!-- HONEY -->
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #E5C896;">
+          <span class="swatch-tag current">KEEP</span>
+          <span class="swatch-hex">#E5C896</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Honey &middot; KEEP</div>
+          <div class="swatch-breeds"><strong>Real references:</strong> Dunn-Edwards Golden Retriever
+            DE5318 <code style="font-family: 'Satoshi'; font-size: 10px;">#F7C66B</code> (lighter);
+            Benjamin Moore Golden Retriever 2165-30 <code style="font-family: 'Satoshi'; font-size: 10px;">#BA8B52</code>
+            (deeper); current Honey sits between. Deeply branded (Gabby's locked colour, app-icon
+            Honey-Peach gradient, Pet Page accent border). High cost to change. Plausible value.</div>
+        </div>
+      </div>
+
+      <!-- PEACH -->
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #E8A87C;">
+          <span class="swatch-tag current">KEEP</span>
+          <span class="swatch-hex">#E8A87C</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Peach &middot; KEEP</div>
+          <div class="swatch-breeds"><strong>Real references:</strong> Orange tabby palette range
+            #FFB74D to #FFCC80 (lighter saturation); current Peach sits in the ginger-tabby /
+            soft-orange zone. Vizsla and Irish Setter are deeper (Rust territory). Deeply branded
+            (app-icon Honey-Peach gradient). High cost to change.</div>
+        </div>
+      </div>
+
+      <!-- RUST -->
+      <div class="swatch-card">
+        <div class="swatch-block dark" style="background: #B05E2E;">
+          <span class="swatch-tag current">KEEP</span>
+          <span class="swatch-hex">#B05E2E</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Rust &middot; KEEP</div>
+          <div class="swatch-breeds"><strong>Real references:</strong> Irish Setter ~#A04E1C
+            (deeper red); Vizsla ~#B57040 (slightly lighter). Current Rust sits in plausible
+            Irish Setter / Vizsla / copper-coat range.</div>
+        </div>
+      </div>
+
+      <!-- MUSHROOM -->
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #A8927A;">
+          <span class="swatch-tag current">KEEP</span>
+          <span class="swatch-hex">#A8927A</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Mushroom &middot; KEEP</div>
+          <div class="swatch-breeds">Real reference for medium-brown / café-au-lait coat: ~#A89280.
+            Current value plausible. Token name "Mushroom" is unusual but not wrong; refers to
+            cafe-au-lait dog coats and faded-chocolate Lab variants. With warmed Smoke (#9F9282)
+            close in tone, distinctness needs verification (LAB distance ~6 units, sufficient
+            for k-means but tight).</div>
+        </div>
+      </div>
+
+      <!-- SMOKE -->
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #A8B4BA;">
+          <span class="swatch-tag current">CURRENT</span>
+          <span class="swatch-hex">#A8B4BA</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Smoke &middot; SHIFT (deep-dive below)</div>
+          <div class="swatch-breeds"><strong>Real references:</strong> Sico Russian Blue Cat
+            <code style="font-family: 'Satoshi'; font-size: 10px;">#6F7974</code>. Current is too
+            cool / blue. Initial recommendation <code style="font-family: 'Satoshi'; font-size: 10px;">#9F9282</code>
+            was wrong &mdash; clashes with Mushroom (warm-taupe family). Revised: <code style="font-family: 'Satoshi'; font-size: 10px;">#8B928A</code>
+            (warm-neutral with slight cool/green undertone, distinct from both Mushroom warm-taupe
+            and Ink-faint warm-neutral chrome).</div>
+        </div>
+      </div>
+
+      <!-- STEEL -->
+      <div class="swatch-card">
+        <div class="swatch-block dark" style="background: #6B7B82;">
+          <span class="swatch-tag current">CURRENT</span>
+          <span class="swatch-hex">#6B7B82</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Steel &middot; SHIFT (deep-dive below)</div>
+          <div class="swatch-breeds"><strong>Real references:</strong> Russian Blue darker areas
+            <code style="font-family: 'Satoshi'; font-size: 10px;">#6F7974</code>. Current is too
+            cool / blue. Initial recommendation <code style="font-family: 'Satoshi'; font-size: 10px;">#6F6862</code>
+            was wrong &mdash; clashes with Bark warm-brown and Ink-soft chrome. Revised:
+            <code style="font-family: 'Satoshi'; font-size: 10px;">#5F6961</code> (warm-neutral
+            dark grey with slight cool/green undertone, distinct from Bark and Ink-soft).</div>
+        </div>
+      </div>
+
+      <!-- BARK -->
+      <div class="swatch-card">
+        <div class="swatch-block dark" style="background: #5C4A3A;">
+          <span class="swatch-tag current">KEEP</span>
+          <span class="swatch-hex">#5C4A3A</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Bark &middot; KEEP</div>
+          <div class="swatch-breeds"><strong>Real references:</strong> color-name.com Chocolate
+            Lab <code style="font-family: 'Satoshi'; font-size: 10px;">#5C3E35</code>; PPG Paints
+            Chocolate Lab PPG1000-7 <code style="font-family: 'Satoshi'; font-size: 10px;">#64584A</code>.
+            Current Bark sits between these two paint references; very close to color-name.com.
+            Plausible. No change needed.</div>
+        </div>
+      </div>
+
+      <!-- SABLE -->
+      <div class="swatch-card">
+        <div class="swatch-block dark" style="background: #2B221A;">
+          <span class="swatch-tag current">KEEP</span>
+          <span class="swatch-hex">#2B221A</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Sable &middot; KEEP</div>
+          <div class="swatch-breeds"><strong>Real references:</strong> "Cool Black" Lab
+            <code style="font-family: 'Satoshi'; font-size: 10px;">#161924</code> (cool tint);
+            warm-tinted black fur in soft light ~<code style="font-family: 'Satoshi'; font-size: 10px;">#1A140E</code>.
+            Current Sable is slightly lighter than the very-darkest reference but warm-toned;
+            needs to stay above pure black for the locked Sable-cover Sampling state contrast
+            (Teal scan-line + glow). Plausible at current value.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MILK CORRECTION NOTE -->
+  <div class="section">
+    <h2 class="section-title">Milk &middot; correction</h2>
+    <p class="section-desc"><strong>Earlier in this sheet I recommended warming Milk to
+      <code>#F5EDDC</code> (ivory). That was wrong.</strong> Real Dalmatian, Samoyed, and white
+      Persian fur IS essentially pure white in real photos — their coats reflect white-white,
+      not cream. Suggesting warm-ivory pushed Milk away from how the actual breeds look.</p>
+    <p class="section-desc">Current Milk <code>#FFFCF2</code> stays. The Milk-vs-Paper clash
+      isn't solved by warming Milk; it's solved by shifting Paper away from cream-white toward
+      a more-neutral taupe-cream. See the revised Paper recommendation below.</p>
+    <div class="reference-block">
+      <strong>Real white pet fur references:</strong>
+      <br>&middot; Dalmatian base coat in soft window light: ~<code>#F8F4ED</code> (near-pure white)
+      <br>&middot; Samoyed double coat: ~<code>#F5F0E5</code> (white with tiny warm hint)
+      <br>&middot; White Persian: ~<code>#F5F0E5</code> (white, very subtle warm cast)
+      <br>&middot; West Highland White Terrier: ~<code>#F8F4ED</code>
+      <br>&middot; Bichon Frise: pure white-white
+      <br><br>
+      All sit in the <code>#F5F0E5</code> to <code>#F8F4ED</code> range. Current Milk
+      <code>#FFFCF2</code> is at the very-pure-white end of this range &mdash; defensible.
+      The previous suggestion of <code>#F5EDDC</code> (HSL 41&deg; hue at 53% saturation) is
+      genuinely ivory/cream, NOT white fur.
+    </div>
+  </div>
+
+  <!-- FULL FUR KIT: CURRENT VS PROPOSED -->
+  <div class="section">
+    <h2 class="section-title">Fur kit &middot; current vs proposed</h2>
+    <p class="section-desc">Side-by-side. The first 8 tokens stay; the last 2 (Smoke, Steel) shift
+      from cool blue-grey to warm-neutral grey to match real-world pet fur references. Detailed
+      proposals further down.</p>
+
+    <div class="palette-label">Current 10-token kit</div>
+    <div class="full-palette">
+      <div class="full-swatch" style="background: #FFFCF2;"><span class="label">Milk</span></div>
+      <div class="full-swatch" style="background: #EAE0C8;"><span class="label">Vanilla</span></div>
+      <div class="full-swatch" style="background: #E5C896;"><span class="label">Honey</span></div>
+      <div class="full-swatch" style="background: #E8A87C;"><span class="label">Peach</span></div>
+      <div class="full-swatch dark" style="background: #B05E2E;"><span class="label">Rust</span></div>
+      <div class="full-swatch" style="background: #A8927A;"><span class="label">Mushroom</span></div>
+      <div class="full-swatch" style="background: #A8B4BA;"><span class="label">Smoke</span></div>
+      <div class="full-swatch dark" style="background: #6B7B82;"><span class="label">Steel</span></div>
+      <div class="full-swatch dark" style="background: #5C4A3A;"><span class="label">Bark</span></div>
+      <div class="full-swatch dark" style="background: #2B221A;"><span class="label">Sable</span></div>
+    </div>
+
+    <div class="palette-label" style="margin-top: 24px;">Proposed (revised &mdash; Milk stays, Paper shifts, Smoke and Steel go cool-neutral)</div>
+    <div class="full-palette">
+      <div class="full-swatch" style="background: #FFFCF2;"><span class="label">Milk (kept)</span></div>
+      <div class="full-swatch" style="background: #EAE0C8;"><span class="label">Vanilla</span></div>
+      <div class="full-swatch" style="background: #E5C896;"><span class="label">Honey</span></div>
+      <div class="full-swatch" style="background: #E8A87C;"><span class="label">Peach</span></div>
+      <div class="full-swatch dark" style="background: #B05E2E;"><span class="label">Rust</span></div>
+      <div class="full-swatch" style="background: #A8927A;"><span class="label">Mushroom</span></div>
+      <div class="full-swatch" style="background: #8B928A;"><span class="label">Smoke*</span></div>
+      <div class="full-swatch dark" style="background: #5F6961;"><span class="label">Steel*</span></div>
+      <div class="full-swatch dark" style="background: #5C4A3A;"><span class="label">Bark</span></div>
+      <div class="full-swatch dark" style="background: #2B221A;"><span class="label">Sable</span></div>
+    </div>
+    <p style="font-family: Inter; font-size: 11px; color: var(--ink-soft); margin-top: 8px;">* Smoke and Steel go cool-neutral grey (slight green undertone), distinct from warm-taupe Mushroom/Bark and from warm-neutral chrome. Milk stays at #FFFCF2 (real Dalmatian / Samoyed / white Persian fur IS near-pure white). Paper shifts to #F5F1E8 to differentiate from Milk.</p>
+  </div>
+
+  <!-- CLASH CHECK SECTION (added after user feedback) -->
+  <div class="section">
+    <h2 class="section-title">Clash check &middot; fur palette vs chrome palette vs other fur tokens</h2>
+    <p class="section-desc">Initial recommendations had a real problem: Smoke <code>#9F9282</code>
+      and Steel <code>#6F6862</code> were both in the warm-taupe family, the same family as
+      Mushroom and Bark. They would have k-means-clustered together AND read as
+      indistinguishable to the eye. The chrome neutrals (Ink-soft, Ink-faint, Paper) also
+      overlap that warm-neutral range. Revised proposal pushes Smoke and Steel into a
+      <strong>cool-leaning warm-neutral</strong> zone (slight green undertone) so they sit in
+      their own quadrant of colour space, distinct from both warm-taupe fur AND warm-neutral
+      chrome.</p>
+
+    <div class="palette-label">Side-by-side check &middot; warm-taupe vs cool-neutral grey</div>
+    <div class="full-palette" style="grid-template-columns: repeat(6, 1fr);">
+      <div class="full-swatch" style="background: #A8927A;"><span class="label">Mushroom #A8927A</span></div>
+      <div class="full-swatch" style="background: #9F9282;"><span class="label">Old Smoke #9F9282 (clash)</span></div>
+      <div class="full-swatch" style="background: #8B928A;"><span class="label">New Smoke #8B928A</span></div>
+      <div class="full-swatch dark" style="background: #5C4A3A;"><span class="label">Bark #5C4A3A</span></div>
+      <div class="full-swatch dark" style="background: #6F6862;"><span class="label">Old Steel #6F6862 (clash)</span></div>
+      <div class="full-swatch dark" style="background: #5F6961;"><span class="label">New Steel #5F6961</span></div>
+    </div>
+    <p style="font-family: Inter; font-size: 11px; color: var(--ink-soft); margin-top: 8px;">
+      Mushroom + old Smoke read as the same warm-taupe; Bark + old Steel read as the same
+      warm-dark-brown. Revised Smoke and Steel have slight cool/green undertone (Russian Blue
+      family) and clearly differentiate.</p>
+
+    <div class="palette-label" style="margin-top: 24px;">Chrome vs fur greys check</div>
+    <div class="full-palette" style="grid-template-columns: repeat(6, 1fr);">
+      <div class="full-swatch" style="background: #A8A39E;"><span class="label">Ink-faint #A8A39E (chrome)</span></div>
+      <div class="full-swatch" style="background: #8B928A;"><span class="label">New Smoke #8B928A (fur)</span></div>
+      <div class="full-swatch dark" style="background: #5C5550;"><span class="label">Ink-soft #5C5550 (chrome)</span></div>
+      <div class="full-swatch dark" style="background: #5F6961;"><span class="label">New Steel #5F6961 (fur)</span></div>
+      <div class="full-swatch" style="background: #F8F6EE;"><span class="label">Paper #F8F6EE (chrome, current)</span></div>
+      <div class="full-swatch" style="background: #FFFCF2;"><span class="label">Old Milk #FFFCF2 (clash with Paper)</span></div>
+    </div>
+    <p style="font-family: Inter; font-size: 11px; color: var(--ink-soft); margin-top: 8px;">
+      Chrome neutrals (Ink-soft, Ink-faint, Paper) sit in warm-neutral (yellow-orange undertone)
+      space. New Smoke and Steel sit in cool-neutral (slight green undertone) space &mdash; close
+      in lightness but distinct in hue family. Old Milk #FFFCF2 is essentially the same colour as
+      Paper #F8F6EE, which is why fur swatches in mockups blend into the page background.</p>
+  </div>
+
+  <!-- SMOKE DEEP-DIVE (revised) -->
+  <div class="section">
+    <h2 class="section-title">Smoke &middot; revised recommendation</h2>
+    <p class="section-desc">Real Russian Blue cat fur has a slight green/cyan undertone (paint
+      reference Sico <code>#6F7974</code>; raw fur sampling shows H=80-100&deg; hue at very low
+      saturation). The fur kit needs a token that is grey but NOT in the warm-taupe family
+      (avoiding clash with Mushroom) and NOT in the warm-neutral chrome family (avoiding clash
+      with Ink-faint). Solution: shift Smoke into the <strong>cool-neutral</strong> zone with
+      subtle green undertone.</p>
+    <div class="swatch-grid">
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #A8B4BA;">
+          <span class="swatch-tag current">CURRENT</span>
+          <span class="swatch-hex">#A8B4BA</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Smoke (current)</div>
+          <div class="swatch-breeds">Cool blue-grey. Apple-product feel; not pet fur. Hue family
+            190-200&deg; (cyan-blue).</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #9F9282;">
+          <span class="swatch-tag alt">REJECTED</span>
+          <span class="swatch-hex">#9F9282</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Initial proposal (Weimaraner paint)</div>
+          <div class="swatch-breeds">CLASHES with Mushroom (#A8927A) &mdash; same warm-taupe
+            family, same hue 27-40&deg;. Would k-means-cluster with Mushroom. Rejected after
+            user feedback.</div>
+        </div>
+      </div>
+      <div class="swatch-card recommend">
+        <div class="swatch-block" style="background: #8B928A;">
+          <span class="swatch-tag">RECOMMEND</span>
+          <span class="swatch-hex">#8B928A</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Cool-neutral mid-grey</div>
+          <div class="swatch-breeds">Hue ~110&deg; (slight green), saturation ~3%, lightness 57%.
+            Distinct from Mushroom warm-taupe (different hue family). Distinct from Ink-faint
+            chrome (~9 LAB units darker, slight green vs yellow undertone). Plausible for
+            Russian Blue, Korat, Chartreux, blue-grey cats. Reads as fur, not chrome.</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block" style="background: #87918A;">
+          <span class="swatch-tag alt">ALT</span>
+          <span class="swatch-hex">#87918A</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Slightly darker, more cool</div>
+          <div class="swatch-breeds">Same family as recommended, ~3 lightness points darker. More
+            distinctness from Ink-faint; slightly less distinctness from Steel.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEEL DEEP-DIVE (revised) -->
+  <div class="section">
+    <h2 class="section-title">Steel &middot; revised recommendation</h2>
+    <p class="section-desc">Same logic: Steel needs to be a dark grey distinct from warm-brown
+      Bark AND from chrome Ink-soft. Revised proposal sits in the cool-neutral dark zone, in the
+      same hue family as the new Smoke (so Smoke and Steel pair as a tonal family).</p>
+    <div class="swatch-grid">
+      <div class="swatch-card">
+        <div class="swatch-block dark" style="background: #6B7B82;">
+          <span class="swatch-tag current">CURRENT</span>
+          <span class="swatch-hex">#6B7B82</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Steel (current)</div>
+          <div class="swatch-breeds">Cool dark grey-blue. Apple stainless steel feel. Hue family
+            190-200&deg;.</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block dark" style="background: #6F6862;">
+          <span class="swatch-tag alt">REJECTED</span>
+          <span class="swatch-hex">#6F6862</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Initial proposal (warm taupe-dark)</div>
+          <div class="swatch-breeds">CLASHES with Bark (#5C4A3A) &mdash; both in warm 28-33&deg;
+            hue. Also tight against Ink-soft chrome (~7 LAB units). Rejected after user feedback.</div>
+        </div>
+      </div>
+      <div class="swatch-card recommend">
+        <div class="swatch-block dark" style="background: #5F6961;">
+          <span class="swatch-tag">RECOMMEND</span>
+          <span class="swatch-hex">#5F6961</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Cool-neutral dark grey</div>
+          <div class="swatch-breeds">Hue ~140&deg; (slight green), saturation ~4%, lightness 39%.
+            Same hue family as new Smoke (pairs as tonal family). Distinct from Bark warm-brown
+            (different hue, ~12 LAB units). Distinct from Ink-soft chrome (different hue family,
+            ~10 LAB units). Plausible for darker Schnauzer banding, Korat, charcoal cats.</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-block dark" style="background: #586862;">
+          <span class="swatch-tag alt">ALT</span>
+          <span class="swatch-hex">#586862</span>
+        </div>
+        <div class="swatch-meta">
+          <div class="swatch-name">Slightly darker, more cool</div>
+          <div class="swatch-breeds">Same family, ~3 lightness points darker. More distinctness
+            from Smoke; slightly less distinctness from Sable.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALGORITHM IMPACT -->
+  <div class="section">
+    <h2 class="section-title">Algorithm impact</h2>
+    <p class="section-desc">Changing Smoke and Steel hex values shifts the LAB anchor points used
+      by the fur-match algorithm (`packages/match-logic`). Implications:</p>
+    <div class="reference-block">
+      <strong>Test fixtures.</strong> 17/17 vitest fixtures currently pass against the existing
+      hex values. The Russian Blue ("Smoke") and Schnauzer ("Steel") fixtures are cited by name in
+      <code>packages/match-logic/src/__tests__/fixtures.test.ts</code>. Updating the hex values will
+      regenerate LAB targets at module load (the verified LAB table in
+      <code>packages/match-logic/src/rules.ts</code> derives from <code>palette</code> values), so
+      the test fixtures will need to be re-run with updated synthetic photos OR the fixtures' hex
+      inputs will need to be regenerated to match the new tokens.
+      <br><br>
+      <strong>Photo classification.</strong> For real photos: a Russian Blue photo currently maps
+      to <code>#A8B4BA</code> (cool blue). With the warmed Smoke at <code>#9F9282</code>, it would
+      map to a tone closer to actual fur. This is an improvement, not a regression.
+      <br><br>
+      <strong>Override-tracking.</strong> If a parent has previously overridden the algorithm's
+      Smoke result, that override stays as their persisted choice (stored in
+      <code>pets.fur_match_primary</code>). The token shift only affects new uploads.
+      <br><br>
+      <strong>Recommendation.</strong> If the hex shift lands, regenerate the 17-fixture suite at
+      the same time, plus a smoke-test pass on the Fernandes 4 (Galaxy is the only at-risk pet,
+      her coat is photo-determined and may currently classify Smoke; with the warmed token she'd
+      classify the same tone but at a more plausible hex).
+    </div>
+  </div>
+
+  <!-- CRITERIA CALLOUT -->
+  <div class="criteria-callout">
+    <h3>Decision summary &middot; revised after clash check</h3>
+    <ul>
+      <li><strong>Teal:</strong> LOCKED. No change.</li>
+      <li><strong>Paper:</strong> SHIFT to ALT B <code>#F5F1E8</code> (more editorial-neutral,
+        less yellow than current). Solves both the "looks slightly off" feel AND the Milk-clash
+        problem (current Paper and current Milk are only ~4 lightness points apart, so white-pet
+        fur swatches blend into the page).</li>
+      <li><strong>Milk:</strong> KEEP <code>#FFFCF2</code>. Real Dalmatian, Samoyed, and white
+        Persian fur IS essentially pure white. Earlier suggestion to warm to <code>#F5EDDC</code>
+        was wrong — that's ivory, not white fur. The clash with Paper gets solved by shifting
+        Paper, not Milk.</li>
+      <li><strong>Vanilla:</strong> KEEP <code>#EAE0C8</code>.</li>
+      <li><strong>Honey:</strong> KEEP <code>#E5C896</code>. Deeply branded.</li>
+      <li><strong>Peach:</strong> KEEP <code>#E8A87C</code>. Deeply branded.</li>
+      <li><strong>Rust:</strong> KEEP <code>#B05E2E</code>.</li>
+      <li><strong>Mushroom:</strong> KEEP <code>#A8927A</code>. Warm-taupe slot.</li>
+      <li><strong>Smoke:</strong> SHIFT to <code>#8B928A</code> (revised). Cool-neutral
+        mid-grey with slight green undertone. Distinct from Mushroom warm-taupe, distinct from
+        Ink-faint chrome.</li>
+      <li><strong>Steel:</strong> SHIFT to <code>#5F6961</code> (revised). Cool-neutral
+        dark grey with slight green undertone. Distinct from Bark warm-brown, distinct from
+        Ink-soft chrome.</li>
+      <li><strong>Bark:</strong> KEEP <code>#5C4A3A</code>.</li>
+      <li><strong>Sable:</strong> KEEP <code>#2B221A</code>.</li>
+    </ul>
+    <h3 style="margin-top: 20px;">Why the revised greys work</h3>
+    <ul>
+      <li>The 10 fur tokens occupy three distinct colour zones: <strong>warm light</strong>
+        (Milk, Vanilla, Honey), <strong>warm orange</strong> (Peach, Rust), <strong>warm
+        brown</strong> (Mushroom, Bark, Sable), and now <strong>cool-neutral grey</strong>
+        (Smoke, Steel). Each zone has at least one lightness variant. No zone overlaps with
+        another.</li>
+      <li>Chrome (Ink, Ink-soft, Ink-faint, Paper) sits in <strong>warm-neutral</strong> zone
+        (yellow-orange undertone, near-zero saturation). Distinct from cool-neutral fur greys
+        and from warm fur tokens.</li>
+      <li>Teal sits in its own slot (deep saturated cyan-green) &mdash; the brand hero, never
+        mixed with fur or chrome.</li>
+    </ul>
+    <h3 style="margin-top: 20px;">Cascade if you lock the proposed shifts</h3>
+    <ul>
+      <li><strong>Files affected:</strong> <code>packages/design-tokens/src/colors.ts</code>
+        (hex constants), <code>tokens.css</code> (CSS vars), <code>packages/match-logic</code>
+        LAB-target regeneration runs at module load from palette values, all
+        <code>mockups/*.html</code> hex usages, <code>docs/brand-system.md</code> palette table.</li>
+      <li><strong>Fixture suite:</strong> 17/17 vitest fixtures need regeneration. The
+        Russian-Blue and Schnauzer fixtures' synthetic photos either stay as-is and
+        re-classify against new tokens (likely still pass), or get regenerated to match new
+        anchor points. Spot-test the Fernandes 4 photos (Galaxy is the only at-risk pet,
+        species/breed/coat is photo-determined).</li>
+      <li><strong>App icon + splash:</strong> NO change required. Honey-Peach gradient stays
+        identical; only Milk/Smoke/Steel tokens shift.</li>
+      <li><strong>Effort estimate:</strong> ~30 minutes for hex updates + ~15 minutes for
+        fixture re-run + spot-test = under one hour total.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>

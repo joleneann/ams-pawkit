@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+<title>Pawkit mockups index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    /* Pawkit mauve-only tokens (locked 2026-05-14, saturation-lifted 2026-05-15 evening) */
+    --canvas:      #F8F7F5;
+    --rail-tint:   #EFE6E8;
+    --ink:         #0F0C0A;
+    --ink-soft:    #5C5550;
+    --ink-faint:   #8F8B86;
+    --rule:        rgba(15, 12, 10, 0.12);
+    --rule-soft:   rgba(15, 12, 10, 0.06);
+    --canvas-2:    rgba(15, 12, 10, 0.04);
+    --berry:       #9C2B5C;
+    --berry-deep:  #7C1F47;
+    --berry-soft:  rgba(156, 43, 92, 0.12);
+  }
+  html, body {
+    background: var(--rail-tint);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+  body { padding: 32px 20px 64px; max-width: 760px; margin: 0 auto; }
+
+  header { padding-bottom: 28px; border-bottom: 1px solid var(--rule); margin-bottom: 36px; }
+  .eyebrow { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600; margin-bottom: 10px; }
+  h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; margin-bottom: 14px; }
+  h1 em { font-family: 'Lora', Georgia, serif; font-style: italic; font-weight: 600; color: var(--berry-deep); }
+  .lede { font-size: 14px; color: var(--ink-soft); max-width: 600px; line-height: 1.55; }
+
+  .section-label {
+    margin: 36px 0 14px;
+    font-size: 10px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+  }
+  .section-label:first-of-type { margin-top: 0; }
+  .section-note {
+    margin-bottom: 14px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 620px;
+  }
+
+  .card-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+  .card {
+    display: block;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 20px 22px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .card:hover { border-color: rgba(156, 43, 92, 0.30); }
+  .card.current { border-color: rgba(156, 43, 92, 0.20); background: var(--berry-soft); }
+  .card.historical { opacity: 0.92; }
+  .card-eyebrow {
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 6px;
+    font-feature-settings: 'tnum';
+    font-weight: 600;
+  }
+  .card.current .card-eyebrow { color: var(--berry-deep); }
+  .card-title { font-size: 17px; font-weight: 600; letter-spacing: -0.005em; margin-bottom: 6px; line-height: 1.25; }
+  .card.current .card-title em { font-family: 'Lora', Georgia, serif; font-style: italic; font-weight: 600; }
+  .card-meta { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; line-height: 1.55; }
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: var(--berry);
+    color: #FFFFFF;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .card.historical .card-cta {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid rgba(15, 12, 10, 0.15);
+  }
+
+  .meta-section {
+    padding: 20px 22px;
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+  .meta-section h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.005em; }
+  .meta-section p { font-size: 13px; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.55; }
+  .meta-section p:last-child { margin-bottom: 0; }
+  .meta-section code { background: var(--canvas-2); padding: 1px 6px; border-radius: 4px; font-family: 'Inter', monospace; font-size: 11px; }
+
+  .footer-note { font-size: 11px; color: var(--ink-faint); text-align: center; padding-top: 28px; border-top: 1px solid var(--rule); margin-top: 24px; }
+  .footer-note a { color: var(--ink-soft); }
+
+  @media (min-width: 600px) {
+    h1 { font-size: 30px; }
+    body { padding: 48px 32px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Co-founder pitch &middot; Animal Medical Services Pune</p>
+  <h1>Pawkit mockups</h1>
+  <p class="lede">Pawkit is a two-app pet-care product I'm pitching to <em>Dr Sagar Bhongale</em> at Animal Medical Services Pune. This page links the current design reference plus the historical mockup files (v1.3 Teal/Paper era and the interim mauve studies that fed the locks).</p>
+</header>
+
+<!-- ============================================================
+     CURRENT REFERENCE
+     ============================================================ -->
+<p class="section-label">Current reference (mauve-only build, locked 2026-05-14)</p>
+<p class="section-note">The mauve-only v1.4 lock: Boysenberry <code>#9C2B5C</code> hero + cool off-white <code>#F8F7F5</code> canvas + rail-tint <code>#EFE6E8</code> ground. Inter body + display, Lora italic for pet names, Phosphor Icons filled. Source of truth for the running build is <code>apps/dashboard/</code>; the design system page below is the visual lookup.</p>
+
+<div class="card-grid">
+
+  <a href="design-system.html" class="card current">
+    <p class="card-eyebrow">2026-05-16 &middot; Current</p>
+    <h2 class="card-title">Pawkit design system</h2>
+    <p class="card-meta">Live tokens, type scale, shadcn primitives, Phosphor icon kit, composite patterns (awaiting bar, KPI cards, inbox row, section eyebrow), and discipline rules. Rendered against the actual rail-tint ground so contrast reads true. Single page, all sections anchored.</p>
+    <span class="card-cta">Open the design system</span>
+  </a>
+
+  <a href="parent-app-hifi.html" class="card current">
+    <p class="card-eyebrow">2026-05-16 evening &middot; Current &middot; v3.1</p>
+    <h2 class="card-title">Parent app &middot; hi-fi (all 35+ screens)</h2>
+    <p class="card-meta">Single-file standalone of the v3.1 hi-fi pass. Onboarding (2 steps), fur-match ceremony (Empty &rarr; Sampling &rarr; Magic Moment &rarr; Transformed beat 68px &rarr; Steady 48px hero), all three Pet Page tabs, banner variants, switcher states (active, coachmark, post-swap, memorial), inbox + open/closed threads, broadcasts list + 2 reading views + share sheet + public web view, Settings (Per-pet, Master, 3 Override frames), invoice detail, empty states, memorial pages, offline + 3 error anatomies. Magazine-cover hero Pet Page at <code>--text-display</code> 48px. Vellum filter on photos. Inner-light paper-edge sheen on cards / banners / sheets. Self-contained: needs internet for React+Babel CDN and Unsplash photos, nothing local.</p>
+    <span class="card-cta">Open the parent app</span>
+  </a>
+
+  <a href="broadcast-voice-dump-options.html" class="card current">
+    <p class="card-eyebrow">2026-05-17 evening &middot; Current</p>
+    <h2 class="card-title">Broadcast voice-dump &middot; 3 UI options</h2>
+    <p class="card-meta">Three hi-fi options for the broadcast composer rebuild around the voice-dump flow. Option A: voice-first landing (single hero mic, escape hatch to manual compose). Option B: dual-mode picker (Speak it vs Type it cards). Option C: hybrid (existing form + prominent voice band on top). Plus a populated post-dictation view showing the 5 NHS-care-card sections rendered after the 30-second magic moment. Recommendation locked: ship Option A in v0.</p>
+    <span class="card-cta">Open the voice-dump options</span>
+  </a>
+
+  <a href="broadcast-read-counts.html" class="card current">
+    <p class="card-eyebrow">2026-05-17 evening &middot; Current</p>
+    <h2 class="card-title">Broadcast read counts (dashboard)</h2>
+    <p class="card-meta">Two dashboard surfaces showing the read-receipt feature now that <code>broadcasts_read</code> is seeded. Surface 1: broadcast list cards with a berry-soft "88% &middot; 102 / 116 read" pill + 4px micro-bar (draft cards show a muted "Not sent" pill instead). Surface 2: broadcast detail page with audience / read / rate / care-kit-views metrics + a 24-hour reads-over-time bar curve. Definition of read: parent taps the broadcast detail screen. Numbers pulled from the live seeded DB (88% / 68% / 41% across the three sent broadcasts).</p>
+    <span class="card-cta">Open the read-count surfaces</span>
+  </a>
+
+</div>
+
+<!-- ============================================================
+     HISTORICAL: MAUVE ERA (pre-saturation-lift, pre-dial-down)
+     ============================================================ -->
+<p class="section-label">Historical &middot; mauve era (interim, before 2026-05-15 evening)</p>
+<p class="section-note">Captured during the path from "Teal v1.3" to the locked mauve build. Useful as evolution-of-the-lock reference. The hero color in these files is the original <code>#823159</code> Boysenberry (before the 2026-05-15 evening saturation lift to <code>#9C2B5C</code>); the ground is the interim <code>#ECE7E8</code> or briefly <code>#F2DEE6</code> pink (before the dial-down to <code>#EFE6E8</code>).</p>
+
+<div class="card-grid">
+
+  <a href="archive/admin-mauve-locked.html" class="card historical">
+    <p class="card-eyebrow">9 admin screens &middot; mauve era, pre-saturation-lift</p>
+    <h2 class="card-title">Clinic dashboard &middot; admin (mauve, original Berry)</h2>
+    <p class="card-meta">The first mauve-only lock at original Berry <code>#823159</code> and DM Sans body. v1.3 Teal/Paper was deleted 2026-05-14; this was the next-step lock that then evolved through saturation lift (Berry → <code>#9C2B5C</code>) and font swap (DM Sans → Inter, Satoshi removed). Universal voice mic on the broadcast composer, shadcn primitives. Reference, not current.</p>
+    <span class="card-cta">Open the mauve sheet</span>
+  </a>
+
+  <a href="archive/pawkit-mauve-palette-explore.html" class="card historical">
+    <p class="card-eyebrow">Early mauve exploration</p>
+    <h2 class="card-title">Mauve palette exploration</h2>
+    <p class="card-meta">Pre-lock palette study that became the mauve direction. Useful as design history.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+  <a href="archive/ground-pink-dial-down.html" class="card historical">
+    <p class="card-eyebrow">Ground dial-down study (Option D picked)</p>
+    <h2 class="card-title">Ground &middot; pink dial-down study</h2>
+    <p class="card-meta">The 2026-05-15 evening study that locked the ground at <code>#EFE6E8</code> (barely-there mauve), dialing back from the brief "Tasteful pop" <code>#F2DEE6</code> pink.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+  <a href="archive/brand-saturation-study.html" class="card historical">
+    <p class="card-eyebrow">Saturation lift study</p>
+    <h2 class="card-title">Brand saturation study (Berry)</h2>
+    <p class="card-meta">The 2026-05-15 evening saturation lift from <code>#823159</code> to <code>#9C2B5C</code> ("tasteful pop") that pulled the Boysenberry out of the dusty / gray zone.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+  <a href="archive/serif-options-study.html" class="card historical">
+    <p class="card-eyebrow">Lora picked from 4 options</p>
+    <h2 class="card-title">Serif options study</h2>
+    <p class="card-meta">Side-by-side comparison of Fraunces / Newsreader / Crimson Pro / Lora for the pet-name italic hero. Lora picked because Spectral italic was read as too harsh and Satoshi (display) had been removed the same evening.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+  <a href="archive/ground-tone-study.html" class="card historical">
+    <p class="card-eyebrow">Pre-dial-down ground exploration</p>
+    <h2 class="card-title">Ground tone study</h2>
+    <p class="card-meta">Earlier ground tone variants that fed the rail-tint pick. Reference only.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+  <a href="archive/ground-tone-mauve-variants.html" class="card historical">
+    <p class="card-eyebrow">Mauve ground variants</p>
+    <h2 class="card-title">Ground &middot; mauve variants</h2>
+    <p class="card-meta">Variant exploration that landed at the rail-tint <code>#EFE6E8</code> via Option D of the pink dial-down. Reference only.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+  <a href="archive/ground-floral-white-compare.html" class="card historical">
+    <p class="card-eyebrow">Rejected ground direction</p>
+    <h2 class="card-title">Ground &middot; floral white compare</h2>
+    <p class="card-meta">A floral-white ground direction that was rejected because it inverted depth. Recorded for the path-not-taken.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+</div>
+
+<!-- ============================================================
+     HISTORICAL: PHASE 2 WIREFRAMES (interim mauve)
+     ============================================================ -->
+<p class="section-label">Historical &middot; Phase 2 wireframes (interim mauve)</p>
+<p class="section-note">Per-screen wireframe pass during the mauve era, before the 2026-05-15 evening saturation lift and ground dial-down. Useful for surface anatomy reference, but tokens inside are superseded.</p>
+
+<div class="card-grid">
+
+  <a href="archive/phase2-01-app-shell.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">App shell wireframe</h2>
+    <p class="card-meta">Top bar + left rail + content area anatomy. Pre-inbox-v2 surface lock.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/phase2-02-inbox.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Inbox wireframe</h2>
+    <p class="card-meta">Per-pet thread list, tab segmentation, awaiting + replied states. Superseded by the running inbox build.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/phase2-03-thread-detail.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Thread detail wireframe</h2>
+    <p class="card-meta">Bubble layout, composer anatomy, SOAP context strip.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/phase2-04-invoice.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Invoice wireframe</h2>
+    <p class="card-meta">Itemised invoice view, line items, totals.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/phase2-05-clinical-history.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Clinical history wireframe</h2>
+    <p class="card-meta">SOAP timeline view-only preview.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/phase2-06-broadcast-composer.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Broadcast composer wireframe</h2>
+    <p class="card-meta">Body-first composer, structured-content fields, audience filter. Superseded; the running composer is rebuilt at <code>apps/dashboard/components/broadcast/</code>.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/phase2-06b-broadcast-audience.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Broadcast audience modal wireframe</h2>
+    <p class="card-meta">Audience filter centered modal, condition-group OR-union.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/phase2-06c-broadcast-send.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Broadcast send confirm wireframe</h2>
+    <p class="card-meta">Bilingual confirm modal, both-language gate.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/phase2-07b-settings.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Settings wireframe</h2>
+    <p class="card-meta">Three stacked cards (Profile / Account / Clinic) with card-wide edit mode. Superseded by the running build.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+  <a href="archive/admin-skeletons-phase2.html" class="card historical">
+    <p class="card-eyebrow">Phase 2 &middot; interim mauve</p>
+    <h2 class="card-title">Admin skeletons</h2>
+    <p class="card-meta">Loading skeleton anatomy for the admin app.</p>
+    <span class="card-cta">Open the wireframe</span>
+  </a>
+
+</div>
+
+<!-- ============================================================
+     HISTORICAL: v1.3 ERA (Teal / Paper / Satoshi / Spectral / Lucide)
+     ============================================================ -->
+<p class="section-label">Historical &middot; v1.3 era (Teal / Paper / Satoshi / Spectral / Lucide)</p>
+<p class="section-note">The brand system before the 2026-05-14 mauve lock. <strong>Every token, typeface, and icon-kit statement inside these files is superseded.</strong> Useful as design history, not as current spec.</p>
+
+<div class="card-grid">
+
+  <a href="archive/admin-v1.3.html" class="card historical">
+    <p class="card-eyebrow">7 screens &middot; v1.3 Teal/Paper</p>
+    <h2 class="card-title">Clinic dashboard (admin) &middot; v1.3</h2>
+    <p class="card-meta">What Dr Sagar saw under v1.3. Inbox as one queue, Pet Page, Itemised invoice, Broadcast composer, Settings. Teal hero, Paper bg, Satoshi display, Spectral italic for pet names.</p>
+    <span class="card-cta">Open the historical sheet</span>
+  </a>
+
+  <a href="archive/parent-v1.3.html" class="card historical">
+    <p class="card-eyebrow">13 screens &middot; v1.3 + 6-tab nav</p>
+    <h2 class="card-title">Pet parent app &middot; v1.3</h2>
+    <p class="card-meta">Parent surfaces under v1.3 and the old 6-tab nav (Broadcasts / Community / Pets / Inbox / Shop / Settings). Settings has since moved behind the avatar pill; nav dropped to 5 tabs. References to "Announcements" predate the 2026-05-11 rename to Broadcasts.</p>
+    <span class="card-cta">Open the historical sheet</span>
+  </a>
+
+  <a href="archive/premium-components-v1.3.html" class="card historical">
+    <p class="card-eyebrow">Component reference &middot; v1.3</p>
+    <h2 class="card-title">Premium components &middot; v1.3</h2>
+    <p class="card-meta">Vet byline, banners, Teal CTA, error states, empty states, loading skeletons. Component-level reference for the v1.3 stack. The wireframe author at <code>claude design/inbox rebuild/</code> cites this file for empty-state voice + a list of "6 other components" worth wireframing.</p>
+    <span class="card-cta">Open the historical reference</span>
+  </a>
+
+  <a href="archive/app-icon-options-v2.html" class="card historical">
+    <p class="card-eyebrow">Direction C locked &middot; needs Lora swap</p>
+    <h2 class="card-title">App icon comparison</h2>
+    <p class="card-meta">Direction C is locked: uppercase "P" on Honey-to-Peach gradient. The letterform inside this mockup is Spectral italic; the running spec needs Lora italic 600 per the 2026-05-15 evening font lock.</p>
+    <span class="card-cta">Open the comparison</span>
+  </a>
+
+  <a href="archive/pet-page-hero-options.html" class="card historical">
+    <p class="card-eyebrow">Option B locked &middot; v1.3</p>
+    <h2 class="card-title">Pet Page hero options</h2>
+    <p class="card-meta">8 cover-treatment variants; Option B (full-bleed real photo + 10px fur-token accent border at bottom) was locked 2026-05-08. The cover anatomy survives; the surrounding chrome is v1.3.</p>
+    <span class="card-cta">Open the historical sheet</span>
+  </a>
+
+  <a href="archive/palette-revisit.html" class="card historical">
+    <p class="card-eyebrow">v1.3 palette shift study</p>
+    <h2 class="card-title">Palette revisit &middot; Paper / Smoke / Steel</h2>
+    <p class="card-meta">2026-05-08 palette shifts on Paper / Smoke / Steel. The Smoke + Steel fur-token shifts (cool-blue-grey → cool-neutral) survive into the mauve build; Paper has since been replaced by canvas + rail-tint.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+  <a href="archive/admin-locked.html" class="card historical">
+    <p class="card-eyebrow">v1.3 admin lock &middot; pre-mauve</p>
+    <h2 class="card-title">Admin locked &middot; pre-mauve</h2>
+    <p class="card-meta">Earlier admin lock at v1.3 Teal/Paper. Superseded by <code>admin-mauve-locked.html</code> then by the running dashboard.</p>
+    <span class="card-cta">Open the historical sheet</span>
+  </a>
+
+  <a href="archive/topbar-identity-study.html" class="card historical">
+    <p class="card-eyebrow">Pre-mauve topbar study</p>
+    <h2 class="card-title">Topbar identity study</h2>
+    <p class="card-meta">Clinic wordmark + Pawkit-as-vendor identity exploration. White-label discipline survives; visual stack is pre-mauve.</p>
+    <span class="card-cta">Open the study</span>
+  </a>
+
+</div>
+
+<!-- ============================================================
+     META
+     ============================================================ -->
+<section class="meta-section">
+  <h2>Brand system (current, mauve-only v1.4)</h2>
+  <p><strong>Palette.</strong> Canvas <code>#F8F7F5</code>, rail-tint ground <code>#EFE6E8</code>, Ink <code>#0F0C0A</code>, Ink-soft, Ink-faint <code>#8F8B86</code>, 10 fur tokens (Milk to Sable), Boysenberry <code>#9C2B5C</code> as the brand amplifier (Berry-deep <code>#7C1F47</code> + Berry-soft 12% tint + Berry-ring 30% focus).</p>
+  <p><strong>Type.</strong> Inter for body + display, Lora italic 600 for pet names in hero contexts only. Noto Sans Devanagari for Marathi.</p>
+  <p><strong>Icons.</strong> Phosphor filled (<code>@phosphor-icons/react</code>) with a global <code>weight: "fill"</code> default.</p>
+  <p><strong>Discipline.</strong> No hand-rolled UI primitives anywhere; every interactive element is a shadcn primitive. Type sizes come from the Pawkit scale (<code>text-xxs</code> through <code>text-display</code>); arbitrary <code>text-[Npx]</code> values are banned. Pure white and pure black forbidden. Fur tokens never in chrome. No em dashes anywhere.</p>
+  <p><strong>Pet Page as hero.</strong> The per-pet profile is the editorial centerpiece of the parent app and the demo's emotional center. Fur-match is a secondary visual delight inside the hero, not the centerpiece.</p>
+</section>
+
+<section class="meta-section">
+  <h2>What's pitched</h2>
+  <p><strong>Two apps, one design system.</strong> Next.js dashboard for the clinic + Expo Android app for parents, delivered as an EAS release APK to the demo phone.</p>
+  <p><strong>25 to 30 minute live demo.</strong> Laptop dashboard + phone parent app. 15 minutes of app demo + 10 to 15 minutes of growth pitch. The parent app serves low-literacy users (about 20% of AMS pet parents) with bilingual EN+MR, icon-led design, large tap targets.</p>
+  <p><strong>Real Fernandes pets.</strong> Raffy (memorial), Gabby, Angel, Galaxy. Their fur-match results are pre-locked from real photos.</p>
+  <p><strong>AI scope is strictly minimum.</strong> Two features, both Sarvam-vendor, both dashboard-only, both producing text Sagar reviews before output ships: Sarvam Audio (voice INPUT to text on dashboard compose surfaces) and Sarvam Translate (auto EN ↔ MR at compose time, vet reviews + approves sequentially). No AI on parent app.</p>
+  <p><strong>Three engines for ARR.</strong> Clinic SaaS (anchor), parent subscription (Pawkit Plus), and clinically-curated marketplace. ₹20cr ARR forecast in 3 years; each engine can stand alone if one underperforms.</p>
+</section>
+
+<p class="footer-note">Pawkit v0 mockups index &middot; mauve-only build &middot; updated 2026-05-16</p>
+
+</body>
+</html>

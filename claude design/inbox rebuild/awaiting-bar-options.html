@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AMS Pawkit · Awaiting bar visual options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Production tokens, mirrored from apps/dashboard/app/globals.css */
+    --canvas:       #F8F7F5;
+    --rail-tint:    #EFE6E8;
+    --ink:          #0F0C0A;
+    --ink-70:       rgba(15, 12, 10, 0.72);
+    --ink-50:       rgba(15, 12, 10, 0.55);
+    --ink-30:       rgba(15, 12, 10, 0.35);
+    --rule:         rgba(15, 12, 10, 0.12);
+    --rule-soft:    rgba(15, 12, 10, 0.06);
+    --canvas-2:     rgba(15, 12, 10, 0.04);
+    --berry:        #9C2B5C;
+    --berry-deep:   #7C1F47;
+    --berry-soft:   rgba(156, 43, 92, 0.12);
+    --berry-tint:   rgba(156, 43, 92, 0.06);
+    --berry-ring:   rgba(156, 43, 92, 0.30);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--rail-tint);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  .num { font-variant-numeric: tabular-nums; }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 40px 28px 80px;
+  }
+  .page-head h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .page-head p {
+    margin: 0 0 32px;
+    font-size: 13px;
+    color: var(--ink-70);
+  }
+
+  .option {
+    margin-bottom: 36px;
+  }
+  .option-label {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .option-label .tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+  }
+  .option-label .name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .option-note {
+    font-size: 12px;
+    color: var(--ink-70);
+    margin-bottom: 14px;
+    line-height: 1.5;
+    max-width: 800px;
+  }
+
+  /* Shared button anatomy (Pawkit shadcn Button size=sm) */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .btn-berry {
+    background: var(--berry);
+    color: #FFFFFF;
+  }
+  .btn-berry:hover { background: var(--berry-deep); }
+  .btn-on-berry {
+    background: #FFFFFF;
+    color: var(--berry-deep);
+  }
+  .btn-ghost-on-berry {
+    background: transparent;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+  }
+  .arrow {
+    width: 14px; height: 14px;
+    display: inline-block;
+  }
+
+  /* ============================================================
+     CURRENT (for comparison)
+     ============================================================ */
+  .bar-current {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .bar-current h2 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ============================================================
+     OPTION A · Berry-soft tinted band
+     ============================================================ */
+  .bar-a {
+    background: var(--berry-soft);
+    border: 1px solid rgba(156, 43, 92, 0.20);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .bar-a h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .bar-a .count {
+    color: var(--berry-deep);
+    font-weight: 700;
+    font-size: 17px;
+  }
+
+  /* ============================================================
+     OPTION B · Hero count
+     ============================================================ */
+  .bar-b {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-b::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: var(--berry);
+  }
+  .bar-b .count-block {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-left: 10px;
+  }
+  .bar-b .count {
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--berry-deep);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .bar-b .label-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .bar-b .label-stack .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+  }
+  .bar-b .label-stack .headline {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ============================================================
+     OPTION C · Filled berry bar
+     ============================================================ */
+  .bar-c {
+    background: var(--berry);
+    border: 1px solid var(--berry-deep);
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .bar-c h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .bar-c .count {
+    font-weight: 700;
+    font-size: 17px;
+    color: #FFFFFF;
+  }
+
+  /* ============================================================
+     OPTION D · Left rail + live dot
+     ============================================================ */
+  .bar-d {
+    background: var(--canvas);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--berry);
+    border-radius: 12px;
+    padding: 12px 20px 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .bar-d h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bar-d .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--berry);
+    box-shadow: 0 0 0 4px var(--berry-soft);
+    flex-shrink: 0;
+  }
+  .bar-d .count {
+    color: var(--berry-deep);
+    font-weight: 700;
+    font-size: 17px;
+  }
+
+  /* SVG arrow */
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="arrow-right" viewBox="0 0 16 16">
+      <path d="M3 8 L13 8 M9 4 L13 8 L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="page">
+  <div class="page-head">
+    <h1>Awaiting bar · visual options</h1>
+    <p>Goal: make the bar carry more weight on the inbox screen without turning it into a hero card. Page background here is the actual inbox ground tone (rail-tint <span class="num">#EFE6E8</span>) so contrast reads true. Same width as the inbox content column.</p>
+  </div>
+
+  <!-- CURRENT -->
+  <div class="option">
+    <div class="option-label">
+      <span class="tag">Current</span>
+      <span class="name">Canvas bar + rule border</span>
+    </div>
+    <p class="option-note">What ships today. The bar shares its tone with the row list below it, so it visually merges into the surface stack. The CTA is doing all the standing-out work alone.</p>
+    <div class="bar-current">
+      <h2><span class="num">55</span> parents are waiting on you</h2>
+      <a href="#" class="btn btn-berry">Start reply queue <svg class="arrow"><use href="#arrow-right"/></svg></a>
+    </div>
+  </div>
+
+  <!-- OPTION A -->
+  <div class="option">
+    <div class="option-label">
+      <span class="tag">Option A</span>
+      <span class="name">Berry-soft tinted band</span>
+    </div>
+    <p class="option-note">Same height, fills the bar with the 12% berry tint used for active nav. Count renders in berry-deep at 17px so the number does the lifting. Lowest disruption to the page; relies on hue contrast against the rail-tint ground to lift off.</p>
+    <div class="bar-a">
+      <h2><span class="num count">55</span> parents are waiting on you</h2>
+      <a href="#" class="btn btn-berry">Start reply queue <svg class="arrow"><use href="#arrow-right"/></svg></a>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="option">
+    <div class="option-label">
+      <span class="tag">Option B</span>
+      <span class="name">Hero count + accent rail</span>
+    </div>
+    <p class="option-note">Drama through type, not color. The 55 becomes a 44px berry-deep numeral; a small eyebrow + sentence label sits to its right; a 6px berry rail anchors the left edge. Tallest of the four (about 80px). Breaks the "thin announcement strip" intent in the code comment, but the numeric hierarchy is hard to miss.</p>
+    <div class="bar-b">
+      <div class="count-block">
+        <span class="num count">55</span>
+        <div class="label-stack">
+          <span class="eyebrow">Reply queue</span>
+          <span class="headline">parents are waiting on you</span>
+        </div>
+      </div>
+      <a href="#" class="btn btn-berry">Start reply queue <svg class="arrow"><use href="#arrow-right"/></svg></a>
+    </div>
+  </div>
+
+  <!-- OPTION C -->
+  <div class="option">
+    <div class="option-label">
+      <span class="tag">Option C</span>
+      <span class="name">Filled berry bar</span>
+    </div>
+    <p class="option-note">Inverts the bar to berry-on-white. Reads as the loudest element on the page by a wide margin and turns the entire strip into the call to action. Inside CTA goes white-on-berry so it still reads as a button. Risk: competes with the active inbox tab for primary attention.</p>
+    <div class="bar-c">
+      <h2><span class="num count">55</span> parents are waiting on you</h2>
+      <a href="#" class="btn btn-on-berry">Start reply queue <svg class="arrow"><use href="#arrow-right"/></svg></a>
+    </div>
+  </div>
+
+  <!-- OPTION D -->
+  <div class="option">
+    <div class="option-label">
+      <span class="tag">Option D</span>
+      <span class="name">Left rail + live dot</span>
+    </div>
+    <p class="option-note">Structural emphasis without color flood. 4px berry left rail signals "actionable", a small berry dot beside the count reads as an active queue indicator, count moves to berry-deep 17px. Stays at today's height. Cheapest visual lift; closest to the current bar in restraint.</p>
+    <div class="bar-d">
+      <h2><span class="dot"></span><span class="num"><span class="count">55</span> parents are waiting on you</span></h2>
+      <a href="#" class="btn btn-berry">Start reply queue <svg class="arrow"><use href="#arrow-right"/></svg></a>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

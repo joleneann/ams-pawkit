@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+<title>Pawkit App Icon · v2 (professional icons + warmer backgrounds)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Spectral:ital,wght@0,400;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F5F1E8;
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #A8A39E;
+    --teal: #006D6F;
+    --honey: #E5C896;
+    --peach: #E8A87C;
+    --vanilla: #EAE0C8;
+    --bark: #5C4A3A;
+    --sable: #2B221A;
+  }
+  html, body { background: #2a2a2a; color: var(--ink); font-family: 'Inter', -apple-system, sans-serif; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  body { padding: 32px; }
+  .page { max-width: 1400px; margin: 0 auto; background: var(--bg-canvas); padding: 56px 56px 80px; }
+
+  /* Header */
+  .doc-eyebrow { font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 12px; font-weight: 600; }
+  .doc-title { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; line-height: 1.1; }
+  .doc-lede { font-size: 15px; color: var(--ink-soft); max-width: 720px; padding-bottom: 32px; border-bottom: 1.5px solid var(--ink); margin-bottom: 56px; }
+
+  .v1-callout {
+    background: rgba(176, 94, 46, 0.08);
+    border-left: 3px solid var(--peach);
+    padding: 14px 18px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    border-radius: 4px;
+  }
+  .v1-callout strong { color: var(--ink); font-weight: 600; }
+
+  /* Comparison strip */
+  .compare-bar {
+    background: #1a1a1a;
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 56px;
+  }
+  .compare-eyebrow { font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 8px; font-weight: 600; }
+  .compare-title { font-family: Inter; font-size: 16px; color: var(--bg-canvas); font-weight: 600; margin-bottom: 24px; }
+  .compare-row { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+  .compare-item { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .compare-label { font-family: Inter; font-size: 11px; color: var(--bg-canvas); font-weight: 600; text-align: center; max-width: 110px; line-height: 1.3; }
+  .compare-sub { color: #888; font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; display: block; }
+  .faux-home {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    padding: 40px 32px;
+    border-radius: 12px;
+    margin-top: 16px;
+  }
+
+  /* Section */
+  .section { margin-bottom: 56px; padding: 32px; background: var(--bg-canvas); border: 1.5px solid var(--ink); border-radius: 16px; }
+  .section-head { margin-bottom: 28px; }
+  .section-num { font-size: 11px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 6px; font-feature-settings: 'tnum'; font-weight: 600; }
+  .section-title { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 10px; }
+  .section-desc { font-size: 14px; color: var(--ink-soft); max-width: 680px; line-height: 1.6; }
+
+  /* Icon row */
+  .icon-row { display: flex; gap: 32px; align-items: flex-end; flex-wrap: wrap; padding: 24px 0 8px; }
+  .icon-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+  /* Tile base */
+  .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .tile.s192 { width: 192px; height: 192px; border-radius: 42px; }
+  .tile.s128 { width: 128px; height: 128px; border-radius: 28px; }
+  .tile.s96 { width: 96px; height: 96px; border-radius: 21px; }
+  .tile.s64 { width: 64px; height: 64px; border-radius: 14px; }
+  .tile.s32 { width: 32px; height: 32px; border-radius: 7px; }
+
+  .size-label { font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; font-feature-settings: 'tnum'; text-align: center; line-height: 1.3; }
+  .size-label strong { color: var(--ink); display: block; font-size: 11px; }
+  .size-label .real { color: var(--teal); font-size: 9px; display: block; margin-top: 2px; font-weight: 700; }
+
+  /* DIRECTION A: Paw on Teal */
+  .tile.A { background: var(--teal); }
+  .tile.A svg { width: 60%; height: 60%; color: var(--bg-canvas); }
+  .tile.A.s32 svg { width: 64%; height: 64%; }
+
+  /* DIRECTION B: Dog silhouette in framed circle */
+  .tile.B { background: var(--bg-canvas); border: 1.5px solid var(--ink); }
+  .tile.B.s32 { border-width: 1px; }
+  .tile.B .inner-circle {
+    width: 80%; height: 80%; background: var(--ink); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .tile.B .inner-circle svg { width: 70%; height: 70%; color: var(--bg-canvas); }
+
+  /* DIRECTION C: Spectral italic P on fur gradient */
+  .tile.C {
+    background: linear-gradient(135deg, var(--honey) 0%, var(--peach) 100%);
+  }
+  .tile.C .letter {
+    font-family: 'Spectral', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--bg-canvas);
+    line-height: 0.85;
+  }
+  .tile.C.s192 .letter { font-size: 150px; padding-top: 14px; }
+  .tile.C.s128 .letter { font-size: 100px; padding-top: 10px; }
+  .tile.C.s96 .letter { font-size: 76px; padding-top: 8px; }
+  .tile.C.s64 .letter { font-size: 50px; padding-top: 5px; }
+  .tile.C.s32 .letter { font-size: 24px; padding-top: 2px; }
+
+  /* DIRECTION D: Spectral italic p on Paper, Teal frame */
+  .tile.D { background: var(--bg-canvas); border: 2px solid var(--teal); }
+  .tile.D.s128 { border-width: 1.5px; }
+  .tile.D.s96 { border-width: 1.5px; }
+  .tile.D.s64 { border-width: 1.5px; }
+  .tile.D.s32 { border-width: 1px; }
+  .tile.D .letter {
+    font-family: 'Spectral', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 0.85;
+  }
+  .tile.D.s192 .letter { font-size: 150px; padding-bottom: 8px; }
+  .tile.D.s128 .letter { font-size: 100px; padding-bottom: 6px; }
+  .tile.D.s96 .letter { font-size: 76px; padding-bottom: 4px; }
+  .tile.D.s64 .letter { font-size: 50px; padding-bottom: 3px; }
+  .tile.D.s32 .letter { font-size: 24px; padding-bottom: 2px; }
+
+  /* DIRECTION E: Wordmark "pk" stacked, Sable background */
+  .tile.E { background: var(--sable); }
+  .tile.E .letter {
+    font-family: 'Spectral', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--bg-canvas);
+    line-height: 0.85;
+  }
+  .tile.E.s192 .letter { font-size: 130px; padding-bottom: 8px; }
+  .tile.E.s128 .letter { font-size: 90px; padding-bottom: 6px; }
+  .tile.E.s96 .letter { font-size: 70px; padding-bottom: 4px; }
+  .tile.E.s64 .letter { font-size: 46px; padding-bottom: 3px; }
+  .tile.E.s32 .letter { font-size: 22px; padding-bottom: 2px; }
+
+  /* Caption */
+  .caption {
+    font-family: Inter;
+    font-size: 13px;
+    color: var(--ink-soft);
+    max-width: 720px;
+    line-height: 1.65;
+    margin-top: 24px;
+    padding-left: 14px;
+    border-left: 2px solid var(--ink-faint);
+  }
+  .caption strong { color: var(--ink); font-weight: 600; }
+  .caption + .caption { margin-top: 12px; }
+
+  .rec-block {
+    margin-top: 64px;
+    padding: 32px;
+    background: rgba(0, 109, 111, 0.08);
+    border: 1px solid var(--teal);
+    border-radius: 12px;
+    font-family: Inter;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  .rec-block h2 { font-size: 18px; font-weight: 700; margin-bottom: 14px; }
+  .rec-block p { margin-bottom: 12px; max-width: 720px; }
+  .rec-block strong { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <p class="doc-eyebrow">Pawkit v1.3 · App Icon · v2 attempt</p>
+  <h1 class="doc-title">Five fresh directions, professional icons</h1>
+
+  <div class="v1-callout">
+    <strong>What changed from v1.</strong> Replaced the hand-coded SVG paws and silhouettes with professionally drawn icons from Phosphor (the same library Linear and Vercel use). Switched the heavy Ink backgrounds to warmer Teal, Sable, or fur-gradient fills. Refined the typography sizing and optical centering. The hand-drawn versions in v1 looked amateur because SVG draftsmanship in raw HTML is a real limit; using a proper icon library fixes that.
+  </div>
+
+  <p class="doc-lede">Five directions. Each one rendered at 5 sizes (192 / 128 / 96 / 64 / 32 px display). The 192px size matches the typical Android adaptive home screen icon at standard phone DPI, so that is the size to focus on when picking. The colour green on the size label means real-world pixel size at typical phone DPI.</p>
+
+  <!-- ============================================================ -->
+  <!-- COMPARISON STRIP                                              -->
+  <!-- ============================================================ -->
+
+  <div class="compare-bar">
+    <p class="compare-eyebrow">Side by side at home screen size</p>
+    <p class="compare-title">All 5 candidates at 96px display (matches Android adaptive home screen size)</p>
+    <div class="faux-home">
+      <div class="compare-row">
+
+        <div class="compare-item">
+          <div class="tile A s96">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M40,124a32,32,0,1,1,32,32A32,32,0,0,1,40,124Zm44-72a32,32,0,1,1,32,32A32,32,0,0,1,84,52Zm56,0a32,32,0,1,1,32,32A32,32,0,0,1,140,52Zm44,72a32,32,0,1,1,32,32A32,32,0,0,1,184,124Zm-12,32H148a4,4,0,0,0-4,4v32a32,32,0,0,1-32-32V160a4,4,0,0,0-4-4H84a32,32,0,0,0-32,32v18A30,30,0,0,0,82,236h92a30,30,0,0,0,30-30V188A32,32,0,0,0,172,156Z"/></svg>
+          </div>
+          <p class="compare-label">A · Paw on Teal<span class="compare-sub">Phosphor icon</span></p>
+        </div>
+
+        <div class="compare-item">
+          <div class="tile B s96">
+            <div class="inner-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,103.21V224a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V103.16A16,16,0,0,1,32.41,87.6L60,69.43V40a16,16,0,0,1,28-10.7L121.55,72h12.9L168,29.3A16,16,0,0,1,196,40V69.43l27.59,18.16A16,16,0,0,1,232,103.21ZM92,148a12,12,0,1,0-12,12A12,12,0,0,0,92,148Zm68,28H96a8,8,0,0,0-7.16,11.58A40,40,0,0,0,128,208a40.46,40.46,0,0,0,7.59-.72,40,40,0,0,0,31.57-19.69A8,8,0,0,0,160,176Zm28-28a12,12,0,1,0-12,12A12,12,0,0,0,188,148Z"/></svg>
+            </div>
+          </div>
+          <p class="compare-label">B · Dog face in framed circle<span class="compare-sub">Phosphor icon</span></p>
+        </div>
+
+        <div class="compare-item">
+          <div class="tile C s96"><span class="letter">P</span></div>
+          <p class="compare-label">C · "P" on fur gradient<span class="compare-sub">Spectral italic</span></p>
+        </div>
+
+        <div class="compare-item">
+          <div class="tile D s96"><span class="letter">p</span></div>
+          <p class="compare-label">D · "p" with Teal frame<span class="compare-sub">Spectral italic</span></p>
+        </div>
+
+        <div class="compare-item">
+          <div class="tile E s96"><span class="letter">pk</span></div>
+          <p class="compare-label">E · "pk" monogram on Sable<span class="compare-sub">Spectral italic</span></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- DIRECTION A                                                   -->
+  <!-- ============================================================ -->
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-num">Direction A</p>
+      <h2 class="section-title">Paw print on Teal</h2>
+      <p class="section-desc">Phosphor's professionally drawn paw print silhouette in Paper, on a solid Teal background. No Ink frame. Switches the heaviness from cold Ink to brand Teal, which is the warmer reading.</p>
+    </div>
+    <div class="icon-row">
+      <div class="icon-item"><div class="tile A s192"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M40,124a32,32,0,1,1,32,32A32,32,0,0,1,40,124Zm44-72a32,32,0,1,1,32,32A32,32,0,0,1,84,52Zm56,0a32,32,0,1,1,32,32A32,32,0,0,1,140,52Zm44,72a32,32,0,1,1,32,32A32,32,0,0,1,184,124Zm-12,32H148a4,4,0,0,0-4,4v32a32,32,0,0,1-32-32V160a4,4,0,0,0-4-4H84a32,32,0,0,0-32,32v18A30,30,0,0,0,82,236h92a30,30,0,0,0,30-30V188A32,32,0,0,0,172,156Z"/></svg></div><p class="size-label"><strong>1024 px</strong>at 192 display</p></div>
+      <div class="icon-item"><div class="tile A s128"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M40,124a32,32,0,1,1,32,32A32,32,0,0,1,40,124Zm44-72a32,32,0,1,1,32,32A32,32,0,0,1,84,52Zm56,0a32,32,0,1,1,32,32A32,32,0,0,1,140,52Zm44,72a32,32,0,1,1,32,32A32,32,0,0,1,184,124Zm-12,32H148a4,4,0,0,0-4,4v32a32,32,0,0,1-32-32V160a4,4,0,0,0-4-4H84a32,32,0,0,0-32,32v18A30,30,0,0,0,82,236h92a30,30,0,0,0,30-30V188A32,32,0,0,0,172,156Z"/></svg></div><p class="size-label"><strong>512 px</strong>Play Store</p></div>
+      <div class="icon-item"><div class="tile A s96"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M40,124a32,32,0,1,1,32,32A32,32,0,0,1,40,124Zm44-72a32,32,0,1,1,32,32A32,32,0,0,1,84,52Zm56,0a32,32,0,1,1,32,32A32,32,0,0,1,140,52Zm44,72a32,32,0,1,1,32,32A32,32,0,0,1,184,124Zm-12,32H148a4,4,0,0,0-4,4v32a32,32,0,0,1-32-32V160a4,4,0,0,0-4-4H84a32,32,0,0,0-32,32v18A30,30,0,0,0,82,236h92a30,30,0,0,0,30-30V188A32,32,0,0,0,172,156Z"/></svg></div><p class="size-label"><strong>192 px</strong>Android home<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile A s64"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M40,124a32,32,0,1,1,32,32A32,32,0,0,1,40,124Zm44-72a32,32,0,1,1,32,32A32,32,0,0,1,84,52Zm56,0a32,32,0,1,1,32,32A32,32,0,0,1,140,52Zm44,72a32,32,0,1,1,32,32A32,32,0,0,1,184,124Zm-12,32H148a4,4,0,0,0-4,4v32a32,32,0,0,1-32-32V160a4,4,0,0,0-4-4H84a32,32,0,0,0-32,32v18A30,30,0,0,0,82,236h92a30,30,0,0,0,30-30V188A32,32,0,0,0,172,156Z"/></svg></div><p class="size-label"><strong>64 px</strong>List icon<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile A s32"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M40,124a32,32,0,1,1,32,32A32,32,0,0,1,40,124Zm44-72a32,32,0,1,1,32,32A32,32,0,0,1,84,52Zm56,0a32,32,0,1,1,32,32A32,32,0,0,1,140,52Zm44,72a32,32,0,1,1,32,32A32,32,0,0,1,184,124Zm-12,32H148a4,4,0,0,0-4,4v32a32,32,0,0,1-32-32V160a4,4,0,0,0-4-4H84a32,32,0,0,0-32,32v18A30,30,0,0,0,82,236h92a30,30,0,0,0,30-30V188A32,32,0,0,0,172,156Z"/></svg></div><p class="size-label"><strong>32 px</strong>Notification<span class="real">REAL SIZE</span></p></div>
+    </div>
+    <p class="caption"><strong>Trade-off.</strong> Teal makes it warmer than Ink, and the Phosphor paw is professionally drawn. Still in the "paw print pet app" visual category alongside Rover, Pawp, and Wag, but distinguished by Teal (most pet apps default to red, blue, or orange).</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DIRECTION B                                                   -->
+  <!-- ============================================================ -->
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-num">Direction B</p>
+      <h2 class="section-title">Dog face inside framed circle</h2>
+      <p class="section-desc">Phosphor's dog face icon in Paper, inside an Ink circle, inside a Paper square with a thin Ink frame. Editorial pet portrait composition. Like a New York Times pet section illustration.</p>
+    </div>
+    <div class="icon-row">
+      <div class="icon-item"><div class="tile B s192"><div class="inner-circle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,103.21V224a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V103.16A16,16,0,0,1,32.41,87.6L60,69.43V40a16,16,0,0,1,28-10.7L121.55,72h12.9L168,29.3A16,16,0,0,1,196,40V69.43l27.59,18.16A16,16,0,0,1,232,103.21ZM92,148a12,12,0,1,0-12,12A12,12,0,0,0,92,148Zm68,28H96a8,8,0,0,0-7.16,11.58A40,40,0,0,0,128,208a40.46,40.46,0,0,0,7.59-.72,40,40,0,0,0,31.57-19.69A8,8,0,0,0,160,176Zm28-28a12,12,0,1,0-12,12A12,12,0,0,0,188,148Z"/></svg></div></div><p class="size-label"><strong>1024 px</strong>at 192 display</p></div>
+      <div class="icon-item"><div class="tile B s128"><div class="inner-circle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,103.21V224a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V103.16A16,16,0,0,1,32.41,87.6L60,69.43V40a16,16,0,0,1,28-10.7L121.55,72h12.9L168,29.3A16,16,0,0,1,196,40V69.43l27.59,18.16A16,16,0,0,1,232,103.21ZM92,148a12,12,0,1,0-12,12A12,12,0,0,0,92,148Zm68,28H96a8,8,0,0,0-7.16,11.58A40,40,0,0,0,128,208a40.46,40.46,0,0,0,7.59-.72,40,40,0,0,0,31.57-19.69A8,8,0,0,0,160,176Zm28-28a12,12,0,1,0-12,12A12,12,0,0,0,188,148Z"/></svg></div></div><p class="size-label"><strong>512 px</strong>Play Store</p></div>
+      <div class="icon-item"><div class="tile B s96"><div class="inner-circle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,103.21V224a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V103.16A16,16,0,0,1,32.41,87.6L60,69.43V40a16,16,0,0,1,28-10.7L121.55,72h12.9L168,29.3A16,16,0,0,1,196,40V69.43l27.59,18.16A16,16,0,0,1,232,103.21ZM92,148a12,12,0,1,0-12,12A12,12,0,0,0,92,148Zm68,28H96a8,8,0,0,0-7.16,11.58A40,40,0,0,0,128,208a40.46,40.46,0,0,0,7.59-.72,40,40,0,0,0,31.57-19.69A8,8,0,0,0,160,176Zm28-28a12,12,0,1,0-12,12A12,12,0,0,0,188,148Z"/></svg></div></div><p class="size-label"><strong>192 px</strong>Android home<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile B s64"><div class="inner-circle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,103.21V224a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V103.16A16,16,0,0,1,32.41,87.6L60,69.43V40a16,16,0,0,1,28-10.7L121.55,72h12.9L168,29.3A16,16,0,0,1,196,40V69.43l27.59,18.16A16,16,0,0,1,232,103.21ZM92,148a12,12,0,1,0-12,12A12,12,0,0,0,92,148Zm68,28H96a8,8,0,0,0-7.16,11.58A40,40,0,0,0,128,208a40.46,40.46,0,0,0,7.59-.72,40,40,0,0,0,31.57-19.69A8,8,0,0,0,160,176Zm28-28a12,12,0,1,0-12,12A12,12,0,0,0,188,148Z"/></svg></div></div><p class="size-label"><strong>64 px</strong>List icon<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile B s32"><div class="inner-circle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232,103.21V224a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V103.16A16,16,0,0,1,32.41,87.6L60,69.43V40a16,16,0,0,1,28-10.7L121.55,72h12.9L168,29.3A16,16,0,0,1,196,40V69.43l27.59,18.16A16,16,0,0,1,232,103.21ZM92,148a12,12,0,1,0-12,12A12,12,0,0,0,92,148Zm68,28H96a8,8,0,0,0-7.16,11.58A40,40,0,0,0,128,208a40.46,40.46,0,0,0,7.59-.72,40,40,0,0,0,31.57-19.69A8,8,0,0,0,160,176Zm28-28a12,12,0,1,0-12,12A12,12,0,0,0,188,148Z"/></svg></div></div><p class="size-label"><strong>32 px</strong>Notification<span class="real">REAL SIZE</span></p></div>
+    </div>
+    <p class="caption"><strong>Trade-off.</strong> Phosphor's dog face is professionally drawn (the eyes, ears, and snout are clear at 192px). Reads as "this is a pet app" instantly. The "dog only" question stays — cat owners would notice. If a cat-friendly variant is needed later, swap the dog SVG for Phosphor's cat icon (same composition, different inner shape).</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DIRECTION C                                                   -->
+  <!-- ============================================================ -->
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-num">Direction C</p>
+      <h2 class="section-title">Spectral italic "P" on fur gradient</h2>
+      <p class="section-desc">Uppercase Spectral italic "P" in Paper, sitting on a Honey to Peach gradient (Gabby's actual fur-match). The uppercase P is more architectural and confident than the lowercase p. Combines feature-led signature (fur match) with editorial typography.</p>
+    </div>
+    <div class="icon-row">
+      <div class="icon-item"><div class="tile C s192"><span class="letter">P</span></div><p class="size-label"><strong>1024 px</strong>at 192 display</p></div>
+      <div class="icon-item"><div class="tile C s128"><span class="letter">P</span></div><p class="size-label"><strong>512 px</strong>Play Store</p></div>
+      <div class="icon-item"><div class="tile C s96"><span class="letter">P</span></div><p class="size-label"><strong>192 px</strong>Android home<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile C s64"><span class="letter">P</span></div><p class="size-label"><strong>64 px</strong>List icon<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile C s32"><span class="letter">P</span></div><p class="size-label"><strong>32 px</strong>Notification<span class="real">REAL SIZE</span></p></div>
+    </div>
+    <p class="caption"><strong>Trade-off.</strong> Most distinctive of all the options. The Honey to Peach gradient is unmistakably warm, and the Spectral italic uppercase P has serious editorial gravitas (similar to Day One's nib mark). At 32px the P stays legible because uppercase letters survive better at small sizes than lowercase. Risk is the gradient could read as a coffee or wellness app to first-time viewers.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DIRECTION D                                                   -->
+  <!-- ============================================================ -->
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-num">Direction D</p>
+      <h2 class="section-title">Spectral italic "p" with Teal frame</h2>
+      <p class="section-desc">Lowercase Spectral italic "p" in Ink on Paper, inside a 2px Teal rounded square frame. The Teal frame is a brand-aligned alternative to the Ink frame (which felt too cold). The lowercase italic ties to the same Spectral italic discipline used for pet names across the app.</p>
+    </div>
+    <div class="icon-row">
+      <div class="icon-item"><div class="tile D s192"><span class="letter">p</span></div><p class="size-label"><strong>1024 px</strong>at 192 display</p></div>
+      <div class="icon-item"><div class="tile D s128"><span class="letter">p</span></div><p class="size-label"><strong>512 px</strong>Play Store</p></div>
+      <div class="icon-item"><div class="tile D s96"><span class="letter">p</span></div><p class="size-label"><strong>192 px</strong>Android home<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile D s64"><span class="letter">p</span></div><p class="size-label"><strong>64 px</strong>List icon<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile D s32"><span class="letter">p</span></div><p class="size-label"><strong>32 px</strong>Notification<span class="real">REAL SIZE</span></p></div>
+    </div>
+    <p class="caption"><strong>Trade-off.</strong> Most consistent with the existing brand discipline (Spectral italic for pet names is already locked everywhere). Teal frame solves the wallpaper-disappearance problem without the heaviness of a solid Ink square. Lowercase italic p is gentle and editorial. Risk: lowercase is harder to read at 32px than uppercase, and the descender of the p sits a bit awkwardly inside the rounded square.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DIRECTION E                                                   -->
+  <!-- ============================================================ -->
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-num">Direction E (NEW)</p>
+      <h2 class="section-title">"pk" monogram on Sable</h2>
+      <p class="section-desc">Spectral italic "pk" (paw kit initials) as a confident monogram on a deep Sable background. Treats the icon like a magazine masthead. Closest reference is Day One's nib mark or the Browser Company (Arc) logomark.</p>
+    </div>
+    <div class="icon-row">
+      <div class="icon-item"><div class="tile E s192"><span class="letter">pk</span></div><p class="size-label"><strong>1024 px</strong>at 192 display</p></div>
+      <div class="icon-item"><div class="tile E s128"><span class="letter">pk</span></div><p class="size-label"><strong>512 px</strong>Play Store</p></div>
+      <div class="icon-item"><div class="tile E s96"><span class="letter">pk</span></div><p class="size-label"><strong>192 px</strong>Android home<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile E s64"><span class="letter">pk</span></div><p class="size-label"><strong>64 px</strong>List icon<span class="real">REAL SIZE</span></p></div>
+      <div class="icon-item"><div class="tile E s32"><span class="letter">pk</span></div><p class="size-label"><strong>32 px</strong>Notification<span class="real">REAL SIZE</span></p></div>
+    </div>
+    <p class="caption"><strong>Trade-off.</strong> "pk" reads as a confident monogram, more substantial than a single letter. Sable (the deepest fur token) is warmer than pure Ink. Similar mood to Day One's "DO" or Hey's "h". Risk: at 32px notification, the two letters compress and lose definition. Could solve by showing only "p" at the smallest size.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- RECOMMENDATION                                                -->
+  <!-- ============================================================ -->
+
+  <div class="rec-block">
+    <h2>Honest assessment</h2>
+    <p><strong>This is still placeholder territory.</strong> A real app icon needs Figma plus a designer's eye for optical adjustments (the centring, the descender position, the visual weight balance). What HTML rendering can do is show direction, not finished design.</p>
+    <p><strong>Of these 5, the typographic options (C, D, E) are the most credible as-is</strong> because text rendering in the browser is closer to final design than SVG-coded illustrations. The icon options (A, B) need a designer's hand to refine the SVG even though we are starting from professionally drawn Phosphor source.</p>
+    <p><strong>If you want me to keep iterating</strong>, tell me which 1 to 2 directions feel closest and I will generate refined variations (different colours, different letter choices, different compositions). If none of them work, the right move is to skip mocking these and write a Figma-ready spec for you to design from when you start the Domestika course.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

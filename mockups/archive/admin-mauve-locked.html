@@ -1,0 +1,2756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pawkit · Admin · Mauve locked screens (v1.4)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Spectral:ital,wght@1,500;1,600;1,700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-canvas: #F8F7F5;            /* Cool off-white (mauve theme white) */
+    --ink: #0F0C0A;
+    --ink-soft: #5C5550;
+    --ink-faint: #8F8B86;            /* bumped from #A8A39E for 3.5:1 on cool white */
+    --border-faint: #C9C5C0;         /* lighter row dividers */
+    --primary: #823159;              /* Boysenberry — the hero brand color */
+    --primary-soft: rgba(130, 49, 89, 0.12);
+    --primary-wash: rgba(130, 49, 89, 0.06);
+    --card-radius: 12px;             /* 4px → 12px softer corners */
+    --card-border: rgba(15, 12, 10, 0.08);
+    --card-shadow: 0 1px 2px rgba(15, 12, 10, 0.04), 0 8px 24px rgba(15, 12, 10, 0.04);
+    --rail-bg: rgba(15, 12, 10, 0.025);
+    /* Inbox v2 tokens (locked 2026-05-15) */
+    --rail-tint: rgba(15, 12, 10, 0.045);
+    --canvas-2: rgba(15, 12, 10, 0.04);
+    --ink-70: rgba(15, 12, 10, 0.72);
+    --ink-50: rgba(15, 12, 10, 0.55);
+    --rule: rgba(15, 12, 10, 0.12);
+    --rule-soft: rgba(15, 12, 10, 0.06);
+    --berry-soft: rgba(130, 49, 89, 0.12);
+    --berry-ring: rgba(130, 49, 89, 0.28);
+
+    --milk: #FFFCF2;
+    --vanilla: #EAE0C8;
+    --honey: #E5C896;
+    --peach: #E8A87C;
+    --rust: #B05E2E;
+    --mushroom: #A8927A;
+    --smoke: #8B928A;
+    --steel: #5F6961;
+    --bark: #5C4A3A;
+    --sable: #2B221A;
+  }
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: #1f1f1f;
+    color: var(--bg-canvas);
+    padding: 48px 32px 96px;
+    line-height: 1.4;
+  }
+  .doc { max-width: 1360px; margin: 0 auto; }
+  .doc-header { border-bottom: 1px solid #444; padding-bottom: 24px; margin-bottom: 32px; }
+  .doc-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: #c9a3b8; margin-bottom: 8px;
+  }
+  .doc-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 30px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .doc-sub { font-size: 13px; color: #bbb; margin-top: 12px; max-width: 760px; }
+  .doc-sub .key { color: #d68aa9; }
+
+  /* TOC */
+  .toc {
+    margin-top: 24px;
+    display: flex; gap: 14px; flex-wrap: wrap;
+    padding: 14px 18px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+  }
+  .toc-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #888; margin-right: 4px; align-self: center;
+  }
+  .toc a {
+    font-size: 12px; color: #ddd;
+    text-decoration: none;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 6px 10px;
+    background: #1f1f1f;
+  }
+  .toc a:hover { background: #2a2a2a; border-color: #555; }
+
+  /* Section per screen */
+  .screen { margin-top: 56px; scroll-margin-top: 24px; }
+  .screen-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #c9a3b8; margin-bottom: 6px;
+  }
+  .screen-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--bg-canvas);
+    margin-bottom: 6px;
+  }
+  .screen-sub { font-size: 12px; color: #aaa; margin-bottom: 22px; max-width: 760px; }
+  .screen-sub .key { color: #d68aa9; }
+
+  .anatomy {
+    margin-bottom: 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 16px 20px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #bbb;
+    line-height: 1.55;
+  }
+  .anatomy .row { display: flex; gap: 10px; }
+  .anatomy .label {
+    font-weight: 600;
+    color: #d68aa9;
+    flex-shrink: 0;
+    min-width: 110px;
+  }
+  .anatomy .val { color: #ddd; }
+
+  /* Inbox v2 surface architecture: frame ground is rail-tint, cards lift off in canvas.
+     The build draws rail-tint (rgba(15,12,10,.045)) over the body's underlying
+     white/cream — a 4.5% ink wash over a light base. In the mockup the page
+     body is dark grey (#1f1f1f) to frame the screens, so a semi-transparent
+     rail-tint reads as imperceptible darkening of the dark page. To preserve
+     the visual layering the frame uses a PRE-COMPUTED opaque equivalent of
+     "rail-tint over canvas": rgba(15,12,10,.045) over var(--bg-canvas) #F8F7F5
+     resolves to approximately #EEEDEA. Tokens (rail-tint, canvas-2, ink-70/50,
+     rule, rule-soft, berry-soft) are added to :root below the existing
+     chrome-header CSS for use across the new screens. */
+  .frame {
+    background: #EEEDEA;  /* rail-tint ground, pre-composed over canvas */
+    width: 1280px;
+    max-width: 100%;
+    border: 1px solid #333;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .frame .chrome-header,
+  .frame .chrome-rail {
+    background: transparent !important;  /* let rail-tint frame show through */
+    border-color: rgba(15, 12, 10, 0.06) !important;
+  }
+
+  /* ============ LOCKED MAUVE CHROME ============ */
+  /* Header: clinic logo + name (left, DM Sans semibold), search (center, mauve wash), vet (right, DM Sans semibold) */
+  .chrome-header {
+    height: 64px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 28px;
+    border-bottom: 1px solid rgba(15, 12, 10, 0.06);
+    gap: 28px;
+  }
+  .chrome-clinic { display: flex; align-items: center; gap: 12px; justify-self: start; }
+  .chrome-clinic-logo {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--primary); color: var(--bg-canvas);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+    border: 1.5px solid var(--card-border);
+  }
+  /* Three-tier chrome size discipline (locked 2026-05-15):
+       - Identity (clinic + doctor names) = 14px DM Sans semibold   ← "who"
+       - Utility   (rail nav, search, awaiting-bar headline) = 13px
+       - Metadata  (row meta, count badges)                = 12px
+     Clinic + doctor match each other (same size + weight) so the two identity
+     labels read as one layer, but sit one notch above the 13px utility floor
+     so the workspace's "who" gets a quiet authority over its "what". The
+     earlier 12-13px clinic+doctor read smaller than the rail it framed, which
+     was visually backwards. */
+  .chrome-clinic-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 14px;
+    color: var(--ink); letter-spacing: -0.005em;
+  }
+  /* Search bar: 480px fixed width, centered. Switched from mauve-wash fill to
+     bg-canvas + 1px rule border + 12px radius (rounded-xl) per build state
+     2026-05-15. Wash-fill read too loud against the rail-tint ground. */
+  .chrome-search {
+    width: 480px; height: 40px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    display: flex; align-items: center;
+    padding: 0 14px; gap: 10px;
+    justify-self: center;
+  }
+  .chrome-search svg { width: 16px; height: 16px; color: var(--ink-faint); flex-shrink: 0; stroke-width: 1.8; }
+  .chrome-search .placeholder { font-size: 13px; font-weight: 500; color: var(--ink-faint); }
+  .chrome-vet { display: flex; align-items: center; gap: 12px; justify-self: end; }
+  .chrome-vet-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 14px;
+    color: var(--ink); letter-spacing: -0.005em;
+  }
+  .chrome-vet-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--ink-faint); color: var(--bg-canvas);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    border: 1.5px solid var(--card-border);
+  }
+
+  /* Rail: light wash, mauve-pill active state, Settings anchored to bottom */
+  .chrome-shell {
+    display: grid; grid-template-columns: 240px 1fr;
+    min-height: 760px;          /* taller so Settings sits visibly at the bottom */
+    align-items: stretch;       /* grid cells stretch to fill row height */
+  }
+  .chrome-rail {
+    background: var(--rail-bg);
+    border-right: 1px solid rgba(15, 12, 10, 0.06);
+    padding: 20px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+    height: 100%;               /* force the rail to fill its grid cell so flex-1 spacer works */
+    align-self: stretch;
+  }
+  .chrome-rail-label {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 12px; margin: 4px 0 8px;
+  }
+  /* Spacer pushes Settings to the bottom of the rail. The rail is bounded
+     by the viewport (main has internal scroll), so Settings always renders
+     at the bottom of the visible screen, always reachable. */
+  .chrome-rail-spacer { flex: 1; }
+  /* Rail items unified to the chrome's 13px body language 2026-05-15. The
+     earlier 17px label clashed against the rest of the chrome (search
+     placeholder, clinic + vet names, tabs, awaiting-bar headline all at 13px)
+     and made the workspace lane read bigger than the actual work. Now 13px
+     DM Sans medium / semibold-on-active, 36px tall, 12px gap, 16px icons. */
+  .chrome-rail-item {
+    height: 36px;
+    display: flex; align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    color: var(--ink-soft);
+    transition: background 0.12s, color 0.12s;
+  }
+  .chrome-rail-item:hover { background: rgba(15, 12, 10, 0.03); color: var(--ink); }
+  .chrome-rail-item svg { width: 16px; height: 16px; color: currentColor; flex-shrink: 0; stroke-width: 1.7; }
+  .chrome-rail-item.active {
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* Empty route placeholder */
+  .main { padding: 24px 32px; }
+  .empty-route {
+    height: 540px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+  .empty-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .empty-text {
+    font-size: 13px; font-style: italic; color: var(--ink-faint);
+    max-width: 360px; line-height: 1.5;
+  }
+
+  /* ============ Screen 02 main area — Inbox (mauve, solid-berry Tabs + real pet photos) ============ */
+  /* Tab style locked 2026-05-15: pill pair with SOLID berry fill on the
+     active side + nested darker-berry count mini-pill (white text inside).
+     Inactive sits transparent inside the canvas-2 container, ink-soft text,
+     count rendered in a soft canvas-2 mini-pill for legibility. This is
+     the mockup-target anatomy; earlier soft-mauve interlude drifted from
+     it per 2026-05-15 review. */
+  .inbox-tabs {
+    display: inline-flex; align-items: center;
+    gap: 0; margin-bottom: 18px;
+    background: var(--canvas-2);
+    border-radius: 9999px;
+    padding: 4px;
+  }
+  .inbox-tab {
+    font-size: 13px; font-weight: 500;
+    color: var(--ink-soft);
+    padding: 6px 14px;
+    border-radius: 9999px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    line-height: 1;
+    transition: background 0.12s, color 0.12s;
+  }
+  .inbox-tab.active,
+  .inbox-tab.active:hover {
+    background: var(--primary);
+    color: var(--bg-canvas);
+    font-weight: 600;
+  }
+  .inbox-tab .count {
+    font-size: 11px; font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    background: var(--canvas-2);
+    color: var(--ink-soft);
+  }
+  .inbox-tab.active .count {
+    background: #6B1F44;            /* berry-deep, mockup's nested-pill spec */
+    color: var(--bg-canvas);
+  }
+
+  /* Pet avatar with real Pexels photo + fur ring */
+  .avatar-ring {
+    border-radius: 50%; padding: 3px;
+    flex-shrink: 0; width: 46px; height: 46px;
+  }
+  .avatar-ring.honey { background: var(--honey); }
+  .avatar-ring.sable { background: var(--sable); }
+  .avatar-ring.milk { background: linear-gradient(135deg, var(--milk), var(--vanilla)); }
+  .avatar-ring.steel { background: var(--steel); }
+  .avatar-photo {
+    width: 40px; height: 40px; border-radius: 50%;
+    background-size: cover; background-position: center;
+    border: 1.5px solid var(--bg-canvas);
+  }
+  .avatar-photo.gabby { background-image: url("https://pevofxnfjcvmamdcfkus.supabase.co/storage/v1/object/public/pet-photos/gabby.jpg"); }
+  .avatar-photo.rocky { background-image: url("https://pevofxnfjcvmamdcfkus.supabase.co/storage/v1/object/public/pet-photos/rocky.jpg"); }
+  .avatar-photo.coco { background-image: url("https://pevofxnfjcvmamdcfkus.supabase.co/storage/v1/object/public/pet-photos/coco.jpg"); }
+  .avatar-photo.misha { background-image: url("https://pevofxnfjcvmamdcfkus.supabase.co/storage/v1/object/public/pet-photos/misha.jpg"); }
+  .avatar-photo.bruno { background-image: url("https://pevofxnfjcvmamdcfkus.supabase.co/storage/v1/object/public/pet-photos/bruno.jpg"); }
+
+  /* Row anatomy locked 2026-05-15: unread-dot column was REMOVED — in the
+     Awaiting tab every row is by definition awaiting, so the dot was
+     redundant signal next to the wait duration on the right and the
+     awaiting-bar count above. Per-row read/unread weight bifurcation in the
+     preview was REMOVED for the same reason; it was leaking demo-test
+     artifacts when `read_at` happened to be set on some threads but not
+     others. Preview is uniform weight (text-ink, font-medium) in active;
+     dimmed (text-ink-70) in replied. */
+  .inbox-row {
+    display: grid;
+    grid-template-columns: 46px 1fr auto;
+    gap: 14px;
+    align-items: start;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .sender-cell { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding-top: 2px; }
+  .pet-name {
+    font-family: 'Spectral', Georgia, serif; font-style: italic;
+    font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1.15;
+  }
+  .pet-meta { font-size: 12px; font-weight: 500; color: var(--ink-faint); margin-left: 6px; }
+  .household { font-size: 12px; font-weight: 500; color: var(--ink-soft); }
+  .preview {
+    font-size: 13px; font-weight: 500;
+    color: var(--ink);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.45;
+    margin-top: 2px;
+    max-width: 640px;
+  }
+  .timestamp {
+    font-size: 13px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    padding-top: 4px;
+  }
+
+  /* ============ Screen 03 main area — Thread detail (mauve vet bubbles + photo header) ============ */
+  .td-main { display: grid; grid-template-columns: 1fr 468px; min-height: 696px; }
+  .conv-col { display: flex; flex-direction: column; min-width: 0; }
+  .breadcrumb { font-size: 13px; color: var(--ink-soft); padding: 14px 28px; }
+  .breadcrumb .sep { color: var(--ink-faint); margin: 0 6px; }
+  .breadcrumb .current { color: var(--ink); font-weight: 500; }
+  .conv-body { flex: 1; padding: 8px 28px 16px; display: flex; flex-direction: column; gap: 14px; }
+  .bubble-row { display: flex; }
+  .bubble-row.parent { justify-content: flex-start; }
+  .bubble-row.vet { justify-content: flex-end; }
+  .bubble-wrap { max-width: 65%; display: flex; flex-direction: column; gap: 4px; }
+  .bubble-row.parent .bubble-wrap { align-items: flex-start; }
+  .bubble-row.vet .bubble-wrap { align-items: flex-end; }
+  .bubble { padding: 10px 14px; font-size: 14px; line-height: 1.5; border-radius: 16px; }
+  .bubble-row.parent .bubble {
+    background: var(--bg-canvas); color: var(--ink);
+    border: 1px solid var(--card-border);
+    border-bottom-left-radius: 4px;
+  }
+  .bubble-row.vet .bubble {
+    background: var(--primary); color: var(--bg-canvas);
+    border-bottom-right-radius: 4px;
+  }
+  .bubble-stamp { font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; padding: 0 6px; }
+  .compose {
+    border-top: 1px solid rgba(15, 12, 10, 0.06);
+    padding: 14px 28px;
+    background: var(--bg-canvas);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .compose-field {
+    flex: 1; border: 1px solid var(--card-border);
+    border-radius: 8px; padding: 0 14px; height: 44px;
+    display: flex; align-items: center;
+    background: var(--bg-canvas);
+    font-size: 14px; color: var(--ink-faint); font-style: italic;
+  }
+  .compose-mic, .compose-send {
+    height: 44px; display: flex; align-items: center;
+    border-radius: 8px;
+  }
+  .compose-mic {
+    width: 44px; justify-content: center;
+    border: 1px solid var(--card-border);
+    color: var(--ink-soft);
+  }
+  .compose-mic svg { width: 17px; height: 17px; }
+  .compose-send {
+    padding: 0 24px; background: var(--primary); color: var(--bg-canvas);
+    font-size: 14px; font-weight: 500; gap: 8px;
+  }
+  .compose-send svg { width: 14px; height: 14px; color: currentColor; }
+
+  /* Pet panel — soft card aesthetic, real photo header, mauve-active Tabs */
+  .pet-panel {
+    width: 468px;
+    border-left: 1px solid rgba(15, 12, 10, 0.06);
+    background: var(--bg-canvas);
+    display: flex; flex-direction: column;
+    max-height: 760px; overflow: hidden;
+  }
+  .pp-scroll { padding: 20px 22px 0; overflow-y: auto; flex: 1; }
+  .pp-header {
+    display: flex; align-items: center; gap: 14px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-faint);
+    margin-bottom: 18px;
+  }
+  .pp-photo-ring {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--honey); padding: 3px; flex-shrink: 0;
+  }
+  .pp-photo {
+    width: 100%; height: 100%; border-radius: 50%;
+    background-image: url("https://pevofxnfjcvmamdcfkus.supabase.co/storage/v1/object/public/pet-photos/gabby.jpg");
+    background-size: cover; background-position: center;
+    border: 1.5px solid var(--bg-canvas);
+  }
+  .pp-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--ink); letter-spacing: -0.015em;
+  }
+  .pp-section-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 8px;
+  }
+  .pp-block { margin-bottom: 18px; }
+  .pp-quick .row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid var(--border-faint);
+  }
+  .pp-quick .row:last-child { border-bottom: none; }
+  .pp-quick .label { font-size: 13px; color: var(--ink-soft); }
+  .pp-quick .val {
+    font-size: 14px; color: var(--ink); font-weight: 600;
+    font-variant-numeric: tabular-nums; text-align: right;
+  }
+
+  /* Tabs — mauve primary on active (was Ink) */
+  .pp-tabs {
+    display: flex; gap: 24px;
+    border-bottom: 1px solid var(--border-faint);
+    margin-bottom: 14px;
+  }
+  .pp-tab {
+    background: transparent; border: none;
+    padding: 8px 0; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    color: var(--ink-soft); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .pp-tab:hover { color: var(--ink); }
+  .pp-tab.active {
+    color: var(--primary);
+    font-weight: 600;
+    border-bottom-color: var(--primary);
+  }
+  .pp-tab-content { display: none; }
+  .pp-tab-content.active { display: block; }
+
+  .ch-row {
+    display: flex; gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-faint);
+    cursor: pointer; transition: background 0.1s;
+  }
+  .ch-row:last-of-type { border-bottom: none; }
+  .ch-row:hover { background: rgba(168, 163, 158, 0.08); }
+  .ch-date {
+    width: 60px; flex-shrink: 0;
+    font-size: 12px; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums; padding-top: 2px;
+  }
+  .ch-body { flex: 1; }
+  .ch-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+  .ch-meta { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+
+  .inv-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-faint);
+    cursor: pointer; transition: background 0.1s;
+  }
+  .inv-row:last-of-type { border-bottom: none; }
+  .inv-row:hover { background: rgba(168, 163, 158, 0.08); }
+  .inv-date { width: 60px; flex-shrink: 0; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .inv-body { flex: 1; min-width: 0; }
+  .inv-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .inv-amount { font-size: 14px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pp-year-marker {
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft); font-variant-numeric: tabular-nums;
+    padding: 14px 0 8px;
+    border-top: 1px solid var(--border-faint);
+  }
+  .pp-year-marker:first-child { border-top: none; padding-top: 0; }
+
+  /* ============ Design system reference (top of doc) ============ */
+  .dsr {
+    background: var(--bg-canvas);
+    border: 1px solid #333;
+    border-radius: var(--card-radius);
+    padding: 32px 40px;
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 56px;
+  }
+  .dsr-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  .dsr-title { font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; margin-bottom: 6px; }
+  .dsr-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 28px; max-width: 760px; }
+  .dsr-row { padding: 20px 0; border-top: 1px solid var(--border-faint); }
+  .dsr-row:last-child { border-bottom: 1px solid var(--border-faint); }
+  .dsr-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+  .dsr-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  .dsr-swatch { width: 104px; height: 84px; border-radius: 8px; border: 1px solid var(--border-faint); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 8px; }
+  .dsr-swatch-name { font-size: 11px; font-weight: 600; color: var(--ink); background: rgba(248, 247, 245, 0.88); padding: 2px 5px; border-radius: 3px; }
+  .dsr-swatch-hex { font-size: 10px; color: var(--ink-soft); background: rgba(248, 247, 245, 0.78); padding: 1px 5px; border-radius: 3px; margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .dsr-swatch.dark .dsr-swatch-name { background: rgba(15, 12, 10, 0.55); color: var(--bg-canvas); }
+  .dsr-swatch.dark .dsr-swatch-hex { background: rgba(15, 12, 10, 0.45); color: var(--bg-canvas); }
+  .dsr-type-grid { display: grid; grid-template-columns: 220px 1fr; gap: 14px 24px; align-items: baseline; }
+  .dsr-type-meta { font-size: 11px; color: var(--ink-faint); letter-spacing: 0.06em; text-transform: uppercase; }
+  .dsr-type-display { font-family: 'DM Sans', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+  .dsr-type-body { font-family: 'DM Sans', 'Noto Sans Devanagari', sans-serif; font-size: 15px; color: var(--ink); }
+  .dsr-type-devanagari { font-family: 'DM Sans', 'Noto Sans Devanagari', sans-serif; font-size: 15px; color: var(--ink); line-height: 1.6; }
+  .dsr-type-spectral { font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 30px; color: var(--ink); }
+  .dsr-type-tnum { font-family: 'DM Sans', 'Noto Sans Devanagari', sans-serif; font-size: 16px; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .dsr-btn-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .dsr-btn-primary { background: var(--primary); color: var(--bg-canvas); padding: 10px 24px; font-size: 14px; font-weight: 500; border: none; border-radius: 8px; cursor: default; }
+  .dsr-btn-ghost { background: transparent; color: var(--ink); padding: 10px 24px; font-size: 14px; font-weight: 500; border: 1px solid var(--card-border); border-radius: 8px; cursor: default; }
+  .dsr-btn-disabled { background: rgba(168, 163, 158, 0.18); color: var(--ink-faint); padding: 10px 24px; font-size: 14px; font-weight: 500; border: none; border-radius: 8px; cursor: not-allowed; }
+  .dsr-btn-note { font-size: 12px; color: var(--ink-soft); font-style: italic; margin-left: 8px; }
+  .dsr-callout {
+    padding: 16px 20px;
+    border: 1px solid var(--card-border);
+    background: var(--bg-canvas);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+  }
+  .dsr-callout-rule { font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .dsr-callout-meta { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+
+  /* Pet photo strip preview for the design system */
+  .dsr-pet-strip { display: flex; gap: 14px; flex-wrap: wrap; }
+  .dsr-pet-card {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 14px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    min-width: 120px;
+  }
+  .dsr-pet-card .pet-name-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .dsr-pet-card .pet-breed-label { font-size: 11px; color: var(--ink-soft); }
+
+  /* ============ Screen 04 main area — Invoice (mauve cards, soft shadow) ============ */
+  .s4-main { overflow-y: auto; }
+  .s4-back { padding: 18px 32px 0; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-soft); cursor: pointer; }
+  .s4-back svg { width: 14px; height: 14px; }
+  .s4-back:hover { color: var(--ink); }
+  .s4-stage { padding: 24px 32px 48px; max-width: 800px; margin: 0 auto; }
+  .s4-letterhead { display: flex; justify-content: space-between; padding-bottom: 22px; border-bottom: 2px solid var(--ink); margin-bottom: 24px; }
+  .s4-ams-name { font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .s4-ams-meta { font-size: 12px; color: var(--ink-soft); }
+  .s4-right { text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .s4-num { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .s4-date { font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .s4-cat-section { margin-bottom: 16px; }
+  .s4-cat-header { padding-bottom: 8px; border-bottom: 1px solid var(--border-faint); margin-bottom: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+  .s4-line-row { display: grid; grid-template-columns: 1fr 100px; gap: 12px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--border-faint); }
+  .s4-line-row.simple { align-items: center; padding: 12px 0; }
+  .s4-line-row:last-of-type { border-bottom: none; }
+  .s4-line-name { font-size: 14px; color: var(--ink); font-weight: 500; margin-bottom: 3px; }
+  .s4-line-row.simple .s4-line-name { margin-bottom: 0; }
+  .s4-line-tip { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  .s4-line-amt { text-align: right; font-size: 14px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .s4-totals { margin-top: 28px; padding-top: 16px; border-top: 2px solid var(--ink); display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .s4-total-row { display: flex; gap: 28px; align-items: baseline; width: 280px; justify-content: space-between; }
+  .s4-total-row .lbl { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .s4-total-row .val { font-family: 'DM Sans', sans-serif; font-size: 26px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .s4-gst-note { font-size: 12px; color: var(--ink-faint); text-align: right; width: 280px; font-style: italic; padding-top: 4px; }
+
+  /* ============ Screen 05 main area — Clinical history (soft cards, no vellum) ============ */
+  .s5-main { overflow-y: auto; }
+  .s5-back { padding: 18px 32px 0; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-soft); cursor: pointer; }
+  .s5-back svg { width: 14px; height: 14px; }
+  .s5-stage { max-width: 800px; margin: 0 auto; padding: 24px 32px 64px; }
+  .s5-header { padding-bottom: 14px; border-bottom: 1px solid var(--border-faint); margin-bottom: 22px; }
+  .s5-title { font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; margin-bottom: 4px; }
+  .s5-sub { font-size: 13px; color: var(--ink-soft); }
+  .s5-card {
+    background: var(--bg-canvas);
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .s5-card-header {
+    display: flex; gap: 14px; align-items: center;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-faint);
+    flex-wrap: wrap;
+  }
+  .s5-card-date { font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .s5-card-reason { font-size: 15px; color: var(--ink); font-weight: 600; }
+  .s5-pills { display: flex; gap: 6px; margin-left: auto; }
+  .s5-pill {
+    font-size: 11px; padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(15,12,10,0.06);
+    color: var(--ink-soft);
+    font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .s5-card-vet { font-size: 12px; color: var(--ink-faint); font-style: italic; width: 100%; }
+  .s5-soap { display: grid; grid-template-columns: 92px 1fr; gap: 16px; margin-bottom: 14px; align-items: start; }
+  .s5-soap:last-child { margin-bottom: 0; }
+  .s5-soap-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); padding-top: 2px; }
+  .s5-soap-body { font-size: 14px; color: var(--ink); line-height: 1.65; }
+
+  /* ============ Screen 06 main area — Broadcast composer (ToggleGroup pills + soft inputs) ============ */
+  .s6-main { overflow-y: auto; }
+  .s6-step-nav {
+    display: flex; gap: 0;
+    padding: 0 32px; height: 48px;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(15, 12, 10, 0.06);
+    flex-shrink: 0;
+  }
+  .s6-step {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 22px;
+    font-size: 13px; color: var(--ink-soft);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-weight: 500;
+  }
+  .s6-step.active {
+    color: var(--primary);
+    font-weight: 700;
+    border-bottom-color: var(--primary);
+  }
+  .s6-step-num {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(15,12,10,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: var(--ink-soft);
+  }
+  .s6-step.active .s6-step-num { background: var(--primary); color: var(--bg-canvas); }
+  .s6-step.done .s6-step-num { background: var(--ink-soft); color: var(--bg-canvas); }
+  .s6-split { display: grid; grid-template-columns: 1fr 360px; gap: 32px; padding: 24px 32px 32px; }
+  .s6-editor { display: flex; flex-direction: column; gap: 18px; }
+  .s6-cover {
+    aspect-ratio: 16/5;
+    border: 1px dashed var(--card-border);
+    border-radius: var(--card-radius);
+    background: rgba(168, 163, 158, 0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--ink-soft);
+  }
+  .s6-url-bar {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 16px;
+    background: rgba(15,12,10,0.04);
+    border-radius: 8px;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  .s6-url-text { flex: 1; font-family: monospace; color: var(--ink); font-weight: 500; }
+  .s6-url-meta { font-size: 12px; color: var(--ink-faint); }
+  .s6-lang-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px;
+    background: rgba(15,12,10,0.04);
+    border-radius: 8px;
+  }
+  .s6-lang-label { font-size: 12px; color: var(--ink-soft); margin-right: 4px; font-weight: 500; }
+  /* ToggleGroup default tone: primary fill on active */
+  .s6-toggle-group {
+    display: inline-flex; padding: 3px;
+    background: rgba(15, 12, 10, 0.04);
+    border-radius: 8px;
+  }
+  .s6-toggle-item {
+    padding: 4px 12px;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-soft);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .s6-toggle-item.active {
+    background: var(--primary);
+    color: var(--bg-canvas);
+  }
+  .s6-lang-note { font-size: 12px; color: var(--ink-faint); margin-left: auto; font-style: italic; }
+  /* Universal voice mic — the only voice entry point on the composer */
+  .s6-universal-mic {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px;
+    border: 1px dashed rgba(130, 49, 89, 0.28);
+    background: rgba(130, 49, 89, 0.04);
+    border-radius: var(--card-radius);
+  }
+  .s6-universal-mic-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--primary); color: var(--bg-canvas);
+    border: none; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; cursor: pointer;
+  }
+  .s6-universal-mic-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+  .s6-universal-mic-label { font-size: 13px; color: var(--ink-soft); font-weight: 500; line-height: 1.3; }
+  .s6-universal-mic-help { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+  .s6-autofill-btn {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--ink-soft);
+    padding: 6px 14px;
+    font-size: 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .s6-autofill-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+  .s6-field { display: flex; flex-direction: column; gap: 6px; }
+  .s6-field-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .s6-field-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .s6-red-dot { width: 6px; height: 6px; background: #B33A3A; border-radius: 50%; }
+  .s6-mic {
+    width: 28px; height: 28px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--bg-canvas);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--ink-soft); flex-shrink: 0;
+  }
+  .s6-mic svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+  .s6-input {
+    padding: 10px 14px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--bg-canvas);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .s6-input.title-input { font-size: 17px; font-weight: 600; }
+  .s6-textarea {
+    padding: 12px 14px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--bg-canvas);
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.6;
+    font-family: 'DM Sans', sans-serif;
+    min-height: 80px;
+  }
+  .s6-bullets {
+    padding: 12px 14px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--bg-canvas);
+  }
+  .s6-bullet-row {
+    display: flex; gap: 10px;
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--border-faint);
+    font-size: 14px; color: var(--ink);
+    align-items: center;
+  }
+  .s6-bullet-row:last-child { border-bottom: none; }
+  .s6-bullet-dot { color: var(--ink-faint); }
+  .s6-warning-box, .s6-escalation-box {
+    padding: 14px 16px;
+    border: 1.5px solid #B33A3A;
+    border-radius: var(--card-radius);
+    background: rgba(179, 58, 58, 0.06);
+  }
+  .s6-warning-bullets {
+    font-size: 14px; color: var(--ink); line-height: 1.6;
+    padding-left: 16px;
+  }
+  .s6-warning-bullets li {
+    list-style-type: "·  "; padding-left: 4px; margin-bottom: 3px;
+  }
+  .s6-escalation-text { font-size: 14px; color: var(--ink); line-height: 1.6; }
+  .s6-escalation-text p { margin-bottom: 6px; }
+  .s6-escalation-text p:last-child { margin-bottom: 0; }
+  .s6-publish-row {
+    display: flex; justify-content: flex-end;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-faint);
+  }
+  .s6-publish-btn {
+    background: var(--primary); color: var(--bg-canvas);
+    border: none;
+    padding: 10px 24px;
+    font-size: 14px; font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .s6-publish-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+  .s6-phone-wrap { position: sticky; top: 80px; align-self: start; }
+  .s6-preview-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 8px; text-align: center;
+  }
+  .s6-phone {
+    width: 290px;
+    background: var(--ink);
+    border-radius: 32px;
+    padding: 4px;
+    flex-shrink: 0; margin: 0 auto;
+  }
+  .s6-phone-inner {
+    background: var(--bg-canvas);
+    border-radius: 28px;
+    max-height: 580px;
+    overflow: hidden auto;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .s6-phone-inner::-webkit-scrollbar { display: none; width: 0; height: 0; }
+  .s6-phone-statusbar {
+    height: 22px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 18px;
+    font-size: 10px; font-weight: 600; color: var(--ink);
+    background: var(--bg-canvas);
+  }
+  .s6-phone-cover {
+    aspect-ratio: 16/9;
+    background: rgba(168, 163, 158, 0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--ink-faint); font-style: italic;
+  }
+  .s6-phone-body { padding: 14px 16px; }
+  .s6-phone-byline { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .s6-phone-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--ink-faint);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: var(--bg-canvas);
+  }
+  .s6-phone-byline-name { font-size: 12px; font-weight: 600; color: var(--ink); }
+  .s6-phone-byline-clinic { font-size: 9px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em; }
+  .s6-phone-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 19px; font-weight: 700;
+    color: var(--ink); margin-bottom: 8px;
+    line-height: 1.25; letter-spacing: -0.01em;
+  }
+  .s6-phone-section { margin-bottom: 14px; }
+  .s6-phone-section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .s6-phone-summary { font-size: 12px; color: var(--ink); line-height: 1.55; padding-left: 14px; }
+  .s6-phone-summary li { margin-bottom: 4px; list-style-type: "·  "; padding-left: 4px; }
+  .s6-phone-body-text { font-size: 12px; color: var(--ink); line-height: 1.6; }
+  .s6-phone-card {
+    border: 1.5px solid #B33A3A;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: rgba(179, 58, 58, 0.06);
+    margin-bottom: 12px;
+  }
+  .s6-phone-card-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .s6-phone-card-icon { width: 13px; height: 13px; color: #B33A3A; stroke: currentColor; fill: none; }
+  .s6-phone-card-title { font-size: 10px; font-weight: 700; color: #B33A3A; letter-spacing: 0.06em; text-transform: uppercase; }
+  .s6-phone-card-body { font-size: 12px; color: var(--ink); line-height: 1.55; }
+  .s6-phone-card-body ul { padding-left: 14px; }
+  .s6-phone-card-body li { list-style-type: "·  "; padding-left: 4px; margin-bottom: 3px; }
+  .s6-phone-share-btn {
+    background: var(--primary); color: var(--bg-canvas);
+    width: 100%; padding: 10px;
+    border-radius: 8px;
+    font-size: 12px; font-weight: 600; border: none;
+    margin-top: 8px;
+  }
+
+  /* ============ Screen 06b main area — Audience (mauve toggles, mauve hero) ============ */
+  .s6b-shell { padding: 24px 32px 32px; max-width: 980px; margin: 0 auto; }
+  .s6b-eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px;
+    background: rgba(15,12,10,0.04);
+    border-radius: 8px;
+    margin-bottom: 22px;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  .s6b-eyebrow .label { font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); font-size: 11px; }
+  .s6b-eyebrow .title { color: var(--ink); font-weight: 600; }
+  .s6b-eyebrow .edit { margin-left: auto; color: var(--ink-soft); font-size: 12px; padding: 4px 12px; border: 1px solid var(--card-border); border-radius: 6px; cursor: pointer; }
+  .s6b-title { font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; margin-bottom: 4px; }
+  .s6b-sub { font-size: 14px; color: var(--ink-soft); margin-bottom: 28px; }
+  .s6b-group {
+    padding: 18px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 12px;
+  }
+  .s6b-group-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px; color: var(--ink-soft);
+    margin-bottom: 12px;
+    font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .s6b-condition-row {
+    display: grid;
+    grid-template-columns: auto 130px 110px 1fr auto;
+    gap: 10px; align-items: center;
+    padding: 10px 0;
+  }
+  .s6b-condition-row + .s6b-condition-row { border-top: 1px dashed var(--border-faint); }
+  /* WHERE/AND badge — Badge "secondary" + "outline" variants */
+  .s6b-cond-conn {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 4px 10px;
+    background: rgba(15,12,10,0.06);
+    border-radius: 999px;
+    min-width: 44px; text-align: center;
+  }
+  .s6b-cond-conn.where {
+    background: transparent;
+    border: 1px solid var(--card-border);
+  }
+  .s6b-cond-prop { font-size: 14px; color: var(--ink); font-weight: 600; }
+  .s6b-cond-value { font-size: 13px; color: var(--ink); }
+  /* ToggleGroup default tone — primary fill on active */
+  .s6b-cond-pills {
+    display: inline-flex; padding: 3px;
+    background: rgba(15, 12, 10, 0.04);
+    border-radius: 8px;
+  }
+  .s6b-cond-pill {
+    padding: 4px 12px;
+    font-size: 12px; font-weight: 600;
+    color: var(--ink-soft);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .s6b-cond-pill.selected {
+    background: var(--primary); color: var(--bg-canvas);
+  }
+  .s6b-add-cond {
+    padding: 8px 14px;
+    border: 1px dashed var(--card-border);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    font-size: 12px; cursor: pointer;
+    margin-top: 8px; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .s6b-add-or-group { text-align: center; margin: 16px 0 0; }
+  .s6b-age-range { display: flex; align-items: center; gap: 8px; }
+  .s6b-age-input {
+    width: 64px; padding: 8px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    font-size: 13px; color: var(--ink);
+    background: var(--bg-canvas);
+    font-variant-numeric: tabular-nums;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .s6b-age-label { font-size: 13px; color: var(--ink-soft); }
+  /* Hero count card — primary fill */
+  .s6b-count-strip {
+    display: flex; align-items: center; gap: 16px;
+    padding: 22px 26px;
+    background: var(--primary);
+    color: var(--bg-canvas);
+    border-radius: var(--card-radius);
+    margin-top: 22px;
+  }
+  .s6b-count-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 30px; font-weight: 700;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .s6b-count-meta { font-size: 13px; opacity: 0.92; }
+  .s6b-actions-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 22px;
+    border-top: 1px solid var(--border-faint);
+    margin-top: 28px;
+  }
+  .s6b-back-btn {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--ink-soft);
+    padding: 10px 24px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .s6b-next-btn {
+    background: var(--primary); color: var(--bg-canvas);
+    padding: 10px 24px;
+    font-size: 14px; font-weight: 500;
+    border: none; border-radius: 8px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .s6b-next-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+  /* ============ Screen 06c main area — Send (mauve hero, mauve send CTA) ============ */
+  .s6c-stage { padding: 24px 32px 32px; max-width: 1080px; margin: 0 auto; }
+  .s6c-eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px;
+    background: rgba(15,12,10,0.04);
+    border-radius: 8px;
+    margin-bottom: 22px;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  .s6c-eyebrow .label { font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); font-size: 11px; }
+  .s6c-eyebrow .title { color: var(--ink); font-weight: 600; }
+  .s6c-eyebrow .edit { margin-left: auto; color: var(--ink-soft); font-size: 12px; padding: 4px 12px; border: 1px solid var(--card-border); border-radius: 6px; cursor: pointer; }
+  .s6c-title { font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; margin-bottom: 4px; }
+  .s6c-sub { font-size: 14px; color: var(--ink-soft); margin-bottom: 28px; }
+  .s6c-split { display: grid; grid-template-columns: 320px 1fr; gap: 36px; align-items: start; }
+  .s6c-preview-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; text-align: center; }
+  .s6c-confirm-col { display: flex; flex-direction: column; gap: 22px; }
+  .s6c-confirm-hero {
+    background: var(--primary); color: var(--bg-canvas);
+    padding: 28px 32px;
+    border-radius: var(--card-radius);
+  }
+  .s6c-confirm-hero-eyebrow { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.78; margin-bottom: 10px; }
+  .s6c-confirm-hero-num { font-family: 'DM Sans', sans-serif; font-size: 40px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 6px; }
+  .s6c-confirm-hero-meta { font-size: 14px; opacity: 0.92; }
+  .s6c-confirm-block {
+    background: var(--bg-canvas);
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    padding: 20px 24px;
+  }
+  .s6c-confirm-block-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+  .s6c-confirm-filter-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-faint);
+    font-size: 14px;
+  }
+  .s6c-confirm-filter-row:last-child { border-bottom: none; }
+  .s6c-confirm-filter-prop { color: var(--ink-soft); font-weight: 500; }
+  .s6c-confirm-filter-value { color: var(--ink); font-weight: 600; }
+  .s6c-confirm-channel-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0;
+    font-size: 13px; color: var(--ink);
+  }
+  .s6c-confirm-channel-row svg { width: 14px; height: 14px; color: var(--ink); stroke: currentColor; fill: none; flex-shrink: 0; }
+  .s6c-confirm-channel-row .meta { color: var(--ink-soft); margin-left: auto; font-size: 12px; }
+  .s6c-send-actions {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 22px;
+    border-top: 1px solid var(--border-faint);
+    margin-top: 32px;
+  }
+  .s6c-send-undo-hint {
+    font-size: 12px; color: var(--ink-faint); font-style: italic;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .s6c-send-undo-hint svg { width: 12px; height: 12px; stroke: currentColor; fill: none; }
+  .s6c-send-buttons { display: flex; gap: 12px; }
+  .s6c-send-back-btn {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--ink-soft);
+    padding: 10px 24px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .s6c-send-confirm-btn {
+    background: var(--primary); color: var(--bg-canvas);
+    padding: 10px 24px;
+    font-size: 14px; font-weight: 500;
+    border: none; border-radius: 8px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .s6c-send-confirm-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+  /* ============ Screen 07b main area — Settings (DM Sans, mauve toggles) ============ */
+  .s7-main { overflow-y: auto; }
+  .s7-stage { max-width: 720px; margin: 0 auto; padding: 32px 32px 64px; }
+  /* Page titles are 17px / DM Sans 600 (text-lg semibold) per font-discipline
+     lock 2026-05-15. Earlier 26px bold treatment read as "disgustingly large"
+     per Sagar review; subtitle drops to 13px ink-soft to match. */
+  .s7-page-title { font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; margin-bottom: 2px; }
+  .s7-page-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 32px; }
+  .s7-section { margin-bottom: 32px; }
+  .s7-section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
+  .s7-photo-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--border-faint);
+    border-bottom: 1px solid var(--border-faint);
+  }
+  .s7-photo-slot {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 1.5px solid var(--card-border);
+    background: var(--bg-canvas);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .s7-photo-slot svg { width: 20px; height: 20px; color: var(--ink-faint); stroke: currentColor; fill: none; }
+  .s7-photo-slot img { width: 100%; height: 100%; object-fit: cover; }
+  .s7-photo-text { flex: 1; min-width: 0; }
+  .s7-photo-name { font-size: 14px; color: var(--ink); font-weight: 600; }
+  .s7-photo-help { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .s7-photo-edit {
+    font-size: 12px; color: var(--ink-soft);
+    padding: 6px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .s7-field-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-faint);
+  }
+  .s7-field-row:last-child { border-bottom: none; }
+  .s7-field-label { font-size: 13px; color: var(--ink-soft); flex-shrink: 0; width: 160px; }
+  .s7-field-value { flex: 1; font-size: 14px; color: var(--ink); font-weight: 500; min-width: 0; }
+  .s7-field-value.readonly { color: var(--ink-soft); font-variant-numeric: tabular-nums; font-weight: 400; }
+  .s7-field-value.placeholder { color: var(--ink-faint); font-weight: 400; font-style: italic; }
+  .s7-field-value.tabular { font-variant-numeric: tabular-nums; }
+  .s7-field-edit {
+    font-size: 12px; color: var(--ink-soft);
+    padding: 6px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    cursor: pointer; flex-shrink: 0;
+  }
+  /* Settings toggle pills — primary fill on active */
+  .s7-toggle-group {
+    display: inline-flex; padding: 3px;
+    background: rgba(15, 12, 10, 0.04);
+    border-radius: 8px;
+  }
+  .s7-toggle-item {
+    padding: 6px 14px;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-soft);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .s7-toggle-item.active {
+    background: var(--primary); color: var(--bg-canvas);
+  }
+  .s7-stacked-help {
+    font-size: 12px; color: var(--ink-faint);
+    padding: 6px 0 0 176px;
+    line-height: 1.55; max-width: 520px;
+  }
+  .s7-clinic-lines { padding: 4px 0; }
+  .s7-clinic-name { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.005em; }
+  .s7-clinic-line { font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
+  .s7-clinic-line.tabular { font-variant-numeric: tabular-nums; }
+  .s7-signout-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px; font-weight: 500;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
+  .s7-signout-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+  .s7-vendor {
+    text-align: center; margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-faint);
+    display: flex; justify-content: center; gap: 8px; align-items: baseline;
+  }
+  .s7-vendor-brand { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700; color: var(--ink-faint); }
+  .s7-vendor-sep { font-size: 11px; color: var(--ink-faint); }
+  .s7-vendor-version { font-size: 11px; color: var(--ink-faint); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">v1.5 · Mauve + Inbox v2 · Locked screens</div>
+    <div class="doc-title">Pawkit dashboard · Boysenberry + cool off-white</div>
+    <div class="doc-sub">
+      <strong style="color:#fff;">2026-05-15 update — Inbox v2 rebuild landed.</strong> Surface architecture flipped: top bar + rail + content area now share <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">rail-tint</code> (<span class="key">rgba(15,12,10,0.045)</span>) as one continuous ground; <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">canvas</code> (<span class="key">#F8F7F5</span>) is reserved for cards that "lift" off it. <strong style="color:#fff;">All drop shadows removed</strong> — elevation = tonal contrast + 1px <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">rule</code> hairlines. New surfaces: Awaiting bar + reply queue focus mode (Screen 02), embedded SOAP context strip + dropped right pet panel (Screen 03), Inbox zero state (auto). New rail item: Billing. Screens 02 + 03 below show the inbox v2 anatomy; Screens 04 / 05 / 06 / 06b / 06c / 07b show the broader chrome that ships alongside.
+      <br><br>
+      9 admin screens rendered at the locked anatomy. The v1.3 Teal/Paper build was deleted 2026-05-14; mauve is the only theme. Palette: Boysenberry <span class="key">#823159</span> + cool off-white <span class="key">#F8F7F5</span>. DM Sans throughout (Inter + Satoshi removed) + Spectral italic for hero pet names. Ink-faint bumped to <span class="key">#8F8B86</span>. Type scale +1-2px across the board. Hero color amplified across cards, vet bubbles, tabs, and toggles. Real Pexels pet portraits seeded for the 5 demo pets — fur rings explicitly kept (overriding the inbox-v2 handoff's "neutral monogram" rule per Pawkit brand discipline).
+      <br><br>
+      Token names in the running build: <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">--berry</code> / <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">bg-berry</code> for the brand hero (renamed from <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">--teal</code> 2026-05-15 cleanup so the variable matches the actual color identity), <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">--bg-canvas</code> / <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">bg-canvas</code> for the cool off-white, plus the shadcn HSL stack (<code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">--primary</code> / <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">--background</code> / <code style="background:#2a2a2a;padding:1px 5px;border-radius:2px;font-size:11px;color:#ddd;">--ring</code>) that every shadcn primitive consumes automatically.
+      <br><br>
+      Decisions live in <span class="key">docs/decisions-log.md</span> 2026-05-14 "Mauve-only build" + 2026-05-15 "Hero token renamed teal → berry" locks. Source of truth for the running build: <span class="key">apps/dashboard/app/globals.css</span> + <span class="key">packages/design-tokens/src/{colors.ts,tokens.css}</span> + <span class="key">apps/dashboard/components/ui/*</span> (shadcn primitives).
+    </div>
+    <div class="toc">
+      <div class="toc-label">Locked screens</div>
+      <a href="#screen-01">01 · App shell + nav</a>
+      <a href="#screen-02">02 · Inbox</a>
+      <a href="#screen-03">03 · Inbox thread detail</a>
+      <a href="#screen-04">04 · Invoice full screen</a>
+      <a href="#screen-05">05 · Clinical history full screen</a>
+      <a href="#screen-06">06 · Broadcast composer (compose)</a>
+      <a href="#screen-06b">06b · Broadcast audience</a>
+      <a href="#screen-06c">06c · Broadcast send</a>
+      <a href="#screen-07b">07b · Settings</a>
+    </div>
+  </div>
+
+  <!-- ============ Design system reference ============ -->
+  <section class="dsr">
+    <div class="dsr-eyebrow">Design system reference · v1.4 mauve-only</div>
+    <div class="dsr-title">Pawkit design system</div>
+    <div class="dsr-sub">The locked mauve tokens, type, buttons, and audit rules used by every screen below. v1.3 Teal/Paper was deleted 2026-05-14; mauve is the only theme now and there's no toggle to switch.</div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Structural neutrals · 4 tokens · chrome only</div>
+      <div class="dsr-swatches">
+        <div class="dsr-swatch" style="background:var(--bg-canvas);"><span class="dsr-swatch-name">Canvas</span><span class="dsr-swatch-hex">#F8F7F5</span></div>
+        <div class="dsr-swatch dark" style="background:var(--ink);"><span class="dsr-swatch-name">Ink</span><span class="dsr-swatch-hex">#0F0C0A</span></div>
+        <div class="dsr-swatch" style="background:var(--ink-soft);"><span class="dsr-swatch-name">Ink-soft</span><span class="dsr-swatch-hex">#5C5550</span></div>
+        <div class="dsr-swatch" style="background:var(--ink-faint);"><span class="dsr-swatch-name">Ink-faint</span><span class="dsr-swatch-hex">#8F8B86</span></div>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Hero · Boysenberry · primary action + active states · token: berry</div>
+      <div class="dsr-swatches">
+        <div class="dsr-swatch dark" style="background:var(--primary);"><span class="dsr-swatch-name">Boysenberry</span><span class="dsr-swatch-hex">#823159</span></div>
+      </div>
+      <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.55;">
+        Class names: <code style="background:rgba(15,12,10,0.06);padding:1px 6px;border-radius:3px;font-size:11px;">bg-berry</code> / <code style="background:rgba(15,12,10,0.06);padding:1px 6px;border-radius:3px;font-size:11px;">text-berry</code> / <code style="background:rgba(15,12,10,0.06);padding:1px 6px;border-radius:3px;font-size:11px;">border-berry</code> (Pawkit-native, RGB-triplet driven for alpha modifiers like <code style="background:rgba(15,12,10,0.06);padding:1px 6px;border-radius:3px;font-size:11px;">bg-berry/10</code>). For shadcn primitives use <code style="background:rgba(15,12,10,0.06);padding:1px 6px;border-radius:3px;font-size:11px;">bg-primary</code> / <code style="background:rgba(15,12,10,0.06);padding:1px 6px;border-radius:3px;font-size:11px;">ring-ring</code> — both resolve to the same Boysenberry via different CSS-var paths. Renamed from <code style="background:rgba(15,12,10,0.06);padding:1px 6px;border-radius:3px;font-size:11px;">--teal</code> 2026-05-15 cleanup.
+      </p>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Type · DM Sans for body AND display · Noto Sans Devanagari fallback</div>
+      <div class="dsr-type-grid">
+        <div class="dsr-type-meta">DM Sans Semibold 17px · text-lg · all page titles (locked 2026-05-15, downsized from the earlier 26-30px display treatment which over-shouted page-level headers)</div>
+        <div class="dsr-type-display">Animal Medical Services</div>
+        <div class="dsr-type-meta">DM Sans 15px · body · Latin glyphs</div>
+        <div class="dsr-type-body">Body text, microcopy, labels. DM Sans for Latin; Noto Sans Devanagari for the Marathi fallback.</div>
+        <div class="dsr-type-meta">Noto Sans Devanagari 15px · Marathi · +1px when lang=mr</div>
+        <div class="dsr-type-devanagari">पावसाळ्यात कुत्र्यांच्या कानांची काळजी घ्या. खाज, डोके हलवणे, किंवा कोणताही असामान्य स्त्राव असल्यास, आम्हाला कळवा.</div>
+        <div class="dsr-type-meta">Spectral semibold italic · pet names HERO ONLY</div>
+        <div class="dsr-type-spectral">Gabby</div>
+        <div class="dsr-type-meta">DM Sans tabular-nums · invoices, counts, timestamps</div>
+        <div class="dsr-type-tnum">₹2,450 · 31.2 kg · 142 households</div>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Buttons · shadcn primitives (default / outline / disabled)</div>
+      <div class="dsr-btn-row">
+        <button class="dsr-btn-primary">Send to 187 parents</button>
+        <button class="dsr-btn-ghost">Back to Audience</button>
+        <button class="dsr-btn-disabled">Send to 187 parents</button>
+        <span class="dsr-btn-note">primary paints Boysenberry via shadcn <code style="background:rgba(15,12,10,0.06);padding:1px 5px;border-radius:3px;font-size:11px;">bg-primary</code> · 40px tall · 24px h-padding · 14px medium</span>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Brand amplification rule · superseding v1.3 "one Teal per screen"</div>
+      <div class="dsr-callout">
+        <div class="dsr-callout-rule">Brand shows up everywhere.</div>
+        <div class="dsr-callout-meta">Hero count cards, vet message bubbles, active tabs, segmented toggle on-state, rail active item, primary CTAs, search-bar wash, focus rings — all auto-paint Boysenberry. The locked v1.3 "one Teal per screen" budget is intentionally relaxed for the mauve build per user feedback 2026-05-14.</div>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Real pet photos · seeded for the demo 5 (Pexels · pet-photos Supabase bucket)</div>
+      <div class="dsr-pet-strip">
+        <div class="dsr-pet-card">
+          <div class="avatar-ring honey" style="width:64px;height:64px;"><div class="avatar-photo gabby" style="width:58px;height:58px;"></div></div>
+          <div class="pet-name-label">Gabby</div>
+          <div class="pet-breed-label">Golden Retriever · honey</div>
+        </div>
+        <div class="dsr-pet-card">
+          <div class="avatar-ring sable" style="width:64px;height:64px;"><div class="avatar-photo bruno" style="width:58px;height:58px;"></div></div>
+          <div class="pet-name-label">Bruno</div>
+          <div class="pet-breed-label">Labrador · sable</div>
+        </div>
+        <div class="dsr-pet-card">
+          <div class="avatar-ring milk" style="width:64px;height:64px;"><div class="avatar-photo misha" style="width:58px;height:58px;"></div></div>
+          <div class="pet-name-label">Misha</div>
+          <div class="pet-breed-label">Persian cat · milk</div>
+        </div>
+        <div class="dsr-pet-card">
+          <div class="avatar-ring steel" style="width:64px;height:64px;"><div class="avatar-photo rocky" style="width:58px;height:58px;"></div></div>
+          <div class="pet-name-label">Rocky</div>
+          <div class="pet-breed-label">Mixed · steel</div>
+        </div>
+        <div class="dsr-pet-card">
+          <div class="avatar-ring honey" style="width:64px;height:64px;"><div class="avatar-photo coco" style="width:58px;height:58px;"></div></div>
+          <div class="pet-name-label">Coco</div>
+          <div class="pet-breed-label">Indie · honey</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dsr-row">
+      <div class="dsr-label">Fur kit · 10 tones · pet content ONLY</div>
+      <div style="padding:12px 16px;background:var(--bg-canvas);border:1.5px solid var(--ink);border-left:4px solid var(--ink);border-radius:8px;margin-bottom:14px;display:flex;align-items:center;gap:12px;">
+        <svg style="width:18px;height:18px;color:var(--ink);flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span style="font-size:13px;font-weight:600;color:var(--ink);">Pet content only · NEVER chrome (avatars, fur-match rings, Pet Page accents)</span>
+      </div>
+      <div class="dsr-swatches">
+        <div class="dsr-swatch" style="background:var(--milk);"><span class="dsr-swatch-name">Milk</span><span class="dsr-swatch-hex">#FFFCF2</span></div>
+        <div class="dsr-swatch" style="background:var(--vanilla);"><span class="dsr-swatch-name">Vanilla</span><span class="dsr-swatch-hex">#EAE0C8</span></div>
+        <div class="dsr-swatch" style="background:var(--honey);"><span class="dsr-swatch-name">Honey</span><span class="dsr-swatch-hex">#E5C896</span></div>
+        <div class="dsr-swatch" style="background:var(--peach);"><span class="dsr-swatch-name">Peach</span><span class="dsr-swatch-hex">#E8A87C</span></div>
+        <div class="dsr-swatch dark" style="background:var(--rust);"><span class="dsr-swatch-name">Rust</span><span class="dsr-swatch-hex">#B05E2E</span></div>
+        <div class="dsr-swatch" style="background:var(--mushroom);"><span class="dsr-swatch-name">Mushroom</span><span class="dsr-swatch-hex">#A8927A</span></div>
+        <div class="dsr-swatch" style="background:var(--smoke);"><span class="dsr-swatch-name">Smoke</span><span class="dsr-swatch-hex">#8B928A</span></div>
+        <div class="dsr-swatch dark" style="background:var(--steel);"><span class="dsr-swatch-name">Steel</span><span class="dsr-swatch-hex">#5F6961</span></div>
+        <div class="dsr-swatch dark" style="background:var(--bark);"><span class="dsr-swatch-name">Bark</span><span class="dsr-swatch-hex">#5C4A3A</span></div>
+        <div class="dsr-swatch dark" style="background:var(--sable);"><span class="dsr-swatch-name">Sable</span><span class="dsr-swatch-hex">#2B221A</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 01 · App shell + nav ============ -->
+  <section class="screen" id="screen-01">
+    <div class="screen-eyebrow">Locked 2026-05-14 · Sarvam-style chrome (v1.4 mauve-only)</div>
+    <div class="screen-title">01 · App shell + nav</div>
+    <div class="screen-sub">
+      Locked chrome anatomy. <span class="key">Light rail wash</span> with a <span class="key">filled mauve pill</span> for the active item, <span class="key">Settings anchored to the bottom</span> of the rail via flex-grow spacer, <span class="key">header zones unified in DM Sans</span> (clinic name + vet name share one typeface AND one size — text-sm semibold, locked 2026-05-15 after the 16px-on-clinic + 13px-on-vet difference read as a hierarchy break), <span class="key">canvas + 1px rule search bar</span> (replacing the earlier mauve-wash fill which read too loud against the rail-tint ground). Rail right-divider and header bottom-border are Ink/6.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Header</div><div class="val">64px · Ink/6 bottom border · 3-zone grid 1fr/auto/1fr · 28px h-padding · 28px gap</div></div>
+      <div class="row"><div class="label">Clinic zone</div><div class="val">left · 36px Boysenberry-filled circle logo + clinic name DM Sans semibold 14px Ink (text-md, identity tier — one notch above utility floor)</div></div>
+      <div class="row"><div class="label">Search bar</div><div class="val">centered · 480px wide · 40px tall · bg-canvas + 1px rule border · 12px radius (rounded-xl) · Lucide magnifier 16px Ink-faint · DM Sans 13px Ink-faint placeholder (text-base utility tier) · focus = berry border + berry-ring shadow</div></div>
+      <div class="row"><div class="label">Vet zone</div><div class="val">right · vet full name DM Sans semibold 14px Ink (text-md, matches clinic) + 34px avatar circle Canvas-2 fill with 1px rule border</div></div>
+      <div class="row"><div class="label">Chrome size tiering</div><div class="val">Three-tier discipline locked 2026-05-15: identity (clinic + vet) = 14px · utility (rail nav, search, awaiting headline) = 13px · metadata (row meta, count badges) = 12px. Clinic + vet match each other but sit one notch above utility so the workspace's "who" reads with quiet authority over its "what".</div></div>
+      <div class="row"><div class="label">Rail</div><div class="val">240px · light wash bg rgba(15,12,10,.025) · Ink/6 right border · 20px v-padding · 12px h-padding · flex-grow spacer between primary nav + Settings</div></div>
+      <div class="row"><div class="label">Section label</div><div class="val">"WORKSPACE" DM Sans medium 11px Ink-faint · 0.16em letter-spacing</div></div>
+      <div class="row"><div class="label">Rail items</div><div class="val">36px tall · 12px gap · 8px radius · DM Sans 13px medium Ink-soft (rest) / Boysenberry semibold (active) · 16px Lucide icons · unified to the chrome's 13px body language 2026-05-15 (was 17px which clashed)</div></div>
+      <div class="row"><div class="label">Active state</div><div class="val">mauve filled pill bg rgba(130,49,89,.12) + Boysenberry text · no left border</div></div>
+      <div class="row"><div class="label">Settings position</div><div class="val">Bottom of the viewport via `.chrome-rail-spacer { flex: 1 }` pushing Settings to the rail's end. The rail's parent row is viewport-bounded (main has internal scroll, body doesn't scroll), so the rail's bottom IS the viewport bottom — Settings is always visible at the bottom of the screen regardless of how much content the main is rendering. Reads top-down as "things you do" then "things you configure". Locked 2026-05-15.</div></div>
+      <div class="row"><div class="label">Behavior</div><div class="val">search context-aware: patient/parent records on Inbox · keyword on Broadcasts · hidden on Settings</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="main">
+          <div class="empty-route">
+            <div class="empty-eyebrow">Route container</div>
+            <div class="empty-text">Inbox, Broadcasts, or Settings content renders here based on which rail item is active. Each is a separate locked screen below.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 02 · Inbox (v2 rebuild 2026-05-15) ============ -->
+  <section class="screen" id="screen-02">
+    <div class="screen-eyebrow">Inbox v2 · Locked 2026-05-15 · Awaiting bar + reply queue CTA + wait duration + case chips</div>
+    <div class="screen-title">02 · Inbox · Awaiting list</div>
+    <div class="screen-sub">
+      Per the `claude design/` handoff, retuned 2026-05-15 for size + signal discipline. <span class="key">Awaiting bar</span> above the list ("N parents are waiting on you · Start reply queue") makes the queue mode discoverable; compressed to py-2.5 + text-sm semibold headline + size-sm CTA so it reads as a thin urgency strip, not a hero card. <span class="key">Row anatomy</span>: pet avatar (46px outer ring + 3px fur band + 40px real photo, fur rings explicitly kept) + who column (Spectral italic name + breed/sex/age + household + 2-line snippet) + meta (wait duration "1d 4h" with oldest in berry + case chip). The earlier unread-dot column was REMOVED — in the Awaiting tab every row is by definition awaiting, so the dot was redundant signal next to the wait duration on the right and the count above. <span class="key">Solid-berry pill Tabs</span> with nested count mini-pills (berry-deep on active, canvas-2 on inactive); container is canvas-2 wash. The earlier brief soft-pill experiment drifted from the mockup target — the filled-berry active pill is the locked anatomy. Surface architecture: rail-tint ground (visible body color composed over canvas), cards lift off in canvas, 1px rule hairlines, no shadows. Rail and main share one ground tone; only cards visibly lift.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Tabs</div><div class="val">Pill pair · canvas-2 container · rounded-full · active = solid var(--primary) fill + var(--bg-canvas) text + semibold + nested berry-deep (#6B1F44) count mini-pill with white text · inactive = transparent inside container, ink-soft text, canvas-2 count mini-pill with ink-soft text</div></div>
+      <div class="row"><div class="label">Awaiting bar</div><div class="val">bg-canvas card · 1px rule · 12px radius (rounded-xl) · 10px v-padding · "N parents are waiting on you" DM Sans semibold 13px (text-sm; Spectral is locked to pet-name hero contexts per docs/brand-system.md) · "Start reply queue" Button size="sm" (h-9)</div></div>
+      <div class="row"><div class="label">List card</div><div class="val">bg-canvas · 1px rule · 16px radius · overflow-hidden so rows share corners</div></div>
+      <div class="row"><div class="label">Row</div><div class="val">grid 46/1fr/auto · 14px gap · 20px h-padding · 16px v-padding · 1px rule bottom divider · hover canvas-2</div></div>
+      <div class="row"><div class="label">Avatar</div><div class="val">46px outer fur-tone ring + 3px band + 40px real Pexels photo · keeps Pawkit brand discipline despite handoff's "neutral monogram" rule</div></div>
+      <div class="row"><div class="label">Who column</div><div class="val">pet name Spectral italic 17px + breed/sex/age DM Sans 12.5px ink-50 · household ink-70 · 2-line snippet (1-line on Replied)</div></div>
+      <div class="row"><div class="label">Preview weight</div><div class="val">UNIFORM text-ink font-medium 13.5px (active) · text-ink-70 (replied) · no per-row read/unread bifurcation — the earlier conditional bolded `read_at IS NULL` rows and demoted others, which leaked demo-test artifacts as visual chop. The wait-duration + awaiting-count already carry urgency.</div></div>
+      <div class="row"><div class="label">Wait duration</div><div class="val">"1d 4h" DM Sans 12px tabular ink-70 · oldest awaiting row renders this in berry</div></div>
+      <div class="row"><div class="label">Case chip</div><div class="val">Badge "secondary" · pulls from pets' latest visit chief_complaint · e.g. "Tick fever recheck", "CKD quarterly recheck", "Right hind lameness", "Cat fight wound" · 55 seeded demo pets after 2026-05-15 inbox-expansion seed</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="main" style="padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; background: transparent;">
+
+          <!-- Tabs: solid-berry filled active pill + nested berry-deep count
+               mini-pill (locked 2026-05-15). Container is canvas-2 wash with
+               rounded-full; active pill is solid var(--primary) with white
+               text; inactive sits transparent inside the container with
+               ink-soft text. Count badges are mini-pills inside each tab —
+               berry-deep (#6B1F44) on the active, canvas-2 on the inactive.
+               Both pills share display: inline-flex + align-items: center +
+               line-height: 1 so the labels align. -->
+          <div style="display: inline-flex; align-items: center; gap: 0; align-self: flex-start; background: var(--canvas-2); border-radius: 9999px; padding: 4px;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 600; line-height: 1; color: var(--bg-canvas); background: var(--primary);">
+              Awaiting reply
+              <span style="font-size: 11px; font-weight: 600; line-height: 1; padding: 2px 7px; border-radius: 9999px; background: #6B1F44; color: var(--bg-canvas); font-variant-numeric: tabular-nums;">53</span>
+            </div>
+            <div style="display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500; line-height: 1; color: var(--ink-soft);">Replied</div>
+          </div>
+
+          <!-- Awaiting bar (compressed 2026-05-15: py-2.5 + text-sm semibold
+               headline + size-sm CTA + rounded-xl, replacing the earlier
+               taller 16px/22px padding + 20px-bold headline + h-40 button
+               which over-emphasised an announcement strip). Container reads
+               as a thin urgency rail, not a hero card. -->
+          <div style="background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <h2 style="font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em;">53 parents are waiting on you</h2>
+            <button style="background: var(--primary); color: var(--bg-canvas); border: none; border-radius: 8px; height: 36px; padding: 0 14px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif;">
+              Start reply queue
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Awaiting list card -->
+          <div style="background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 16px; overflow: hidden;">
+
+            <!-- Row · Rocky (oldest awaiting · wait duration in berry) -->
+            <div style="display: grid; grid-template-columns: 46px 1fr auto; gap: 14px; align-items: start; padding: 16px 20px; border-bottom: 1px solid var(--rule);">
+<div class="avatar-ring steel"><div class="avatar-photo rocky"></div></div>
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                  <span style="font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 17px; color: var(--ink); line-height: 1.15;">Rocky</span>
+                  <span style="font-size: 12.5px; color: var(--ink-50); font-weight: 500;">Mixed · M · 4y</span>
+                </div>
+                <span style="font-size: 12.5px; color: var(--ink-70); font-weight: 500;">Joshi household</span>
+                <p style="font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.45; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 640px;">He's been off his food since Saturday morning, just lying around mostly. Slept through lunch yesterday too and didn't want his evening walk either. Should we be worried?</p>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 4px;">
+                <span style="font-size: 12px; font-weight: 600; color: var(--primary); font-variant-numeric: tabular-nums;">3d 4h</span>
+                <span style="background: var(--canvas-2); border: 1px solid var(--rule); border-radius: 9999px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--ink-70); white-space: nowrap;">Wellness check</span>
+              </div>
+            </div>
+
+            <!-- Row · Coco -->
+            <div style="display: grid; grid-template-columns: 46px 1fr auto; gap: 14px; align-items: start; padding: 16px 20px; border-bottom: 1px solid var(--rule);">
+<div class="avatar-ring honey"><div class="avatar-photo coco"></div></div>
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                  <span style="font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 17px; color: var(--ink); line-height: 1.15;">Coco</span>
+                  <span style="font-size: 12.5px; color: var(--ink-50); font-weight: 500;">Indie · F · 3y</span>
+                </div>
+                <span style="font-size: 12.5px; color: var(--ink-70); font-weight: 500;">Sharma household</span>
+                <p style="font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.45; margin-top: 2px;">Video</p>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 4px;">
+                <span style="font-size: 12px; font-weight: 600; color: var(--ink-70); font-variant-numeric: tabular-nums;">2d</span>
+                <span style="background: var(--canvas-2); border: 1px solid var(--rule); border-radius: 9999px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--ink-70); white-space: nowrap;">Limping evaluation</span>
+              </div>
+            </div>
+
+            <!-- Row · Misha -->
+            <div style="display: grid; grid-template-columns: 46px 1fr auto; gap: 14px; align-items: start; padding: 16px 20px; border-bottom: 1px solid var(--rule);">
+<div class="avatar-ring milk"><div class="avatar-photo misha"></div></div>
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                  <span style="font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 17px; color: var(--ink); line-height: 1.15;">Misha</span>
+                  <span style="font-size: 12.5px; color: var(--ink-50); font-weight: 500;">Persian · F · 6y</span>
+                </div>
+                <span style="font-size: 12.5px; color: var(--ink-70); font-weight: 500;">Khan household</span>
+                <p style="font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.45; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 640px;">She finished the antibiotics yesterday. Anything else we should watch for, or are we done with this round?</p>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 4px;">
+                <span style="font-size: 12px; font-weight: 600; color: var(--ink-70); font-variant-numeric: tabular-nums;">1d</span>
+                <span style="background: var(--canvas-2); border: 1px solid var(--rule); border-radius: 9999px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--ink-70); white-space: nowrap;">UTI recheck</span>
+              </div>
+            </div>
+
+            <!-- Row · Bruno -->
+            <div style="display: grid; grid-template-columns: 46px 1fr auto; gap: 14px; align-items: start; padding: 16px 20px; border-bottom: 1px solid var(--rule);">
+<div class="avatar-ring sable"><div class="avatar-photo bruno"></div></div>
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                  <span style="font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 17px; color: var(--ink); line-height: 1.15;">Bruno</span>
+                  <span style="font-size: 12.5px; color: var(--ink-50); font-weight: 500;">Labrador · M · 2y</span>
+                </div>
+                <span style="font-size: 12.5px; color: var(--ink-70); font-weight: 500;">Patil household</span>
+                <p style="font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.45; margin-top: 2px;">Photo</p>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 4px;">
+                <span style="font-size: 12px; font-weight: 600; color: var(--ink-70); font-variant-numeric: tabular-nums;">5h</span>
+                <span style="background: var(--canvas-2); border: 1px solid var(--rule); border-radius: 9999px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--ink-70); white-space: nowrap;">Skin allergy</span>
+              </div>
+            </div>
+
+            <!-- Row · Gabby (last in list) -->
+            <div style="display: grid; grid-template-columns: 46px 1fr auto; gap: 14px; align-items: start; padding: 16px 20px;">
+<div class="avatar-ring honey"><div class="avatar-photo gabby"></div></div>
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+                <div style="display: flex; align-items: baseline; gap: 6px;">
+                  <span style="font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 17px; color: var(--ink); line-height: 1.15;">Gabby</span>
+                  <span style="font-size: 12.5px; color: var(--ink-50); font-weight: 500;">Golden Retriever · M · 4y</span>
+                </div>
+                <span style="font-size: 12.5px; color: var(--ink-70); font-weight: 500;">Fernandes household</span>
+                <p style="font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.45; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 640px;">He's been scratching at his ear since this morning, should I be worried? It looks a bit red on the inside but he isn't crying out.</p>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 4px;">
+                <span style="font-size: 12px; font-weight: 600; color: var(--ink-70); font-variant-numeric: tabular-nums;">2h</span>
+                <span style="background: var(--canvas-2); border: 1px solid var(--rule); border-radius: 9999px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--ink-70); white-space: nowrap;">Ear infection check</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 03 · Thread detail · Focus card (v2 rebuild 2026-05-15) ============ -->
+  <section class="screen" id="screen-03">
+    <div class="screen-eyebrow">Inbox v2 · Locked 2026-05-15 · Focus card · embedded SOAP context strip · pet panel dropped</div>
+    <div class="screen-title">03 · Inbox thread detail · Single thread (focus card)</div>
+    <div class="screen-sub">
+      Gabby's thread, rebuilt per `claude design/`. <span class="key">The 468px right pet panel is gone</span> — the focus card now fills the content area and the pet's clinical context lives inline as a <span class="key">collapsible SOAP context strip</span> between the pet header and the conversation. App bar shows just "← Back to list" (single-thread mode — no queue progress; `/inbox/queue` adds the "N of M" bar for focus mode). Composer gains an Attach button (image + video to Supabase Storage). Vet bubbles berry, parent bubbles canvas-2 with 1px rule. Surface: rail-tint ground, cards lift off in canvas, no shadows.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">App bar</div><div class="val">"← Back to list" Button ghost · single-thread mode shows just this · /inbox/queue adds "N of M" + 96×6 berry progress bar to the right · shrink-0 (never gives up height)</div></div>
+      <div class="row"><div class="label">Focus card</div><div class="val">bg-canvas · 1px rule · 16px radius · h-full inside flex-1 min-h-0 slot · card fills the viewport vertically so the composer can pin to its foot · NO right pet panel</div></div>
+      <div class="row"><div class="label">Pet header</div><div class="val">grid auto/1fr/auto · 20px gap · 22px h-padding · 72×72 fur-tone ring + real Pexels photo · Spectral italic 32px pet name · bio line DM Sans 13.5px ink-70 · Open-profile icon Button right · shrink-0</div></div>
+      <div class="row"><div class="label">SOAP context strip</div><div class="val">collapsible · collapsed = LAST VISIT label + date + reason + diagnosis + Invoices ↗ + All visits ↗ + SOAP ▾ pill · expanded = embedded SOAP card with S/O/A/P grid + tag badges + "Open full clinical history" link</div></div>
+      <div class="row"><div class="label">Thread bubbles</div><div class="val">parent bubbles canvas-2 + 1px rule + 16px radius + 4px bottom-left tail · vet bubbles bg-primary text-primary-foreground + 4px bottom-right tail · max-w 64% · single scroll region (flex-1 min-h-0 overflow-y-auto) so taller threads scroll inside the card instead of pushing the composer below the fold</div></div>
+      <div class="row"><div class="label">Composer</div><div class="val">border-top 1px rule · pinned to card foot at every viewport height (shrink-0) · language toggle row + Reply Textarea (8px radius, 1px rule) + Attach Button (Paperclip · image/* + video/*) + Voice Button + Send</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+
+          <!-- App bar — single-thread mode: just "Back to list" (no queue progress) -->
+          <div style="padding: 16px 28px; display: flex; align-items: center;">
+            <a href="#screen-02" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 8px; color: var(--ink-70); font-size: 13px; font-weight: 600; text-decoration: none;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              Back to list
+            </a>
+          </div>
+
+          <!-- Focus card -->
+          <div style="margin: 0 28px 28px; background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;">
+
+            <!-- Pet header -->
+            <header style="display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center; padding: 22px 28px 18px; border-bottom: 1px solid var(--rule);">
+              <div class="avatar-ring honey" style="width: 72px; height: 72px;"><div class="avatar-photo gabby" style="width: 64px; height: 64px;"></div></div>
+              <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+                <h1 style="font-family: 'Spectral', Georgia, serif; font-style: italic; font-weight: 600; font-size: 32px; color: var(--ink); line-height: 1; letter-spacing: -0.005em;">Gabby</h1>
+                <p style="font-size: 13.5px; color: var(--ink-70); font-weight: 500;">
+                  Golden Retriever
+                  <span style="color: var(--rule); margin: 0 8px;">·</span>
+                  M
+                  <span style="color: var(--rule); margin: 0 8px;">·</span>
+                  4 years
+                  <span style="color: var(--rule); margin: 0 8px;">·</span>
+                  <span style="font-variant-numeric: tabular-nums;">28.0 kg</span>
+                  <span style="color: var(--rule); margin: 0 8px;">·</span>
+                  <strong style="color: var(--ink); font-weight: 600;">Fernandes household</strong>
+                </p>
+              </div>
+              <button style="width: 36px; height: 36px; background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--ink-70); cursor: pointer;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+              </button>
+            </header>
+
+            <!-- SOAP context strip (rendered EXPANDED here for the mockup; in production this is collapsed by default) -->
+            <div style="background: var(--bg-canvas); border-bottom: 1px solid var(--rule);">
+              <!-- Collapsed row (clickable to toggle) -->
+              <div style="display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 14px; align-items: center; padding: 12px 28px;">
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-50);">Last visit</span>
+                <div style="display: flex; align-items: baseline; gap: 8px; min-width: 0;">
+                  <span style="font-size: 13px; color: var(--ink-50); font-variant-numeric: tabular-nums; white-space: nowrap;">6 May 2026</span>
+                  <span style="font-size: 13.5px; color: var(--ink); font-weight: 600;">Ear infection check (right)</span>
+                  <span style="font-size: 13.5px; color: var(--ink-70);">· Bacterial otitis externa</span>
+                </div>
+                <a href="#" style="font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; padding: 4px 8px;">Invoices ↗</a>
+                <a href="#screen-05" style="font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; padding: 4px 8px;">All visits ↗</a>
+                <button style="background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 9999px; padding: 5px 11px; font-size: 12px; font-weight: 600; color: var(--ink-70); display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                  SOAP <span>▴</span>
+                </button>
+              </div>
+
+              <!-- Expanded SOAP card -->
+              <div style="border-top: 1px dashed var(--rule); padding: 4px 28px 20px;">
+                <div style="background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 22px; margin-top: 16px;">
+                  <header style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--rule);">
+                    <div style="display: flex; align-items: baseline; gap: 12px;">
+                      <h3 style="font-size: 15px; font-weight: 600; color: var(--ink);">Ear infection check (right)</h3>
+                      <span style="font-size: 12.5px; color: var(--ink-50); font-variant-numeric: tabular-nums;">6 May 2026 · Dr Sagar Bhongale</span>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                      <span style="background: var(--canvas-2); border: 1px solid var(--rule); border-radius: 9999px; padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--ink-70); letter-spacing: 0.04em; text-transform: uppercase;">Sick visit</span>
+                      <span style="background: var(--canvas-2); border: 1px solid var(--rule); border-radius: 9999px; padding: 3px 10px; font-size: 11px; font-weight: 600; color: var(--ink-70); letter-spacing: 0.04em; text-transform: uppercase;">Otitis</span>
+                    </div>
+                  </header>
+                  <dl style="display: grid; grid-template-columns: 110px 1fr; gap: 10px 22px;">
+                    <dt style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50);">Subjective</dt>
+                    <dd style="font-size: 14px; color: var(--ink); line-height: 1.55;">Parent reports right ear shaking since yesterday morning. Increased scratching at the same ear. No appetite or energy change. Last ear infection was Aug 2025 on the left side.</dd>
+                    <dt style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50);">Objective</dt>
+                    <dd style="font-size: 14px; color: var(--ink); line-height: 1.55;">Right ear canal inflamed with mild dark discharge. Otoscope: erythema, no foreign body. Cytology: cocci dominant. Weight 31.2 kg (steady from Apr 22).</dd>
+                    <dt style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50);">Assessment</dt>
+                    <dd style="font-size: 14px; color: var(--ink); line-height: 1.55;">Bacterial otitis externa, right ear. Likely seasonal allergy-driven flare given chronic atopy.</dd>
+                    <dt style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50);">Plan</dt>
+                    <dd style="font-size: 14px; color: var(--ink); line-height: 1.55;">Cefadroxil 250mg PO BID × 7 days. Daily ear-cleaner flush. Recheck in 10 days. Parent to message if scratching escalates or new discharge appears.</dd>
+                  </dl>
+                  <footer style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule-soft);">
+                    <a href="#screen-05" style="font-size: 13px; font-weight: 600; color: var(--primary); text-decoration: none;">Open full clinical history (8 visits) ↗</a>
+                  </footer>
+                </div>
+              </div>
+            </div>
+
+            <!-- Thread bubbles -->
+            <div style="background: var(--bg-canvas); padding: 22px 28px 18px; display: flex; flex-direction: column; gap: 12px;">
+
+              <!-- Vet bubble -->
+              <div style="display: flex; justify-content: flex-end;">
+                <div style="max-width: 64%; display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
+                  <div style="background: var(--primary); color: var(--bg-canvas); padding: 12px 16px; border-radius: 16px; border-bottom-right-radius: 4px; font-size: 14.5px; line-height: 1.5;">Hi Mrs Fernandes. Just checking in on Gabby's ear. The cefadroxil should be helping by now. Please let me know if anything looks off, or if you notice him scratching more.</div>
+                  <div style="font-size: 11.5px; color: var(--ink-50); font-variant-numeric: tabular-nums; padding: 0 6px;">Dr Sagar · May 6, 11:42</div>
+                </div>
+              </div>
+
+              <!-- Parent bubble -->
+              <div style="display: flex; justify-content: flex-start;">
+                <div style="max-width: 64%; display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <div style="background: var(--canvas-2); border: 1px solid var(--rule); color: var(--ink); padding: 12px 16px; border-radius: 16px; border-bottom-left-radius: 4px; font-size: 14.5px; line-height: 1.5;">Thanks Doctor. He seems okay so far. We're giving the medicine on time.</div>
+                  <div style="font-size: 11.5px; color: var(--ink-50); font-variant-numeric: tabular-nums; padding: 0 6px;">May 7, 18:30</div>
+                </div>
+              </div>
+
+              <!-- Vet bubble -->
+              <div style="display: flex; justify-content: flex-end;">
+                <div style="max-width: 64%; display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
+                  <div style="background: var(--primary); color: var(--bg-canvas); padding: 12px 16px; border-radius: 16px; border-bottom-right-radius: 4px; font-size: 14.5px; line-height: 1.5;">Good. Watch for head-shaking or any new discharge.</div>
+                  <div style="font-size: 11.5px; color: var(--ink-50); font-variant-numeric: tabular-nums; padding: 0 6px;">Dr Sagar · May 7, 19:05</div>
+                </div>
+              </div>
+
+              <!-- Parent bubble -->
+              <div style="display: flex; justify-content: flex-start;">
+                <div style="max-width: 64%; display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
+                  <div style="background: var(--canvas-2); border: 1px solid var(--rule); color: var(--ink); padding: 12px 16px; border-radius: 16px; border-bottom-left-radius: 4px; font-size: 14.5px; line-height: 1.5;">He's been scratching at his ear since this morning, should I be worried? It looks a bit red on the inside but he isn't crying out.</div>
+                  <div style="font-size: 11.5px; color: var(--ink-50); font-variant-numeric: tabular-nums; padding: 0 6px;">Today, 09:20</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Composer -->
+            <div style="border-top: 1px solid var(--rule); background: var(--bg-canvas); padding: 14px 28px 18px; display: flex; flex-direction: column; gap: 10px;">
+
+              <!-- Language toggle row -->
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--ink-50);">
+                <span style="font-weight: 500;">This parent writes in English. ·</span>
+                <span style="font-weight: 500;">Reply in:</span>
+                <div style="display: inline-flex; background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 9999px; padding: 2px;">
+                  <div style="background: var(--primary); color: var(--bg-canvas); padding: 4px 12px; border-radius: 9999px; font-size: 11.5px; font-weight: 600;">English</div>
+                  <div style="padding: 4px 12px; border-radius: 9999px; font-size: 11.5px; font-weight: 600; color: var(--ink-70); font-family: 'DM Sans', sans-serif;">मराठी</div>
+                </div>
+              </div>
+
+              <!-- Input field -->
+              <div style="background: transparent; border: 1px solid var(--rule); border-radius: 12px; padding: 14px 16px; min-height: 72px; font-size: 14.5px; color: var(--ink-50); font-style: italic;">Reply to Anjali...</div>
+
+              <!-- Action row -->
+              <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                <button style="background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 8px; height: 36px; padding: 0 14px; font-size: 13px; font-weight: 600; color: var(--ink-70); display: flex; align-items: center; gap: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 17.99 8.83l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                  Attach
+                </button>
+                <button style="background: var(--bg-canvas); border: 1px solid var(--rule); border-radius: 8px; height: 36px; width: 36px; display: flex; align-items: center; justify-content: center; color: var(--ink-70); cursor: pointer;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+                </button>
+                <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                  <button style="background: var(--primary); color: var(--bg-canvas); border: none; border-radius: 8px; height: 40px; padding: 0 24px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif;">
+                    Send
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 04 · Invoice ============ -->
+  <section class="screen" id="screen-04">
+    <div class="screen-eyebrow">Locked 2026-05-14 · Stripe-channeled view-only invoice document</div>
+    <div class="screen-title">04 · Itemised invoice</div>
+    <div class="screen-sub">
+      Gabby's May 6 ear-infection-check invoice (₹3,150 across 7 line items in 3 categories). The invoice document stays deliberately restrained — no Paid pill, no Download PDF in v0. <span class="key">DM Sans throughout</span>, <span class="key">row dividers Ink-faint #C9C5C0</span>, <span class="key">page background</span> Canvas #F8F7F5. The letterhead top-bar + totals separator stay Ink for invoice formality (the brand doesn't loud-up here — it's a financial document).
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Stage</div><div class="val">800px max-width centered · 24px v-padding top · 48px v-padding bottom</div></div>
+      <div class="row"><div class="label">Letterhead</div><div class="val">flex space-between · 2px Ink bottom border · AMS name DM Sans bold 18px + address line + invoice number DM Sans bold 14px tabular + date</div></div>
+      <div class="row"><div class="label">Category header</div><div class="val">DM Sans 11px bold 0.14em uppercase Ink-faint · 1px Ink-faint bottom hairline</div></div>
+      <div class="row"><div class="label">Line row</div><div class="val">grid 1fr/100px · name DM Sans 14px medium Ink + optional tooltip below DM Sans 12px Ink-soft · amount DM Sans 14px semibold tabular right-aligned</div></div>
+      <div class="row"><div class="label">Total block</div><div class="val">flex-end · 2px Ink top border · 280px width · "Total" + ₹3,150 in DM Sans bold 26px tabular · italic "GST included" caption Ink-faint</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s4-main">
+          <div class="s4-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to Gabby's invoices
+          </div>
+          <div class="s4-stage">
+            <div class="s4-letterhead">
+              <div>
+                <div class="s4-ams-name">Animal Medical Services</div>
+                <div class="s4-ams-meta">Karve Road, Kothrud · Pune 411038, Maharashtra</div>
+                <div class="s4-ams-meta">GSTIN: 27ABCDE1234F1Z2</div>
+              </div>
+              <div class="s4-right">
+                <div class="s4-num">Invoice INV-2026-0418</div>
+                <div class="s4-date">May 6, 2026</div>
+                <div class="s4-date">Gabby · Fernandes household</div>
+              </div>
+            </div>
+            <div class="s4-cat-section">
+              <div class="s4-cat-header">Examination</div>
+              <div class="s4-line-row">
+                <div>
+                  <div class="s4-line-name">Consultation</div>
+                  <div class="s4-line-tip">Dr Sagar's time with Gabby.</div>
+                </div>
+                <div class="s4-line-amt">₹500</div>
+              </div>
+              <div class="s4-line-row">
+                <div>
+                  <div class="s4-line-name">Otoscope examination</div>
+                  <div class="s4-line-tip">Visual examination of Gabby's ear canal.</div>
+                </div>
+                <div class="s4-line-amt">₹200</div>
+              </div>
+              <div class="s4-line-row">
+                <div>
+                  <div class="s4-line-name">Ear cytology</div>
+                  <div class="s4-line-tip">Microscope check for bacteria, yeast, mites.</div>
+                </div>
+                <div class="s4-line-amt">₹350</div>
+              </div>
+            </div>
+            <div class="s4-cat-section">
+              <div class="s4-cat-header">Medication</div>
+              <div class="s4-line-row simple">
+                <div class="s4-line-name">Cefadroxil 250mg · 14 tablets</div>
+                <div class="s4-line-amt">₹420</div>
+              </div>
+              <div class="s4-line-row simple">
+                <div class="s4-line-name">Ear cleaner · 100ml</div>
+                <div class="s4-line-amt">₹280</div>
+              </div>
+              <div class="s4-line-row simple">
+                <div class="s4-line-name">Anti-inflammatory drops · 10ml</div>
+                <div class="s4-line-amt">₹450</div>
+              </div>
+            </div>
+            <div class="s4-cat-section">
+              <div class="s4-cat-header">Procedure</div>
+              <div class="s4-line-row">
+                <div>
+                  <div class="s4-line-name">Ear flush + debridement</div>
+                  <div class="s4-line-tip">Clearing exudate from Gabby's right ear under sedation.</div>
+                </div>
+                <div class="s4-line-amt">₹950</div>
+              </div>
+            </div>
+            <div class="s4-totals">
+              <div class="s4-total-row">
+                <span class="lbl">Total</span>
+                <span class="val">₹3,150</span>
+              </div>
+              <div class="s4-gst-note">GST included</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 05 · Clinical history full screen ============ -->
+  <section class="screen" id="screen-05">
+    <div class="screen-eyebrow">Locked 2026-05-14 · Linear-channeled SOAP cards · soft shadow + 12px radius</div>
+    <div class="screen-title">05 · Clinical history full screen</div>
+    <div class="screen-sub">
+      Gabby's clinical history rendered as SOAP cards. Cards use the <span class="key">1px Ink/8 + 12px radius + soft drop shadow</span> stack, <span class="key">vellum filter is off</span> (paper-grain doesn't read on the cool canvas), <span class="key">visit-type pills</span> render as Badge "secondary" (rounded-full · light Ink/6 wash · 0.04em letterspacing). DM Sans throughout.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Stage</div><div class="val">800px max · 24px v-padding top · 64px v-padding bottom</div></div>
+      <div class="row"><div class="label">Page header</div><div class="val">DM Sans semibold 17px page title (text-lg) · DM Sans 13px Ink-soft signalment line · 1px Ink-faint bottom border</div></div>
+      <div class="row"><div class="label">SOAP card</div><div class="val">1px Ink/8 border + 12px radius + soft drop shadow · 20px h-padding · 24px v-padding · 16px bottom margin between cards</div></div>
+      <div class="row"><div class="label">Card header</div><div class="val">flex with wrap · date DM Sans 13px Ink-soft semibold tabular + reason DM Sans 15px Ink semibold + pill row + vet byline line below</div></div>
+      <div class="row"><div class="label">SOAP grid</div><div class="val">92px label / 1fr body · DM Sans 11px bold uppercase 0.14em label Ink-faint · DM Sans 14px Ink body</div></div>
+      <div class="row"><div class="label">Pills</div><div class="val">Badge secondary · rounded-full · 11px DM Sans medium Ink-soft on rgba(15,12,10,0.06) wash · 0.04em letter-spacing uppercase</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search pets, parents, phone numbers</div>
+        </div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s5-main">
+          <div class="s5-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to thread with Fernandes household
+          </div>
+          <div class="s5-stage">
+            <div class="s5-header">
+              <div class="s5-title">Gabby · Clinical history</div>
+              <div class="s5-sub">Golden Retriever · 4 years M · Fernandes household · 8 visits</div>
+            </div>
+
+            <div class="s5-card">
+              <div class="s5-card-header">
+                <span class="s5-card-date">6 May 2026</span>
+                <span class="s5-card-reason">Ear infection check</span>
+                <div class="s5-pills">
+                  <span class="s5-pill">Sick visit</span>
+                  <span class="s5-pill">Otitis</span>
+                </div>
+                <div class="s5-card-vet">Dr Sagar Bhongale · edited 12m ago</div>
+              </div>
+              <div class="s5-soap">
+                <div class="s5-soap-label">Subjective</div>
+                <div class="s5-soap-body">Parent reports right ear shaking since yesterday morning. Increased scratching at the same ear. No appetite or energy change. Last ear infection was Aug 2025 on the left side.</div>
+              </div>
+              <div class="s5-soap">
+                <div class="s5-soap-label">Objective</div>
+                <div class="s5-soap-body">Right ear canal inflamed with mild dark discharge. Otoscope: erythema, no foreign body. Cytology: cocci dominant. Weight 31.2 kg (steady from Apr 22).</div>
+              </div>
+              <div class="s5-soap">
+                <div class="s5-soap-label">Assessment</div>
+                <div class="s5-soap-body">Bacterial otitis externa, right ear. Likely seasonal allergy-driven flare given chronic atopy.</div>
+              </div>
+              <div class="s5-soap">
+                <div class="s5-soap-label">Plan</div>
+                <div class="s5-soap-body">Cefadroxil 250mg PO BID × 7 days. Daily ear-cleaner flush. Recheck in 10 days. Parent to message if scratching escalates or new discharge appears.</div>
+              </div>
+            </div>
+
+            <div class="s5-card">
+              <div class="s5-card-header">
+                <span class="s5-card-date">22 Apr 2026</span>
+                <span class="s5-card-reason">Annual wellness + DHPP booster</span>
+                <div class="s5-pills">
+                  <span class="s5-pill">Wellness</span>
+                  <span class="s5-pill">Vaccination</span>
+                </div>
+                <div class="s5-card-vet">Dr Sagar Bhongale</div>
+              </div>
+              <div class="s5-soap">
+                <div class="s5-soap-label">Subjective</div>
+                <div class="s5-soap-body">No concerns from parent. Eating well, normal energy, normal stool. Walks 2× daily.</div>
+              </div>
+              <div class="s5-soap">
+                <div class="s5-soap-label">Objective</div>
+                <div class="s5-soap-body">Weight 31.2 kg (BCS 5/9). Heart and lungs clear. Mouth: mild tartar lower molars. Coat in good condition, no skin lesions.</div>
+              </div>
+              <div class="s5-soap">
+                <div class="s5-soap-label">Assessment</div>
+                <div class="s5-soap-body">Healthy adult Golden Retriever. Atopy under control off-season.</div>
+              </div>
+              <div class="s5-soap">
+                <div class="s5-soap-label">Plan</div>
+                <div class="s5-soap-body">DHPP annual booster administered today. Next due Apr 2027. Recommend dental scale within 6 months. Continue current diet.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 06 · Broadcast composer (compose step) ============ -->
+  <section class="screen" id="screen-06">
+    <div class="screen-eyebrow">Locked 2026-05-14 · Universal voice mic only · ToggleGroup pills primary-filled · soft 8px inputs</div>
+    <div class="screen-title">06 · Broadcast composer (Compose step)</div>
+    <div class="screen-sub">
+      3-step wizard nav (Compose · Audience · Send) with the active step in Boysenberry on both numeral pip + underline + text. Bilingual "Composing in:" toggle uses the <span class="key">ToggleGroup primary fill</span> on the active language. Auto-fill Marathi/English helper renders as <span class="key">Button variant="outline" size="sm"</span>. Field Input + Textarea use shadcn primitives (8px radius, Ink/8 border). Warning + escalation blocks keep the locked NHS Care Card red border treatment. The <span class="key">universal voice mic is the only voice entry point</span> — one dictation gets sectioned via Sarvam Chat into all 5 active-language fields. Per-field mics were removed 2026-05-14 along with the v1.3 theme.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Step nav</div><div class="val">48px tall · 32px h-padding · 22px h-padding per step · 2px underline + Boysenberry text on active · 20px num pip Boysenberry-filled on active / Ink-soft-filled on done</div></div>
+      <div class="row"><div class="label">Cover slot</div><div class="val">16:5 aspect · 1px dashed Ink/8 + 12px radius · "Drag in a cover photo, or skip" Ink-soft 14px</div></div>
+      <div class="row"><div class="label">URL slug bar</div><div class="val">Ink/4 wash · 8px radius · "pawkit.app/broadcasts/" prefix + monospace slug input + "Live once you send" caption Ink-faint</div></div>
+      <div class="row"><div class="label">Lang toggle</div><div class="val">ToggleGroup default tone (primary fill) · "English" + "मराठी" · auto-fill button right-aligned outline variant</div></div>
+      <div class="row"><div class="label">Universal mic</div><div class="val">Boysenberry-filled circular Button · "Dictate the whole broadcast" label · idle → recording → transcribing → sectioning → done · Re-record link below</div></div>
+      <div class="row"><div class="label">Fields</div><div class="val">Title Input 17px semibold · Summary/Body/Warning/Escalation Textarea 14px line-height-1.6 · all 8px radius + Ink/8 border · no per-field mics</div></div>
+      <div class="row"><div class="label">Warning + escalation</div><div class="val">1.5px #B33A3A border + rgba(179,58,58,.06) wash · 12px radius · red-dot label · Lucide AlertTriangle + Phone icons</div></div>
+      <div class="row"><div class="label">Send CTA</div><div class="val">"Next: Audience →" Button default · h-10 px-6 text-sm · 8px radius · Boysenberry fill · top divider 1px Ink-faint</div></div>
+      <div class="row"><div class="label">Phone preview</div><div class="val">290px sticky · vet byline + title + summary + body + warning + escalation + Boysenberry Share CTA · scrollbar hidden cross-browser</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s6-main">
+          <div class="s6-step-nav">
+            <div class="s6-step active"><span class="s6-step-num">1</span> Compose</div>
+            <div class="s6-step"><span class="s6-step-num">2</span> Audience</div>
+            <div class="s6-step"><span class="s6-step-num">3</span> Send</div>
+          </div>
+          <div class="s6-split">
+            <div class="s6-editor">
+              <div class="s6-cover">Drag in a cover photo, or skip</div>
+              <div class="s6-url-bar">
+                <span>pawkit.app/broadcasts/</span>
+                <span class="s6-url-text">monsoon-ear-care</span>
+                <span class="s6-url-meta">Live once you send</span>
+              </div>
+              <div class="s6-lang-row">
+                <span class="s6-lang-label">Composing in:</span>
+                <div class="s6-toggle-group">
+                  <div class="s6-toggle-item active">English</div>
+                  <div class="s6-toggle-item">मराठी</div>
+                </div>
+                <button class="s6-autofill-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                  Auto-fill मराठी
+                </button>
+              </div>
+
+              <!-- Universal voice mic — the only voice entry point. Per-field mics
+                   were removed 2026-05-14 along with the v1.3 theme. -->
+              <div class="s6-universal-mic">
+                <button class="s6-universal-mic-btn" aria-label="Start dictating the whole broadcast">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+                </button>
+                <div>
+                  <div class="s6-universal-mic-label">Dictate the whole broadcast</div>
+                  <div class="s6-universal-mic-help">Sarvam Chat sections your dictation into Title / Summary / Body / Warning / Escalation. Edit any field after to fine-tune.</div>
+                </div>
+              </div>
+
+              <div class="s6-field">
+                <div class="s6-field-label">Title</div>
+                <div class="s6-input title-input">Monsoon ear-infection watch for dogs</div>
+              </div>
+
+              <div class="s6-field">
+                <div class="s6-field-label">Summary</div>
+                <div class="s6-bullets">
+                  <div class="s6-bullet-row"><span class="s6-bullet-dot">·</span><span>Pune monsoon is here; humid weather flares ear infections in dogs.</span></div>
+                  <div class="s6-bullet-row"><span class="s6-bullet-dot">·</span><span>Check ears weekly, dry them after walks, and watch for head-shaking.</span></div>
+                  <div class="s6-bullet-row"><span class="s6-bullet-dot">·</span><span>Floppy-eared breeds (Goldens, Spaniels, Labs) are at higher risk.</span></div>
+                </div>
+              </div>
+
+              <div class="s6-field">
+                <div class="s6-field-label">Body</div>
+                <div class="s6-textarea">As Pune's monsoon settles in, we see a sharp rise in canine ear infections. Humid air + trapped moisture in the ear canal is a breeding ground for bacteria and yeast. The good news: most flares are easy to catch early if you check the ears weekly and dry them after walks or baths. Use a cotton ball (not Q-tips) to gently wipe the outer ear. If you notice redness, dark discharge, smell, or head-shaking, bring them in — we have a 7-day recheck protocol that works well.</div>
+              </div>
+
+              <div class="s6-field">
+                <div class="s6-field-label"><span class="s6-red-dot"></span> Warning signs</div>
+                <div class="s6-warning-box">
+                  <ul class="s6-warning-bullets">
+                    <li>Repeated head-shaking or scratching at one ear</li>
+                    <li>Dark or smelly discharge from the ear canal</li>
+                    <li>Visible redness or swelling around the ear opening</li>
+                    <li>Whining or flinching when you touch the ear</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="s6-field">
+                <div class="s6-field-label"><span class="s6-red-dot"></span> When to call us</div>
+                <div class="s6-escalation-box">
+                  <div class="s6-escalation-text">
+                    <p>Message us through Pawkit if you see any of the warning signs above — Dr Sagar will get back to you within an open follow-up window.</p>
+                    <p>Call the clinic line (+91 20 2612 3456) for after-hours urgent issues. We are walk-in Mon–Sat 9am–9pm.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="s6-publish-row">
+                <button class="s6-publish-btn">
+                  Next: Audience
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="s6-phone-wrap">
+              <div class="s6-preview-label">Parent view</div>
+              <div class="s6-phone">
+                <div class="s6-phone-inner">
+                  <div class="s6-phone-statusbar"><span>9:41</span><span>● ● ●</span></div>
+                  <div class="s6-phone-cover">No cover · placeholder</div>
+                  <div class="s6-phone-body">
+                    <div class="s6-phone-byline">
+                      <div class="s6-phone-avatar">SB</div>
+                      <div>
+                        <div class="s6-phone-byline-name">Dr Sagar Bhongale</div>
+                        <div class="s6-phone-byline-clinic">AMS Pune · Today</div>
+                      </div>
+                    </div>
+                    <div class="s6-phone-title">Monsoon ear-infection watch for dogs</div>
+                    <div class="s6-phone-section">
+                      <div class="s6-phone-section-label">Summary</div>
+                      <ul class="s6-phone-summary">
+                        <li>Pune monsoon is here; humid weather flares ear infections in dogs.</li>
+                        <li>Check ears weekly, dry them after walks, and watch for head-shaking.</li>
+                        <li>Floppy-eared breeds are at higher risk.</li>
+                      </ul>
+                    </div>
+                    <div class="s6-phone-body-text">As Pune's monsoon settles in, we see a sharp rise in canine ear infections. Humid air + trapped moisture in the ear canal is a breeding ground for bacteria and yeast...</div>
+                    <div class="s6-phone-card" style="margin-top:14px;">
+                      <div class="s6-phone-card-head">
+                        <svg class="s6-phone-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                        <span class="s6-phone-card-title">Warning signs</span>
+                      </div>
+                      <div class="s6-phone-card-body">
+                        <ul>
+                          <li>Repeated head-shaking or scratching</li>
+                          <li>Dark or smelly discharge</li>
+                          <li>Redness or swelling</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <button class="s6-phone-share-btn">Share · WhatsApp / Social / Email</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 06b · Audience ============ -->
+  <section class="screen" id="screen-06b">
+    <div class="screen-eyebrow">Locked 2026-05-14 · Mauve hero count · ToggleGroup pills · soft cards · OR badge as Badge variant="secondary"</div>
+    <div class="screen-title">06b · Broadcast audience</div>
+    <div class="screen-sub">
+      Klaviyo-channeled AND/OR groups. <span class="key">Audience-size hero strip paints Boysenberry</span>, <span class="key">Species + Deceased toggles use ToggleGroup primary fill</span>, <span class="key">WHERE / AND / OR connectors render as Badge primitives</span> (outline + secondary variants), <span class="key">Group A card</span> uses the soft 12px-radius + drop-shadow treatment, and the <span class="key">"+ Add OR group"</span> CTA stays the lazy-reveal pattern (Group B reveals on click). Age inputs use shadcn Input (8px radius, Ink/8 border). Send CTA is Boysenberry filled.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Stage</div><div class="val">980px max · 24px v-padding top · 32px v-padding bottom</div></div>
+      <div class="row"><div class="label">Eyebrow</div><div class="val">Ink/4 wash 8px radius · "BROADCAST" Ink-faint label + title + "Edit" outline Button right</div></div>
+      <div class="row"><div class="label">Group card</div><div class="val">1px Ink/8 + 12px radius + soft drop shadow · 18px padding · "CONDITION GROUP A" Ink-soft uppercase header</div></div>
+      <div class="row"><div class="label">Condition row</div><div class="val">grid auto/130/110/1fr/auto · connector Badge "outline" (WHERE) or "secondary" (AND) · property semibold · "is" copula · value pills/inputs</div></div>
+      <div class="row"><div class="label">Toggles</div><div class="val">ToggleGroup default tone · primary fill on active · Dogs/Cats/Both + Include/Exclude</div></div>
+      <div class="row"><div class="label">Age input</div><div class="val">Input 8px radius · Ink/8 border · 13px DM Sans tabular · "from 0 to 15 years"</div></div>
+      <div class="row"><div class="label">Hero strip</div><div class="val">Boysenberry fill + Paper text · 12px radius · DM Sans 30px bold tabular count + "across N households" caption</div></div>
+      <div class="row"><div class="label">Action bar</div><div class="val">Top Ink-faint border · Back outline + Next: Send Boysenberry filled</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s6-main">
+          <div class="s6-step-nav">
+            <div class="s6-step done"><span class="s6-step-num">1</span> Compose</div>
+            <div class="s6-step active"><span class="s6-step-num">2</span> Audience</div>
+            <div class="s6-step"><span class="s6-step-num">3</span> Send</div>
+          </div>
+          <div class="s6b-shell">
+            <div class="s6b-eyebrow">
+              <span class="label">Broadcast</span>
+              <span class="title">Monsoon ear-infection watch for dogs</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="s6b-title">Who's this for?</div>
+            <div class="s6b-sub">Pick which parents see this. Live count updates as you change conditions.</div>
+
+            <div class="s6b-group">
+              <div class="s6b-group-header">Condition group A</div>
+
+              <div class="s6b-condition-row">
+                <span class="s6b-cond-conn where">WHERE</span>
+                <span class="s6b-cond-prop">Species</span>
+                <span class="s6b-cond-value">is</span>
+                <div class="s6b-cond-pills">
+                  <div class="s6b-cond-pill selected">Dogs</div>
+                  <div class="s6b-cond-pill">Cats</div>
+                  <div class="s6b-cond-pill">Dogs and cats</div>
+                </div>
+                <span></span>
+              </div>
+
+              <div class="s6b-condition-row">
+                <span class="s6b-cond-conn">AND</span>
+                <span class="s6b-cond-prop">Age range</span>
+                <span class="s6b-cond-value">is</span>
+                <div class="s6b-age-range">
+                  <span class="s6b-age-label">from</span>
+                  <input class="s6b-age-input" value="1" readonly>
+                  <span class="s6b-age-label">to</span>
+                  <input class="s6b-age-input" value="12" readonly>
+                  <span class="s6b-age-label">years</span>
+                </div>
+                <span></span>
+              </div>
+
+              <div class="s6b-condition-row">
+                <span class="s6b-cond-conn">AND</span>
+                <span class="s6b-cond-prop">Deceased pets</span>
+                <span class="s6b-cond-value">is</span>
+                <div class="s6b-cond-pills">
+                  <div class="s6b-cond-pill">Include</div>
+                  <div class="s6b-cond-pill selected">Exclude</div>
+                </div>
+                <span></span>
+              </div>
+
+              <div class="s6b-add-cond">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Add condition
+              </div>
+            </div>
+
+            <div class="s6b-add-or-group">
+              <div class="s6b-add-cond">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                Add OR group
+              </div>
+            </div>
+
+            <div class="s6b-count-strip">
+              <div>
+                <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;opacity:0.78;margin-bottom:6px;">Audience size</div>
+                <div style="display:flex;align-items:baseline;gap:12px;">
+                  <span class="s6b-count-num">187</span>
+                  <span style="font-size:15px;opacity:0.85;">pets</span>
+                </div>
+                <div class="s6b-count-meta" style="margin-top:4px;">across 142 households · 73% of AMS dog parents</div>
+              </div>
+            </div>
+
+            <div class="s6b-actions-bar">
+              <button class="s6b-back-btn">← Back to Compose</button>
+              <button class="s6b-next-btn">
+                Next: Send
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 06c · Send ============ -->
+  <section class="screen" id="screen-06c">
+    <div class="screen-eyebrow">Locked 2026-05-14 · Mauve hero card · Mauve Send CTA · soft confirm blocks · 15s undo unchanged</div>
+    <div class="screen-title">06c · Broadcast send</div>
+    <div class="screen-sub">
+      Final review screen. <span class="key">"Sending to N pets" hero card paints Boysenberry</span>, <span class="key">confirm blocks</span> (audience filter + delivery channels) use the 12px soft-shadow card treatment, <span class="key">Send-to-N-parents CTA</span> is Boysenberry filled. Phone preview pinned to the left at 320px wide. 15-second undo hint stays in place at the bottom; v0 still uses the deferred-action timer locked 2026-05-12.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Stage</div><div class="val">1080px max · 24px v-padding top · 32px v-padding bottom · 36px gap between phone + confirm columns</div></div>
+      <div class="row"><div class="label">Phone preview</div><div class="val">320px wide · vet byline + title + summary + body + warning + escalation + Boysenberry Share CTA</div></div>
+      <div class="row"><div class="label">Hero card</div><div class="val">Boysenberry fill + Paper text · 12px radius · "SENDING TO" eyebrow + 40px tabular hero count + caption</div></div>
+      <div class="row"><div class="label">Audience filter block</div><div class="val">1px Ink/8 + 12px radius + soft shadow · 20px padding · row labels Ink-soft + values Ink semibold</div></div>
+      <div class="row"><div class="label">Delivery channels block</div><div class="val">same card treatment · Lucide icons MessageSquare / Bell / Link · in-app / push / public URL · "instant" meta right</div></div>
+      <div class="row"><div class="label">Send action bar</div><div class="val">top Ink-faint border · undo hint Ink-faint italic + RotateCcw icon · Back outline + Send-to-N-parents Boysenberry filled</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div class="chrome-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <div class="placeholder">Search broadcasts by keyword</div>
+        </div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s6-main">
+          <div class="s6-step-nav">
+            <div class="s6-step done"><span class="s6-step-num">1</span> Compose</div>
+            <div class="s6-step done"><span class="s6-step-num">2</span> Audience</div>
+            <div class="s6-step active"><span class="s6-step-num">3</span> Send</div>
+          </div>
+          <div class="s6c-stage">
+            <div class="s6c-eyebrow">
+              <span class="label">Broadcast ready</span>
+              <span class="title">Monsoon ear-infection watch for dogs</span>
+              <span class="edit">Edit</span>
+            </div>
+            <div class="s6c-title">Ready to send</div>
+            <div class="s6c-sub">Both English and मराठी versions reviewed. 187 parents will receive it in their preferred language.</div>
+
+            <div class="s6c-split">
+              <div>
+                <div class="s6c-preview-label">Parent view</div>
+                <div class="s6-phone" style="width:320px;">
+                  <div class="s6-phone-inner">
+                    <div class="s6-phone-statusbar"><span>9:41</span><span>● ● ●</span></div>
+                    <div class="s6-phone-cover">No cover · placeholder</div>
+                    <div class="s6-phone-body">
+                      <div class="s6-phone-byline">
+                        <div class="s6-phone-avatar">SB</div>
+                        <div>
+                          <div class="s6-phone-byline-name">Dr Sagar Bhongale</div>
+                          <div class="s6-phone-byline-clinic">AMS Pune · Today</div>
+                        </div>
+                      </div>
+                      <div class="s6-phone-title">Monsoon ear-infection watch for dogs</div>
+                      <div class="s6-phone-section">
+                        <div class="s6-phone-section-label">Summary</div>
+                        <ul class="s6-phone-summary">
+                          <li>Pune monsoon is here; humid weather flares ear infections.</li>
+                          <li>Check ears weekly, dry after walks, watch for head-shaking.</li>
+                          <li>Floppy-eared breeds at higher risk.</li>
+                        </ul>
+                      </div>
+                      <div class="s6-phone-body-text">Humid air + trapped moisture in the ear canal is a breeding ground. Use cotton (not Q-tips) to wipe the outer ear. If redness, dark discharge, or smell, bring them in...</div>
+                      <button class="s6-phone-share-btn">Share · WhatsApp / Social / Email</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="s6c-confirm-col">
+                <div class="s6c-confirm-hero">
+                  <div class="s6c-confirm-hero-eyebrow">Sending to</div>
+                  <div class="s6c-confirm-hero-num">187 pets</div>
+                  <div class="s6c-confirm-hero-meta">across 142 households · 73% of AMS dog parents</div>
+                </div>
+
+                <div class="s6c-confirm-block">
+                  <div class="s6c-confirm-block-label">Audience filter</div>
+                  <div class="s6c-confirm-filter-row"><span class="s6c-confirm-filter-prop">Species</span><span class="s6c-confirm-filter-value">Dogs only</span></div>
+                  <div class="s6c-confirm-filter-row"><span class="s6c-confirm-filter-prop">Age range</span><span class="s6c-confirm-filter-value">1 to 12 years</span></div>
+                  <div class="s6c-confirm-filter-row"><span class="s6c-confirm-filter-prop">Deceased pets</span><span class="s6c-confirm-filter-value">Excluded</span></div>
+                </div>
+
+                <div class="s6c-confirm-block">
+                  <div class="s6c-confirm-block-label">Delivery</div>
+                  <div class="s6c-confirm-channel-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>In-app Broadcasts tab</span>
+                    <span class="meta">instant</span>
+                  </div>
+                  <div class="s6c-confirm-channel-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                    <span>Push notification</span>
+                    <span class="meta">mobile · instant</span>
+                  </div>
+                  <div class="s6c-confirm-channel-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    <span>Public web page</span>
+                    <span class="meta">pawkit.app/broadcasts/monsoon-ear-care</span>
+                  </div>
+                </div>
+
+                <div class="s6c-send-actions">
+                  <div class="s6c-send-undo-hint">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><polyline points="3 4 3 10 9 10"/></svg>
+                    Send has a 15-second undo window.
+                  </div>
+                  <div class="s6c-send-buttons">
+                    <button class="s6c-send-back-btn">← Back to Audience</button>
+                    <button class="s6c-send-confirm-btn">
+                      Send to 187 parents
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screen 07b · Settings ============ -->
+  <section class="screen" id="screen-07b">
+    <div class="screen-eyebrow">Locked 2026-05-14 · DM Sans throughout · Settings at rail bottom · ToggleGroup pills primary-filled</div>
+    <div class="screen-title">07b · Settings</div>
+    <div class="screen-sub">
+      Linear-channeled dense single-column inline-edit settings. Three sections: <span class="key">Profile</span> (photo + full name + vet license + email), <span class="key">Account</span> (phone + dashboard language toggle), <span class="key">Clinic</span> (logo + name + phone + GSTIN + address). <span class="key">"Settings" rail item anchored to the bottom</span> of the rail via flex-grow spacer. <span class="key">Language toggle</span> uses ToggleGroup default tone (Boysenberry fill on active). <span class="key">Sign-out button</span> is shadcn Button variant="outline" (the only sign-out is a Dialog explaining v0.1). The earlier Appearance section + Default/Mauve theme picker was deleted 2026-05-14 when v1.3 went away and mauve became the only theme.
+    </div>
+
+    <div class="anatomy">
+      <div class="row"><div class="label">Stage</div><div class="val">720px max · 32px v-padding top · 64px v-padding bottom</div></div>
+      <div class="row"><div class="label">Page title</div><div class="val">DM Sans semibold 17px Ink (text-lg) · subtitle DM Sans 13px Ink-soft · downsized from 26px bold 2026-05-15</div></div>
+      <div class="row"><div class="label">Section label</div><div class="val">DM Sans 11px bold 0.14em uppercase Ink-faint above each section · 10px bottom margin</div></div>
+      <div class="row"><div class="label">Profile photo row</div><div class="val">48px circle slot Ink/8 border · DM Sans 14px name + 12px help · "Upload" outline Button right</div></div>
+      <div class="row"><div class="label">Field row</div><div class="val">160px label column · 14px value · "Edit" outline Button right · Ink-faint bottom hairline · last row no border</div></div>
+      <div class="row"><div class="label">Language toggle</div><div class="val">ToggleGroup default tone · "English" + "मराठी" · Boysenberry fill on active</div></div>
+      <div class="row"><div class="label">Sign out</div><div class="val">Full-width outline Button · LogOut icon · opens Dialog explaining v0.1 supersedes auth lock</div></div>
+      <div class="row"><div class="label">Footer</div><div class="val">"Pawkit · v0.1" vendor mark Ink-faint centered · Ink-faint top hairline · white-label discipline locked here only</div></div>
+    </div>
+
+    <div class="frame">
+      <div class="chrome-header">
+        <div class="chrome-clinic">
+          <div class="chrome-clinic-logo">AMS</div>
+          <div class="chrome-clinic-name">Animal Medical Services</div>
+        </div>
+        <div></div>
+        <div class="chrome-vet">
+          <div class="chrome-vet-name">Dr Sagar Bhongale</div>
+          <div class="chrome-vet-avatar">SB</div>
+        </div>
+      </div>
+      <div class="chrome-shell">
+        <div class="chrome-rail">
+          <div class="chrome-rail-label">Workspace</div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Inbox
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Broadcasts
+          </div>
+          <div class="chrome-rail-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+            Billing
+          </div>
+          <div class="chrome-rail-spacer"></div>
+          <div class="chrome-rail-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="s7-main">
+          <div class="s7-stage">
+            <div class="s7-page-title">Settings</div>
+            <div class="s7-page-sub">Your profile, account, appearance, and clinic details.</div>
+
+            <div class="s7-section">
+              <div class="s7-section-label">Profile</div>
+              <div class="s7-photo-row">
+                <div class="s7-photo-slot">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                </div>
+                <div class="s7-photo-text">
+                  <div class="s7-photo-name">Profile photo</div>
+                  <div class="s7-photo-help">Used in your byline on every broadcast and reply.</div>
+                </div>
+                <div class="s7-photo-edit">Upload</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Full name</div>
+                <div class="s7-field-value">Dr Sagar Bhongale</div>
+                <div class="s7-field-edit">Edit</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Vet license</div>
+                <div class="s7-field-value readonly tabular">MVC/2008/04821</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Email</div>
+                <div class="s7-field-value placeholder">Add to receive clinic alerts</div>
+                <div class="s7-field-edit">Add</div>
+              </div>
+            </div>
+
+            <div class="s7-section">
+              <div class="s7-section-label">Account</div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Phone</div>
+                <div class="s7-field-value readonly tabular">+91 98220 47561</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Dashboard language</div>
+                <div class="s7-field-value">
+                  <div class="s7-toggle-group">
+                    <div class="s7-toggle-item active">English</div>
+                    <div class="s7-toggle-item">मराठी</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s7-stacked-help">Changes labels and buttons in your dashboard. Broadcasts always ship to parents in both languages.</div>
+            </div>
+
+            <div class="s7-section">
+              <div class="s7-section-label">Clinic</div>
+              <div class="s7-photo-row">
+                <div class="s7-photo-slot" style="background:var(--primary);color:var(--bg-canvas);font-size:11px;font-weight:700;letter-spacing:0.05em;">AMS</div>
+                <div class="s7-photo-text">
+                  <div class="s7-photo-name">Clinic logo</div>
+                  <div class="s7-photo-help">Shown in the header and on every broadcast cover.</div>
+                </div>
+                <div class="s7-photo-edit">Upload</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Clinic name</div>
+                <div class="s7-field-value" style="font-weight:700;font-size:15px;letter-spacing:-0.005em;">Animal Medical Services</div>
+                <div class="s7-field-edit">Edit</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">Phone</div>
+                <div class="s7-field-value tabular">+91 20 2612 3456</div>
+                <div class="s7-field-edit">Edit</div>
+              </div>
+              <div class="s7-field-row">
+                <div class="s7-field-label">GSTIN</div>
+                <div class="s7-field-value tabular">27ABCDE1234F1Z2</div>
+                <div class="s7-field-edit">Edit</div>
+              </div>
+              <div class="s7-field-row" style="align-items:flex-start;">
+                <div class="s7-field-label" style="padding-top:2px;">Address</div>
+                <div class="s7-clinic-lines">
+                  <div class="s7-clinic-line">Karve Road, Kothrud, Pune 411038</div>
+                  <div class="s7-clinic-line">Maharashtra, India</div>
+                  <div class="s7-clinic-line" style="font-style:italic;color:var(--ink-faint);margin-top:4px;font-size:12px;">9am to 9pm Mon-Sat · walk-in</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="s7-signout-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              Sign out
+            </button>
+
+            <div class="s7-vendor">
+              <span class="s7-vendor-brand">Pawkit</span>
+              <span class="s7-vendor-sep">·</span>
+              <span class="s7-vendor-version">v0.1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

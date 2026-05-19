@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pawkit splash screen (locked 2026-05-15 evening; Lora swapped in for Spectral,
+  Inter swapped in for Satoshi).
+
+  Spec per `docs/premium-feel/first-run.md`:
+    - Background: same 135° Honey #E5C896 → Peach #E8A87C gradient as the icon,
+      full-screen. Reads as one continuous warm surface from icon tap to app
+      open.
+    - Wordmark: "pawkit" in Inter Bold, canvas #F8F7F5 (was Satoshi Bold under
+      v1.3; swapped 2026-05-15 evening alongside the dashboard Satoshi removal).
+    - Tagline: "your pet's records, in your pocket" in Lora italic 600, canvas
+      #F8F7F5 at 70% opacity, sitting on the gradient.
+    - No CTAs, no chrome, no progress indicator. Stillness signals confidence.
+
+  Export target (PNG, 32-bit):
+    - apps/petparent/assets/splash.png   1284×2778  (iPhone 14 Pro Max canvas;
+                                                     Expo scales for other
+                                                     devices)
+    - apps/petparent/assets/splash@2x.png 2208×4320 (Android XXXHDPI)
+
+  Aspect ratio is portrait-only (orientation=portrait in app.json).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1284 2778" width="1284" height="2778" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="splash-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E5C896"/>
+      <stop offset="100%" stop-color="#E8A87C"/>
+    </linearGradient>
+  </defs>
+  <rect width="1284" height="2778" fill="url(#splash-gradient)"/>
+
+  <!-- Wordmark: Inter Bold, canvas. Optically centred vertically. -->
+  <text
+    x="50%"
+    y="52%"
+    text-anchor="middle"
+    dominant-baseline="alphabetic"
+    font-family="Inter, 'Helvetica Neue', sans-serif"
+    font-weight="700"
+    font-size="192"
+    fill="#F8F7F5"
+    letter-spacing="-3"
+  >pawkit</text>
+
+  <!-- Tagline: Lora italic 600, canvas at 70% opacity. Sits below wordmark. -->
+  <text
+    x="50%"
+    y="57%"
+    text-anchor="middle"
+    dominant-baseline="alphabetic"
+    font-family="Lora, Georgia, 'Times New Roman', serif"
+    font-style="italic"
+    font-weight="600"
+    font-size="56"
+    fill="#F8F7F5"
+    opacity="0.7"
+  >your pet's records, in your pocket</text>
+</svg>
