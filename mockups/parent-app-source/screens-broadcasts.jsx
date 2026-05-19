@@ -16,7 +16,6 @@ function BroadcastsList() {
               <span className="stamp">Today · 8:12 am</span>
             </div>
             <div className="right">
-              <div className="pk-seg" style={{ padding: 2 }}><span className="opt on" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>EN</span><span className="opt" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>MR</span></div>
               <span className="unread-dot" />
             </div>
           </div>
@@ -35,9 +34,7 @@ function BroadcastsList() {
               <b>Dr Sagar · AMS</b><br />
               <span className="stamp">Mon · 9:40 am</span>
             </div>
-            <div className="right">
-              <div className="pk-seg" style={{ padding: 2 }}><span className="opt on" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>EN</span><span className="opt" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>MR</span></div>
-            </div>
+            <div className="right" />
           </div>
           <div className="ttl" style={{ marginBottom: 4 }}>AMS will be closed Mon 9 Nov for Diwali</div>
           <div className="body">
@@ -52,9 +49,7 @@ function BroadcastsList() {
               <b>Dr Sagar · AMS</b><br />
               <span className="stamp">12 Mar · 6:30 pm</span>
             </div>
-            <div className="right">
-              <div className="pk-seg" style={{ padding: 2 }}><span className="opt" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>EN</span><span className="opt on" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>MR</span></div>
-            </div>
+            <div className="right" />
           </div>
           <div className="ttl" style={{ marginBottom: 4, fontFamily: 'Noto Sans Devanagari, var(--font-inter)' }}>
             पावसाळ्यात कुत्र्यांसाठी टिक्स आणि पिसवांचा सल्ला
@@ -76,20 +71,11 @@ function BroadcastsList() {
 function BroadcastReadingLong() {
   return (
     <PawkitFrame>
-      <TopBar title="From Dr Sagar Bhongale" right={<div style={{ width: 40, height: 40, display: 'grid', placeItems: 'center' }}><Icon id="share-network" size={20} /></div>} />
+      <TopBar title="From your vet" right={<div style={{ width: 40, height: 40, display: 'grid', placeItems: 'center' }}><Icon id="share-network" size={20} /></div>} />
       <div className="pk-reader">
-        <div className="byline">AMS Pune · Today, 8:12 am</div>
+        <div className="byline">Dr Sagar Bhongale · AMS Pune · Today, 8:12 am</div>
         <h1>Monsoon ear-infection watch for dogs</h1>
         <div className="cover" style={{ backgroundImage: `url(${BROADCAST_PHOTOS.monsoon})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' }} />
-
-        <div className="summary">
-          <div className="label">Summary</div>
-          <ul>
-            <li>Humid weather flares ear infections in dogs.</li>
-            <li>Check ears weekly, dry them after walks.</li>
-            <li>Floppy-eared breeds at higher risk.</li>
-          </ul>
-        </div>
 
         <div className="body">
           As Pune's monsoon settles in, we see a sharp rise in canine ear infections. Humid air and trapped moisture is a breeding ground for bacteria and yeast. Most flares are easy to catch early if you check the ears weekly and dry them after walks or baths.
@@ -117,9 +103,10 @@ function BroadcastReadingLong() {
       <div className="pk-share-footer">
         <div className="lead"><Icon id="share-network" size={18} /> Share with someone</div>
         <div className="actions">
-          <div className="pill" title="WhatsApp" style={{ fontSize: 'var(--text-xs)', fontWeight: 700 }}>WA</div>
-          <div className="pill" title="Share"><Icon id="share-network" size={14} /></div>
+          <div className="pill" title="WhatsApp"><Icon id="whatsapp-logo" size={16} /></div>
+          <div className="pill" title="Facebook"><Icon id="facebook-logo" size={16} /></div>
           <div className="pill" title="Email"><Icon id="envelope" size={14} /></div>
+          <div className="pill" title="Copy link"><Icon id="link-simple" size={14} /></div>
         </div>
       </div>
     </PawkitFrame>
@@ -132,9 +119,9 @@ function BroadcastReadingLong() {
 function BroadcastReadingShort() {
   return (
     <PawkitFrame>
-      <TopBar title="From Dr Sagar Bhongale" right={<div style={{ width: 40, height: 40, display: 'grid', placeItems: 'center' }}><Icon id="share-network" size={20} /></div>} />
+      <TopBar title="From your vet" right={<div style={{ width: 40, height: 40, display: 'grid', placeItems: 'center' }}><Icon id="share-network" size={20} /></div>} />
       <div className="pk-reader">
-        <div className="byline">AMS Pune · Mon, 9:40 am</div>
+        <div className="byline">Dr Sagar Bhongale · AMS Pune · Mon, 9:40 am</div>
         <h1>AMS will be closed Mon 9 Nov for Diwali</h1>
         <div className="body">
           We'll reopen on Tue 10 Nov, 9am, on regular schedule.
@@ -147,9 +134,10 @@ function BroadcastReadingShort() {
       <div className="pk-share-footer">
         <div className="lead"><Icon id="share-network" size={18} /> Share with someone</div>
         <div className="actions">
-          <div className="pill" style={{ fontSize: 'var(--text-xs)', fontWeight: 700 }}>WA</div>
-          <div className="pill"><Icon id="share-network" size={14} /></div>
-          <div className="pill"><Icon id="envelope" size={14} /></div>
+          <div className="pill" title="WhatsApp"><Icon id="whatsapp-logo" size={16} /></div>
+          <div className="pill" title="Facebook"><Icon id="facebook-logo" size={16} /></div>
+          <div className="pill" title="Email"><Icon id="envelope" size={14} /></div>
+          <div className="pill" title="Copy link"><Icon id="link-simple" size={14} /></div>
         </div>
       </div>
     </PawkitFrame>
@@ -162,10 +150,10 @@ function BroadcastReadingShort() {
 function ShareSheet() {
   return (
     <PawkitFrame>
-      <TopBar title="From Dr Sagar Bhongale" />
+      <TopBar title="From your vet" />
       <div style={{ flex: 1, opacity: 0.35, padding: '14px 20px', background: 'var(--canvas)', overflow: 'hidden' }}>
         <div className="byline" style={{ fontSize: 'var(--text-xxs)', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-50)', marginBottom: 12 }}>
-          AMS Pune · Today, 8:12 am
+          Dr Sagar Bhongale · AMS Pune · Today, 8:12 am
         </div>
         <h1 style={{
           fontFamily: 'var(--font-inter)', fontSize: 'var(--text-2xl)', lineHeight: 1.2,
@@ -185,10 +173,10 @@ function ShareSheet() {
           <div className="sub">Opens at pawkit.app/broadcasts/monsoon-ears</div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, padding: '8px 18px 14px' }}>
-          <ShareTile label="WhatsApp" mark="WA" />
-          <ShareTile label="More apps" icon="share-network" />
+          <ShareTile label="WhatsApp" icon="whatsapp-logo" tint="#25D366" />
+          <ShareTile label="Facebook" icon="facebook-logo" tint="#1877F2" />
           <ShareTile label="Email" icon="envelope" />
-          <ShareTile label="Copy link" icon="paperclip" />
+          <ShareTile label="Copy link" icon="link-simple" />
         </div>
         <div style={{ margin: '0 18px', padding: '10px 12px', border: '1px dashed var(--rule)', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{
@@ -204,16 +192,20 @@ function ShareSheet() {
     </PawkitFrame>
   );
 }
-function ShareTile({ label, mark, icon }) {
+function ShareTile({ label, mark, icon, tint }) {
+  const tinted = !!tint;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
       <div style={{
         width: 56, height: 56, borderRadius: 16,
-        background: 'var(--canvas-2)', border: '1px solid var(--rule)',
+        background: tinted ? tint : 'var(--canvas-2)',
+        border: tinted ? '1px solid rgba(0,0,0,0.06)' : '1px solid var(--rule)',
         display: 'grid', placeItems: 'center',
-        color: 'var(--ink)', fontWeight: 700, fontSize: 'var(--text-base)',
+        color: tinted ? '#fff' : 'var(--ink)',
+        fontWeight: 700, fontSize: 'var(--text-base)',
+        boxShadow: tinted ? 'inset 0 1px 0 rgba(255,255,255,0.18)' : 'none',
       }}>
-        {mark || <Icon id={icon} size={20} />}
+        {mark || <Icon id={icon} size={26} />}
       </div>
       <div style={{ fontSize: 'var(--text-xs)', fontWeight: 500, color: 'var(--ink)' }}>{label}</div>
     </div>
@@ -286,17 +278,6 @@ function PublicWebView() {
           width: '100%', aspectRatio: '16/9', borderRadius: 12, marginBottom: 22,
           backgroundImage: `url(${BROADCAST_PHOTOS.monsoon})`, backgroundSize: 'cover', backgroundPosition: 'center',
         }} />
-
-        <div style={{
-          background: 'var(--canvas-2)', borderRadius: 12, padding: '14px 16px', marginBottom: 22,
-        }}>
-          <div className="pk-eyebrow" style={{ marginBottom: 8 }}>Summary</div>
-          <ul style={{ margin: 0, paddingLeft: 18, fontSize: 'var(--text-md)', lineHeight: 1.55 }}>
-            <li>Humid weather flares ear infections in dogs.</li>
-            <li>Check ears weekly, dry them after walks.</li>
-            <li>Floppy-eared breeds at higher risk.</li>
-          </ul>
-        </div>
 
         <div style={{ fontSize: 'var(--text-md)', lineHeight: 1.65, color: 'var(--ink)', marginBottom: 22 }}>
           As Pune's monsoon settles in, we see a sharp rise in canine ear infections. Humid air and trapped moisture is a breeding ground for bacteria and yeast.

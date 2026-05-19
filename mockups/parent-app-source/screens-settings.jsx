@@ -33,7 +33,7 @@ function MasterSettings() {
           <div className="av honey" style={{ backgroundImage: `url(${PETS.gabby.photo})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' }} />
           <div className="meta">
             <div className="name">Gabby</div>
-            <div className="det">Golden Retriever · 4y</div>
+            <div className="det">Golden Retriever · M · 4y</div>
           </div>
           <Icon id="arrow-right" size={16} style={{ color: 'var(--ink-50)' }} />
         </div>
@@ -41,7 +41,7 @@ function MasterSettings() {
           <div className="av smoke" style={{ backgroundImage: `url(${PETS.angel.photo})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' }} />
           <div className="meta">
             <div className="name">Angel</div>
-            <div className="det">Persian · 8y</div>
+            <div className="det">Persian · F · 8y</div>
           </div>
           <Icon id="arrow-right" size={16} style={{ color: 'var(--ink-50)' }} />
         </div>
@@ -100,7 +100,7 @@ function PerPetSettings() {
           }} />
           <div>
             <div style={{ fontFamily: 'var(--font-lora)', fontStyle: 'italic', fontWeight: 600, fontSize: 'var(--text-2xl)', lineHeight: 1.05 }}>Gabby</div>
-            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-70)', marginTop: 4 }}>Golden Retriever · 4 years</div>
+            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-70)', marginTop: 4 }}>Golden Retriever · Male · 4 years</div>
           </div>
         </div>
 

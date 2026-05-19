@@ -186,7 +186,7 @@ function InvoiceDetail() {
 
         <div style={{ padding: '14px 20px 20px', display: 'flex', gap: 10 }}>
           <OutlineBtn full leading={<Icon id="download" size={14} />}>Download PDF</OutlineBtn>
-          <OutlineBtn full leading={<Icon id="envelope" size={14} />}>Email me a copy</OutlineBtn>
+          <OutlineBtn full leading={<Icon id="envelope" size={14} />}>Email copy</OutlineBtn>
         </div>
       </div>
     </PawkitFrame>
@@ -216,8 +216,8 @@ function EmptyVaccinations() {
     <PawkitFrame>
       <Cover tone="honey" height={140} />
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Vaccinations" />
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vaccinations" />
       <div className="pk-empty">No vaccinations on file yet.</div>
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -232,8 +232,8 @@ function EmptyInvoices() {
     <PawkitFrame>
       <Cover tone="honey" height={140} />
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Invoices" />
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Invoices" />
       <div className="pk-empty">No invoices yet.</div>
       <BottomNav active="pets" />
     </PawkitFrame>

@@ -18,20 +18,45 @@ const BROADCAST_PHOTOS = {
 };
 
 // ─────────────────────────────────────────────────────────────
-// Phosphor icon (sprite + extension symbols inlined in HTML)
 // ─────────────────────────────────────────────────────────────
+// Phosphor icon — renders Phosphor Regular via @phosphor-icons/web
+// (loaded as a CSS web font in Parent App.html). Custom glyphs that
+// aren't in Phosphor (memorial wings) fall through to the SVG sprite.
+// ─────────────────────────────────────────────────────────────
+const PH_NAME = {
+  'paper-plane': 'paper-plane-tilt',
+  'paw':         'paw-print',
+  'magnifier':   'magnifying-glass',
+  'chat':        'chat-circle',
+  'floppy':      'floppy-disk',
+  'pin':         'map-pin',
+  'download':    'download-simple',
+};
+const SPRITE_GLYPHS = new Set(['wings']);
+
 function Icon({ id, size = 18, color, style, ...rest }) {
+  if (SPRITE_GLYPHS.has(id)) {
+    return (
+      <svg
+        className={`icon s${size}`}
+        width={size}
+        height={size}
+        style={{ color, ...style }}
+        aria-hidden="true"
+        {...rest}
+      >
+        <use href={`#i-${id}`} />
+      </svg>
+    );
+  }
+  const name = PH_NAME[id] || id;
   return (
-    <svg
-      className={`icon s${size}`}
-      width={size}
-      height={size}
-      style={{ color, ...style }}
+    <i
+      className={`icon s${size} ph ph-${name}`}
+      style={{ fontSize: size, lineHeight: 1, color, ...style }}
       aria-hidden="true"
       {...rest}
-    >
-      <use href={`#i-${id}`} />
-    </svg>
+    />
   );
 }
 
@@ -154,7 +179,7 @@ function Cover({ tone = "honey", height, hero = false, sampling = false, empty =
         </>
       )}
       {memorial && (
-        <div style={{ position: 'absolute', inset: 0, background: 'var(--fur-sable)', opacity: 0.62 }} />
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
       )}
       <div className={`strip ${tone}`} style={memorial ? { height: 4 } : undefined} />
       {children}

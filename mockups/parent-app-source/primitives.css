@@ -6,17 +6,23 @@
 /* ───── Reset for in-screen content ───── */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* ───── Phosphor icon helper ───── */
+/* ───── Phosphor icon helper ─────
+   Works for both <svg class="icon"> (custom sprite glyphs like wings)
+   and <i class="icon ph ph-house"> (Phosphor regular web-font glyphs). */
 .icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
   flex-shrink: 0;
   color: currentColor;
+  fill: currentColor;
+  font-style: normal;
 }
-.icon.s16 { width: 16px; height: 16px; }
-.icon.s18 { width: 18px; height: 18px; }
-.icon.s20 { width: 20px; height: 20px; }
-.icon.s24 { width: 24px; height: 24px; }
+.icon.s16 { width: 16px; height: 16px; font-size: 16px; }
+.icon.s18 { width: 18px; height: 18px; font-size: 18px; }
+.icon.s20 { width: 20px; height: 20px; font-size: 20px; }
+.icon.s24 { width: 24px; height: 24px; font-size: 24px; }
 
 /* ============================================================
    DEVICE FRAME
@@ -170,16 +176,25 @@
   position: relative;
   transition: color var(--duration-base) var(--ease);
 }
-.pk-bottomnav .tab.active { color: var(--berry); }
+.pk-bottomnav .tab.active { color: #fff; }
+/* Round, raised berry disc behind the active tab icon. */
 .pk-bottomnav .tab.active::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 28%; right: 28%;
-  height: 2px;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background: var(--berry);
-  border-radius: 0 0 2px 2px;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 4px 10px rgba(156, 43, 92, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  z-index: 0;
 }
+.pk-bottomnav .tab.active svg,
+.pk-bottomnav .tab.active i { position: relative; z-index: 1; }
 
 /* ============================================================
    PET PAGE PRIMITIVES
@@ -254,29 +269,31 @@
   font-family: var(--font-lora);
   font-style: italic;
   font-weight: 600;
-  font-size: var(--text-3xl);
-  line-height: 1.05;
+  font-size: 40px;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
-/* Hero variant — 48px magazine name on a clean canvas band below the cover.
-   No overlap onto the photo: dark ink over a busy image is unreadable. */
+/* Hero variant — 40px magazine name on a clean canvas band below the cover.
+   No overlap onto the photo: dark ink over a busy image is unreadable.
+   line-height >= 1.05 so Lora italic's descenders (g, y, p) don't clip. */
 .pk-petname-row.hero {
   background: var(--canvas);
-  padding: 22px 22px 4px;
+  padding: 18px 22px 6px;
   align-items: flex-end;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
 }
 .pk-petname-row.hero .name {
-  font-size: var(--text-display);
-  line-height: 0.95;
+  font-size: 40px;
+  line-height: 1.08;
   letter-spacing: -0.02em;
 }
 
-/* Transformed beat — frame 1, before reflowing down to Steady's 48px. */
+/* Transformed beat — uses the same 40px as the steady hero for visual continuity. */
 .pk-petname-row.hero.beat .name {
-  font-size: 68px;
-  line-height: 0.92;
+  font-size: 40px;
+  line-height: 1.08;
 }
 .pk-petname-row .gear {
   margin-left: auto;
@@ -1290,13 +1307,13 @@
    ============================================================ */
 .pk-photo-prompt {
   margin: 16px 20px 0;
-  border: 1px dashed var(--rule);
+  border: 1px dashed var(--berry);
   border-radius: 12px;
   padding: 14px 16px;
   text-align: center;
   font-size: var(--text-sm);
-  color: var(--ink-70);
-  background: var(--canvas-2);
+  color: var(--berry-deep);
+  background: var(--berry-soft);
   flex-shrink: 0;
 }
 .pk-photo-prompt .icon-wrap {
@@ -1305,13 +1322,13 @@
   background: var(--canvas);
   display: inline-grid;
   place-items: center;
-  color: var(--ink);
+  color: var(--berry);
   margin-bottom: 8px;
 }
 .pk-photo-prompt .lead {
   font-size: var(--text-md);
   font-weight: 600;
-  color: var(--ink);
+  color: var(--berry-deep);
   margin-bottom: 2px;
 }
 
@@ -1397,6 +1414,23 @@
   color: var(--ink);
   text-align: center;
   padding: 0 22px;
+}
+.pk-magic-toast .copy .lead {
+  font-size: var(--text-lg);
+  line-height: 1.25;
+}
+.pk-magic-toast .copy .sub {
+  margin-top: 6px;
+  font-size: var(--text-sm);
+  line-height: 1.35;
+  color: var(--ink-70);
+}
+.pk-magic-toast .copy .link {
+  color: var(--berry);
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--berry);
+  padding-bottom: 1px;
+  text-decoration: none;
 }
 .pk-magic-toast .copy b {
   font-family: var(--font-lora);

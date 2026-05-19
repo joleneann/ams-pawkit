@@ -34,8 +34,11 @@ function App() {
         <DCArtboard id="onb-1" label="01 · Household name" width={W} height={H}>
           <Screen><OnbHousehold /></Screen>
         </DCArtboard>
-        <DCArtboard id="onb-2" label="02 · First pet" width={W} height={H}>
+        <DCArtboard id="onb-2" label="02 · First pet · Date" width={W} height={H}>
           <Screen><OnbFirstPet /></Screen>
+        </DCArtboard>
+        <DCArtboard id="onb-2b" label="02 · First pet · Age" width={W} height={H}>
+          <Screen><OnbFirstPetAge /></Screen>
         </DCArtboard>
         <DCArtboard id="onb-3" label="03 · Land on empty Pet Page" width={W} height={H}>
           <Screen><OnbLand /></Screen>
@@ -55,13 +58,13 @@ function App() {
         <DCArtboard id="hero-transformed" label="04 · Transformed (beat · 68px)" width={W} height={H}>
           {window.PetPageTransformed ? <Screen><PetPageTransformed /></Screen> : <Placeholder label="Transformed — coming next" />}
         </DCArtboard>
-        <DCArtboard id="hero-steady" label="05 · Steady (48px + Timeline)" width={W} height={H}>
+        <DCArtboard id="hero-steady" label="05 · Steady (40px + Vet visits)" width={W} height={H}>
           {window.PetPageSteady ? <Screen><PetPageSteady /></Screen> : <Placeholder label="Steady — coming next" />}
         </DCArtboard>
       </DCSection>
 
-      <DCSection id="pet-tabs" title="Pet Page · three tabs" subtitle="Timeline / Vaccinations / Invoices.">
-        <DCArtboard id="tab-timeline" label="Timeline" width={W} height={H}>
+      <DCSection id="pet-tabs" title="Pet Page · three tabs" subtitle="Vet Visits / Vaccinations / Invoices.">
+        <DCArtboard id="tab-timeline" label="Vet Visits" width={W} height={H}>
           {window.PetPageTimeline ? <Screen><PetPageTimeline /></Screen> : <Placeholder />}
         </DCArtboard>
         <DCArtboard id="tab-vaccs" label="Vaccinations" width={W} height={H}>
@@ -183,7 +186,7 @@ function App() {
         </DCArtboard>
       </DCSection>
 
-      <DCSection id="resilience" title="Offline + errors" subtitle="Achromatic: Ink + warning icon.">
+      <DCSection id="resilience" title="Offline + errors" subtitle="Achromatic — Ink + warning icon.">
         <DCArtboard id="off" label="Offline state" width={W} height={H}>
           {window.OfflineState ? <Screen><OfflineState /></Screen> : <Placeholder />}
         </DCArtboard>

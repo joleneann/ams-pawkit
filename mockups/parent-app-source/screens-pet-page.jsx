@@ -67,13 +67,13 @@ function PetPageEmpty() {
     <PawkitFrame>
       <Cover empty />
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
       <div className="pk-photo-prompt">
         <div className="icon-wrap"><Icon id="camera" size={16} /></div>
         <div className="lead">Add a photo of Gabby</div>
         <div>We'll find his fur palette from it.</div>
       </div>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div className="pk-empty" style={{ flex: 'none', padding: '32px 24px' }}>No visits yet.</div>
       <div style={{ flex: 1 }} />
       <BottomNav active="pets" />
@@ -89,24 +89,31 @@ function PetPageSampling() {
     <PawkitFrame>
       <Cover tone="honey" photo={PETS.gabby.photo} sampling />
       <div style={{
-        padding: '12px 20px',
-        background: 'var(--canvas-2)',
+        padding: '14px 20px 16px',
+        background: 'var(--canvas)',
         borderBottom: '1px solid var(--rule)',
       }}>
-        <div className="pk-eyebrow" style={{ color: 'var(--berry-deep)', marginBottom: 8 }}>Reading fur palette…</div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <FurDot bg="var(--fur-milk)" />
-          <FurDot bg="var(--fur-vanilla)" dim />
+        <div className="pk-eyebrow" style={{ color: 'var(--berry-deep)', marginBottom: 10 }}>Reading fur palette…</div>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <FurDot bg="var(--fur-milk)" dim />
+          <FurDot bg="var(--fur-vanilla)" matched />
           <FurDot bg="var(--fur-honey)" matched />
-          <FurDot bg="var(--fur-peach)" dim />
+          <FurDot bg="var(--fur-peach)" matched />
           <FurDot bg="var(--fur-rust)" matched />
           <FurDot bg="var(--fur-mushroom)" dim />
+          <FurDot bg="var(--fur-smoke)" dim />
+          <FurDot bg="var(--fur-steel)" dim />
           <FurDot bg="var(--fur-bark)" dim />
+          <FurDot bg="var(--fur-sable)" dim />
         </div>
       </div>
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div style={{ flex: 1 }} />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -116,9 +123,11 @@ function PetPageSampling() {
 function FurDot({ bg, dim = false, matched = false }) {
   return (
     <div style={{
-      width: 26, height: 26, borderRadius: '50%', background: bg,
-      border: '1.5px solid var(--ink)', opacity: dim ? 0.32 : 1,
-      boxShadow: matched ? '0 0 0 2px var(--canvas-2), 0 0 0 3.5px var(--berry)' : 'none',
+      width: 22, height: 22, borderRadius: '50%', background: bg,
+      border: '1px solid var(--ink)', opacity: dim ? 0.28 : 1,
+      boxShadow: matched ? '0 0 0 2px var(--canvas), 0 0 0 3px var(--berry)' : 'none',
+      transition: 'opacity 200ms var(--ease)',
+      flexShrink: 0,
     }} />
   );
 }
@@ -138,7 +147,13 @@ function PetPageMagicMoment() {
         <div className="pk-magic-toast">
           <div className="photo" style={{ backgroundImage: `url(${PETS.gabby.photo})` }} />
           <div className="swatch" style={{ background: 'var(--fur-honey)' }} />
-          <div className="copy">Meet <b>Gabby</b>, a Honey palette dog.</div>
+          <div className="copy">
+            <div className="lead"><b>Gabby</b> is a honey dog!</div>
+            <div className="sub">
+              Don't agree?<br />
+              <a href="#" className="link">Change his colour palette</a>
+            </div>
+          </div>
         </div>
         <div style={{ flex: 1, background: 'var(--canvas)' }} />
       </div>
@@ -156,8 +171,8 @@ function PetPageTransformed() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero beat name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div style={{ flex: 1, background: 'var(--canvas)' }} />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -172,8 +187,8 @@ function PetPageSteady() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineFull />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -188,8 +203,8 @@ function PetPageTimeline() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineFull />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -204,8 +219,8 @@ function PetPageVaccinations() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Vaccinations" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vaccinations" />
       <div className="pk-scroll">
         <div className="pk-section-label">Upcoming</div>
         <div className="pk-vacc-row">
@@ -259,8 +274,8 @@ function PetPageInvoices() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Invoices" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Invoices" />
       <div className="pk-scroll">
         <div className="pk-inv-row">
           <div>
@@ -307,9 +322,9 @@ function PetPageWindowOpen() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
       <BerryBanner petName="Gabby" until="28 Mar" />
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineShort />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -324,14 +339,14 @@ function PetPageReminder() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
       <WarmBanner
         headIcon="clock"
         head="DHPPi+L4 booster due 12 May"
         det="Walk-in 9am–9pm Mon–Sat at AMS Pune."
         cta="See schedule"
       />
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineShort />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -346,8 +361,8 @@ function PetPageQuiet() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineFull />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -362,8 +377,8 @@ function SwitcherActive() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div style={{ opacity: 0.4 }}>
         <TimelineShort />
       </div>
@@ -382,8 +397,14 @@ function SwitcherActive() {
 
 function SwitcherAv({ tone = "honey", letter, photo, on = false, wings = false, label }) {
   return (
-    <div className={`pk-switcher-av ${tone}${on ? ' on' : ''}`}>
-      <div className="av" style={photo ? { backgroundImage: `url(${photo})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' } : undefined}>
+    <div className={`pk-switcher-av ${tone}${on ? ' on' : ''}${wings ? ' memorial' : ''}`}>
+      <div className="av" style={photo ? {
+        backgroundImage: `url(${photo})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        color: 'transparent',
+        filter: wings ? 'grayscale(1) contrast(0.95)' : undefined,
+      } : undefined}>
         {!photo && letter}
         {wings && <div className="wings-badge"><Icon id="wings" size={11} /></div>}
       </div>
@@ -400,8 +421,8 @@ function SwitcherCoachmark() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineShort />
       <div className="pk-coachmark">Press and hold to switch pets</div>
       <BottomNav active="pets" />
@@ -417,9 +438,9 @@ function SwitcherPostSwap() {
     <PawkitFrame>
       <Cover hero tone="smoke" photo={PETS.angel.photo} />
       <PetNameRow hero name="Angel" />
-      <PetSubline hero>Persian · 8 years</PetSubline>
+      <PetSubline hero>Persian · Female · 8 years</PetSubline>
       <BerryBanner petName="Angel" until="22 Apr" />
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div className="pk-scroll">
         <TimelineCard
           icon="bandage" accent="berry"
@@ -445,10 +466,10 @@ function SwitcherPostSwap() {
 function MemorialSwitcher() {
   return (
     <PawkitFrame>
-      <Cover hero tone="honey" photo={PETS.gabby.photo} />
-      <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <Cover tone="honey" height={140} photo={PETS.gabby.photo} />
+      <PetNameRow name="Gabby" />
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div style={{ opacity: 0.4 }}>
         <TimelineShort />
       </div>
@@ -480,7 +501,7 @@ function MemorialPetPage() {
       <div className="pk-petsub" style={{ fontStyle: 'italic', padding: '8px 22px 22px' }}>
         Indie · 2009 to 2024. A very good dog.
       </div>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div className="pk-scroll" style={{ opacity: 0.85 }}>
         <TimelineCard
           icon="bandage"

@@ -191,17 +191,23 @@ code, .code {
 /* ───── Reset for in-screen content ───── */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* ───── Phosphor icon helper ───── */
+/* ───── Phosphor icon helper ─────
+   Works for both <svg class="icon"> (custom sprite glyphs like wings)
+   and <i class="icon ph ph-house"> (Phosphor regular web-font glyphs). */
 .icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   vertical-align: middle;
   flex-shrink: 0;
   color: currentColor;
+  fill: currentColor;
+  font-style: normal;
 }
-.icon.s16 { width: 16px; height: 16px; }
-.icon.s18 { width: 18px; height: 18px; }
-.icon.s20 { width: 20px; height: 20px; }
-.icon.s24 { width: 24px; height: 24px; }
+.icon.s16 { width: 16px; height: 16px; font-size: 16px; }
+.icon.s18 { width: 18px; height: 18px; font-size: 18px; }
+.icon.s20 { width: 20px; height: 20px; font-size: 20px; }
+.icon.s24 { width: 24px; height: 24px; font-size: 24px; }
 
 /* ============================================================
    DEVICE FRAME
@@ -355,16 +361,25 @@ code, .code {
   position: relative;
   transition: color var(--duration-base) var(--ease);
 }
-.pk-bottomnav .tab.active { color: var(--berry); }
+.pk-bottomnav .tab.active { color: #fff; }
+/* Round, raised berry disc behind the active tab icon. */
 .pk-bottomnav .tab.active::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 28%; right: 28%;
-  height: 2px;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background: var(--berry);
-  border-radius: 0 0 2px 2px;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 4px 10px rgba(156, 43, 92, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  z-index: 0;
 }
+.pk-bottomnav .tab.active svg,
+.pk-bottomnav .tab.active i { position: relative; z-index: 1; }
 
 /* ============================================================
    PET PAGE PRIMITIVES
@@ -439,29 +454,31 @@ code, .code {
   font-family: var(--font-lora);
   font-style: italic;
   font-weight: 600;
-  font-size: var(--text-3xl);
-  line-height: 1.05;
+  font-size: 40px;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
-/* Hero variant — 48px magazine name on a clean canvas band below the cover.
-   No overlap onto the photo: dark ink over a busy image is unreadable. */
+/* Hero variant — 40px magazine name on a clean canvas band below the cover.
+   No overlap onto the photo: dark ink over a busy image is unreadable.
+   line-height >= 1.05 so Lora italic's descenders (g, y, p) don't clip. */
 .pk-petname-row.hero {
   background: var(--canvas);
-  padding: 22px 22px 4px;
+  padding: 18px 22px 6px;
   align-items: flex-end;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
 }
 .pk-petname-row.hero .name {
-  font-size: var(--text-display);
-  line-height: 0.95;
+  font-size: 40px;
+  line-height: 1.08;
   letter-spacing: -0.02em;
 }
 
-/* Transformed beat — frame 1, before reflowing down to Steady's 48px. */
+/* Transformed beat — uses the same 40px as the steady hero for visual continuity. */
 .pk-petname-row.hero.beat .name {
-  font-size: 68px;
-  line-height: 0.92;
+  font-size: 40px;
+  line-height: 1.08;
 }
 .pk-petname-row .gear {
   margin-left: auto;
@@ -1475,13 +1492,13 @@ code, .code {
    ============================================================ */
 .pk-photo-prompt {
   margin: 16px 20px 0;
-  border: 1px dashed var(--rule);
+  border: 1px dashed var(--berry);
   border-radius: 12px;
   padding: 14px 16px;
   text-align: center;
   font-size: var(--text-sm);
-  color: var(--ink-70);
-  background: var(--canvas-2);
+  color: var(--berry-deep);
+  background: var(--berry-soft);
   flex-shrink: 0;
 }
 .pk-photo-prompt .icon-wrap {
@@ -1490,13 +1507,13 @@ code, .code {
   background: var(--canvas);
   display: inline-grid;
   place-items: center;
-  color: var(--ink);
+  color: var(--berry);
   margin-bottom: 8px;
 }
 .pk-photo-prompt .lead {
   font-size: var(--text-md);
   font-weight: 600;
-  color: var(--ink);
+  color: var(--berry-deep);
   margin-bottom: 2px;
 }
 
@@ -1582,6 +1599,23 @@ code, .code {
   color: var(--ink);
   text-align: center;
   padding: 0 22px;
+}
+.pk-magic-toast .copy .lead {
+  font-size: var(--text-lg);
+  line-height: 1.25;
+}
+.pk-magic-toast .copy .sub {
+  margin-top: 6px;
+  font-size: var(--text-sm);
+  line-height: 1.35;
+  color: var(--ink-70);
+}
+.pk-magic-toast .copy .link {
+  color: var(--berry);
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--berry);
+  padding-bottom: 1px;
+  text-decoration: none;
 }
 .pk-magic-toast .copy b {
   font-family: var(--font-lora);
@@ -1783,6 +1817,9 @@ code, .code {
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Phosphor Icons (Regular) — the real ones. -->
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
 </head>
 <body data-screen-label="Parent app hi-fi">
 
@@ -1842,9 +1879,6 @@ code, .code {
     <rect width="200" height="200" fill="#EFE6E8"/>
     <rect x="60" y="40" width="80" height="130" rx="14" fill="#F8F7F5" stroke="#0F0C0A" stroke-width="2"/>
     <text x="100" y="118" font-family="Georgia, serif" font-style="italic" font-weight="600" font-size="44" fill="#9C2B5C" text-anchor="middle">P</text>
-  </svg>
-</template>
-<div id="root"></div>
 <script type="text/babel">
 
 // DesignCanvas.jsx — Figma-ish design canvas wrapper
@@ -2834,20 +2868,45 @@ const BROADCAST_PHOTOS = {
 };
 
 // ─────────────────────────────────────────────────────────────
-// Phosphor icon (sprite + extension symbols inlined in HTML)
 // ─────────────────────────────────────────────────────────────
+// Phosphor icon — renders Phosphor Regular via @phosphor-icons/web
+// (loaded as a CSS web font in Parent App.html). Custom glyphs that
+// aren't in Phosphor (memorial wings) fall through to the SVG sprite.
+// ─────────────────────────────────────────────────────────────
+const PH_NAME = {
+  'paper-plane': 'paper-plane-tilt',
+  'paw':         'paw-print',
+  'magnifier':   'magnifying-glass',
+  'chat':        'chat-circle',
+  'floppy':      'floppy-disk',
+  'pin':         'map-pin',
+  'download':    'download-simple',
+};
+const SPRITE_GLYPHS = new Set(['wings']);
+
 function Icon({ id, size = 18, color, style, ...rest }) {
+  if (SPRITE_GLYPHS.has(id)) {
+    return (
+      <svg
+        className={`icon s${size}`}
+        width={size}
+        height={size}
+        style={{ color, ...style }}
+        aria-hidden="true"
+        {...rest}
+      >
+        <use href={`#i-${id}`} />
+      </svg>
+    );
+  }
+  const name = PH_NAME[id] || id;
   return (
-    <svg
-      className={`icon s${size}`}
-      width={size}
-      height={size}
-      style={{ color, ...style }}
+    <i
+      className={`icon s${size} ph ph-${name}`}
+      style={{ fontSize: size, lineHeight: 1, color, ...style }}
       aria-hidden="true"
       {...rest}
-    >
-      <use href={`#i-${id}`} />
-    </svg>
+    />
   );
 }
 
@@ -2970,7 +3029,7 @@ function Cover({ tone = "honey", height, hero = false, sampling = false, empty =
         </>
       )}
       {memorial && (
-        <div style={{ position: 'absolute', inset: 0, background: 'var(--fur-sable)', opacity: 0.62 }} />
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} />
       )}
       <div className={`strip ${tone}`} style={memorial ? { height: 4 } : undefined} />
       {children}
@@ -3259,12 +3318,12 @@ function OnbHousehold() {
   return (
     <PawkitFrame>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'var(--canvas)' }}>
-        <div style={{ padding: '40px 24px 0' }}>
+        <div style={{ padding: '24px 24px 0' }}>
           <Progress total={2} at={0} />
           <h1 style={{
             fontFamily: 'var(--font-inter)', fontSize: 'var(--text-2xl)', lineHeight: 1.2,
             fontWeight: 600, letterSpacing: '-0.01em',
-            margin: '24px 0 8px',
+            margin: '20px 0 6px',
           }}>Welcome to Pawkit</h1>
           <p style={{
             fontSize: 'var(--text-md)', lineHeight: 'var(--lh-md)',
@@ -3272,7 +3331,7 @@ function OnbHousehold() {
           }}>Let's set up your household. You can change any of this later in Settings.</p>
         </div>
 
-        <div style={{ padding: '36px 24px 0', flex: 1 }}>
+        <div style={{ padding: '32px 24px 0', flex: 1 }}>
           <div className="pk-field" style={{ borderBottom: 'none', padding: 0 }}>
             <div className="label">Household name</div>
             <div className="value placeholder">e.g. The Fernandes family</div>
@@ -3290,9 +3349,140 @@ function OnbHousehold() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Step 2 — First pet (5 fields)
+// Mini-calendar — used inline under Birthday/Date
+// August 2021, Aug 1 is a Sunday, day 12 highlighted.
 // ─────────────────────────────────────────────────────────────
-function OnbFirstPet() {
+function MiniCalendar({ year = 2021, monthLabel = 'August 2021', selected = 12, firstDow = 0, daysInMonth = 31 }) {
+  const dow = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const cells = [];
+  for (let i = 0; i < firstDow; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '4px 2px 10px',
+      }}>
+        <span style={{
+          fontFamily: 'var(--font-inter)', fontSize: 'var(--text-sm)',
+          fontWeight: 600, color: 'var(--ink)',
+        }}>{monthLabel}</span>
+        <span style={{ display: 'inline-flex', gap: 6, color: 'var(--ink-50)' }}>
+          <span style={{
+            width: 22, height: 22, display: 'grid', placeItems: 'center',
+            borderRadius: 6,
+          }}>‹</span>
+          <span style={{
+            width: 22, height: 22, display: 'grid', placeItems: 'center',
+            borderRadius: 6,
+          }}>›</span>
+        </span>
+      </div>
+
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)',
+        gap: 2, fontFamily: 'var(--font-inter)',
+        fontSize: 'var(--text-xxs)', letterSpacing: '0.06em',
+        color: 'var(--ink-50)', textTransform: 'uppercase',
+        textAlign: 'center', padding: '0 0 6px',
+      }}>
+        {dow.map((d, i) => <div key={i}>{d}</div>)}
+      </div>
+
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)',
+        gap: 2,
+      }}>
+        {cells.map((d, i) => {
+          if (d == null) return <div key={i} style={{ height: 30 }} />;
+          const on = d === selected;
+          return (
+            <div key={i} style={{
+              height: 30, display: 'grid', placeItems: 'center',
+              fontSize: 'var(--text-sm)',
+              fontVariantNumeric: 'tabular-nums',
+              fontWeight: on ? 600 : 400,
+              color: on ? 'var(--canvas)' : 'var(--ink)',
+              background: on ? 'var(--ink)' : 'transparent',
+              borderRadius: 999,
+            }}>{d}</div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Age picker — Years / Months side-by-side wheels
+// ─────────────────────────────────────────────────────────────
+function AgePicker({ years = 4, months = 2 }) {
+  const Wheel = ({ label, value, max }) => {
+    const items = [];
+    for (let v = Math.max(0, value - 2); v <= Math.min(max, value + 2); v++) items.push(v);
+    return (
+      <div style={{
+        flex: 1,
+        background: 'var(--canvas-2)',
+        border: '1px solid var(--rule)',
+        borderRadius: 12,
+        padding: '10px 0',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          textAlign: 'center',
+          fontFamily: 'var(--font-inter)',
+          fontSize: 'var(--text-xxs)',
+          letterSpacing: 'var(--tracking-eyebrow)',
+          textTransform: 'uppercase',
+          color: 'var(--ink-50)',
+          fontWeight: 600,
+          marginBottom: 4,
+        }}>{label}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          {items.map(v => {
+            const on = v === value;
+            return (
+              <div key={v} style={{
+                fontFamily: 'var(--font-inter)',
+                fontVariantNumeric: 'tabular-nums',
+                fontSize: on ? 'var(--text-lg)' : 'var(--text-sm)',
+                fontWeight: on ? 600 : 400,
+                color: on ? 'var(--ink)' : 'var(--ink-30)',
+                lineHeight: 1.2,
+              }}>{v}</div>
+            );
+          })}
+        </div>
+        {/* selection band */}
+        <div style={{
+          position: 'absolute', left: 6, right: 6,
+          top: '50%', transform: 'translateY(-50%)',
+          height: 30,
+          borderTop: '1px solid var(--rule)',
+          borderBottom: '1px solid var(--rule)',
+          pointerEvents: 'none',
+        }} />
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ marginTop: 10, display: 'flex', gap: 10 }}>
+      <Wheel label="Years" value={years} max={30} />
+      <Wheel label="Months" value={months} max={11} />
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Step 2 — First pet (5 fields)
+// `birthMode` = 'date' (calendar) | 'age' (years/months wheel)
+// ─────────────────────────────────────────────────────────────
+function OnbFirstPet({ birthMode = 'date' }) {
   return (
     <PawkitFrame>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'var(--canvas)' }}>
@@ -3308,7 +3498,7 @@ function OnbFirstPet() {
           </p>
         </div>
 
-        <div style={{ padding: '20px 24px 0', flex: 1, overflowY: 'auto' }}>
+        <div style={{ padding: '16px 24px 0', flex: 1, overflowY: 'auto' }}>
           <div className="pk-field">
             <div className="label">Name</div>
             <div className="value">Gabby</div>
@@ -3321,7 +3511,14 @@ function OnbFirstPet() {
           </div>
           <div className="pk-field">
             <div className="label">Breed</div>
-            <div className="value">Golden Retriever</div>
+            <div className="value" style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
+            }}>
+              <span>Golden Retriever</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style={{ color: 'var(--ink-50)', flexShrink: 0 }}>
+                <path fill="currentColor" d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
           </div>
           <div className="pk-field">
             <div className="label">Gender</div>
@@ -3334,9 +3531,11 @@ function OnbFirstPet() {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8,
             }}>
               <span>Birthday</span>
-              <Seg options={['Date', 'Age']} on="Date" />
+              <Seg options={['Date', 'Age']} on={birthMode === 'age' ? 'Age' : 'Date'} />
             </div>
-            <div className="value">12 August 2021</div>
+            {birthMode === 'age'
+              ? <AgePicker years={4} months={2} />
+              : <MiniCalendar />}
           </div>
         </div>
 
@@ -3349,6 +3548,8 @@ function OnbFirstPet() {
   );
 }
 
+function OnbFirstPetAge() { return <OnbFirstPet birthMode="age" />; }
+
 // ─────────────────────────────────────────────────────────────
 // Land on empty Pet Page (after submit)
 // ─────────────────────────────────────────────────────────────
@@ -3357,7 +3558,7 @@ function OnbLand() {
     <PawkitFrame>
       <Cover empty />
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
 
       <div className="pk-photo-prompt">
         <div className="icon-wrap"><Icon id="camera" size={16} /></div>
@@ -3365,7 +3566,7 @@ function OnbLand() {
         <div>We'll find his fur palette from it.</div>
       </div>
 
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
 
       <div className="pk-empty" style={{ flex: 'none', padding: '32px 24px' }}>
         No visits yet.
@@ -3377,7 +3578,7 @@ function OnbLand() {
   );
 }
 
-Object.assign(window, { OnbHousehold, OnbFirstPet, OnbLand });
+Object.assign(window, { OnbHousehold, OnbFirstPet, OnbFirstPetAge, OnbLand });
 </script>
 <script type="text/babel">
 // screens-pet-page.jsx — Pet Page (the brand hero) in all its states.
@@ -3449,13 +3650,13 @@ function PetPageEmpty() {
     <PawkitFrame>
       <Cover empty />
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
       <div className="pk-photo-prompt">
         <div className="icon-wrap"><Icon id="camera" size={16} /></div>
         <div className="lead">Add a photo of Gabby</div>
         <div>We'll find his fur palette from it.</div>
       </div>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div className="pk-empty" style={{ flex: 'none', padding: '32px 24px' }}>No visits yet.</div>
       <div style={{ flex: 1 }} />
       <BottomNav active="pets" />
@@ -3471,24 +3672,31 @@ function PetPageSampling() {
     <PawkitFrame>
       <Cover tone="honey" photo={PETS.gabby.photo} sampling />
       <div style={{
-        padding: '12px 20px',
-        background: 'var(--canvas-2)',
+        padding: '14px 20px 16px',
+        background: 'var(--canvas)',
         borderBottom: '1px solid var(--rule)',
       }}>
-        <div className="pk-eyebrow" style={{ color: 'var(--berry-deep)', marginBottom: 8 }}>Reading fur palette…</div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <FurDot bg="var(--fur-milk)" />
-          <FurDot bg="var(--fur-vanilla)" dim />
+        <div className="pk-eyebrow" style={{ color: 'var(--berry-deep)', marginBottom: 10 }}>Reading fur palette…</div>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <FurDot bg="var(--fur-milk)" dim />
+          <FurDot bg="var(--fur-vanilla)" matched />
           <FurDot bg="var(--fur-honey)" matched />
-          <FurDot bg="var(--fur-peach)" dim />
+          <FurDot bg="var(--fur-peach)" matched />
           <FurDot bg="var(--fur-rust)" matched />
           <FurDot bg="var(--fur-mushroom)" dim />
+          <FurDot bg="var(--fur-smoke)" dim />
+          <FurDot bg="var(--fur-steel)" dim />
           <FurDot bg="var(--fur-bark)" dim />
+          <FurDot bg="var(--fur-sable)" dim />
         </div>
       </div>
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div style={{ flex: 1 }} />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -3498,9 +3706,11 @@ function PetPageSampling() {
 function FurDot({ bg, dim = false, matched = false }) {
   return (
     <div style={{
-      width: 26, height: 26, borderRadius: '50%', background: bg,
-      border: '1.5px solid var(--ink)', opacity: dim ? 0.32 : 1,
-      boxShadow: matched ? '0 0 0 2px var(--canvas-2), 0 0 0 3.5px var(--berry)' : 'none',
+      width: 22, height: 22, borderRadius: '50%', background: bg,
+      border: '1px solid var(--ink)', opacity: dim ? 0.28 : 1,
+      boxShadow: matched ? '0 0 0 2px var(--canvas), 0 0 0 3px var(--berry)' : 'none',
+      transition: 'opacity 200ms var(--ease)',
+      flexShrink: 0,
     }} />
   );
 }
@@ -3520,7 +3730,13 @@ function PetPageMagicMoment() {
         <div className="pk-magic-toast">
           <div className="photo" style={{ backgroundImage: `url(${PETS.gabby.photo})` }} />
           <div className="swatch" style={{ background: 'var(--fur-honey)' }} />
-          <div className="copy">Meet <b>Gabby</b>, a Honey palette dog.</div>
+          <div className="copy">
+            <div className="lead"><b>Gabby</b> is a honey dog!</div>
+            <div className="sub">
+              Don't agree?<br />
+              <a href="#" className="link">Change his colour palette</a>
+            </div>
+          </div>
         </div>
         <div style={{ flex: 1, background: 'var(--canvas)' }} />
       </div>
@@ -3538,8 +3754,8 @@ function PetPageTransformed() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero beat name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div style={{ flex: 1, background: 'var(--canvas)' }} />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -3554,8 +3770,8 @@ function PetPageSteady() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineFull />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -3570,8 +3786,8 @@ function PetPageTimeline() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineFull />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -3586,8 +3802,8 @@ function PetPageVaccinations() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Vaccinations" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vaccinations" />
       <div className="pk-scroll">
         <div className="pk-section-label">Upcoming</div>
         <div className="pk-vacc-row">
@@ -3641,8 +3857,8 @@ function PetPageInvoices() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Invoices" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Invoices" />
       <div className="pk-scroll">
         <div className="pk-inv-row">
           <div>
@@ -3689,9 +3905,9 @@ function PetPageWindowOpen() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
       <BerryBanner petName="Gabby" until="28 Mar" />
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineShort />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -3706,14 +3922,14 @@ function PetPageReminder() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
       <WarmBanner
         headIcon="clock"
         head="DHPPi+L4 booster due 12 May"
         det="Walk-in 9am–9pm Mon–Sat at AMS Pune."
         cta="See schedule"
       />
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineShort />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -3728,8 +3944,8 @@ function PetPageQuiet() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineFull />
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -3744,8 +3960,8 @@ function SwitcherActive() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div style={{ opacity: 0.4 }}>
         <TimelineShort />
       </div>
@@ -3764,8 +3980,14 @@ function SwitcherActive() {
 
 function SwitcherAv({ tone = "honey", letter, photo, on = false, wings = false, label }) {
   return (
-    <div className={`pk-switcher-av ${tone}${on ? ' on' : ''}`}>
-      <div className="av" style={photo ? { backgroundImage: `url(${photo})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' } : undefined}>
+    <div className={`pk-switcher-av ${tone}${on ? ' on' : ''}${wings ? ' memorial' : ''}`}>
+      <div className="av" style={photo ? {
+        backgroundImage: `url(${photo})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        color: 'transparent',
+        filter: wings ? 'grayscale(1) contrast(0.95)' : undefined,
+      } : undefined}>
         {!photo && letter}
         {wings && <div className="wings-badge"><Icon id="wings" size={11} /></div>}
       </div>
@@ -3782,8 +4004,8 @@ function SwitcherCoachmark() {
     <PawkitFrame>
       <Cover hero tone="honey" photo={PETS.gabby.photo} />
       <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <PetSubline hero>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <TimelineShort />
       <div className="pk-coachmark">Press and hold to switch pets</div>
       <BottomNav active="pets" />
@@ -3799,9 +4021,9 @@ function SwitcherPostSwap() {
     <PawkitFrame>
       <Cover hero tone="smoke" photo={PETS.angel.photo} />
       <PetNameRow hero name="Angel" />
-      <PetSubline hero>Persian · 8 years</PetSubline>
+      <PetSubline hero>Persian · Female · 8 years</PetSubline>
       <BerryBanner petName="Angel" until="22 Apr" />
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div className="pk-scroll">
         <TimelineCard
           icon="bandage" accent="berry"
@@ -3827,10 +4049,10 @@ function SwitcherPostSwap() {
 function MemorialSwitcher() {
   return (
     <PawkitFrame>
-      <Cover hero tone="honey" photo={PETS.gabby.photo} />
-      <PetNameRow hero name="Gabby" />
-      <PetSubline hero>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <Cover tone="honey" height={140} photo={PETS.gabby.photo} />
+      <PetNameRow name="Gabby" />
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div style={{ opacity: 0.4 }}>
         <TimelineShort />
       </div>
@@ -3862,7 +4084,7 @@ function MemorialPetPage() {
       <div className="pk-petsub" style={{ fontStyle: 'italic', padding: '8px 22px 22px' }}>
         Indie · 2009 to 2024. A very good dog.
       </div>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Timeline" />
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vet Visits" />
       <div className="pk-scroll" style={{ opacity: 0.85 }}>
         <TimelineCard
           icon="bandage"
@@ -4074,7 +4296,6 @@ function BroadcastsList() {
               <span className="stamp">Today · 8:12 am</span>
             </div>
             <div className="right">
-              <div className="pk-seg" style={{ padding: 2 }}><span className="opt on" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>EN</span><span className="opt" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>MR</span></div>
               <span className="unread-dot" />
             </div>
           </div>
@@ -4093,9 +4314,7 @@ function BroadcastsList() {
               <b>Dr Sagar · AMS</b><br />
               <span className="stamp">Mon · 9:40 am</span>
             </div>
-            <div className="right">
-              <div className="pk-seg" style={{ padding: 2 }}><span className="opt on" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>EN</span><span className="opt" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>MR</span></div>
-            </div>
+            <div className="right" />
           </div>
           <div className="ttl" style={{ marginBottom: 4 }}>AMS will be closed Mon 9 Nov for Diwali</div>
           <div className="body">
@@ -4110,9 +4329,7 @@ function BroadcastsList() {
               <b>Dr Sagar · AMS</b><br />
               <span className="stamp">12 Mar · 6:30 pm</span>
             </div>
-            <div className="right">
-              <div className="pk-seg" style={{ padding: 2 }}><span className="opt" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>EN</span><span className="opt on" style={{ padding: '3px 8px', fontSize: 'var(--text-xxs)' }}>MR</span></div>
-            </div>
+            <div className="right" />
           </div>
           <div className="ttl" style={{ marginBottom: 4, fontFamily: 'Noto Sans Devanagari, var(--font-inter)' }}>
             पावसाळ्यात कुत्र्यांसाठी टिक्स आणि पिसवांचा सल्ला
@@ -4134,20 +4351,11 @@ function BroadcastsList() {
 function BroadcastReadingLong() {
   return (
     <PawkitFrame>
-      <TopBar title="From Dr Sagar Bhongale" right={<div style={{ width: 40, height: 40, display: 'grid', placeItems: 'center' }}><Icon id="share-network" size={20} /></div>} />
+      <TopBar title="From your vet" right={<div style={{ width: 40, height: 40, display: 'grid', placeItems: 'center' }}><Icon id="share-network" size={20} /></div>} />
       <div className="pk-reader">
-        <div className="byline">AMS Pune · Today, 8:12 am</div>
+        <div className="byline">Dr Sagar Bhongale · AMS Pune · Today, 8:12 am</div>
         <h1>Monsoon ear-infection watch for dogs</h1>
         <div className="cover" style={{ backgroundImage: `url(${BROADCAST_PHOTOS.monsoon})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' }} />
-
-        <div className="summary">
-          <div className="label">Summary</div>
-          <ul>
-            <li>Humid weather flares ear infections in dogs.</li>
-            <li>Check ears weekly, dry them after walks.</li>
-            <li>Floppy-eared breeds at higher risk.</li>
-          </ul>
-        </div>
 
         <div className="body">
           As Pune's monsoon settles in, we see a sharp rise in canine ear infections. Humid air and trapped moisture is a breeding ground for bacteria and yeast. Most flares are easy to catch early if you check the ears weekly and dry them after walks or baths.
@@ -4175,9 +4383,10 @@ function BroadcastReadingLong() {
       <div className="pk-share-footer">
         <div className="lead"><Icon id="share-network" size={18} /> Share with someone</div>
         <div className="actions">
-          <div className="pill" title="WhatsApp" style={{ fontSize: 'var(--text-xs)', fontWeight: 700 }}>WA</div>
-          <div className="pill" title="Share"><Icon id="share-network" size={14} /></div>
+          <div className="pill" title="WhatsApp"><Icon id="whatsapp-logo" size={16} /></div>
+          <div className="pill" title="Facebook"><Icon id="facebook-logo" size={16} /></div>
           <div className="pill" title="Email"><Icon id="envelope" size={14} /></div>
+          <div className="pill" title="Copy link"><Icon id="link-simple" size={14} /></div>
         </div>
       </div>
     </PawkitFrame>
@@ -4190,9 +4399,9 @@ function BroadcastReadingLong() {
 function BroadcastReadingShort() {
   return (
     <PawkitFrame>
-      <TopBar title="From Dr Sagar Bhongale" right={<div style={{ width: 40, height: 40, display: 'grid', placeItems: 'center' }}><Icon id="share-network" size={20} /></div>} />
+      <TopBar title="From your vet" right={<div style={{ width: 40, height: 40, display: 'grid', placeItems: 'center' }}><Icon id="share-network" size={20} /></div>} />
       <div className="pk-reader">
-        <div className="byline">AMS Pune · Mon, 9:40 am</div>
+        <div className="byline">Dr Sagar Bhongale · AMS Pune · Mon, 9:40 am</div>
         <h1>AMS will be closed Mon 9 Nov for Diwali</h1>
         <div className="body">
           We'll reopen on Tue 10 Nov, 9am, on regular schedule.
@@ -4205,9 +4414,10 @@ function BroadcastReadingShort() {
       <div className="pk-share-footer">
         <div className="lead"><Icon id="share-network" size={18} /> Share with someone</div>
         <div className="actions">
-          <div className="pill" style={{ fontSize: 'var(--text-xs)', fontWeight: 700 }}>WA</div>
-          <div className="pill"><Icon id="share-network" size={14} /></div>
-          <div className="pill"><Icon id="envelope" size={14} /></div>
+          <div className="pill" title="WhatsApp"><Icon id="whatsapp-logo" size={16} /></div>
+          <div className="pill" title="Facebook"><Icon id="facebook-logo" size={16} /></div>
+          <div className="pill" title="Email"><Icon id="envelope" size={14} /></div>
+          <div className="pill" title="Copy link"><Icon id="link-simple" size={14} /></div>
         </div>
       </div>
     </PawkitFrame>
@@ -4220,10 +4430,10 @@ function BroadcastReadingShort() {
 function ShareSheet() {
   return (
     <PawkitFrame>
-      <TopBar title="From Dr Sagar Bhongale" />
+      <TopBar title="From your vet" />
       <div style={{ flex: 1, opacity: 0.35, padding: '14px 20px', background: 'var(--canvas)', overflow: 'hidden' }}>
         <div className="byline" style={{ fontSize: 'var(--text-xxs)', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-50)', marginBottom: 12 }}>
-          AMS Pune · Today, 8:12 am
+          Dr Sagar Bhongale · AMS Pune · Today, 8:12 am
         </div>
         <h1 style={{
           fontFamily: 'var(--font-inter)', fontSize: 'var(--text-2xl)', lineHeight: 1.2,
@@ -4243,10 +4453,10 @@ function ShareSheet() {
           <div className="sub">Opens at pawkit.app/broadcasts/monsoon-ears</div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, padding: '8px 18px 14px' }}>
-          <ShareTile label="WhatsApp" mark="WA" />
-          <ShareTile label="More apps" icon="share-network" />
+          <ShareTile label="WhatsApp" icon="whatsapp-logo" tint="#25D366" />
+          <ShareTile label="Facebook" icon="facebook-logo" tint="#1877F2" />
           <ShareTile label="Email" icon="envelope" />
-          <ShareTile label="Copy link" icon="paperclip" />
+          <ShareTile label="Copy link" icon="link-simple" />
         </div>
         <div style={{ margin: '0 18px', padding: '10px 12px', border: '1px dashed var(--rule)', borderRadius: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{
@@ -4262,16 +4472,20 @@ function ShareSheet() {
     </PawkitFrame>
   );
 }
-function ShareTile({ label, mark, icon }) {
+function ShareTile({ label, mark, icon, tint }) {
+  const tinted = !!tint;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
       <div style={{
         width: 56, height: 56, borderRadius: 16,
-        background: 'var(--canvas-2)', border: '1px solid var(--rule)',
+        background: tinted ? tint : 'var(--canvas-2)',
+        border: tinted ? '1px solid rgba(0,0,0,0.06)' : '1px solid var(--rule)',
         display: 'grid', placeItems: 'center',
-        color: 'var(--ink)', fontWeight: 700, fontSize: 'var(--text-base)',
+        color: tinted ? '#fff' : 'var(--ink)',
+        fontWeight: 700, fontSize: 'var(--text-base)',
+        boxShadow: tinted ? 'inset 0 1px 0 rgba(255,255,255,0.18)' : 'none',
       }}>
-        {mark || <Icon id={icon} size={20} />}
+        {mark || <Icon id={icon} size={26} />}
       </div>
       <div style={{ fontSize: 'var(--text-xs)', fontWeight: 500, color: 'var(--ink)' }}>{label}</div>
     </div>
@@ -4344,17 +4558,6 @@ function PublicWebView() {
           width: '100%', aspectRatio: '16/9', borderRadius: 12, marginBottom: 22,
           backgroundImage: `url(${BROADCAST_PHOTOS.monsoon})`, backgroundSize: 'cover', backgroundPosition: 'center',
         }} />
-
-        <div style={{
-          background: 'var(--canvas-2)', borderRadius: 12, padding: '14px 16px', marginBottom: 22,
-        }}>
-          <div className="pk-eyebrow" style={{ marginBottom: 8 }}>Summary</div>
-          <ul style={{ margin: 0, paddingLeft: 18, fontSize: 'var(--text-md)', lineHeight: 1.55 }}>
-            <li>Humid weather flares ear infections in dogs.</li>
-            <li>Check ears weekly, dry them after walks.</li>
-            <li>Floppy-eared breeds at higher risk.</li>
-          </ul>
-        </div>
 
         <div style={{ fontSize: 'var(--text-md)', lineHeight: 1.65, color: 'var(--ink)', marginBottom: 22 }}>
           As Pune's monsoon settles in, we see a sharp rise in canine ear infections. Humid air and trapped moisture is a breeding ground for bacteria and yeast.
@@ -4438,7 +4641,7 @@ function MasterSettings() {
           <div className="av honey" style={{ backgroundImage: `url(${PETS.gabby.photo})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' }} />
           <div className="meta">
             <div className="name">Gabby</div>
-            <div className="det">Golden Retriever · 4y</div>
+            <div className="det">Golden Retriever · M · 4y</div>
           </div>
           <Icon id="arrow-right" size={16} style={{ color: 'var(--ink-50)' }} />
         </div>
@@ -4446,7 +4649,7 @@ function MasterSettings() {
           <div className="av smoke" style={{ backgroundImage: `url(${PETS.angel.photo})`, backgroundSize: 'cover', backgroundPosition: 'center', color: 'transparent' }} />
           <div className="meta">
             <div className="name">Angel</div>
-            <div className="det">Persian · 8y</div>
+            <div className="det">Persian · F · 8y</div>
           </div>
           <Icon id="arrow-right" size={16} style={{ color: 'var(--ink-50)' }} />
         </div>
@@ -4505,7 +4708,7 @@ function PerPetSettings() {
           }} />
           <div>
             <div style={{ fontFamily: 'var(--font-lora)', fontStyle: 'italic', fontWeight: 600, fontSize: 'var(--text-2xl)', lineHeight: 1.05 }}>Gabby</div>
-            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-70)', marginTop: 4 }}>Golden Retriever · 4 years</div>
+            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-70)', marginTop: 4 }}>Golden Retriever · Male · 4 years</div>
           </div>
         </div>
 
@@ -4847,7 +5050,7 @@ function InvoiceDetail() {
 
         <div style={{ padding: '14px 20px 20px', display: 'flex', gap: 10 }}>
           <OutlineBtn full leading={<Icon id="download" size={14} />}>Download PDF</OutlineBtn>
-          <OutlineBtn full leading={<Icon id="envelope" size={14} />}>Email me a copy</OutlineBtn>
+          <OutlineBtn full leading={<Icon id="envelope" size={14} />}>Email copy</OutlineBtn>
         </div>
       </div>
     </PawkitFrame>
@@ -4877,8 +5080,8 @@ function EmptyVaccinations() {
     <PawkitFrame>
       <Cover tone="honey" height={140} />
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Vaccinations" />
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Vaccinations" />
       <div className="pk-empty">No vaccinations on file yet.</div>
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -4893,8 +5096,8 @@ function EmptyInvoices() {
     <PawkitFrame>
       <Cover tone="honey" height={140} />
       <PetNameRow name="Gabby" />
-      <PetSubline>Golden Retriever · 4 years</PetSubline>
-      <TabStrip tabs={['Timeline', 'Vaccinations', 'Invoices']} active="Invoices" />
+      <PetSubline>Golden Retriever · Male · 4 years</PetSubline>
+      <TabStrip tabs={['Vet Visits', 'Vaccinations', 'Invoices']} active="Invoices" />
       <div className="pk-empty">No invoices yet.</div>
       <BottomNav active="pets" />
     </PawkitFrame>
@@ -5047,8 +5250,11 @@ function App() {
         <DCArtboard id="onb-1" label="01 · Household name" width={W} height={H}>
           <Screen><OnbHousehold /></Screen>
         </DCArtboard>
-        <DCArtboard id="onb-2" label="02 · First pet" width={W} height={H}>
+        <DCArtboard id="onb-2" label="02 · First pet · Date" width={W} height={H}>
           <Screen><OnbFirstPet /></Screen>
+        </DCArtboard>
+        <DCArtboard id="onb-2b" label="02 · First pet · Age" width={W} height={H}>
+          <Screen><OnbFirstPetAge /></Screen>
         </DCArtboard>
         <DCArtboard id="onb-3" label="03 · Land on empty Pet Page" width={W} height={H}>
           <Screen><OnbLand /></Screen>
@@ -5068,13 +5274,13 @@ function App() {
         <DCArtboard id="hero-transformed" label="04 · Transformed (beat · 68px)" width={W} height={H}>
           {window.PetPageTransformed ? <Screen><PetPageTransformed /></Screen> : <Placeholder label="Transformed — coming next" />}
         </DCArtboard>
-        <DCArtboard id="hero-steady" label="05 · Steady (48px + Timeline)" width={W} height={H}>
+        <DCArtboard id="hero-steady" label="05 · Steady (40px + Vet visits)" width={W} height={H}>
           {window.PetPageSteady ? <Screen><PetPageSteady /></Screen> : <Placeholder label="Steady — coming next" />}
         </DCArtboard>
       </DCSection>
 
-      <DCSection id="pet-tabs" title="Pet Page · three tabs" subtitle="Timeline / Vaccinations / Invoices.">
-        <DCArtboard id="tab-timeline" label="Timeline" width={W} height={H}>
+      <DCSection id="pet-tabs" title="Pet Page · three tabs" subtitle="Vet Visits / Vaccinations / Invoices.">
+        <DCArtboard id="tab-timeline" label="Vet Visits" width={W} height={H}>
           {window.PetPageTimeline ? <Screen><PetPageTimeline /></Screen> : <Placeholder />}
         </DCArtboard>
         <DCArtboard id="tab-vaccs" label="Vaccinations" width={W} height={H}>
@@ -5196,7 +5402,7 @@ function App() {
         </DCArtboard>
       </DCSection>
 
-      <DCSection id="resilience" title="Offline + errors" subtitle="Achromatic: Ink + warning icon.">
+      <DCSection id="resilience" title="Offline + errors" subtitle="Achromatic — Ink + warning icon.">
         <DCArtboard id="off" label="Offline state" width={W} height={H}>
           {window.OfflineState ? <Screen><OfflineState /></Screen> : <Placeholder />}
         </DCArtboard>
@@ -5210,5 +5416,5 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
-</body>
-</html>
+<script type="text/babel" src="screens-misc.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
