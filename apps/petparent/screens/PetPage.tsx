@@ -162,9 +162,12 @@ export default function PetPage() {
 
   const primaryFur = pet.fur_match_primary?.toLowerCase() ?? 'honey';
   const secondaryFur = pet.fur_match_secondary?.toLowerCase() ?? 'peach';
-  const ringHex = FUR_HEX[primaryFur] ?? FUR_HEX.honey;
   const gradientStart = FUR_HEX[primaryFur] ?? FUR_HEX.honey;
   const gradientEnd = FUR_HEX[secondaryFur] ?? FUR_HEX.peach;
+  // For the 3px accent bar: solo-fur pets must not show the peach fallback;
+  // fall back to primary so the bar reads as solid primary instead of an
+  // invented primary→peach gradient. Two-tone pets render primary→secondary.
+  const barEnd = pet.fur_match_secondary ? gradientEnd : gradientStart;
 
   const ageStr = formatAge(pet.birthday);
   // Patient-since uses birthday year (fallback to created_at). For the Fernandes anchor,
@@ -189,15 +192,20 @@ export default function PetPage() {
           end={{ x: 1, y: 1 }}
           style={{ flex: 1 }}
         />
-        {/* 3px accent ring along bottom: fur-match's ambient contribution */}
-        <View
+        {/* 3px accent bar along bottom: horizontal gradient from primary
+            (left) to secondary (right). Solo-fur pets render solid primary
+            because `barEnd` falls back to `gradientStart` when no secondary
+            exists. Fur-match's ambient contribution, two-tone visible. */}
+        <LinearGradient
+          colors={[gradientStart, barEnd] as [string, string]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
           style={{
             position: 'absolute',
             left: 0,
             right: 0,
             bottom: 0,
             height: 3,
-            backgroundColor: ringHex,
           }}
         />
         {/* Caption overlay: uppercase Inter at bottom-left */}
