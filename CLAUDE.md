@@ -91,6 +91,8 @@ anatomy folded into Day 1 of build foundations. See
 - Bypass-permissions mode is on; don't ask before edits/bash.
 - No em dashes anywhere in docs, microcopy, or UI strings. Use commas,
   periods, colons, parentheses, or sentence breaks.
+- No `Co-Authored-By: Claude` trailers on commits. All commits on this
+  project use Jolene's git user only. Locked 2026-05-19.
 - **NO hand-rolled UI primitives. Ever.** Every interactive element in
   `apps/dashboard/**` must use a shadcn primitive from
   `apps/dashboard/components/ui/`. The 14 shadcn primitives currently
