@@ -218,7 +218,8 @@ anatomy folded into Day 1 of build foundations. See
 | Files that exist + planned files | `docs/critical-files.md` |
 | Deferred decisions awaiting next round | `docs/open-issues.md` |
 | Design system (current, mauve) | `mockups/design-system.html` |
-| Visual mockups (HISTORICAL, v1.3) | `mockups/archive/admin-v1.3.html`, `mockups/archive/parent-v1.3.html`, `mockups/archive/premium-components-v1.3.html` (every token, typeface, icon-kit statement inside is superseded; reference only) |
+| Parent-app mockups (CURRENT, canonical) | `mockups/parent-app-source/` (Claude Design 2026-05-19 handoff) + rebuilt `mockups/parent-app-hifi.html`. Build against `primitives.css` + `tokens.css` here, not the archive. |
+| Visual mockups (HISTORICAL, v1.3, dashboard-era) | `mockups/archive/admin-v1.3.html`, `mockups/archive/premium-components-v1.3.html` (every token, typeface, icon-kit statement inside is superseded; reference only). Old `parent-v1.3.html` deleted 2026-05-19 since superseded by parent-app-source. |
 | App icon direction C (letterform needs Spectral → Lora swap) | `mockups/archive/app-icon-options-v2.html` |
 | Mockups index | `mockups/index.html` (also on v1.3 styling; due for rewrite) |
 | Microcopy EN + MR | `microcopy/` (after product elements, empty) |

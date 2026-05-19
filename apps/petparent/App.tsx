@@ -11,7 +11,7 @@ import {
   Lora_600SemiBold,
   Lora_600SemiBold_Italic,
 } from '@expo-google-fonts/lora';
-import { ActivityIndicator, Platform, StatusBar, View } from 'react-native';
+import { ActivityIndicator, Platform, StatusBar, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import './global.css';
@@ -89,8 +89,7 @@ export default function App() {
         <View
           // Phone-shaped frame: 390x844 (iPhone 12/13/14 reference; close
           // enough to Pixel for design review). Rounded corners + soft drop
-          // shadow so the canvas reads as a device, not a panel. Children
-          // (the actual app) render inside.
+          // shadow so the canvas reads as a device, not a panel.
           style={
             {
               width: 390,
@@ -100,10 +99,59 @@ export default function App() {
               overflow: 'hidden',
               backgroundColor: '#F8F7F5',
               boxShadow: '0 12px 48px rgba(0,0,0,0.18)',
+              display: 'flex',
+              flexDirection: 'column',
             } as any
           }
         >
-          {screens}
+          {/* Fake status bar (web preview only) per mockup primitives.css
+              `.pk-status`: 40px tall, time on left, centered camera punch,
+              minimal battery glyph on right. Consumes the top inset so the
+              actual app content gets the same top margin SafeAreaView gives
+              it on native. */}
+          <View
+            style={{
+              height: 40,
+              paddingHorizontal: 18,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              position: 'relative',
+              flexShrink: 0,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: 'Inter_500Medium',
+                fontSize: 13,
+                color: '#0F0C0A',
+              }}
+            >
+              9:41
+            </Text>
+            <View
+              style={{
+                position: 'absolute',
+                top: 10,
+                left: '50%',
+                marginLeft: -9,
+                width: 18,
+                height: 18,
+                borderRadius: 9,
+                backgroundColor: '#0F0C0A',
+              }}
+            />
+            <View
+              style={{
+                width: 22,
+                height: 11,
+                borderWidth: 1,
+                borderColor: '#0F0C0A',
+                borderRadius: 2,
+              }}
+            />
+          </View>
+          <View style={{ flex: 1 }}>{screens}</View>
         </View>
       </View>
     );
