@@ -1,3 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Pawkit v1.4 mauve palette mapped to shadcn / RNR semantic tokens.
+ * HSL values are space-separated (no hsl() wrapper) so Tailwind can
+ * compose them with opacity modifiers like `bg-primary/90`.
+ *
+ * Source palette (locked 2026-05-15, mauve-only):
+ *   canvas      #F8F7F5  (cool off-white card surface)
+ *   ink         #0F0C0A  (body text, primary stroke)
+ *   ink-soft    #5C5550  (secondary text)
+ *   ink-faint   #8F8B86  (placeholder, tertiary)
+ *   rule        #E5DEE0  (faint mauve borders / separators)
+ *   rail-tint   #EFE6E8  (workspace ground, very faint mauve)
+ *   berry       #9C2B5C  (Boysenberry primary)
+ */
+@layer base {
+  :root {
+    --background: 30 14% 97%;          /* canvas #F8F7F5 */
+    --foreground: 20 22% 5%;           /* ink #0F0C0A */
+
+    --card: 30 14% 97%;
+    --card-foreground: 20 22% 5%;
+
+    --popover: 30 14% 97%;
+    --popover-foreground: 20 22% 5%;
+
+    --primary: 335 57% 39%;            /* berry #9C2B5C */
+    --primary-foreground: 30 14% 97%;  /* canvas (text on berry) */
+
+    --secondary: 350 22% 92%;          /* rail-tint #EFE6E8 */
+    --secondary-foreground: 20 22% 5%;
+
+    --muted: 350 22% 92%;              /* rail-tint */
+    --muted-foreground: 25 7% 34%;     /* ink-soft #5C5550 */
+
+    --accent: 350 22% 92%;
+    --accent-foreground: 20 22% 5%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 30 14% 97%;
+
+    --border: 345 12% 88%;             /* rule #E5DEE0 */
+    --input: 345 12% 88%;
+    --ring: 335 57% 39%;               /* berry, focus ring */
+
+    --radius: 0.75rem;                 /* 12px, Pawkit button radius */
+  }
+}

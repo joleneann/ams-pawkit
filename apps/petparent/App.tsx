@@ -11,12 +11,17 @@ import {
   Lora_600SemiBold,
   Lora_600SemiBold_Italic,
 } from '@expo-google-fonts/lora';
-import { ActivityIndicator, SafeAreaView, StatusBar, View } from 'react-native';
+import { ActivityIndicator, Platform, SafeAreaView, StatusBar, View } from 'react-native';
 
 import './global.css';
 import PetPage from './screens/PetPage';
 import OnboardingHousehold from './screens/OnboardingHousehold';
 import OnboardingFirstPet from './screens/OnboardingFirstPet';
+
+// Web-only phone frame so design iteration in the browser previews at real
+// phone proportions instead of stretched to laptop width. Native (Expo Go,
+// EAS APK) renders full-screen as normal.
+const IS_WEB = Platform.OS === 'web';
 
 // Font stack locked 2026-05-15 evening (mauve-only v1.4):
 //   - Inter (body + display): handles every non-pet-name surface
@@ -54,8 +59,8 @@ export default function App() {
     );
   }
 
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F7F5' }}>
+  const screens = (
+    <>
       <StatusBar barStyle="dark-content" backgroundColor="#F8F7F5" />
       {screen === 'onboarding-household' && (
         <OnboardingHousehold onNext={() => setScreen('onboarding-pet')} />
@@ -67,6 +72,45 @@ export default function App() {
         />
       )}
       {screen === 'petpage' && <PetPage />}
+    </>
+  );
+
+  if (IS_WEB) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#E5DEE0',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <View
+          // Phone-shaped frame: 390x844 (iPhone 12/13/14 reference; close
+          // enough to Pixel for design review). Rounded corners + soft drop
+          // shadow so the canvas reads as a device, not a panel. Children
+          // (the actual app) render inside.
+          style={
+            {
+              width: 390,
+              height: 844,
+              maxHeight: '95vh',
+              borderRadius: 36,
+              overflow: 'hidden',
+              backgroundColor: '#F8F7F5',
+              boxShadow: '0 12px 48px rgba(0,0,0,0.18)',
+            } as any
+          }
+        >
+          {screens}
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F7F5' }}>
+      {screens}
     </SafeAreaView>
   );
 }
