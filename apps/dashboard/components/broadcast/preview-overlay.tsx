@@ -484,7 +484,7 @@ function PreviewSection({ section }: { section: Section }) {
               className="flex items-start gap-2 text-sm text-ink leading-snug"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-ink mt-1.5 shrink-0" />
-              {it}
+              {section.type === "warning" && it ? it.charAt(0).toUpperCase() + it.slice(1) : it}
             </li>
           ))}
         </ul>
