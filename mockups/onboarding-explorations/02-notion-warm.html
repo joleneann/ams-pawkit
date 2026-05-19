@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Onboarding · Direction 2 · Notion-style warm illustrated</title>
+<link rel="stylesheet" href="../parent-app-source/tokens.css" />
+<link rel="stylesheet" href="../parent-app-source/primitives.css" />
+<style>
+  body { padding: 32px; background: var(--rail-tint); display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+  .label-strip { font-family: var(--font-inter); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-50); margin-bottom: 8px; }
+  .screen-col { display: flex; flex-direction: column; align-items: center; }
+
+  /* Direction 2: soft mauve wash, illustration anchors empty space,
+     warmer copy with one Lora italic accent word. */
+  .d2 .pk-content {
+    background:
+      radial-gradient(120% 60% at 50% 0%, rgba(156, 43, 92, 0.05), transparent 50%),
+      var(--canvas);
+  }
+  .d2 .accent {
+    font-family: var(--font-lora);
+    font-style: italic;
+    font-weight: 600;
+  }
+  .d2 .illo {
+    width: 96px; height: 96px;
+    margin: 32px auto;
+    display: block;
+    color: var(--berry);
+    opacity: 0.55;
+  }
+  .d2 .illo-small {
+    width: 56px; height: 56px;
+    margin: 0 auto 20px;
+    display: block;
+    color: var(--berry);
+    opacity: 0.45;
+  }
+</style>
+</head>
+<body class="d2">
+  <div class="screen-col">
+    <div class="label-strip">01 · Household</div>
+    <div class="pk-device">
+      <div class="pk-status">
+        <span>9:41</span>
+        <div class="punch"></div>
+        <div class="right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="1.5" stroke="currentColor"/></svg></div>
+      </div>
+      <div class="pk-content">
+        <div style="padding: 28px 24px 0;">
+          <div class="pk-progress" style="margin-bottom: 24px;"><div class="d on"></div><div class="d"></div></div>
+          <h1 class="h1 pawkit" style="margin: 0 0 8px;">Hi, who&rsquo;s in your <span class="accent">household</span>?</h1>
+          <p class="p-soft">Let&rsquo;s set up your home. Everything stays editable later.</p>
+        </div>
+        <div style="padding: 32px 24px 0;">
+          <div class="pk-field" style="border-bottom: none; padding: 0;">
+            <div class="label">Household name</div>
+            <div class="value placeholder">e.g. The Fernandes family</div>
+            <div class="help">Optional · defaults to &ldquo;Your household&rdquo;</div>
+          </div>
+        </div>
+        <svg class="illo" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30 38c-4 0-7 4-7 9s3 9 7 9 7-4 7-9-3-9-7-9zM66 38c-4 0-7 4-7 9s3 9 7 9 7-4 7-9-3-9-7-9zM18 56c-3 0-5 3-5 7s2 7 5 7 5-3 5-7-2-7-5-7zM78 56c-3 0-5 3-5 7s2 7 5 7 5-3 5-7-2-7-5-7zM48 56c-10 0-18 8-18 18 0 7 4 10 9 10s9-3 18-3 13 3 18 3 9-3 9-10c0-10-8-18-18-18-2 0-4 0-9 0s-7 0-9 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <div style="flex: 1;"></div>
+        <div style="padding: 16px 20px 28px; display: flex; gap: 10px;">
+          <button class="pk-btn outline">Skip</button>
+          <button class="pk-btn primary full" style="flex: 2;">Continue <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+      <div class="pk-nav"><div class="pill"></div></div>
+    </div>
+  </div>
+
+  <div class="screen-col">
+    <div class="label-strip">02 · First pet</div>
+    <div class="pk-device">
+      <div class="pk-status">
+        <span>9:41</span>
+        <div class="punch"></div>
+        <div class="right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="1.5" stroke="currentColor"/></svg></div>
+      </div>
+      <div class="pk-content">
+        <div style="padding: 28px 24px 0;">
+          <div class="pk-progress" style="margin-bottom: 20px;"><div class="d on"></div><div class="d on"></div></div>
+          <h1 class="h1 pawkit" style="margin: 0 0 8px;">Tell us about your <span class="accent">first pet</span></h1>
+          <p class="p-soft">Five quick fields. Photo can come later.</p>
+        </div>
+        <div style="padding: 20px 24px 0; flex: 1;">
+          <div class="pk-field"><div class="label">Name</div><div class="value">Gabby</div></div>
+          <div class="pk-field"><div class="label">Species</div><div style="margin-top: 8px;"><span class="pk-seg"><span class="opt on">Dog</span><span class="opt">Cat</span></span></div></div>
+          <div class="pk-field"><div class="label">Breed</div><div class="value" style="display: flex; justify-content: space-between; align-items: center;"><span>Golden Retriever</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          <div class="pk-field"><div class="label">Gender</div><div style="margin-top: 8px;"><span class="pk-seg"><span class="opt">Female</span><span class="opt on">Male</span></span></div></div>
+          <div class="pk-field" style="border-bottom: none;"><div class="label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;"><span>Age</span><span class="meta" style="text-transform: none; letter-spacing: 0; font-weight: 400;">4 years, 2 months</span></div></div>
+        </div>
+        <div style="padding: 16px 20px 28px; display: flex; gap: 10px;">
+          <button class="pk-btn outline">Back</button>
+          <button class="pk-btn primary full" style="flex: 2;">Create pet page <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+      <div class="pk-nav"><div class="pill"></div></div>
+    </div>
+  </div>
+</body>
+</html>

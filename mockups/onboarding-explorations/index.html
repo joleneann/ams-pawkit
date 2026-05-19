@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Onboarding Phase 2 · Direction picks</title>
+<link rel="stylesheet" href="../parent-app-source/tokens.css" />
+<style>
+  body { font-family: var(--font-inter); background: var(--rail-tint); padding: 48px 32px; max-width: 720px; margin: 0 auto; color: var(--ink); }
+  h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 8px; }
+  .sub { color: var(--ink-70); font-size: 15px; margin-bottom: 32px; line-height: 1.5; }
+  .card { background: var(--canvas); border: 1px solid var(--rule); border-radius: 14px; padding: 24px; margin-bottom: 16px; display: block; text-decoration: none; color: inherit; transition: background var(--duration-base) var(--ease); }
+  .card:hover { background: var(--canvas-2); }
+  .card-title { font-size: 18px; font-weight: 600; margin: 0 0 6px; display: flex; align-items: center; gap: 10px; }
+  .card-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-50); }
+  .card-desc { font-size: 14px; color: var(--ink-70); line-height: 1.55; margin: 0 0 8px; }
+  .card-meta { font-size: 12px; color: var(--ink-50); }
+  .swatch { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--berry); margin-right: 4px; vertical-align: 1px; }
+</style>
+</head>
+<body>
+  <h1>Onboarding · Phase 2</h1>
+  <p class="sub">Four direction concepts for OnboardingHousehold + OnboardingFirstPet. Each opens a side-by-side render of both screens in that direction. Pick one to advance into the build.</p>
+
+  <a class="card" href="01-linear-restrained.html">
+    <h2 class="card-title"><span class="card-tag">D1</span> Linear-style · restrained</h2>
+    <p class="card-desc">No Skip button (smart default if blank). Single full-width Continue. Minimum chrome, maximum whitespace. Anti-onboarding ethos: barely there.</p>
+    <p class="card-meta">Ref: Linear · Style: minimal-confident · Risk: cold</p>
+  </a>
+
+  <a class="card" href="02-notion-warm.html">
+    <h2 class="card-title"><span class="card-tag">D2</span> Notion-style · warm illustrated</h2>
+    <p class="card-desc">Soft mauve radial wash on the canvas. SVG paw-cluster illustration anchors the empty middle. Headline gains warmth via one Lora italic accent word ("household", "first pet").</p>
+    <p class="card-meta">Ref: Notion · Style: friendly-editorial · Risk: illustration must not feel AI-slop</p>
+  </a>
+
+  <a class="card" href="03-stripe-serif.html">
+    <h2 class="card-title"><span class="card-tag">D3</span> Stripe-style · editorial serif hero</h2>
+    <p class="card-desc">Lora italic 600 at 40px takes the headline ("Welcome.", "Gabby."). Inter for everything else. The serif at scale IS the visual identity, no illustration needed. Magazine cover energy.</p>
+    <p class="card-meta">Ref: Stripe · Style: refined-magazine · Risk: expands Lora scope beyond pet names (worth re-locking in CLAUDE.md)</p>
+  </a>
+
+  <a class="card" href="04-pet-photoled.html">
+    <h2 class="card-title"><span class="card-tag">D4</span> Pet-app convention · photo-led</h2>
+    <p class="card-desc">Step 1 stays compact. Step 2 leads with a 120px circular dashed photo placeholder at the top — "Add a photo of Gabby. We&rsquo;ll find their fur palette from it." Pet photo is the centerpiece, fields support it.</p>
+    <p class="card-meta">Ref: Pawp / AirVet · Style: direct-conventional · Risk: convention can feel generic without strong typography to anchor</p>
+  </a>
+</body>
+</html>

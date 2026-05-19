@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Onboarding · Direction 4 · Pet-app photo-led</title>
+<link rel="stylesheet" href="../parent-app-source/tokens.css" />
+<link rel="stylesheet" href="../parent-app-source/primitives.css" />
+<style>
+  body { padding: 32px; background: var(--rail-tint); display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+  .label-strip { font-family: var(--font-inter); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-50); margin-bottom: 8px; }
+  .screen-col { display: flex; flex-direction: column; align-items: center; }
+
+  /* Direction 4: Circular photo placeholder anchors Step 2 — front and
+     center, the photo upload is the FIRST thing you do, not deferred. */
+  .d4 .photo-placeholder {
+    width: 120px; height: 120px;
+    margin: 24px auto 8px;
+    border-radius: 50%;
+    border: 2px dashed var(--berry);
+    background: var(--berry-soft);
+    display: grid;
+    place-items: center;
+    color: var(--berry);
+  }
+  .d4 .photo-prompt {
+    text-align: center;
+    font-family: var(--font-inter);
+    font-size: 13px;
+    color: var(--berry-deep);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .d4 .photo-sub {
+    text-align: center;
+    font-family: var(--font-inter);
+    font-size: 11px;
+    color: var(--ink-50);
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body class="d4">
+  <div class="screen-col">
+    <div class="label-strip">01 · Household</div>
+    <div class="pk-device">
+      <div class="pk-status">
+        <span>9:41</span>
+        <div class="punch"></div>
+        <div class="right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="1.5" stroke="currentColor"/></svg></div>
+      </div>
+      <div class="pk-content">
+        <div style="padding: 28px 24px 0;">
+          <div class="pk-progress" style="margin-bottom: 24px;"><div class="d on"></div><div class="d"></div></div>
+          <h1 class="h1 pawkit" style="margin: 0 0 8px;">Welcome to Pawkit</h1>
+          <p class="p-soft">Let&rsquo;s set up your household. You can change any of this later in Settings.</p>
+        </div>
+        <div style="padding: 32px 24px 0;">
+          <div class="pk-field" style="border-bottom: none; padding: 0;">
+            <div class="label">Household name</div>
+            <div class="value placeholder">e.g. The Fernandes family</div>
+            <div class="help">Optional · defaults to &ldquo;Your household&rdquo;</div>
+          </div>
+        </div>
+        <div style="flex: 1;"></div>
+        <div style="padding: 16px 20px 28px; display: flex; gap: 10px;">
+          <button class="pk-btn outline">Skip</button>
+          <button class="pk-btn primary full" style="flex: 2;">Continue <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+      <div class="pk-nav"><div class="pill"></div></div>
+    </div>
+  </div>
+
+  <div class="screen-col">
+    <div class="label-strip">02 · First pet (photo-led)</div>
+    <div class="pk-device">
+      <div class="pk-status">
+        <span>9:41</span>
+        <div class="punch"></div>
+        <div class="right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="19" height="10" rx="1.5" stroke="currentColor"/></svg></div>
+      </div>
+      <div class="pk-content">
+        <div style="padding: 24px 24px 0;">
+          <div class="pk-progress" style="margin-bottom: 20px;"><div class="d on"></div><div class="d on"></div></div>
+          <h1 class="h1 pawkit" style="margin: 0 0 6px;">Tell us about your pet</h1>
+          <p class="p-soft">Photo first, fields below.</p>
+        </div>
+        <div class="photo-placeholder">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 7h4l2-2h6l2 2h4v12H3V7zM12 17a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="photo-prompt">Add a photo of Gabby</div>
+        <div class="photo-sub">We&rsquo;ll find their fur palette from it.</div>
+        <div style="padding: 0 24px; flex: 1;">
+          <div class="pk-field" style="padding: 10px 0;"><div class="label">Name</div><div class="value">Gabby</div></div>
+          <div class="pk-field" style="padding: 10px 0;"><div class="label">Species</div><div style="margin-top: 8px;"><span class="pk-seg"><span class="opt on">Dog</span><span class="opt">Cat</span></span></div></div>
+          <div class="pk-field" style="padding: 10px 0;"><div class="label">Breed</div><div class="value" style="display: flex; justify-content: space-between; align-items: center;"><span>Golden Retriever</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          <div class="pk-field" style="padding: 10px 0;"><div class="label">Gender</div><div style="margin-top: 8px;"><span class="pk-seg"><span class="opt">Female</span><span class="opt on">Male</span></span></div></div>
+          <div class="pk-field" style="padding: 10px 0; border-bottom: none;"><div class="label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;"><span>Age</span><span class="meta" style="text-transform: none; letter-spacing: 0; font-weight: 400;">4 years, 2 months</span></div></div>
+        </div>
+        <div style="padding: 16px 20px 28px; display: flex; gap: 10px;">
+          <button class="pk-btn outline">Back</button>
+          <button class="pk-btn primary full" style="flex: 2;">Create pet page <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+      <div class="pk-nav"><div class="pill"></div></div>
+    </div>
+  </div>
+</body>
+</html>
