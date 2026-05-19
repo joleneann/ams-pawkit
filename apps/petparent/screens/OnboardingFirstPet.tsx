@@ -207,43 +207,43 @@ export default function OnboardingFirstPet({
 
           {birthMode === 'age' ? (
             <View className="flex-row gap-2.5">
-              <View className="flex-1 border border-input bg-background rounded-md overflow-hidden">
-                <View className="px-3 pt-2">
-                  <Text variant="muted" className="text-xs uppercase tracking-widest">
-                    Years
-                  </Text>
+              <View className="flex-1">
+                <Label className="mb-1.5 text-xs tracking-widest uppercase text-muted-foreground">
+                  Years
+                </Label>
+                <View className="border border-input bg-background rounded-md overflow-hidden">
+                  <Picker
+                    selectedValue={age.years}
+                    onValueChange={(v) => {
+                      const years = typeof v === 'number' ? v : parseInt(String(v), 10);
+                      setBirthday(approxBirthdayFromAge(years, age.months));
+                    }}
+                    style={pickerStyle}
+                  >
+                    {Array.from({ length: 31 }).map((_, i) => (
+                      <Picker.Item key={i} label={String(i)} value={i} />
+                    ))}
+                  </Picker>
                 </View>
-                <Picker
-                  selectedValue={age.years}
-                  onValueChange={(v) => {
-                    const years = typeof v === 'number' ? v : parseInt(String(v), 10);
-                    setBirthday(approxBirthdayFromAge(years, age.months));
-                  }}
-                  style={pickerStyle}
-                >
-                  {Array.from({ length: 31 }).map((_, i) => (
-                    <Picker.Item key={i} label={String(i)} value={i} />
-                  ))}
-                </Picker>
               </View>
-              <View className="flex-1 border border-input bg-background rounded-md overflow-hidden">
-                <View className="px-3 pt-2">
-                  <Text variant="muted" className="text-xs uppercase tracking-widest">
-                    Months
-                  </Text>
+              <View className="flex-1">
+                <Label className="mb-1.5 text-xs tracking-widest uppercase text-muted-foreground">
+                  Months
+                </Label>
+                <View className="border border-input bg-background rounded-md overflow-hidden">
+                  <Picker
+                    selectedValue={age.months}
+                    onValueChange={(v) => {
+                      const months = typeof v === 'number' ? v : parseInt(String(v), 10);
+                      setBirthday(approxBirthdayFromAge(age.years, months));
+                    }}
+                    style={pickerStyle}
+                  >
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <Picker.Item key={i} label={String(i)} value={i} />
+                    ))}
+                  </Picker>
                 </View>
-                <Picker
-                  selectedValue={age.months}
-                  onValueChange={(v) => {
-                    const months = typeof v === 'number' ? v : parseInt(String(v), 10);
-                    setBirthday(approxBirthdayFromAge(age.years, months));
-                  }}
-                  style={pickerStyle}
-                >
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <Picker.Item key={i} label={String(i)} value={i} />
-                  ))}
-                </Picker>
               </View>
             </View>
           ) : (
