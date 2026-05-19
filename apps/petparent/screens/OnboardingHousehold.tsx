@@ -42,7 +42,8 @@ export default function OnboardingHousehold({ onNext }: { onNext: () => void }) 
         </Text>
       </View>
 
-      {/* Form */}
+      {/* Form. Inputs are underline-only per mockup `.pk-field .value`:
+          no box, no rounded corners, transparent bg, INK bottom border. */}
       <View className="px-6 pt-8 flex-1">
         <Label className="mb-2 text-xs tracking-widest uppercase text-muted-foreground">
           Household name
@@ -51,6 +52,7 @@ export default function OnboardingHousehold({ onNext }: { onNext: () => void }) 
           value={householdName}
           onChangeText={setHouseholdName}
           placeholder="e.g. The Fernandes family"
+          className="border-0 border-b-2 border-foreground rounded-none bg-transparent px-0 shadow-none h-10 text-md font-inter-medium"
         />
         <Text variant="muted" className="mt-2 text-xs">
           Optional · defaults to &quot;Your household&quot;
@@ -71,18 +73,20 @@ export default function OnboardingHousehold({ onNext }: { onNext: () => void }) 
   );
 }
 
-// Two small inline rectangles. Not a hand-rolled "primitive" worth wrapping,
-// just visual layout for the progress indicator.
+// Progress dots per mockup `.pk-progress .d`: 8px circles, INK filled for
+// completed steps, canvas-2 wash with rule border for upcoming steps.
 function ProgressDots({ total, at }: { total: number; at: number }) {
   return (
-    <View className="flex-row">
+    <View className="flex-row items-center">
       {Array.from({ length: total }).map((_, i) => (
         <View
           key={i}
           className={
-            'h-1 w-6 rounded-sm ' +
-            (i < total - 1 ? 'mr-1.5 ' : '') +
-            (i <= at ? 'bg-foreground' : 'bg-muted')
+            'h-2 w-2 rounded-full ' +
+            (i < total - 1 ? 'mr-2 ' : '') +
+            (i <= at
+              ? 'bg-foreground border border-foreground'
+              : 'bg-muted border border-border')
           }
         />
       ))}

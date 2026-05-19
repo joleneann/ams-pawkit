@@ -109,7 +109,7 @@ export default function OnboardingFirstPet({
         contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 20, paddingBottom: 20 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Name */}
+        {/* Name. Underline-only per mockup `.pk-field .value`. */}
         <View className="mb-5">
           <Label className="mb-2 text-xs tracking-widest uppercase text-muted-foreground">
             Name
@@ -118,10 +118,11 @@ export default function OnboardingFirstPet({
             value={petName}
             onChangeText={setPetName}
             placeholder="Pet name"
+            className="border-0 border-b-2 border-foreground rounded-none bg-transparent px-0 shadow-none h-10 text-md font-inter-medium"
           />
         </View>
 
-        {/* Species */}
+        {/* Species. Pill toggle per mockup `.pk-seg`. */}
         <View className="mb-5">
           <Label className="mb-2 text-xs tracking-widest uppercase text-muted-foreground">
             Species
@@ -130,23 +131,24 @@ export default function OnboardingFirstPet({
             type="single"
             value={species}
             onValueChange={(v) => v && setSpecies(v as Species)}
-            variant="outline"
+            className="bg-secondary rounded-full p-0.5 self-start"
           >
-            <ToggleGroupItem value="Dog" isFirst>
+            <ToggleGroupItem value="Dog" className="rounded-full px-4 py-1 border-0">
               <Text>Dog</Text>
             </ToggleGroupItem>
-            <ToggleGroupItem value="Cat" isLast>
+            <ToggleGroupItem value="Cat" className="rounded-full px-4 py-1 border-0">
               <Text>Cat</Text>
             </ToggleGroupItem>
           </ToggleGroup>
         </View>
 
-        {/* Breed */}
+        {/* Breed. Underline-only Picker; the View wrapper renders the rule
+            border, the Picker itself is transparent inside it. */}
         <View className="mb-5">
           <Label className="mb-2 text-xs tracking-widest uppercase text-muted-foreground">
             Breed
           </Label>
-          <View className="border border-input bg-background rounded-md overflow-hidden">
+          <View className="border-0 border-b-2 border-foreground bg-transparent">
             <Picker
               selectedValue={breed}
               onValueChange={(v) => setBreed(v as string)}
@@ -164,7 +166,7 @@ export default function OnboardingFirstPet({
           </View>
         </View>
 
-        {/* Gender */}
+        {/* Gender. Pill toggle. */}
         <View className="mb-5">
           <Label className="mb-2 text-xs tracking-widest uppercase text-muted-foreground">
             Gender
@@ -173,18 +175,18 @@ export default function OnboardingFirstPet({
             type="single"
             value={sex}
             onValueChange={(v) => v && setSex(v as Sex)}
-            variant="outline"
+            className="bg-secondary rounded-full p-0.5 self-start"
           >
-            <ToggleGroupItem value="Female" isFirst>
+            <ToggleGroupItem value="Female" className="rounded-full px-4 py-1 border-0">
               <Text>Female</Text>
             </ToggleGroupItem>
-            <ToggleGroupItem value="Male" isLast>
+            <ToggleGroupItem value="Male" className="rounded-full px-4 py-1 border-0">
               <Text>Male</Text>
             </ToggleGroupItem>
           </ToggleGroup>
         </View>
 
-        {/* Birthday */}
+        {/* Birthday with Date/Age pill toggle next to the label. */}
         <View className="mb-5">
           <View className="flex-row items-center justify-between mb-2">
             <Label className="text-xs tracking-widest uppercase text-muted-foreground">
@@ -194,12 +196,12 @@ export default function OnboardingFirstPet({
               type="single"
               value={birthMode === 'age' ? 'Age' : 'Date'}
               onValueChange={(v) => v && setBirthMode(v === 'Age' ? 'age' : 'date')}
-              variant="outline"
+              className="bg-secondary rounded-full p-0.5"
             >
-              <ToggleGroupItem value="Date" isFirst>
+              <ToggleGroupItem value="Date" className="rounded-full px-3.5 py-1 border-0">
                 <Text>Date</Text>
               </ToggleGroupItem>
-              <ToggleGroupItem value="Age" isLast>
+              <ToggleGroupItem value="Age" className="rounded-full px-3.5 py-1 border-0">
                 <Text>Age</Text>
               </ToggleGroupItem>
             </ToggleGroup>
@@ -211,7 +213,7 @@ export default function OnboardingFirstPet({
                 <Label className="mb-1.5 text-xs tracking-widest uppercase text-muted-foreground">
                   Years
                 </Label>
-                <View className="border border-input bg-background rounded-md overflow-hidden">
+                <View className="border-0 border-b-2 border-foreground bg-transparent">
                   <Picker
                     selectedValue={age.years}
                     onValueChange={(v) => {
@@ -230,7 +232,7 @@ export default function OnboardingFirstPet({
                 <Label className="mb-1.5 text-xs tracking-widest uppercase text-muted-foreground">
                   Months
                 </Label>
-                <View className="border border-input bg-background rounded-md overflow-hidden">
+                <View className="border-0 border-b-2 border-foreground bg-transparent">
                   <Picker
                     selectedValue={age.months}
                     onValueChange={(v) => {
@@ -298,17 +300,19 @@ export default function OnboardingFirstPet({
   );
 }
 
-// Two small rectangles, see OnboardingHousehold for rationale.
+// Progress dots per mockup primitives.css `.pk-progress .d`.
 function ProgressDots({ total, at }: { total: number; at: number }) {
   return (
-    <View className="flex-row">
+    <View className="flex-row items-center">
       {Array.from({ length: total }).map((_, i) => (
         <View
           key={i}
           className={
-            'h-1 w-6 rounded-sm ' +
-            (i < total - 1 ? 'mr-1.5 ' : '') +
-            (i <= at ? 'bg-foreground' : 'bg-muted')
+            'h-2 w-2 rounded-full ' +
+            (i < total - 1 ? 'mr-2 ' : '') +
+            (i <= at
+              ? 'bg-foreground border border-foreground'
+              : 'bg-muted border border-border')
           }
         />
       ))}

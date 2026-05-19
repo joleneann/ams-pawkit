@@ -44,12 +44,12 @@
     --popover: 30 14% 97%;
     --popover-foreground: 20 22% 5%;
 
-    /* Mockup correction 2026-05-19: primary action color in Claude Design
-       mockups is INK (black), not BERRY. Berry stays available as a brand
-       accent (focus ring, links, calendar selection), but Continue / Create
-       buttons + selected toggles render BLACK to match the mockup. */
-    --primary: 20 22% 5%;              /* ink #0F0C0A (was berry) */
-    --primary-foreground: 30 14% 97%;  /* canvas (text on ink) */
+    /* Per mockups/parent-app-source/primitives.css `.pk-btn.primary`:
+       primary buttons use BERRY (#9C2B5C). My earlier swap to INK was a
+       misread of the mockup screenshots; spec confirms berry is correct.
+       Selected toggle stays INK (--accent below) per `.pk-seg .opt.on`. */
+    --primary: 335 57% 39%;            /* berry #9C2B5C */
+    --primary-foreground: 30 14% 97%;  /* canvas (text on berry) */
 
     --secondary: 350 22% 92%;          /* rail-tint #EFE6E8 */
     --secondary-foreground: 20 22% 5%;
