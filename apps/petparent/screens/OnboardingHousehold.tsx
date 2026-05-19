@@ -77,9 +77,12 @@ export default function OnboardingHousehold({ onNext }: { onNext: () => void }) 
           intrinsic-height, the spacer absorbs the gap). */}
       <View className="flex-1" />
 
-      {/* Footer. Two-button row, outline Skip + filled Continue. Bottom
-          padding kept modest so buttons feel anchored, not floored. */}
-      <View className="px-5 pb-5 flex-row gap-2.5">
+      {/* Footer. Two-button row, outline Skip + filled Continue. Per mockup
+          screens-onboarding.jsx the container has `padding: 20` on every
+          side (20px top, 20px bottom). Plus extra bottom space (pb-8 = 32px)
+          so the buttons sit visibly above the device's rounded corner edge,
+          not flush against it. */}
+      <View className="px-5 pt-5 pb-8 flex-row gap-2.5">
         <Button variant="outline" onPress={onNext} className="flex-1 h-12">
           <Text className="font-inter-medium text-[14px]">Skip</Text>
         </Button>
