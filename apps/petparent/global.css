@@ -3,6 +3,23 @@
 @tailwind utilities;
 
 /*
+ * Font family overrides. React Native treats fontWeight independently of
+ * fontFamily, so Tailwind's `font-medium` / `font-semibold` classes (which
+ * normally set font-weight) need to be remapped to weight-specific Inter
+ * families loaded via expo-google-fonts in App.tsx.
+ *
+ * `font-pet-name` is the Lora italic hero variant used on Pet Page covers
+ * and personalisation surfaces per docs/premium-feel/byline.md.
+ */
+@layer utilities {
+  .font-normal { font-family: 'Inter_400Regular'; font-weight: normal; }
+  .font-medium { font-family: 'Inter_500Medium'; font-weight: normal; }
+  .font-semibold { font-family: 'Inter_600SemiBold'; font-weight: normal; }
+  .font-bold { font-family: 'Inter_700Bold'; font-weight: normal; }
+  .font-pet-name { font-family: 'Lora_600SemiBold_Italic'; font-weight: normal; font-style: italic; }
+}
+
+/*
  * Pawkit v1.4 mauve palette mapped to shadcn / RNR semantic tokens.
  * HSL values are space-separated (no hsl() wrapper) so Tailwind can
  * compose them with opacity modifiers like `bg-primary/90`.

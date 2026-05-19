@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { CaretRight } from 'phosphor-react-native';
 import { Picker } from '@react-native-picker/picker';
+import { Calendar } from 'react-native-calendars';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -246,20 +247,38 @@ export default function OnboardingFirstPet({
               </View>
             </View>
           ) : (
-            <View className="rounded-md border border-input bg-background p-4">
-              <Text variant="muted" className="text-center text-xs">
-                Calendar coming next (react-native-calendars wiring deferred). Switch to Age
-                for now or continue with the current saved date.
-              </Text>
-              {birthday && (
-                <Text className="text-center mt-2 text-sm">
-                  {birthday.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </Text>
-              )}
+            <View className="rounded-md border border-input bg-background overflow-hidden">
+              <Calendar
+                current={toISODate(birthday ?? new Date())}
+                onDayPress={(day: { dateString: string }) =>
+                  setBirthday(new Date(day.dateString))
+                }
+                markedDates={
+                  birthday
+                    ? {
+                        [toISODate(birthday)]: {
+                          selected: true,
+                          selectedColor: '#9C2B5C',
+                        },
+                      }
+                    : {}
+                }
+                theme={{
+                  backgroundColor: '#F8F7F5',
+                  calendarBackground: '#F8F7F5',
+                  selectedDayBackgroundColor: '#9C2B5C',
+                  selectedDayTextColor: '#F8F7F5',
+                  todayTextColor: '#9C2B5C',
+                  dayTextColor: '#0F0C0A',
+                  textDisabledColor: '#8F8B86',
+                  monthTextColor: '#0F0C0A',
+                  arrowColor: '#5C5550',
+                  textSectionTitleColor: '#5C5550',
+                  textDayFontFamily: 'Inter_400Regular',
+                  textMonthFontFamily: 'Inter_600SemiBold',
+                  textDayHeaderFontFamily: 'Inter_500Medium',
+                }}
+              />
             </View>
           )}
         </View>
@@ -340,4 +359,12 @@ function approxBirthdayFromAge(years: number, months: number): Date {
   d.setFullYear(d.getFullYear() - years);
   d.setMonth(d.getMonth() - months);
   return d;
+}
+
+// react-native-calendars expects ISO date strings (`YYYY-MM-DD`).
+function toISODate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
 }
