@@ -44,8 +44,12 @@
     --popover: 30 14% 97%;
     --popover-foreground: 20 22% 5%;
 
-    --primary: 335 57% 39%;            /* berry #9C2B5C */
-    --primary-foreground: 30 14% 97%;  /* canvas (text on berry) */
+    /* Mockup correction 2026-05-19: primary action color in Claude Design
+       mockups is INK (black), not BERRY. Berry stays available as a brand
+       accent (focus ring, links, calendar selection), but Continue / Create
+       buttons + selected toggles render BLACK to match the mockup. */
+    --primary: 20 22% 5%;              /* ink #0F0C0A (was berry) */
+    --primary-foreground: 30 14% 97%;  /* canvas (text on ink) */
 
     --secondary: 350 22% 92%;          /* rail-tint #EFE6E8 */
     --secondary-foreground: 20 22% 5%;
@@ -53,8 +57,9 @@
     --muted: 350 22% 92%;              /* rail-tint */
     --muted-foreground: 25 7% 34%;     /* ink-soft #5C5550 */
 
-    --accent: 350 22% 92%;
-    --accent-foreground: 20 22% 5%;
+    /* Selected toggle pill = INK background, CANVAS text. Matches mockup. */
+    --accent: 20 22% 5%;               /* ink (was mauve) */
+    --accent-foreground: 30 14% 97%;   /* canvas (text on ink) */
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 30 14% 97%;

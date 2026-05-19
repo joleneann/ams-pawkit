@@ -11,7 +11,8 @@ import {
   Lora_600SemiBold,
   Lora_600SemiBold_Italic,
 } from '@expo-google-fonts/lora';
-import { ActivityIndicator, Platform, SafeAreaView, StatusBar, View } from 'react-native';
+import { ActivityIndicator, Platform, StatusBar, View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import './global.css';
 import PetPage from './screens/PetPage';
@@ -108,9 +109,14 @@ export default function App() {
     );
   }
 
+  // Native path. SafeAreaView from react-native-safe-area-context (not the
+  // legacy react-native one, which is iOS-only) so Android picks up the
+  // status-bar inset and content doesn't bleed under the system bar.
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F7F5' }}>
-      {screens}
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F7F5' }} edges={['top', 'bottom']}>
+        {screens}
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
