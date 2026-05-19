@@ -51,6 +51,21 @@ module.exports = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      // Pawkit font stack (locked 2026-05-15 per docs/brand-system.md):
+      //   Inter for body + display + all UI (4 weights via @expo-google-fonts)
+      //   Lora italic 600 for pet-name hero ONLY (Pet Page cover, broadcast
+      //     personalisation, magic toast, memorial card per byline.md)
+      //
+      // Named explicitly per-weight because React Native treats fontWeight
+      // independently of fontFamily; Tailwind's default `font-medium` etc.
+      // only set fontWeight and would leave the family as system default.
+      fontFamily: {
+        inter: ['Inter_400Regular'],
+        'inter-medium': ['Inter_500Medium'],
+        'inter-semibold': ['Inter_600SemiBold'],
+        'inter-bold': ['Inter_700Bold'],
+        'lora-italic': ['Lora_600SemiBold_Italic'],
+      },
     },
   },
 };

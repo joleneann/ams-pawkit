@@ -4,9 +4,15 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import { Platform, Text as RNText, type Role } from 'react-native';
 
+// Pawkit font wiring: every variant gets an explicit Inter family so the
+// rendered output uses the loaded expo-google-fonts files (not system
+// default). Weights swap by family (Inter_500Medium vs Inter_600SemiBold)
+// because React Native ignores fontWeight unless the family already encodes
+// the weight. See tailwind.config.js fontFamily extension for the class
+// names. Locked 2026-05-19 per docs/brand-system.md typography section.
 const textVariants = cva(
   cn(
-    'text-foreground text-base',
+    'text-foreground text-base font-inter',
     Platform.select({
       web: 'select-text',
     })
@@ -16,23 +22,23 @@ const textVariants = cva(
       variant: {
         default: '',
         h1: cn(
-          'text-center text-4xl font-extrabold tracking-tight',
+          'text-center text-4xl font-inter-bold tracking-tight',
           Platform.select({ web: 'scroll-m-20 text-balance' })
         ),
         h2: cn(
-          'border-border border-b pb-2 text-3xl font-semibold tracking-tight',
+          'border-border border-b pb-2 text-3xl font-inter-semibold tracking-tight',
           Platform.select({ web: 'scroll-m-20 first:mt-0' })
         ),
-        h3: cn('text-2xl font-semibold tracking-tight', Platform.select({ web: 'scroll-m-20' })),
-        h4: cn('text-xl font-semibold tracking-tight', Platform.select({ web: 'scroll-m-20' })),
+        h3: cn('text-2xl font-inter-semibold tracking-tight', Platform.select({ web: 'scroll-m-20' })),
+        h4: cn('text-xl font-inter-semibold tracking-tight', Platform.select({ web: 'scroll-m-20' })),
         p: 'mt-3 leading-7 sm:mt-6',
         blockquote: 'mt-4 border-l-2 pl-3 italic sm:mt-6 sm:pl-6',
         code: cn(
-          'bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold'
+          'bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-inter-semibold'
         ),
         lead: 'text-muted-foreground text-xl',
-        large: 'text-lg font-semibold',
-        small: 'text-sm font-medium leading-none',
+        large: 'text-lg font-inter-semibold',
+        small: 'text-sm font-inter-medium leading-none',
         muted: 'text-muted-foreground text-sm',
       },
     },
