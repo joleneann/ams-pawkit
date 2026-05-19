@@ -24,6 +24,43 @@
     background: var(--ink-soft);
     color: var(--canvas);
   }
+  /* No divider lines between fields — locked 2026-05-19, dividers felt
+     cluttered against the warm mauve wash. Rely on the field padding and
+     eyebrow labels for visual rhythm instead. */
+  .d2 .pk-field {
+    border-bottom: none;
+    padding: 14px 0;
+  }
+  /* Age field: two side-by-side underline pickers, matching the Breed
+     pattern, since RNR Select renders as a styled dropdown not a wheel. */
+  .d2 .age-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 6px;
+  }
+  .d2 .age-cell .age-eyebrow {
+    font-family: var(--font-inter);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin-bottom: 6px;
+  }
+  .d2 .age-cell .age-value {
+    font-family: var(--font-inter);
+    font-size: var(--text-md);
+    line-height: var(--lh-md);
+    font-weight: 500;
+    color: var(--ink);
+    padding-bottom: 6px;
+    border-bottom: 1.5px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .d2 .age-cell .age-value svg { color: var(--ink-50); }
   .d2 .accent {
     font-family: var(--font-lora);
     font-style: italic;
@@ -99,7 +136,25 @@
           <div class="pk-field"><div class="label">Species</div><div style="margin-top: 8px;"><span class="pk-seg"><span class="opt on">Dog</span><span class="opt">Cat</span></span></div></div>
           <div class="pk-field"><div class="label">Breed</div><div class="value" style="display: flex; justify-content: space-between; align-items: center;"><span>Golden Retriever</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
           <div class="pk-field"><div class="label">Gender</div><div style="margin-top: 8px;"><span class="pk-seg"><span class="opt">Female</span><span class="opt on">Male</span></span></div></div>
-          <div class="pk-field" style="border-bottom: none;"><div class="label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;"><span>Age</span><span class="meta" style="text-transform: none; letter-spacing: 0; font-weight: 400;">4 years, 2 months</span></div></div>
+          <div class="pk-field">
+            <div class="label">Age</div>
+            <div class="age-grid">
+              <div class="age-cell">
+                <div class="age-eyebrow">Years</div>
+                <div class="age-value">
+                  <span>4</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="age-cell">
+                <div class="age-eyebrow">Months</div>
+                <div class="age-value">
+                  <span>2</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div style="padding: 16px 20px 28px; display: flex; gap: 10px;">
           <button class="pk-btn outline">Back</button>
