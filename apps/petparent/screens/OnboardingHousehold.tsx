@@ -11,11 +11,14 @@ import { getCurrentHousehold } from '../lib/current-household';
 /**
  * Onboarding step 1 of 2: household name.
  *
- * Pre-populates from the Fernandes household in Supabase (the v0 demo
- * anchor). Skip and Continue both advance to step 2. No DB writes.
+ * Typography + spacing per the frontend-design SKILL principle of restraint
+ * and precision for refined designs. Hierarchy: large headline (28px tight),
+ * mid-weight subline (15px), tiny tracked eyebrow label (11px), input value
+ * (16px medium), faint helper (12px). Form intrinsic-height (no flex-1)
+ * with a flex spacer below so the buttons sit at a comfortable distance
+ * from the form, not floored at the screen bottom.
  *
- * Now uses React Native Reusables components (Button, Input, Label, Text)
- * for all interactive primitives. Progress dots are two inline rectangles.
+ * All values traced to mockups/parent-app-source/tokens.css + primitives.css.
  */
 export default function OnboardingHousehold({ onNext }: { onNext: () => void }) {
   const [householdName, setHouseholdName] = useState('');
@@ -30,42 +33,63 @@ export default function OnboardingHousehold({ onNext }: { onNext: () => void }) 
 
   return (
     <View className="flex-1 bg-background">
-      {/* Header */}
-      <View className="px-6 pt-6">
+      {/* Header: progress dots + headline + subline. Generous top padding
+          so the headline has room below the device status bar. */}
+      <View className="px-6 pt-8">
         <ProgressDots total={2} at={0} />
 
-        <Text variant="h3" className="mt-5 mb-1.5">
+        {/* Headline. Pawkit hero size (28px), Inter SemiBold, tight tracking,
+            tight line-height. Sized larger than RNR's default h3 to match
+            mockup hero weight. */}
+        <Text
+          className="mt-6 font-inter-semibold text-foreground text-[28px] leading-[32px] tracking-[-0.01em]"
+        >
           Welcome to Pawkit
         </Text>
-        <Text variant="muted">
-          Let&apos;s set up your household. You can change any of this later in Settings.
+
+        {/* Subline. Mid contrast (ink-70 via foreground/70), 15px, comfortable
+            line-height for the longer sentence. */}
+        <Text className="mt-2 font-inter text-foreground/70 text-[15px] leading-[22px]">
+          Let&apos;s set up your household. You can change any of this later
+          in Settings.
         </Text>
       </View>
 
-      {/* Form. Inputs are underline-only per mockup `.pk-field .value`:
-          no box, no rounded corners, transparent bg, INK bottom border. */}
-      <View className="px-6 pt-8 flex-1">
-        <Label className="mb-2 text-xs tracking-widest uppercase text-muted-foreground">
+      {/* Form. Intrinsic height (no flex-1), so the buttons can sit closer
+          to the form rather than getting pushed to the absolute bottom. */}
+      <View className="px-6 pt-10">
+        <Label className="font-inter-semibold text-[11px] tracking-[0.14em] uppercase text-foreground/50">
           Household name
         </Label>
         <Input
           value={householdName}
           onChangeText={setHouseholdName}
           placeholder="e.g. The Fernandes family"
-          className="border-0 border-b-2 border-foreground rounded-none bg-transparent px-0 shadow-none h-10 text-md font-inter-medium"
+          className="mt-2 border-0 border-b-2 border-foreground rounded-none bg-transparent px-0 shadow-none h-10 text-[16px] font-inter-medium leading-[24px]"
         />
-        <Text variant="muted" className="mt-2 text-xs">
+        <Text className="mt-3 font-inter text-foreground/50 text-[12px] leading-[18px]">
           Optional · defaults to &quot;Your household&quot;
         </Text>
       </View>
 
-      {/* Footer */}
-      <View className="px-5 pt-4 pb-7 flex-row gap-2.5">
-        <Button variant="outline" onPress={onNext} className="flex-1">
-          <Text>Skip</Text>
+      {/* Spacer that takes remaining vertical space. Pushes the footer to
+          the bottom but in a balanced way (since the form above is now
+          intrinsic-height, the spacer absorbs the gap). */}
+      <View className="flex-1" />
+
+      {/* Footer. Two-button row, outline Skip + filled Continue. Bottom
+          padding kept modest so buttons feel anchored, not floored. */}
+      <View className="px-5 pb-5 flex-row gap-2.5">
+        <Button variant="outline" onPress={onNext} className="flex-1 h-12">
+          <Text className="font-inter-medium text-[14px]">Skip</Text>
         </Button>
-        <Button onPress={onNext} className="flex-[2] flex-row gap-2">
-          <Text className="text-primary-foreground">Continue</Text>
+        <Button
+          onPress={onNext}
+          className="flex-[2] flex-row items-center justify-center gap-2 h-12"
+        >
+          <Text className="font-inter-medium text-[14px] text-primary-foreground">
+            Continue
+          </Text>
           <CaretRight size={16} color="#F8F7F5" weight="bold" />
         </Button>
       </View>
