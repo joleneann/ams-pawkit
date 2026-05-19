@@ -67,9 +67,14 @@ anatomy folded into Day 1 of build foundations. See
   (1) **Sarvam Saarika v2.5 (STT)** transcribes voice INPUT to text on
       dashboard compose surfaces. One mic per surface for per-field
       dictation, plus a hero mic on `/broadcasts/new` for the voice-first
-      broadcast rebuild. Sarvam streaming was requested 2026-05-18 (account
-      pending entitlement); v0 ships with the 30s-capped batch endpoint
-      via 25s rolling segments.
+      broadcast rebuild. Sarvam streaming over WebSocket is available now
+      at `wss://api.sarvam.ai/speech-to-text/ws`; the 2026-05-18 smoke
+      tests returned 403 because Claude was hitting wrong URL paths, not
+      because of entitlement gating (corrected by Sarvam support
+      2026-05-19). v0 deliberately ships with the 30s-capped batch
+      endpoint via 25s rolling segments because the streaming rebuild was
+      deferred for risk reasons close to demo. Post-demo work: switch to
+      WS streaming (`saaras:v3` is Sarvam's recommended streaming model).
   (2) **Sarvam Translate v1 (Mayura)** auto-generates the other-language
       version of a Broadcast (EN ↔ MR) at compose time. Lazy: only fires
       when the vet toggles the other language tab in the composer (saves
