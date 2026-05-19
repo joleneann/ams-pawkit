@@ -316,11 +316,22 @@ function ProgressDots({ total, at }: { total: number; at: number }) {
   );
 }
 
-// Picker on web renders as <select>; this style block keeps the visual height
-// consistent with our Input height on both web and native.
+// Picker on web renders as <select>; on native it shows the system picker.
+// Setting fontFamily ensures the web <select> doesn't fall back to system-ui
+// (which sticks out next to RNR's Inter-everywhere typography). Inter
+// Regular matches the Input field weight for visual consistency.
 const pickerStyle = Platform.select({
-  web: { width: '100%', height: 40, padding: 8, border: 'none', background: 'transparent' },
-  default: { width: '100%' },
+  web: {
+    width: '100%',
+    height: 40,
+    padding: 8,
+    border: 'none',
+    background: 'transparent',
+    fontFamily: 'Inter_400Regular',
+    fontSize: 16,
+    color: '#0F0C0A',
+  },
+  default: { width: '100%', fontFamily: 'Inter_400Regular' },
 }) as any;
 
 // ─────────────────────────────────────────────────────────────
